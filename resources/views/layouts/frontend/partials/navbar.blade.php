@@ -15,8 +15,8 @@
         </a>
         <nav class="hidden items-center gap-6 text-sm font-medium sm:flex [&.on-banner_a]:text-white [&.on-banner_a]:hover:text-stone-100">
             <a href="{{ route('home') }}" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Trang chủ</a>
-            <a href="#site-banner" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Giới thiệu</a>
-            <a href="#dich-vu" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Hottrend</a>
+            <a href="{{route('about')}}" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Giới thiệu</a>
+            <a href="{{route('news')}}" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Tin Tức</a>
             <a href="#dich-vu" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Dịch vụ</a>
             <a href="#lien-he" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Liên hệ</a>
         </nav>
