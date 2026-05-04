@@ -7,12 +7,12 @@
     :class="sidebarToggle ? 'justify-center' : 'justify-between'"
     class="flex items-center gap-2 pt-8 sidebar-header pb-7"
   >
-    <a href="{{ route('staff.dashboard') }}}">
+    <a href="{{ route('staff.dashboard') }}">
       <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-        <img class="dark:hidden" src="./images/logo/logo.svg" alt="Logo" />
+        <img class="dark:hidden" src="{{ asset('images/tailadmin/logo/logo.svg') }}" alt="Logo" />
         <img
           class="hidden dark:block"
-          src="./images/logo/logo-dark.svg"
+          src="{{ asset('images/tailadmin/logo/logo-dark.svg') }}"
           alt="Logo"
         />
       </span>
@@ -20,7 +20,7 @@
       <img
         class="logo-icon"
         :class="sidebarToggle ? 'lg:block' : 'hidden'"
-        src="./images/logo/logo-icon.svg"
+        src="{{ asset('images/tailadmin/logo/logo-icon.svg') }}"
         alt="Logo"
       />
     </a>

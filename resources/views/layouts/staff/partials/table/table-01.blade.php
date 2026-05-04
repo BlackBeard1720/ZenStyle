@@ -112,7 +112,7 @@
             <div class="flex items-center">
               <div class="flex items-center gap-3">
                 <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./images/product/product-01.jpg" alt="Product" />
+                  <img src="{{ asset('images/tailadmin/product/product-01.jpg') }}" alt="Product" />
                 </div>
                 <div>
                   <p
@@ -157,7 +157,7 @@
             <div class="flex items-center">
               <div class="flex items-center gap-3">
                 <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./images/product/product-02.jpg" alt="Product" />
+                  <img src="{{ asset('images/tailadmin/product/product-02.jpg') }}" alt="Product" />
                 </div>
                 <div>
                   <p
@@ -203,7 +203,7 @@
             <div class="flex items-center">
               <div class="flex items-center gap-3">
                 <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./images/product/product-03.jpg" alt="Product" />
+                  <img src="{{ asset('images/tailadmin/product/product-03.jpg') }}" alt="Product" />
                 </div>
                 <div>
                   <p
@@ -249,7 +249,7 @@
             <div class="flex items-center">
               <div class="flex items-center gap-3">
                 <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./images/product/product-04.jpg" alt="Product" />
+                  <img src="{{ asset('images/tailadmin/product/product-04.jpg') }}" alt="Product" />
                 </div>
                 <div>
                   <p
@@ -295,7 +295,7 @@
             <div class="flex items-center">
               <div class="flex items-center gap-3">
                 <div class="h-[50px] w-[50px] overflow-hidden rounded-md">
-                  <img src="./images/product/product-05.jpg" alt="Product" />
+                  <img src="{{ asset('images/tailadmin/product/product-05.jpg') }}" alt="Product" />
                 </div>
                 <div>
                   <p
