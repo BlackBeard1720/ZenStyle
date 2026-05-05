@@ -6,7 +6,7 @@
     {{-- @vite: frontend dùng entry riêng để load Tailwind + JS --}}
     @vite(['resources/css/frontend.css', 'resources/js/frontend.js'])
 </head>
-<body class="min-h-screen bg-white font-outfit text-stone-900 antialiased">
+<body class="min-h-screen bg-stone-50 font-outfit text-stone-900 antialiased">
 @include('layouts.frontend.partials.navbar')
 {{--
     Mặc định pt-20: chừa chỗ cho navbar fixed (xem comment cũ).
@@ -16,5 +16,6 @@
     @yield('content')
 </main>
 @include('layouts.frontend.partials.footer')
+@include('layouts.frontend.partials.floating-booking')
 </body>
 </html>

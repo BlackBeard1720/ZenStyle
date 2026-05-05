@@ -97,7 +97,7 @@
     </script>
 
     {{-- STORY — timeline --}}
-    <section class="border-b border-stone-200/80 bg-white px-4 py-16 sm:px-6">
+    <section class="border-b border-stone-200/70 bg-white px-4 py-16 sm:px-6">
         <div class="mx-auto max-w-6xl">
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="font-['Playfair_Display',serif] text-2xl font-semibold text-stone-900 sm:text-3xl">Hành trình ZenStyle</h2>

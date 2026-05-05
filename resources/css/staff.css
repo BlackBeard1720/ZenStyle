@@ -756,25 +756,14 @@ span.flatpickr-weekday,
 
 /* =============================================================================
    FRONTEND — navbar trên vùng banner
-   - Khi data-on-banner="true": nền trong suốt, menu hiển thị với chữ trắng
+   - data-on-banner="true": nền trong suốt + chữ trắng (đồng bộ frontend.css)
    ============================================================================= */
 
-/* Navbar trên banner: nền trong suốt, menu hiển thị */
 #site-header[data-on-banner="true"] {
-    @apply bg-transparent border-transparent backdrop-blur-none shadow-none;
+    @apply border-transparent bg-transparent shadow-none backdrop-blur-none;
 }
-
-/* Menu navigation khi ở trên banner: chữ trắng */
-#site-header[data-on-banner="true"] nav {
-    @apply flex;
-}
-
-#site-header[data-on-banner="true"] nav a {
-    @apply text-white hover:text-stone-100 transition-colors;
-}
-
-#site-header[data-on-banner="true"] .site-nav-cta {
-    @apply bg-rose-400 text-white shadow-sm hover:bg-rose-500 transition-colors;
+#site-header[data-on-banner="true"] .site-nav-link {
+    @apply !text-white hover:!text-stone-100 transition-colors;
 }
 
 #site-header[data-on-banner="true"] .site-nav-logo {
@@ -792,7 +781,7 @@ span.flatpickr-weekday,
 }
 
 #site-header.nav-on-hero .site-nav-cta {
-    @apply border-transparent bg-rose-400 text-white shadow-sm hover:bg-rose-500;
+    @apply border-transparent bg-rose-400 text-white shadow-sm transition-colors hover:bg-[#1677ff] hover:text-white;
 }
 
 #site-header.nav-on-hero .site-nav-logo {

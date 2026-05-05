@@ -2,246 +2,316 @@
 
 @section('title', 'ZenStyle — Đặt lịch')
 
-@section('main_class', 'pt-20')
+@section('main_class', 'bg-stone-50 pt-20')
 
 @section('content')
     {{--
-        =========================================================================
-        BOOKING PAGE (VIEW ONLY)
-        -------------------------------------------------------------------------
-        - Mục tiêu: dựng giao diện đặt lịch tương tự flow của EasySalon.
-        - Phạm vi: chỉ UI tĩnh bằng Tailwind (chưa có submit backend).
-        - Bố cục: 2 cột (form + tóm tắt), mobile tự co về 1 cột.
-        =========================================================================
+        Flow EasySalon (Ant-style). Tailwind v4 + JS (frontend/booking.js): chọn salon/ngày/giờ/dịch vụ/stylist/khách, cập nhật tóm tắt.
+        Chưa gửi form backend.
     --}}
-    <section class="border-b border-stone-200 bg-gradient-to-b from-rose-50 to-white px-4 py-10 sm:px-6">
-        <div class="mx-auto max-w-6xl">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-700">Booking online</p>
-            <h1 class="mt-2 text-3xl font-bold text-stone-900 sm:text-4xl">Đặt lịch với ZenStyle</h1>
-            <p class="mt-3 max-w-2xl text-sm text-stone-600 sm:text-base">
-                Chọn dịch vụ, stylist và khung giờ phù hợp. ZenStyle sẽ giữ lịch cho bạn trong 15 phút sau khi xác nhận.
-            </p>
-
-            {{--
-                Step bar hiển thị trạng thái quy trình đặt lịch (UI mô phỏng).
-            --}}
-            <ol class="mt-8 grid gap-3 sm:grid-cols-4">
-                <li class="rounded-xl border border-rose-200 bg-rose-100 px-4 py-3 text-sm font-semibold text-rose-800">
-                    1. Dịch vụ
-                </li>
-                <li class="rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm font-medium text-stone-600">
-                    2. Thời gian
-                </li>
-                <li class="rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm font-medium text-stone-600">
-                    3. Thông tin
-                </li>
-                <li class="rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm font-medium text-stone-600">
-                    4. Hoàn tất
-                </li>
-            </ol>
-        </div>
-    </section>
-
-    <section class="px-4 py-10 sm:px-6">
-        <div class="mx-auto grid max-w-6xl gap-6 lg:grid-cols-12">
-            {{--
-                Cột trái: form đặt lịch (chiếm 8/12 trên desktop)
-            --}}
-            <div class="space-y-6 lg:col-span-8">
-                <article class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                    <h2 class="text-lg font-semibold text-stone-900">Chi nhánh</h2>
-                    <p class="mt-1 text-sm text-stone-600">Chọn salon bạn muốn đặt lịch.</p>
-
-                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                        <label class="cursor-pointer rounded-xl border border-rose-200 bg-rose-50 p-4">
-                            <input type="radio" name="branch" class="sr-only" checked>
-                            <p class="font-semibold text-stone-900">ZenStyle Triều Khúc</p>
-                            <p class="mt-1 text-sm text-stone-600">123 Triều Khúc, Thanh Xuân, Hà Nội</p>
-                        </label>
-                        <label class="cursor-pointer rounded-xl border border-stone-200 bg-white p-4 hover:border-stone-300">
-                            <input type="radio" name="branch" class="sr-only">
-                            <p class="font-semibold text-stone-900">ZenStyle Hà Đông</p>
-                            <p class="mt-1 text-sm text-stone-600">58 Nguyễn Văn Lộc, Hà Đông, Hà Nội</p>
-                        </label>
-                    </div>
-                </article>
-
-                <article class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                    <h2 class="text-lg font-semibold text-stone-900">Dịch vụ</h2>
-                    <p class="mt-1 text-sm text-stone-600">Chọn một hoặc nhiều dịch vụ bạn cần.</p>
-
-                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                        <label class="rounded-xl border border-stone-200 p-4 hover:border-rose-300">
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="font-semibold text-stone-900">Cắt tóc nam cao cấp</p>
-                                    <p class="mt-1 text-sm text-stone-600">45 phút</p>
-                                </div>
-                                <span class="text-sm font-semibold text-rose-700">150.000đ</span>
-                            </div>
-                            <input type="checkbox" class="mt-3 h-4 w-4 rounded border-stone-300 text-rose-500 focus:ring-rose-400" checked>
-                        </label>
-
-                        <label class="rounded-xl border border-stone-200 p-4 hover:border-rose-300">
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="font-semibold text-stone-900">Gội + massage da đầu</p>
-                                    <p class="mt-1 text-sm text-stone-600">30 phút</p>
-                                </div>
-                                <span class="text-sm font-semibold text-rose-700">120.000đ</span>
-                            </div>
-                            <input type="checkbox" class="mt-3 h-4 w-4 rounded border-stone-300 text-rose-500 focus:ring-rose-400">
-                        </label>
-
-                        <label class="rounded-xl border border-stone-200 p-4 hover:border-rose-300">
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="font-semibold text-stone-900">Uốn/nhuộm cơ bản</p>
-                                    <p class="mt-1 text-sm text-stone-600">120 phút</p>
-                                </div>
-                                <span class="text-sm font-semibold text-rose-700">650.000đ</span>
-                            </div>
-                            <input type="checkbox" class="mt-3 h-4 w-4 rounded border-stone-300 text-rose-500 focus:ring-rose-400">
-                        </label>
-
-                        <label class="rounded-xl border border-stone-200 p-4 hover:border-rose-300">
-                            <div class="flex items-start justify-between gap-4">
-                                <div>
-                                    <p class="font-semibold text-stone-900">Treatment phục hồi</p>
-                                    <p class="mt-1 text-sm text-stone-600">60 phút</p>
-                                </div>
-                                <span class="text-sm font-semibold text-rose-700">320.000đ</span>
-                            </div>
-                            <input type="checkbox" class="mt-3 h-4 w-4 rounded border-stone-300 text-rose-500 focus:ring-rose-400">
-                        </label>
-                    </div>
-                </article>
-
-                <article class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                    <h2 class="text-lg font-semibold text-stone-900">Ngày &amp; khung giờ</h2>
-                    <p class="mt-1 text-sm text-stone-600">Chọn ngày và giờ bắt đầu mong muốn.</p>
-
-                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label for="booking-date" class="mb-2 block text-sm font-medium text-stone-700">Ngày</label>
-                            <input
-                                id="booking-date"
-                                type="date"
-                                class="w-full rounded-xl border border-stone-300 px-4 py-3 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100"
-                                value="2026-05-06"
-                            >
-                        </div>
-                        <div>
-                            <label for="booking-time" class="mb-2 block text-sm font-medium text-stone-700">Giờ</label>
-                            <select
-                                id="booking-time"
-                                class="w-full rounded-xl border border-stone-300 px-4 py-3 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100"
-                            >
-                                <option>09:00</option>
-                                <option>09:30</option>
-                                <option selected>10:00</option>
-                                <option>10:30</option>
-                                <option>11:00</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <p class="mt-4 text-xs text-stone-500">* Khung giờ có thể thay đổi theo lịch trống của stylist.</p>
-                </article>
-
-                <article class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                    <h2 class="text-lg font-semibold text-stone-900">Stylist ưu tiên</h2>
-                    <p class="mt-1 text-sm text-stone-600">Bạn có thể chọn bất kỳ hoặc stylist cụ thể.</p>
-
-                    <div class="mt-4 grid gap-3 sm:grid-cols-3">
-                        <label class="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm font-medium text-stone-900">
-                            <input type="radio" name="stylist" class="sr-only" checked>
-                            Bất kỳ stylist
-                        </label>
-                        <label class="rounded-xl border border-stone-200 p-4 text-sm font-medium text-stone-900 hover:border-stone-300">
-                            <input type="radio" name="stylist" class="sr-only">
-                            Trần Lan Chi
-                        </label>
-                        <label class="rounded-xl border border-stone-200 p-4 text-sm font-medium text-stone-900 hover:border-stone-300">
-                            <input type="radio" name="stylist" class="sr-only">
-                            Lê Hoàng Nam
-                        </label>
-                    </div>
-                </article>
-
-                <article class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm">
-                    <h2 class="text-lg font-semibold text-stone-900">Thông tin khách hàng</h2>
-                    <p class="mt-1 text-sm text-stone-600">Thông tin để salon xác nhận lịch hẹn.</p>
-
-                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                        <div>
-                            <label for="full-name" class="mb-2 block text-sm font-medium text-stone-700">Họ và tên</label>
-                            <input id="full-name" type="text" placeholder="Nguyễn Văn A" class="w-full rounded-xl border border-stone-300 px-4 py-3 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100">
-                        </div>
-                        <div>
-                            <label for="phone" class="mb-2 block text-sm font-medium text-stone-700">Số điện thoại</label>
-                            <input id="phone" type="tel" placeholder="09xx xxx xxx" class="w-full rounded-xl border border-stone-300 px-4 py-3 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label for="note" class="mb-2 block text-sm font-medium text-stone-700">Ghi chú (tuỳ chọn)</label>
-                            <textarea id="note" rows="4" placeholder="Ví dụ: muốn tư vấn màu nâu lạnh, tóc mỏng..." class="w-full rounded-xl border border-stone-300 px-4 py-3 text-sm focus:border-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-100"></textarea>
-                        </div>
-                    </div>
-                </article>
+    <div id="booking-page" class="pb-12 pt-6 sm:pt-8">
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-wide text-black/45">Booking online</p>
+                    <h1 class="mt-1 text-xl font-semibold text-black/85 sm:text-2xl">Đặt lịch hẹn</h1>
+                </div>
+                <p class="text-sm text-black/45">Hoàn tất các bước bên dưới để giữ chỗ tại salon.</p>
             </div>
 
-            {{--
-                Cột phải: tóm tắt đơn đặt lịch + CTA xác nhận
-            --}}
-            <aside class="space-y-4 lg:col-span-4">
-                <div class="rounded-2xl border border-stone-200 bg-white p-6 shadow-sm lg:sticky lg:top-24">
-                    <h2 class="text-lg font-semibold text-stone-900">Tóm tắt lịch hẹn</h2>
+            {{-- Step bar (kiểu Ant Design Steps) --}}
 
+        </div>
+
+        <div class="mx-auto grid max-w-6xl gap-5 px-4 sm:px-6 lg:grid-cols-12 lg:gap-6">
+            <div class="space-y-5 lg:col-span-8">
+                {{-- Chi nhánh --}}
+                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Chọn salon</h2>
+                    <p class="mt-1 text-sm text-black/45">Vui lòng chọn cơ sở bạn muốn đến.</p>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
+                        <label class="flex cursor-pointer gap-3 rounded border border-black/15 bg-white p-4 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/50">
+                            <input type="radio" name="booking_branch" value="trieukhuc" class="peer sr-only" checked>
+                            <span class="mt-0.5 size-4 shrink-0 rounded-full border-2 border-black/25 bg-white peer-checked:border-[#1677ff] peer-checked:bg-[#1677ff] peer-checked:shadow-[inset_0_0_0_2px_white]"></span>
+                            <span>
+                                <span class="block text-sm font-semibold text-black/85" data-branch-label>ZenStyle Triều Khúc</span>
+                                <span class="mt-1 block text-sm text-black/45">123 Triều Khúc, Thanh Xuân, Hà Nội</span>
+                            </span>
+                        </label>
+                        <label class="flex cursor-pointer gap-3 rounded border border-black/15 bg-white p-4 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/50">
+                            <input type="radio" name="booking_branch" value="hadong" class="peer sr-only">
+                            <span class="mt-0.5 size-4 shrink-0 rounded-full border-2 border-black/25 bg-white peer-checked:border-[#1677ff] peer-checked:bg-[#1677ff] peer-checked:shadow-[inset_0_0_0_2px_white]"></span>
+                            <span>
+                                <span class="block text-sm font-semibold text-black/85" data-branch-label>ZenStyle Hà Đông</span>
+                                <span class="mt-1 block text-sm text-black/45">58 Nguyễn Văn Lộc, Hà Đông</span>
+                            </span>
+                        </label>
+                    </div>
+                </section>
+
+                {{-- Số lượng khách (EasySalon có bước này) --}}
+                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Số lượng khách</h2>
+                    <p class="mt-1 text-sm text-black/45">Số người sử dụng dịch vụ trong buổi hẹn.</p>
+                    <div class="mt-4 inline-flex items-center rounded border border-black/15">
+                        <button type="button" data-booking-guest-minus class="px-4 py-2 text-sm text-black/65 transition hover:bg-black/5 hover:text-black/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1677ff]/40" aria-label="Giảm số khách">−</button>
+                        <span data-booking-guest-value class="min-w-[3rem] border-x border-black/15 py-2 text-center text-sm font-medium text-black/85 tabular-nums">1</span>
+                        <button type="button" data-booking-guest-plus class="px-4 py-2 text-sm text-black/65 transition hover:bg-black/5 hover:text-black/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1677ff]/40" aria-label="Tăng số khách">+</button>
+                    </div>
+                </section>
+
+                {{-- Ngày + lịch tuần (nút) + khung giờ --}}
+                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Chọn ngày &amp; giờ</h2>
+                    <p class="mt-1 text-sm text-black/45">Chọn ngày trong tuần và khung giờ bắt đầu.</p>
+
+                    <div class="mt-4">
+                        <label for="booking-date" class="mb-2 block text-sm font-medium text-black/65">Hoặc chọn ngày</label>
+                        <input
+                            id="booking-date"
+                            type="date"
+                            value="2026-05-06"
+                            class="h-10 max-w-xs rounded border border-black/15 bg-white px-3 text-sm text-black/85 outline-none ring-[#1677ff] focus:border-[#1677ff] focus:ring-2 focus:ring-[#1677ff]/20"
+                        >
+                    </div>
+
+                    <p class="mb-2 mt-6 text-sm font-medium text-black/65">Tuần này</p>
+                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Chọn ngày trong tuần">
+                        @foreach ([
+                            ['T2', '05/05', '2026-05-05', 'Thứ 2, 05/05/2026', false],
+                            ['T3', '06/05', '2026-05-06', 'Thứ 3, 06/05/2026', true],
+                            ['T4', '07/05', '2026-05-07', 'Thứ 4, 07/05/2026', false],
+                            ['T5', '08/05', '2026-05-08', 'Thứ 5, 08/05/2026', false],
+                            ['T6', '09/05', '2026-05-09', 'Thứ 6, 09/05/2026', false],
+                            ['T7', '10/05', '2026-05-10', 'Thứ 7, 10/05/2026', false],
+                            ['CN', '11/05', '2026-05-11', 'Chủ nhật, 11/05/2026', false],
+                        ] as $d)
+                            @php [$dayLabel, $dayDisp, $dayIso, $daySummary, $daySelected] = $d;
+                            @endphp
+                            <button
+                                type="button"
+                                data-booking-day
+                                data-date="{{ $dayIso }}"
+                                data-summary="{{ $daySummary }}"
+                                aria-pressed="{{ $daySelected ? 'true' : 'false' }}"
+                                class="min-w-[4.5rem] rounded border px-3 py-2 text-left text-sm transition-colors border-black/15 bg-white text-black/65 hover:border-[#1677ff]/40"
+                            >
+                                <span class="block text-xs text-black/45">{{ $dayLabel }}</span>
+                                <span class="block tabular-nums">{{ $dayDisp }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+
+                    <p class="mb-2 mt-6 text-sm font-medium text-black/65">Khung giờ trống</p>
+                    <div class="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6" role="radiogroup" aria-label="Giờ bắt đầu">
+                        @foreach (['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '17:00'] as $slot)
+                            <button
+                                type="button"
+                                data-booking-slot
+                                data-slot="{{ $slot }}"
+                                aria-pressed="{{ $slot === '10:00' ? 'true' : 'false' }}"
+                                class="rounded border px-2 py-2 text-sm transition-colors border-black/15 bg-white text-black/65 hover:border-[#1677ff]/50"
+                            >
+                                {{ $slot }}
+                            </button>
+                        @endforeach
+                    </div>
+                </section>
+
+                {{-- Dịch vụ --}}
+                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Chọn dịch vụ</h2>
+                    <p class="mt-1 text-sm text-black/45">Có thể chọn nhiều dịch vụ trong một lịch.</p>
+                    <ul class="mt-4 divide-y divide-black/6 rounded border border-black/8">
+                        <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Cắt tóc nam cao cấp" data-service-price="150000">
+                            <label class="flex flex-1 cursor-pointer items-start gap-3">
+                                <input type="checkbox" checked name="booking_services[]" value="cut" class="mt-0.5 size-4 rounded border-black/20 text-[#1677ff] focus:ring-[#1677ff]/30">
+                                <span>
+                                    <span class="block text-sm font-medium text-black/85">Cắt tóc nam cao cấp</span>
+                                    <span class="mt-0.5 block text-xs text-black/45">Khoảng 45 phút</span>
+                                </span>
+                            </label>
+                            <span class="text-sm font-semibold text-[#1677ff]">150.000đ</span>
+                        </li>
+                        <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Gội + massage da đầu" data-service-price="120000">
+                            <label class="flex flex-1 cursor-pointer items-start gap-3">
+                                <input type="checkbox" name="booking_services[]" value="wash" class="mt-0.5 size-4 rounded border-black/20 text-[#1677ff] focus:ring-[#1677ff]/30">
+                                <span>
+                                    <span class="block text-sm font-medium text-black/85">Gội + massage da đầu</span>
+                                    <span class="mt-0.5 block text-xs text-black/45">30 phút</span>
+                                </span>
+                            </label>
+                            <span class="text-sm font-semibold text-[#1677ff]">120.000đ</span>
+                        </li>
+                        <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Uốn / nhuộm cơ bản" data-service-price="650000">
+                            <label class="flex flex-1 cursor-pointer items-start gap-3">
+                                <input type="checkbox" name="booking_services[]" value="perm" class="mt-0.5 size-4 rounded border-black/20 text-[#1677ff] focus:ring-[#1677ff]/30">
+                                <span>
+                                    <span class="block text-sm font-medium text-black/85">Uốn / nhuộm cơ bản</span>
+                                    <span class="mt-0.5 block text-xs text-black/45">~120 phút</span>
+                                </span>
+                            </label>
+                            <span class="text-sm font-semibold text-[#1677ff]">650.000đ</span>
+                        </li>
+                        <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Treatment phục hồi" data-service-price="320000">
+                            <label class="flex flex-1 cursor-pointer items-start gap-3">
+                                <input type="checkbox" name="booking_services[]" value="treatment" class="mt-0.5 size-4 rounded border-black/20 text-[#1677ff] focus:ring-[#1677ff]/30">
+                                <span>
+                                    <span class="block text-sm font-medium text-black/85">Treatment phục hồi</span>
+                                    <span class="mt-0.5 block text-xs text-black/45">60 phút</span>
+                                </span>
+                            </label>
+                            <span class="text-sm font-semibold text-[#1677ff]">320.000đ</span>
+                        </li>
+                    </ul>
+                </section>
+
+                {{-- Nhân viên --}}
+                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Chọn nhân viên</h2>
+                    <p class="mt-1 text-sm text-black/45">Để salon sắp xếp lịch hoặc chọn stylist yêu thích.</p>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
+                            <input type="radio" name="booking_stylist" value="any" class="peer sr-only" checked>
+
+                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Quách Tùng Dương</span></span>
+                        </label>
+                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
+                            <input type="radio" name="booking_stylist" value="lan-chi" class="peer sr-only">
+
+                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Đinh Văn Hải</span></span>
+                        </label>
+                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
+                            <input type="radio" name="booking_stylist" value="hoang-nam" class="peer sr-only">
+                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Lê Hoàng Nam</span></span>
+                        </label>
+                    </div>
+                </section>
+
+                {{-- Khuyến mãi --}}
+                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Mã khuyến mãi</h2>
+                    <p class="mt-1 text-sm text-black/45">Nhập mã ưu đãi (nếu có).</p>
+                    <div class="mt-4 flex flex-col gap-2 sm:flex-row">
+                        <input
+                            type="text"
+                            data-booking-promo-input
+                            placeholder="VD: SUMMER2026"
+                            class="h-10 flex-1 rounded border border-black/15 px-3 text-sm outline-none placeholder:text-black/35 focus:border-[#1677ff] focus:ring-2 focus:ring-[#1677ff]/20"
+                        >
+                        <button
+                            type="button"
+                            data-booking-promo-apply
+                            class="h-10 shrink-0 rounded border border-[#1677ff] bg-white px-5 text-sm font-medium text-[#1677ff] transition hover:bg-[#e6f4ff]"
+                        >
+                            Áp dụng
+                        </button>
+                    </div>
+                    <p data-booking-promo-hint class="mt-2 text-xs text-black/55" hidden></p>
+                </section>
+
+                {{-- Thông tin liên hệ --}}
+                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Thông tin liên hệ</h2>
+                    <p class="mt-1 text-sm text-black/45">Salon dùng thông tin này để xác nhận lịch.</p>
+                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                        <div class="sm:col-span-1">
+                            <label for="full-name" class="mb-1.5 block text-sm font-medium text-black/65">Họ và tên</label>
+                            <input
+                                id="full-name"
+                                type="text"
+                                placeholder="Nguyễn Văn A"
+                                class="h-10 w-full rounded border border-black/15 px-3 text-sm outline-none focus:border-[#1677ff] focus:ring-2 focus:ring-[#1677ff]/20"
+                            >
+                        </div>
+                        <div class="sm:col-span-1">
+                            <label for="phone" class="mb-1.5 block text-sm font-medium text-black/65">Số điện thoại</label>
+                            <input
+                                id="phone"
+                                type="tel"
+                                placeholder="09xx xxx xxx"
+                                class="h-10 w-full rounded border border-black/15 px-3 text-sm outline-none focus:border-[#1677ff] focus:ring-2 focus:ring-[#1677ff]/20"
+                            >
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label for="note" class="mb-1.5 block text-sm font-medium text-black/65">Ghi chú (tuỳ chọn)</label>
+                            <textarea
+                                id="note"
+                                rows="4"
+                                placeholder="Ví dụ: mong muốn tư vấn màu, tình trạng tóc..."
+                                class="w-full resize-y rounded border border-black/15 px-3 py-2 text-sm outline-none focus:border-[#1677ff] focus:ring-2 focus:ring-[#1677ff]/20"
+                            ></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                {{-- Thanh hành động dưới (kiểu wizard) --}}
+                <div class="flex flex-col-reverse gap-3 border-t border-black/8 pt-2 sm:flex-row sm:justify-end">
+                    <button
+                        type="button"
+                        class="h-10 rounded border border-black/15 bg-white px-5 text-sm font-medium text-black/65 hover:border-[#1677ff]/40 hover:text-[#1677ff]"
+                    >
+                        Quay lại
+                    </button>
+                    <button
+                        type="button"
+                        class="h-10 rounded bg-[#1677ff] px-8 text-sm font-medium text-white shadow-sm transition hover:bg-[#4096ff]"
+                    >
+                        Tiếp tục / Xác nhận đặt lịch
+                    </button>
+                </div>
+            </div>
+
+            {{-- Sidebar tóm tắt --}}
+            <aside class="lg:col-span-4">
+                <div class="sticky top-24 rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Tóm tắt đặt lịch</h2>
                     <dl class="mt-4 space-y-3 text-sm">
-                        <div class="flex items-start justify-between gap-4">
-                            <dt class="text-stone-500">Chi nhánh</dt>
-                            <dd class="text-right font-medium text-stone-900">ZenStyle Triều Khúc</dd>
+                        <div class="flex justify-between gap-3 border-b border-dashed border-black/10 pb-3">
+                            <dt class="text-black/45">Salon</dt>
+                            <dd id="booking-summary-branch" class="text-right font-medium text-black/85">ZenStyle Triều Khúc</dd>
                         </div>
-                        <div class="flex items-start justify-between gap-4">
-                            <dt class="text-stone-500">Dịch vụ</dt>
-                            <dd class="text-right font-medium text-stone-900">Cắt tóc nam cao cấp</dd>
+                        <div class="flex justify-between gap-3 border-b border-dashed border-black/10 pb-3">
+                            <dt class="text-black/45">Thời gian</dt>
+                            <dd class="text-right font-medium text-black/85">
+                                <span id="booking-summary-time-line" class="block">10:00</span>
+                                <span id="booking-summary-date-line" class="text-xs font-normal text-black/45">Thứ 3, 06/05/2026</span>
+                            </dd>
                         </div>
-                        <div class="flex items-start justify-between gap-4">
-                            <dt class="text-stone-500">Stylist</dt>
-                            <dd class="text-right font-medium text-stone-900">Bất kỳ</dd>
+                        <div class="flex justify-between gap-3 border-b border-dashed border-black/10 pb-3">
+                            <dt class="text-black/45">Khách</dt>
+                            <dd id="booking-summary-guests" class="text-right font-medium text-black/85">1 người</dd>
                         </div>
-                        <div class="flex items-start justify-between gap-4">
-                            <dt class="text-stone-500">Thời gian</dt>
-                            <dd class="text-right font-medium text-stone-900">10:00, 06/05/2026</dd>
+                        <div class="flex justify-between gap-3 border-b border-dashed border-black/10 pb-3">
+                            <dt class="text-black/45">Nhân viên</dt>
+                            <dd id="booking-summary-stylist" class="text-right font-medium text-black/85">Bất kỳ nhân viên</dd>
+                        </div>
+                        <div>
+                            <dt class="text-black/45">Dịch vụ</dt>
+                            <dd id="booking-summary-services" class="mt-2 space-y-1 text-right font-medium text-black/85"></dd>
                         </div>
                     </dl>
 
-                    <div class="my-4 border-t border-dashed border-stone-200"></div>
+                    <div class="my-4 border-t border-black/10"></div>
 
-                    <div class="flex items-center justify-between">
-                        <p class="text-sm text-stone-500">Tạm tính</p>
-                        <p class="text-xl font-bold text-rose-700">150.000đ</p>
+                    <div class="flex items-baseline justify-between">
+                        <span class="text-sm text-black/45">Tạm tính</span>
+                        <span id="booking-summary-total" class="text-xl font-semibold text-[#1677ff]">150.000đ</span>
                     </div>
 
                     <button
                         type="button"
-                        class="mt-5 w-full rounded-xl bg-stone-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-stone-800"
+                        class="mt-5 flex h-10 w-full items-center justify-center rounded bg-[#1677ff] text-sm font-medium text-white transition hover:bg-[#4096ff]"
                     >
-                        Xác nhận đặt lịch
+                        Hoàn tất đặt lịch
                     </button>
 
-                    <p class="mt-3 text-center text-xs text-stone-500">
-                        Khi bấm xác nhận, bạn đồng ý với chính sách đặt lịch của ZenStyle.
-                    </p>
-                </div>
-
-                <div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-                    <p class="font-semibold">Lưu ý</p>
-                    <p class="mt-1">
-                        Vui lòng đến sớm 5-10 phút. Salon sẽ giữ lịch tối đa 15 phút nếu chưa thấy bạn check-in.
+                    <p class="mt-4 text-center text-xs leading-relaxed text-black/45">
+                        Bằng việc xác nhận, bạn đồng ý với quy định đặt lịch và chính sách của ZenStyle.
+                        Lịch được giữ tối đa 15 phút sau xác nhận.
                     </p>
                 </div>
             </aside>
         </div>
-    </section>
+    </div>
 @endsection
