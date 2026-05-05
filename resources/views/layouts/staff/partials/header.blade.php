@@ -616,7 +616,7 @@
             <img src="{{ asset('images/tailadmin/user/owner.jpg') }}" alt="User" />
           </span>
 
-          <span class="text-theme-sm mr-1 block font-medium"> {{ auth()->user()->username }} </span>
+          <span class="text-theme-sm mr-1 block font-medium"> Minh </span>
 
           <svg
             :class="dropdownOpen && 'rotate-180'"
@@ -646,12 +646,12 @@
             <span
               class="text-theme-sm block font-medium text-gray-700 dark:text-gray-400"
             >
-              Musharof Chowdhury
+              Minh Pham
             </span>
             <span
               class="text-theme-xs mt-0.5 block text-gray-500 dark:text-gray-400"
             >
-              {{ auth()->user()->email }}
+              minh@email.com
             </span>
           </div>
 
