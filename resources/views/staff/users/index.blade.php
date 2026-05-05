@@ -13,23 +13,10 @@
             class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
         >
             <div class="px-5 py-4 sm:px-6 sm:py-5">
-                <h3
-                    class="text-base font-medium text-gray-800 dark:text-white/90"
-                >
-                    Users list
-                </h3>
-            </div>
-            <div
-                class="p-5 border-t border-gray-100 dark:border-gray-800 sm:p-6"
-            >
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Users list</h3>
 
-                <!-- ====== Table Start -->
-                <div
-                    class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6"
-                >
-                    <div
-                        class="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-end"
-                    >
+                    <div class="flex items-center gap-2">
                         <!-- ADD USER BUTTON -->
                         <a href="{{ route('staff.users.create') }}"
                            class="inline-flex items-center gap-2 rounded-lg bg-brand-500 px-4 py-2.5 text-theme-sm font-medium text-white shadow-theme-xs hover:bg-brand-600">
@@ -39,10 +26,9 @@
                             </svg>
                             Add User
                         </a>
+
                         <!-- FILTER BUTTON -->
-                        <div class="relative flex items-center gap-3"
-                             x-data="{ openFilter: false }"
-                        >
+                        <div class="relative flex items-center gap-3" x-data="{ openFilter: false }">
                             <button
                                 @click="openFilter = !openFilter"
                                 class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
@@ -83,25 +69,31 @@
                             @include('layouts.staff.partials.filter-popup')
                         </div>
                     </div>
+                </div>
+            </div>
 
+            <div class="p-5 sm:p-6">
+
+                <!-- ====== Table Start -->
+                <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                     <div class="w-full overflow-x-auto">
                         <table class="min-w-full">
                             <!-- table header start -->
                             <thead>
-                            <tr class="border-gray-100 border-y dark:border-gray-800">
-                                <th class="py-3 text-left">
+                            <tr class="border-b border-gray-100 dark:border-gray-800">
+                                <th class="px-4 pb-3 pt-4 sm:px-6 text-left">
                                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">ID</p>
                                 </th>
-                                <th class="py-3 text-left">
+                                <th class="px-4 pb-3 pt-4 sm:px-6 text-left">
                                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">User</p>
                                 </th>
-                                <th class="py-3 text-left">
+                                <th class="px-4 pb-3 pt-4 sm:px-6 text-left">
                                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Email</p>
                                 </th>
-                                <th class="py-3 text-left">
+                                <th class="px-4 pb-3 pt-4 sm:px-6 text-left">
                                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>
                                 </th>
-                                <th class="py-3 text-right">
+                                <th class="px-4 pb-3 pt-4 sm:px-6 text-right">
                                     <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Action</p>
                                 </th>
                             </tr>
@@ -112,10 +104,10 @@
                             @foreach($users as $user)
                                 <!-- table item -->
                                 <tr>
-                                    <td class="py-3">
+                                    <td class="px-4 pb-3 pt-4 sm:px-6">
                                         <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ $user->id }}</p>
                                     </td>
-                                    <td class="py-3">
+                                    <td class="px-4 pb-3 pt-4 sm:px-6">
                                         <div class="flex items-center gap-3">
                                             <div class="h-10 w-10 overflow-hidden rounded-full bg-gray-100">
                                                 <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}" alt="User" />
@@ -136,10 +128,10 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="py-3">
+                                    <td class="px-4 pb-3 pt-4 sm:px-6">
                                         <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ $user->email }}</p>
                                     </td>
-                                    <td class="py-3">
+                                    <td class="px-4 pb-3 pt-4 sm:px-6">
                                         @if($user->status == 1)
                                             <span class="inline-flex items-center justify-center gap-1 rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
                                 Active
@@ -150,7 +142,7 @@
                             </span>
                                         @endif
                                     </td>
-                                    <td class="py-3">
+                                    <td class="px-4 pb-3 pt-4 sm:px-6">
                                         <div class="flex items-center justify-end gap-2">
 
                                             <!-- Edit -->
