@@ -1,25 +1,27 @@
 <?php
 
-use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::controller(FrontendController::class)->group(function () {
-    Route::get('/', 'home')->name('home');
-    Route::get('/home', 'home');
-    Route::get('/about', 'about')->name('about');
-    Route::get('/news', 'news')->name('news');
+Route::get('/', function () {
+    return view('frontend.welcome');
 });
-Route::view('/booking', 'frontend.booking.index')->name('booking');
+
+Route::fallback(function (){
+    return view('staff.404');
+});
 
 Route::prefix('staff')->name('staff.')->group(function () {
+    //login
+    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [AuthController::class, 'login'])->name('login.post');
+    //logout
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+    //dashboard
     Route::get('/', function () {
         return view('staff.dashboard');
     })->name('dashboard');
-
     Route::resource('users', UserController::class);
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
-
-
-
