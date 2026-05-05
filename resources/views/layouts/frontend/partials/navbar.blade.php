@@ -20,7 +20,7 @@
             <a href="#dich-vu" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Dịch vụ</a>
             <a href="#lien-he" class="site-nav-link text-stone-600 hover:text-stone-900 transition-colors">Liên hệ</a>
         </nav>
-        <a href="#dat-lich" class="site-nav-cta rounded-full bg-stone-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-stone-800
+        <a href="{{ route('booking') }}" class="site-nav-cta rounded-full bg-stone-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-stone-800
             data-[on-banner='true']:bg-rose-400 data-[on-banner='true']:hover:bg-rose-500">
             Đặt lịch ngay
         </a>

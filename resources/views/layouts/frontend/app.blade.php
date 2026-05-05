@@ -3,8 +3,8 @@
 <html lang="vi" class="scroll-smooth">
 <head>
     @include('layouts.frontend.partials.head')
-    {{-- @vite: Laravel + Vite nạp file CSS/JS đã build; Tailwind nằm trong app.css --}}
-    @vite(['resources/css/app.css','resources/js/frontend.js'])
+    {{-- @vite: frontend dùng entry riêng để load Tailwind + JS --}}
+    @vite(['resources/css/frontend.css', 'resources/js/frontend.js'])
 </head>
 <body class="min-h-screen bg-white font-outfit text-stone-900 antialiased">
 @include('layouts.frontend.partials.navbar')
