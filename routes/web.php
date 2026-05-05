@@ -18,6 +18,7 @@ Route::prefix('staff')->name('staff.')->group(function () {
     })->name('dashboard');
 
     Route::resource('users', UserController::class);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
 
