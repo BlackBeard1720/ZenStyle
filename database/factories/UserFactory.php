@@ -27,7 +27,7 @@ class UserFactory extends Factory
             static::$password = Hash::make('123456'); // Tạo mật khẩu mặc định
         }
         return [
-            "username" => fake()->name(), // Tên đăng nhập giả lập
+            "username" => fake()->userName(), // Tên đăng nhập giả lập
             "email" => fake()->unique()->safeEmail(), // Email giả lập
             "phone" => fake()->phoneNumber(), // Số điện thoại giả lập
             "password" => static::$password, // Mật khẩu được tạo bởi factory

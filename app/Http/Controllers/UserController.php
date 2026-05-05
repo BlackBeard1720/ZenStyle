@@ -38,7 +38,7 @@ class UserController extends Controller
         if ($request->filled('name')) {
             // Thêm điều kiện tìm kiếm gần đúng (LIKE)
             // Ví dụ: 'alex' => '%alex%'
-            $query->where('name', 'like', '%' . $request->name . '%');
+            $query->where('username', 'like', '%' . $request->name . '%');
         }
 
         // =========================
