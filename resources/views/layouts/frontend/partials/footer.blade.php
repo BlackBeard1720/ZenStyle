@@ -53,7 +53,7 @@
 
             <div class="relative mt-10 min-h-[280px] overflow-hidden rounded-2xl border border-stone-200/90 bg-stone-200 shadow-lg ring-1 ring-stone-900/5 lg:mt-0 lg:min-h-[360px]">
                 <a
-                    href="https://www.google.com/maps/search/?api=1&amp;query={{ rawurlencode('Triều Khúc, phường Tân Triều, Hà Nội') }}"
+                    href="https://www.google.com/maps/search/?api=1&amp;query={{ rawurlencode('Trường Cao đẳng FPT Polytechnic') }}"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="absolute left-3 top-3 z-10 rounded-lg bg-white/95 px-3 py-2 text-xs font-semibold text-stone-800 shadow-md ring-1 ring-stone-200/90 backdrop-blur-sm transition hover:bg-white"
@@ -61,12 +61,12 @@
                     Mở trong Maps
                 </a>
                 <iframe
-                    title="Bản đồ ZenStyle — Triều Khúc, phường Tân Triều, Hà Nội"
+                    title="Bản đồ ZenStyle"
                     class="absolute inset-0 h-full w-full border-0"
                     loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"
                     allowfullscreen
-                    src="https://www.google.com/maps?q={{ rawurlencode('Triều Khúc, phường Tân Triều, Hà Nội') }}&amp;z=16&amp;hl=vi&amp;output=embed"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d553.5558370163218!2d105.74746568218576!3d21.038088948474012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313455e940879933%3A0xcf10b34e9f1a03df!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEZQVCBQb2x5dGVjaG5pYw!5e0!3m2!1sen!2s!4v1778012474809!5m2!1sen!2s"
                 ></iframe>
             </div>
         </div>
