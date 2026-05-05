@@ -51,6 +51,7 @@
         </div>
       </div>
 
+      <!-- PHẦN BẢN ĐỒ ĐÃ ĐƯỢC CẬP NHẬT Ở ĐÂY -->
       <div class="relative mt-10 min-h-[280px] overflow-hidden rounded-2xl border border-stone-200/90 bg-stone-200 shadow-lg ring-1 ring-stone-900/5 lg:mt-0 lg:min-h-[360px]">
         <a
           href="https://www.google.com/maps/search/?api=1&amp;query={{ rawurlencode('Trường Cao đẳng FPT Polytechnic') }}"
