@@ -6,6 +6,10 @@
 
 @section('content')
     {{--
+        Nền trang chủ — luồng hợp lý:
+        stone-50 (canvas đồng bộ body) → band trắng (#dịch vụ, #đặt-lịch) → capsule rose nhấn trong CTA.
+    --}}
+    {{--
         =====================================================================
         HERO / SLIDER TĨNH
         ---------------------------------------------------------------------
@@ -79,7 +83,7 @@
         SECTION GIỚI THIỆU
         =====================================================================
     --}}
-    <section id="gioi-thieu" class="scroll-mt-24 bg-rose-50 px-4 py-20 sm:px-6">
+    <section id="gioi-thieu" class="scroll-mt-24 bg-stone-50 px-4 py-20 sm:px-6">
         <div class="mx-auto max-w-6xl">
             <div class="text-center mb-12">
                 <h2 class="text-3xl sm:text-4xl font-bold text-stone-900">Về ZenStyle</h2>
@@ -95,7 +99,7 @@
                         <span class="text-2xl">✨</span>
                     </div>
                     <h3 class="text-xl font-semibold text-stone-900">Chất lượng cao</h3>
-                    <p class="mt-3 text-stone-600">Sử dụng sản phẩm cao cấp và kỹ thuật chuyên nghiệp.</p>
+                     <p class="mt-3 text-stone-600">Sử dụng sản phẩm cao cấp và kỹ thuật chuyên nghiệp.</p>
                 </div>
 
                 <div class="rounded-2xl bg-white p-8 shadow-sm hover:shadow-md transition">
@@ -125,31 +129,132 @@
         - Dữ liệu hiện tại viết cứng, sau này có thể thay bằng DB.
         =====================================================================
     --}}
-    <section id="dich-vu" class="scroll-mt-24 bg-stone-50 px-4 py-16 sm:px-6">
+    <section id="dich-vu" class="scroll-mt-24 border-y border-stone-200/80 bg-white px-4 py-16 sm:px-6">
         <div class="mx-auto max-w-6xl">
             <div class="text-center">
                 <h2 class="text-2xl font-semibold text-stone-800 sm:text-3xl">Dịch vụ nổi bật</h2>
                 <p class="mt-2 text-stone-600">Chọn gói phù hợp — đội ngũ tư vấn tận tâm.</p>
             </div>
 
-            <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 @foreach ([
-                    ['Tóc', 'Cắt, uốn, nhuộm với xu hướng mới nhất.'],
-                    ['Da & mặt', 'Chăm sóc da chuyên sâu, làm sáng và căng mịn.'],
-                    ['Spa & thư giãn', 'Massage, gói trị liệu giúp phục hồi năng lượng.'],
+                    [
+                        'title' => 'Tóc',
+                        'desc' => 'Cắt, uốn, nhuộm với xu hướng mới nhất.',
+                        'image' => asset('images/frontend/services/featured-toc.png'),
+                        'alt' => 'Stylist đang tạo kiểu tóc cho khách tại ZenStyle',
+                    ],
+                    [
+                        'title' => 'Gội & dưỡng tóc',
+                        'desc' => 'Gội massage thư giãn, sản phẩm chăm sóc chuyên nghiệp.',
+                        'image' => asset('images/frontend/services/featured-goi.png'),
+                        'alt' => 'Dịch vụ gội đầu và massage da đầu tại salon',
+                    ],
+                    [
+                        'title' => 'Spa & thư giãn',
+                        'desc' => 'Massage, gói trị liệu giúp phục hồi năng lượng.',
+                        'image' => asset('images/frontend/services/featured-spa.png'),
+                        'alt' => 'Phòng massage ZenStyle — không gian thư giãn',
+                    ],
                 ] as $item)
-                    <article class="rounded-2xl border border-rose-100/90 bg-white p-6 shadow-sm">
-                        <h3 class="text-lg font-semibold text-stone-900">{{ $item[0] }}</h3>
-                        <p class="mt-2 text-sm text-stone-600">{{ $item[1] }}</p>
+                    <article class="overflow-hidden rounded-2xl border border-rose-100/90 bg-white shadow-sm transition hover:shadow-md">
+                        <div class="aspect-[4/3] overflow-hidden bg-stone-200">
+                            <img
+                                src="{{ $item['image'] }}"
+                                alt="{{ $item['alt'] }}"
+                                class="h-full w-full object-cover transition duration-500 ease-out hover:scale-105"
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-stone-900">{{ $item['title'] }}</h3>
+                            <p class="mt-2 text-sm text-stone-600">{{ $item['desc'] }}</p>
+                        </div>
                     </article>
                 @endforeach
             </div>
 
             <div class="mt-12 text-center">
-                <a href="#dat-lich"
-                   class="inline-flex rounded-full bg-rose-400 px-8 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-500">
+                <a
+                    href="{{ route('booking') }}"
+                    class="booking-cta inline-flex rounded-full px-8 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1677ff]/50 focus-visible:ring-offset-2"
+                >
                     Đặt lịch ngay
                 </a>
+            </div>
+        </div>
+    </section>
+
+    {{--
+        =====================================================================
+        HOT TREND — mẫu tóc hot, lưới 3 cột đều (tỉ lệ cột 1:1:1)
+        =====================================================================
+    --}}
+    @php
+        $hotTrendStyles = [
+            [
+                'image' => asset('images/frontend/hottrend/hottrend-01.png'),
+                'alt' => 'Kiểu spike texture, kính gọng đen',
+                'label' => 'Spike texture',
+            ],
+            [
+                'image' => asset('images/frontend/hottrend/hottrend-02.png'),
+                'alt' => 'Tóc nam gọn, phong cách công sở hiện đại',
+                'label' => 'Lịch lãm office',
+            ],
+            [
+                'image' => asset('images/frontend/hottrend/hottrend-03.png'),
+                'alt' => 'Crop texture, kính không gọng, nền studio',
+                'label' => 'Textured crop',
+            ],
+            [
+                'image' => asset('images/frontend/hottrend/hottrend-04.png'),
+                'alt' => 'Wolf cut mullet, layer messy',
+                'label' => 'Wolf cut / Mullet',
+            ],
+            [
+                'image' => asset('images/frontend/hottrend/hottrend-05.png'),
+                'alt' => 'Skin fade cao, spike gọn, profile',
+                'label' => 'Skin fade + spike',
+            ],
+            [
+                'image' => asset('images/frontend/hottrend/hottrend-06.png'),
+                'alt' => 'Undercut mái bạc khói, đường hard part',
+                'label' => 'Undercut + hard part',
+            ],
+        ];
+    @endphp
+
+    <section id="hot-trend" class="scroll-mt-24 bg-gradient-to-b from-stone-50 via-stone-50 to-white px-4 py-16 sm:px-6">
+        <div class="mx-auto max-w-6xl">
+            <div class="text-center">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-600">ZenStyle picks</p>
+                <h2 class="mt-2 text-2xl font-semibold text-stone-900 sm:text-3xl">Hot trend tóc</h2>
+                <p class="mx-auto mt-2 max-w-2xl text-sm text-stone-600 sm:text-base">
+                    Các kiểu mẫu đang được yêu thích — tham khảo và đặt lịch tư vấn cùng stylist.
+                </p>
+            </div>
+
+            {{-- Hai hàng × 3 cột: chia đều 33% · 33% · 33% --}}
+            <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+                @foreach ($hotTrendStyles as $trend)
+                    <figure class="group overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 shadow-sm">
+                        <div class="aspect-square overflow-hidden">
+                            <img
+                                src="{{ $trend['image'] }}"
+                                alt="{{ $trend['alt'] }}"
+                                class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.03]"
+                                loading="lazy"
+                                decoding="async"
+                                sizes="(min-width: 640px) 33vw, 100vw"
+                            >
+                        </div>
+                        <figcaption class="border-t border-stone-100 bg-white px-3 py-2.5 text-center text-sm font-medium text-stone-800">
+                            {{ $trend['label'] }}
+                        </figcaption>
+                    </figure>
+                @endforeach
             </div>
         </div>
     </section>
@@ -160,23 +265,10 @@
         =====================================================================
         - Trước đó navbar/CTA trỏ tới #dat-lich nhưng chưa có section tương ứng.
         - Bổ sung section mẫu để không còn link chết.
+        
+        
+        
         =====================================================================
     --}}
-    <section id="dat-lich" class="scroll-mt-24 bg-rose-50 px-4 py-16 sm:px-6">
-        <div class="mx-auto max-w-6xl rounded-3xl border border-rose-100 bg-rose-50/70 p-8 sm:p-10">
-            <h2 class="text-2xl font-semibold text-stone-900 sm:text-3xl">Đặt lịch nhanh cùng ZenStyle</h2>
-            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-stone-600 sm:text-base">
-                Đây là block giữ chỗ cho module đặt lịch ở task sau. Hiện tại bạn có thể đổi nút này sang route thật
-                (ví dụ: <code>/booking/create</code>) khi hoàn thiện chức năng đặt lịch.
-            </p>
-            <div class="mt-6">
-                <a
-                    href="#"
-                    class="inline-flex rounded-full bg-stone-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-stone-800"
-                >
-                    Mở form đặt lịch (sẽ làm ở task sau)
-                </a>
-            </div>
-        </div>
-    </section>
+    
 @endsection

@@ -9,3 +9,47 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/*
+  ZenStyle — chuẩn nền trang frontend (đồng bộ home / about / news / booking):
+  - Canvas: bg-stone-50 (body, layout)
+  - Khối nội dung nổi: bg-white
+  - Nhấn thương hiệu: bg-rose-50 (đoạn CTA / giới thiệu mềm, khối footer #lien-he)
+*/
+
+/** Nút CTA "Đặt lịch ngay": nền hồng, hover sang xanh. */
+@layer components {
+    .booking-cta {
+        @apply bg-rose-400 text-white shadow-sm transition-colors hover:bg-[#1677ff] hover:text-white;
+    }
+
+    .booking-cta:active {
+        @apply bg-[#0958d9];
+    }
+
+    /*
+     | Trên vùng banner: header trong suốt; link trắng; logo + menu giữa + CTA như navbar.
+     */
+    #site-header[data-on-banner='true'] {
+        @apply border-transparent bg-transparent shadow-none backdrop-blur-none;
+    }
+
+    #site-header[data-on-banner='true'] .site-nav-link {
+        @apply !text-white hover:!text-stone-100;
+    }
+
+    #site-header[data-on-banner='true'] .site-nav-logo {
+        filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+    }
+
+    /** Nút đặt lịch nổi góc phải dưới (toàn site khách). */
+    .booking-fab {
+        @apply fixed z-40 flex items-center justify-center rounded-full shadow-lg shadow-black/20;
+        bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
+        right: max(1rem, env(safe-area-inset-right, 0px));
+        @media (width >= theme(--breakpoint-md)) {
+            bottom: max(1.75rem, env(safe-area-inset-bottom, 0px));
+            right: max(1.5rem, env(safe-area-inset-right, 0px));
+        }
+    }
+}
