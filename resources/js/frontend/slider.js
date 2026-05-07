@@ -16,19 +16,35 @@ function initHeroSlider() {
     if (!section) {
         return;
     }
+    section.style.touchAction = 'pan-y';
 
     const slides = Array.from(section.querySelectorAll('[data-slide]'));
     const dots = Array.from(section.querySelectorAll('[data-slide-dot]'));
+    const slideImages = slides
+        .map((slide) => slide.querySelector('img'))
+        .filter(Boolean);
 
     // Nếu không đủ dữ liệu thì dừng để tránh lỗi JS.
     if (!slides.length) {
         return;
     }
 
+    slideImages.forEach((image) => {
+        image.setAttribute('draggable', 'false');
+        image.style.pointerEvents = 'none';
+        image.style.userSelect = 'none';
+        image.style.webkitUserDrag = 'none';
+    });
+
     let currentIndex = 0;
     const total = slides.length;
     let autoSlideTimer = null;
     const AUTO_SLIDE_INTERVAL = 4000; // 4 giây
+    const DRAG_THRESHOLD = 50;
+    let dragStartX = 0;
+    let dragCurrentX = 0;
+    let dragging = false;
+    let activePointerId = null;
 
     /**
      * Bật/tắt trạng thái hiển thị cho từng slide theo index hiện tại.
@@ -76,6 +92,65 @@ function initHeroSlider() {
         resetAutoSlide();
     }
 
+    function startDrag(clientX) {
+        dragStartX = clientX;
+        dragCurrentX = clientX;
+        dragging = true;
+    }
+
+    function moveDrag(clientX) {
+        if (!dragging) {
+            return;
+        }
+        dragCurrentX = clientX;
+    }
+
+    function endDrag() {
+        if (!dragging) {
+            return;
+        }
+        const deltaX = dragCurrentX - dragStartX;
+        dragging = false;
+
+        if (Math.abs(deltaX) < DRAG_THRESHOLD) {
+            return;
+        }
+
+        if (deltaX < 0) {
+            goTo(currentIndex + 1);
+            return;
+        }
+
+        goTo(currentIndex - 1);
+    }
+
+    function handlePointerDown(event) {
+        if (event.button !== undefined && event.button !== 0) {
+            return;
+        }
+        activePointerId = event.pointerId;
+        section.setPointerCapture(activePointerId);
+        startDrag(event.clientX);
+    }
+
+    function handlePointerMove(event) {
+        if (activePointerId !== null && event.pointerId !== activePointerId) {
+            return;
+        }
+        moveDrag(event.clientX);
+    }
+
+    function handlePointerEnd(event) {
+        if (activePointerId !== null && event.pointerId !== activePointerId) {
+            return;
+        }
+        if (activePointerId !== null && section.hasPointerCapture(activePointerId)) {
+            section.releasePointerCapture(activePointerId);
+        }
+        activePointerId = null;
+        endDrag();
+    }
+
     dots.forEach((dot) => {
         dot.addEventListener('click', () => {
             const index = Number(dot.getAttribute('data-slide-index'));
@@ -93,6 +168,17 @@ function initHeroSlider() {
         if (event.key === 'ArrowRight') {
             goTo(currentIndex + 1);
         }
+    });
+
+    section.addEventListener('pointerdown', handlePointerDown);
+    section.addEventListener('pointermove', handlePointerMove);
+    section.addEventListener('pointerup', handlePointerEnd);
+    section.addEventListener('pointercancel', handlePointerEnd);
+    section.addEventListener('pointerleave', handlePointerEnd);
+
+    // Chặn kéo ảnh mặc định của trình duyệt để ưu tiên swipe.
+    section.addEventListener('dragstart', (event) => {
+        event.preventDefault();
     });
 
     render(currentIndex);

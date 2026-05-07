@@ -21,11 +21,23 @@
     @php
         $heroSlides = [
             [
-                'image' => asset('images/frontend/banner-home-01.png'),
+                'image' => asset('images/frontend/banner/Gemini_Generated_Image_kt0965kt0965kt09.png'),
                 'alt' => 'ZenStyle Hair Service',
             ],
             [
-                'image' => asset('images/frontend/ChatGPT Image 19_07_08 7 thg 5, 2026.png'),
+                'image' => asset('images/frontend/banner/Gemini_Generated_Image_7sr4oq7sr4oq7sr4.png'),
+                'alt' => 'ZenStyle Spa Service',
+            ],
+            [
+                'image' => asset('images/frontend/banner/Gemini_Generated_Image_7w6kln7w6kln7w6k.png'),
+                'alt' => 'ZenStyle Spa Service',
+            ],
+            [
+                'image' => asset('images/frontend/banner/Gemini_Generated_Image_os1lsdos1lsdos1l.png'),
+                'alt' => 'ZenStyle Spa Service',
+            ],
+            [
+                'image' => asset('images/frontend/banner/Gemini_Generated_Image_ympfunympfunympf.png'),
                 'alt' => 'ZenStyle Spa Service',
             ],
         ];
