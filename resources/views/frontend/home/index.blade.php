@@ -21,11 +21,11 @@
     @php
         $heroSlides = [
             [
-                'image' => 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1600&q=80',
+                'image' => asset('images/frontend/banner-home-01.png'),
                 'alt' => 'ZenStyle Hair Service',
             ],
             [
-                'image' => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1600&q=80',
+                'image' => asset('images/frontend/ChatGPT Image 19_07_08 7 thg 5, 2026.png'),
                 'alt' => 'ZenStyle Spa Service',
             ],
         ];
@@ -147,13 +147,13 @@
                     [
                         'title' => 'Gội & dưỡng tóc',
                         'desc' => 'Gội massage thư giãn, sản phẩm chăm sóc chuyên nghiệp.',
-                        'image' => asset('images/frontend/services/featured-goi.png'),
+                        'image' => asset('images/frontend/services/featured-spa.png'),
                         'alt' => 'Dịch vụ gội đầu và massage da đầu tại salon',
                     ],
                     [
                         'title' => 'Spa & thư giãn',
                         'desc' => 'Massage, gói trị liệu giúp phục hồi năng lượng.',
-                        'image' => asset('images/frontend/services/featured-spa.png'),
+                        'image' => asset('images/frontend/services/featured-goi.png '),
                         'alt' => 'Phòng massage ZenStyle — không gian thư giãn',
                     ],
                 ] as $item)
@@ -265,10 +265,10 @@
         =====================================================================
         - Trước đó navbar/CTA trỏ tới #dat-lich nhưng chưa có section tương ứng.
         - Bổ sung section mẫu để không còn link chết.
-        
-        
-        
+
+
+
         =====================================================================
     --}}
-    
+
 @endsection
