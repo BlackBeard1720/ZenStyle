@@ -29,6 +29,16 @@ class FrontendController extends Controller
         return view('frontend.news.show', ['post' => $post]);
     }
 
+    public function privacyPolicy(): View
+    {
+        return view('frontend.privacy.index');
+    }
+
+    public function termsOfService(): View
+    {
+        return view('frontend.terms.index');
+    }
+
     /**
      * Tin tức & ưu đãi demo (PHP tĩnh — sau này có thể thay bằng Model).
      *

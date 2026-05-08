@@ -12,6 +12,8 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/about', 'about')->name('about');
     Route::get('/news', 'news')->name('news');
     Route::get('/news/{slug}', 'newsShow')->name('news.show');
+    Route::get('/chinh-sach-bao-mat', 'privacyPolicy')->name('privacy-policy');
+    Route::get('/dieu-khoan-su-dung', 'termsOfService')->name('terms-of-service');
 });
 
 Route::view('/booking', 'frontend.booking.index')->name('booking');

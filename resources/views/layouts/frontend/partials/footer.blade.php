@@ -161,8 +161,8 @@
       <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-white/45 sm:flex-row sm:px-6">
         <span>ZenStyle — Aptech eProject.</span>
         <div class="flex flex-wrap items-center justify-center gap-4">
-          <a href="#" class="hover:text-white">Chính sách bảo mật</a>
-          <a href="#" class="hover:text-white">Điều khoản</a>
+          <a href="{{ route('privacy-policy') }}" class="hover:text-white">Chính sách bảo mật</a>
+          <a href="{{ route('terms-of-service') }}" class="hover:text-white">Điều khoản</a>
           <a href="#" class="hover:text-white">Sitemap</a>
         </div>
       </div>
