@@ -23,6 +23,51 @@ function initNavbarAutoHide() {
     let lastY = window.scrollY;
     let ticking = false;
 
+    function updateActiveNavByHash() {
+        const navLinks = Array.from(header.querySelectorAll('.site-nav-link[data-nav-key]'));
+        if (!navLinks.length) {
+            return;
+        }
+
+        navLinks.forEach((link) => {
+            link.classList.remove('is-active', 'text-stone-900', 'after:scale-x-100');
+            if (!link.classList.contains('text-stone-600')) {
+                link.classList.add('text-stone-600');
+            }
+        });
+
+        const path = window.location.pathname.replace(/\/+$/, '') || '/';
+        const hash = (window.location.hash || '').toLowerCase();
+
+        let activeKey = null;
+
+        if (path === '/' || path === '/home') {
+            if (hash === '#dich-vu') {
+                activeKey = 'services';
+            } else if (hash === '#lien-he') {
+                activeKey = 'contact';
+            } else {
+                activeKey = 'home';
+            }
+        } else if (path === '/about') {
+            activeKey = 'about';
+        } else if (path.startsWith('/news')) {
+            activeKey = 'news';
+        }
+
+        if (!activeKey) {
+            return;
+        }
+
+        const activeLink = header.querySelector(`.site-nav-link[data-nav-key="${activeKey}"]`);
+        if (!activeLink) {
+            return;
+        }
+
+        activeLink.classList.add('is-active', 'text-stone-900', 'after:scale-x-100');
+        activeLink.classList.remove('text-stone-600');
+    }
+
      /**
       * Khi scroll chưa vượt quá chiều cao banner → coi như đang "trên banner"
       * → thêm data-on-banner="true" (navbar với màu tối, chữ trắng).
@@ -79,9 +124,11 @@ function initNavbarAutoHide() {
     );
 
     window.addEventListener('resize', updateHeroNavTheme, { passive: true });
+    window.addEventListener('hashchange', updateActiveNavByHash, { passive: true });
 
     applyState();
     updateHeroNavTheme();
+    updateActiveNavByHash();
 }
 
 document.addEventListener('DOMContentLoaded', initNavbarAutoHide);

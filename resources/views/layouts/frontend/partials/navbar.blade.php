@@ -8,6 +8,12 @@
         transition-[transform,background-color,border-color,backdrop-filter,text-color] duration-300 ease-out will-change-transform
         data-[on-banner='true']:border-transparent data-[on-banner='true']:!border-b-transparent data-[on-banner='true']:!bg-transparent data-[on-banner='true']:!backdrop-blur-none data-[on-banner='true']:shadow-none"
 >
+    @php
+        $isHomeRoute = request()->routeIs('home');
+        $isAboutRoute = request()->routeIs('about');
+        $isNewsRoute = request()->routeIs('news') || request()->routeIs('news.show');
+    @endphp
+
     {{--
         Layout: logo trái | menu giữa (sm+) | nút đặt lịch phải.
         Nav căn giữa viewport của khối bằng absolute; logo & CTA z-10 để luôn bấm được.
@@ -31,11 +37,41 @@
             class="site-nav-menu pointer-events-none absolute inset-x-0 top-1/2 z-0 hidden -translate-y-1/2 justify-center sm:flex"
         >
             <div class="pointer-events-auto flex items-center gap-6 text-sm font-medium">
-                <a href="{{ route('home') }}" class="site-nav-link text-stone-600 transition-colors hover:text-stone-900">Trang chủ</a>
-                <a href="{{ route('about') }}" class="site-nav-link text-stone-600 transition-colors hover:text-stone-900">Giới thiệu</a>
-                <a href="{{ route('news') }}" class="site-nav-link text-stone-600 transition-colors hover:text-stone-900">Tin Tức</a>
-                <a href="{{ route('home') }}#dich-vu" class="site-nav-link text-stone-600 transition-colors hover:text-stone-900">Dịch vụ</a>
-                <a href="{{ route('home') }}#lien-he" class="site-nav-link text-stone-600 transition-colors hover:text-stone-900">Liên hệ</a>
+                <a
+                    href="{{ route('home') }}"
+                    data-nav-key="home"
+                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 {{ $isHomeRoute ? 'is-active text-stone-900 after:scale-x-100' : 'text-stone-600 hover:text-stone-900 after:scale-x-0 hover:after:scale-x-100' }}"
+                >
+                    Trang chủ
+                </a>
+                <a
+                    href="{{ route('about') }}"
+                    data-nav-key="about"
+                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 {{ $isAboutRoute ? 'is-active text-stone-900 after:scale-x-100' : 'text-stone-600 hover:text-stone-900 after:scale-x-0 hover:after:scale-x-100' }}"
+                >
+                    Giới thiệu
+                </a>
+                <a
+                    href="{{ route('news') }}"
+                    data-nav-key="news"
+                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 {{ $isNewsRoute ? 'is-active text-stone-900 after:scale-x-100' : 'text-stone-600 hover:text-stone-900 after:scale-x-0 hover:after:scale-x-100' }}"
+                >
+                    Tin Tức
+                </a>
+                <a
+                    href="{{ route('home') }}#dich-vu"
+                    data-nav-key="services"
+                    class="site-nav-link relative pb-1 text-stone-600 transition-colors hover:text-stone-900 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 hover:after:scale-x-100"
+                >
+                    Dịch vụ
+                </a>
+                <a
+                    href="{{ route('home') }}#lien-he"
+                    data-nav-key="contact"
+                    class="site-nav-link relative pb-1 text-stone-600 transition-colors hover:text-stone-900 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 hover:after:scale-x-100"
+                >
+                    Liên hệ
+                </a>
             </div>
         </nav>
 
