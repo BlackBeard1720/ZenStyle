@@ -14,7 +14,6 @@
 function initHeroSlider() {
     const section = document.getElementById('site-banner');
     if (!section) {
-        console.warn('⚠️ #site-banner not found');
         return;
     }
     section.style.touchAction = 'pan-y';
@@ -25,11 +24,8 @@ function initHeroSlider() {
         .map((slide) => slide.querySelector('img'))
         .filter(Boolean);
 
-    console.log('🎯 Slider init:', { slideCount: slides.length, dotCount: dots.length });
-
     // Nếu không đủ dữ liệu thì dừng để tránh lỗi JS.
     if (!slides.length) {
-        console.warn('⚠️ No slides found');
         return;
     }
 
@@ -172,10 +168,8 @@ function initHeroSlider() {
 
     dots.forEach((dot) => {
         dot.addEventListener('click', () => {
-            console.log('🖱️ Dot clicked:', dot.getAttribute('data-slide-index'));
             const index = Number(dot.getAttribute('data-slide-index'));
             if (!Number.isNaN(index)) {
-                console.log('➡️ Navigating to slide:', index);
                 goTo(index);
             }
         });
