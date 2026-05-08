@@ -1,20 +1,9 @@
-/**
- * THANH MENU — hai việc:
- * -------------------------------------------------------------
- * (A) Ẩn khi cuộn XUỐNG / hiện khi cuộn LÊN (class "-translate-y-full")
- * (B) Trong suốt khi còn "ở trên" vùng banner (class "nav-on-hero")
- *
- * "nav-on-hero": là class TA TỰ ĐẶT — được style trong app.css
- * (nền trong suốt, chữ trắng). Không phải class có sẵn của Tailwind.
- */
-
 function initNavbarAutoHide() {
     const header = document.getElementById('site-header');
     if (!header) {
         return;
     }
 
-    /** Phần banner trong Blade PHẢI có id="site-banner" — để đo chiều cao */
     const banner = document.getElementById('site-banner');
 
     const showAtTopPx = 24;
@@ -68,28 +57,24 @@ function initNavbarAutoHide() {
         activeLink.classList.remove('text-stone-600');
     }
 
-     /**
-      * Khi scroll chưa vượt quá chiều cao banner → coi như đang "trên banner"
-      * → thêm data-on-banner="true" (navbar với màu tối, chữ trắng).
-      */
-     function updateHeroNavTheme() {
-         if (!banner) {
-             header.removeAttribute('data-on-banner');
-             return;
-         }
+    function updateHeroNavTheme() {
+        if (!banner) {
+            header.removeAttribute('data-on-banner');
+            return;
+        }
 
-         const y = window.scrollY;
-         const bannerBottomPx = banner.offsetTop + banner.offsetHeight;
-         const fadePx = 56;
+        const y = window.scrollY;
+        const bannerBottomPx = banner.offsetTop + banner.offsetHeight;
+        const fadePx = 56;
 
-         const stillOnHero = y < bannerBottomPx - fadePx;
+        const stillOnHero = y < bannerBottomPx - fadePx;
 
-         if (stillOnHero) {
-             header.setAttribute('data-on-banner', 'true');
-         } else {
-             header.removeAttribute('data-on-banner');
-         }
-     }
+        if (stillOnHero) {
+            header.setAttribute('data-on-banner', 'true');
+        } else {
+            header.removeAttribute('data-on-banner');
+        }
+    }
 
     function applyState() {
         const y = window.scrollY;
@@ -131,4 +116,37 @@ function initNavbarAutoHide() {
     updateActiveNavByHash();
 }
 
-document.addEventListener('DOMContentLoaded', initNavbarAutoHide);
+function initScrollTopButton() {
+    const btn = document.querySelector('[data-scroll-top]');
+    if (!btn) return;
+
+    const showAtPx = 320;
+    let ticking = false;
+
+    function syncVisibility() {
+        const shouldShow = window.scrollY > showAtPx;
+        btn.classList.toggle('is-visible', shouldShow);
+        ticking = false;
+    }
+
+    window.addEventListener(
+        'scroll',
+        () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(syncVisibility);
+        },
+        { passive: true },
+    );
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    syncVisibility();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initNavbarAutoHide();
+    initScrollTopButton();
+});

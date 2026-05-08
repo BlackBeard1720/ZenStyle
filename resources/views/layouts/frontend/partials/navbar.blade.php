@@ -1,6 +1,5 @@
 <header
     id="site-header"
-    {{-- Tránh flash nền trắng trước khi JS đo #site-banner — chỉ các URL trang chủ. --}}
     @if (request()->is('/') || request()->is('home'))
         data-on-banner="true"
     @endif
@@ -14,10 +13,6 @@
         $isNewsRoute = request()->routeIs('news') || request()->routeIs('news.show');
     @endphp
 
-    {{--
-        Layout: logo trái | menu giữa (sm+) | nút đặt lịch phải.
-        Nav căn giữa viewport của khối bằng absolute; logo & CTA z-10 để luôn bấm được.
-    --}}
     <div class="relative mx-auto flex max-w-6xl items-center px-4 py-4 sm:px-6">
         <a
             href="{{ route('home') }}"

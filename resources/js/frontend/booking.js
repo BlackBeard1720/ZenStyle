@@ -1,7 +1,3 @@
-/**
- * Đặt lịch: chọn salon/stylist (radio CSS), ngày, giờ, số khách, dịch vụ → cập nhật sidebar.
- */
-
 const SEL = {
     page: '#booking-page',
     dayBtn: '[data-booking-day]',
@@ -59,9 +55,7 @@ function initBookingPage(root) {
     const summaryServicesEl = root.querySelector('#booking-summary-services');
     const summaryTotalEl = root.querySelector('#booking-summary-total');
 
-    /** @type {HTMLButtonElement[]} */
     const dayButtons = [...root.querySelectorAll(SEL.dayBtn)];
-    /** @type {HTMLButtonElement[]} */
     const slotButtons = [...root.querySelectorAll(SEL.slotBtn)];
     const guestMinus = root.querySelector(SEL.guestMinus);
     const guestPlus = root.querySelector(SEL.guestPlus);
@@ -149,7 +143,6 @@ function initBookingPage(root) {
         if (summaryGuests) summaryGuests.textContent = `${guestCount} người`;
     }
 
-    // —— Ngày (nút tuần)
     dayButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
             dayButtons.forEach((b) => {
@@ -164,7 +157,6 @@ function initBookingPage(root) {
         });
     });
 
-    // —— Khung giờ
     slotButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
             slotButtons.forEach((b) => {
@@ -176,7 +168,6 @@ function initBookingPage(root) {
         });
     });
 
-    // —— Ô ngày: bỏ chọn pill nếu người dùng đổi tay
     dateInput?.addEventListener('input', () => {
         dayButtons.forEach((b) => {
             b.setAttribute('aria-pressed', 'false');
@@ -185,7 +176,6 @@ function initBookingPage(root) {
         updateDateTimeSummary();
     });
 
-    // —— Số khách
     guestMinus?.addEventListener('click', () => {
         guestCount = Math.max(1, guestCount - 1);
         if (guestValue) guestValue.textContent = String(guestCount);
@@ -198,12 +188,10 @@ function initBookingPage(root) {
         syncGuestSummary();
     });
 
-    // —— Dịch vụ
     root.querySelectorAll(SEL.serviceCheckbox).forEach((cb) =>
         cb.addEventListener('change', syncServicesAndTotal),
     );
 
-    // —— Salon / stylist
     root.querySelectorAll(SEL.branchRadios).forEach((radio) =>
         radio.addEventListener('change', syncBranchSummary),
     );
@@ -211,7 +199,6 @@ function initBookingPage(root) {
         radio.addEventListener('change', syncStylistSummary),
     );
 
-    // —— Promo (demo)
     promoBtn?.addEventListener('click', () => {
         const raw = promoInput?.value.trim() ?? '';
         if (!promoHint || !promoInput) return;
@@ -228,7 +215,6 @@ function initBookingPage(root) {
         promoHint.textContent = `Đã ghi nhận mã “${raw}” (demo, chưa trừ tiền).`;
     });
 
-    // —— Khởi tạo trạng thái
     syncBranchSummary();
     syncStylistSummary();
     syncGuestSummary();

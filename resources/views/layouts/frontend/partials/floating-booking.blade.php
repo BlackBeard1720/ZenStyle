@@ -1,4 +1,3 @@
-{{-- Nút đặt lịch nổi góc phải dưới — luôn có trừ khi đã ở trang đặt lịch. --}}
 @if (! request()->routeIs('booking'))
     <a
         href="{{ route('booking') }}"
@@ -8,3 +7,12 @@
         Đặt lịch ngay
     </a>
 @endif
+<button
+    type="button"
+    class="scroll-top-btn"
+    data-scroll-top
+    aria-label="Cuộn lên đầu trang"
+    title="Lên đầu trang"
+>
+    <span aria-hidden="true">↑</span>
+</button>
