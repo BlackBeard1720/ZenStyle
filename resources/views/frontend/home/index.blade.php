@@ -68,13 +68,13 @@
             @endforeach
         </div>
         {{-- Navigation dots (dưới cùng) --}}
-        <div class="absolute inset-x-0 bottom-8 z-30 flex justify-center gap-3">
+        <div class="absolute inset-x-0 bottom-8 z-30 flex justify-center gap-3 pointer-events-auto">
             @foreach ($heroSlides as $index => $slide)
                 <button
                     type="button"
                     data-slide-dot
                     data-slide-index="{{ $index }}"
-                    class="h-3 rounded-full transition-all {{ $index === 0 ? 'w-8 bg-white' : 'w-3 bg-white/50 hover:bg-white/75' }}"
+                    class="h-3 rounded-full transition-all cursor-pointer pointer-events-auto {{ $index === 0 ? 'w-8 bg-white' : 'w-3 bg-white/50 hover:bg-white/75' }}"
                     aria-label="Chuyển đến slide {{ $index + 1 }}"
                     aria-current="{{ $index === 0 ? 'true' : 'false' }}"
                 ></button>

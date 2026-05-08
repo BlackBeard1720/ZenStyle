@@ -14,6 +14,7 @@
 function initHeroSlider() {
     const section = document.getElementById('site-banner');
     if (!section) {
+        console.warn('⚠️ #site-banner not found');
         return;
     }
     section.style.touchAction = 'pan-y';
@@ -24,8 +25,11 @@ function initHeroSlider() {
         .map((slide) => slide.querySelector('img'))
         .filter(Boolean);
 
+    console.log('🎯 Slider init:', { slideCount: slides.length, dotCount: dots.length });
+
     // Nếu không đủ dữ liệu thì dừng để tránh lỗi JS.
     if (!slides.length) {
+        console.warn('⚠️ No slides found');
         return;
     }
 
@@ -45,6 +49,7 @@ function initHeroSlider() {
     let dragCurrentX = 0;
     let dragging = false;
     let activePointerId = null;
+    let dragStartedOnInteractiveElement = false;
 
     /**
      * Bật/tắt trạng thái hiển thị cho từng slide theo index hiện tại.
@@ -128,12 +133,22 @@ function initHeroSlider() {
         if (event.button !== undefined && event.button !== 0) {
             return;
         }
+        const target = event.target instanceof Element ? event.target : null;
+        dragStartedOnInteractiveElement = Boolean(
+            target && target.closest('[data-slide-dot], button, a, input, textarea, select, [role="button"]'),
+        );
+        if (dragStartedOnInteractiveElement) {
+            return;
+        }
         activePointerId = event.pointerId;
         section.setPointerCapture(activePointerId);
         startDrag(event.clientX);
     }
 
     function handlePointerMove(event) {
+        if (dragStartedOnInteractiveElement) {
+            return;
+        }
         if (activePointerId !== null && event.pointerId !== activePointerId) {
             return;
         }
@@ -141,6 +156,10 @@ function initHeroSlider() {
     }
 
     function handlePointerEnd(event) {
+        if (dragStartedOnInteractiveElement) {
+            dragStartedOnInteractiveElement = false;
+            return;
+        }
         if (activePointerId !== null && event.pointerId !== activePointerId) {
             return;
         }
@@ -153,8 +172,10 @@ function initHeroSlider() {
 
     dots.forEach((dot) => {
         dot.addEventListener('click', () => {
+            console.log('🖱️ Dot clicked:', dot.getAttribute('data-slide-index'));
             const index = Number(dot.getAttribute('data-slide-index'));
             if (!Number.isNaN(index)) {
+                console.log('➡️ Navigating to slide:', index);
                 goTo(index);
             }
         });
