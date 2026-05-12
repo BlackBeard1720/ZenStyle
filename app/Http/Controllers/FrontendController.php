@@ -18,15 +18,39 @@ class FrontendController extends Controller
 
     public function news(): View
     {
-        return view('frontend.news.index', ['posts' => static::demoNewsPosts()]);
+        $allPosts = static::demoNewsPosts();
+        $category = request('category', '');
+        
+        $posts = $category 
+            ? collect($allPosts)->filter(fn($post) => $post['tag'] === $category)->all()
+            : $allPosts;
+        
+        $categories = collect($allPosts)->pluck('tag')->unique()->sort()->values()->all();
+        
+        return view('frontend.news.index', [
+            'posts' => $posts,
+            'categories' => $categories,
+            'selectedCategory' => $category,
+            'resultCount' => count($posts),
+        ]);
     }
 
     public function newsShow(string $slug): View
     {
-        $post = collect(static::demoNewsPosts())->firstWhere('slug', $slug);
+        $allPosts = static::demoNewsPosts();
+        $posts = collect($allPosts);
+        $post = $posts->firstWhere('slug', $slug);
         abort_if(! $post, 404);
 
-        return view('frontend.news.show', ['post' => $post]);
+        $currentIndex = $posts->search(fn($p) => $p['slug'] === $slug);
+        $prevPost = $currentIndex > 0 ? $posts[$currentIndex - 1] : null;
+        $nextPost = $currentIndex < count($allPosts) - 1 ? $posts[$currentIndex + 1] : null;
+
+        return view('frontend.news.show', [
+            'post' => $post,
+            'prevPost' => $prevPost,
+            'nextPost' => $nextPost,
+        ]);
     }
 
     public function privacyPolicy(): View

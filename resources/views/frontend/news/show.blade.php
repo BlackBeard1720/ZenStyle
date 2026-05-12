@@ -49,5 +49,32 @@
                 Đặt lịch ngay
             </a>
         </p>
+
+        <!-- Navigation between posts -->
+        <nav class="mt-12 grid gap-4 sm:grid-cols-2 border-t border-stone-200 pt-8">
+            @if ($prevPost)
+                <a 
+                    href="{{ route('news.show', $prevPost['slug']) }}"
+                    class="group flex flex-col gap-2 rounded-xl border border-stone-200 bg-white p-4 transition hover:border-rose-200 hover:shadow-md"
+                >
+                    <span class="text-xs font-semibold uppercase tracking-wide text-stone-500">← Bài trước</span>
+                    <h3 class="font-semibold text-stone-900 group-hover:text-rose-700 line-clamp-2">{{ $prevPost['title'] }}</h3>
+                    <span class="text-xs text-stone-500">{{ $prevPost['date_label'] }}</span>
+                </a>
+            @else
+                <div></div>
+            @endif
+
+            @if ($nextPost)
+                <a 
+                    href="{{ route('news.show', $nextPost['slug']) }}"
+                    class="group flex flex-col gap-2 rounded-xl border border-stone-200 bg-white p-4 transition hover:border-rose-200 hover:shadow-md sm:text-right"
+                >
+                    <span class="text-xs font-semibold uppercase tracking-wide text-stone-500">Bài tiếp theo →</span>
+                    <h3 class="font-semibold text-stone-900 group-hover:text-rose-700 line-clamp-2">{{ $nextPost['title'] }}</h3>
+                    <span class="text-xs text-stone-500">{{ $nextPost['date_label'] }}</span>
+                </a>
+            @endif
+        </nav>
     </article>
 @endsection
