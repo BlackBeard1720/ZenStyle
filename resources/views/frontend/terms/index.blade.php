@@ -1,10 +1,4 @@
-@extends('layouts.frontend.app')
-
-@section('title', 'ZenStyle — Điều khoản sử dụng')
-
-@section('main_class', 'bg-stone-50 pt-20')
-
-@section('content')
+<x-frontend.layout title="ZenStyle — Điều khoản sử dụng" main-class="bg-stone-50 pt-20">
     <section class="border-b border-stone-200/70 bg-white px-4 py-12 sm:px-6 sm:py-14">
         <div class="mx-auto max-w-4xl">
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-700">Terms of service</p>
@@ -98,4 +92,4 @@
             </div>
         </article>
     </section>
-@endsection
+</x-frontend.layout>

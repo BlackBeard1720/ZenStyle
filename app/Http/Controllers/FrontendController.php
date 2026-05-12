@@ -63,6 +63,11 @@ class FrontendController extends Controller
         return view('frontend.terms.index');
     }
 
+    public function contact(): View
+    {
+        return view('frontend.contact.index');
+    }
+
     /**
      * Tin tức & ưu đãi demo (PHP tĩnh — sau này có thể thay bằng Model).
      *
@@ -76,11 +81,11 @@ class FrontendController extends Controller
                 'date' => '2026-05-01',
                 'date_label' => '01/05/2026',
                 'title' => 'Ưu đãi tháng 5: Combo cắt + treatment giảm 20%',
-                'excerpt' => 'Áp dụng cuối tuần tại ZenStyle Triều Khúc. Đặt lịch trước 48 giờ để giữ suất stylist yêu thích.',
+                'excerpt' => 'Áp dụng cuối tuần tại ZenStyle FPT Aptech. Đặt lịch trước 48 giờ để giữ suất stylist yêu thích.',
                 'image' => 'https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1200&q=80',
                 'tag' => 'Ưu đãi',
                 'paragraphs' => [
-                    'Tháng 5 này, ZenStyle Triều Khúc mang đến combo cắt tạo kiểu kèm liệu trình treatment phục hồi với mức giảm 20% vào các ngày thứ 7 và chủ nhật.',
+                    'Tháng 5 này, ZenStyle FPT Aptech mang đến combo cắt tạo kiểu kèm liệu trình treatment phục hồi với mức giảm 20% vào các ngày thứ 7 và chủ nhật.',
                     'Ưu đãi được áp dụng sau khi bạn đặt lịch trực tuyến hoặc qua hotline và xác nhận trước ít nhất 48 giờ để stylist sắp xếp thời gian treatment phù hợp với phác đồ của bạn.',
                     'Mọi chi tiết về các gói lựa chọn và danh mục sản phẩm kèm theo được tư vấn tại salon — không thay thể bằng tiền mặt, không ghép đồng thời với chương trình voucher khác trừ khi được ghi rõ trong thông báo.',
                 ],
@@ -118,7 +123,7 @@ class FrontendController extends Controller
                 'date' => '2026-03-15',
                 'date_label' => '15/03/2026',
                 'title' => 'ZenStyle nâng cấp phòng liệu trình phục hồi tóc',
-                'excerpt' => 'Ghế massage, hấp dưỡng ozone và bộ sản phẩm Olaplex/K18 — trải nghiệm spa cho tóc ngay tại Triều Khúc.',
+                'excerpt' => 'Ghế massage, hấp dưỡng ozone và bộ sản phẩm Olaplex/K18 — trải nghiệm spa cho tóc ngay tại FPT Aptech.',
                 'image' => 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=1200&q=80',
                 'tag' => 'Tin salon',
                 'paragraphs' => [

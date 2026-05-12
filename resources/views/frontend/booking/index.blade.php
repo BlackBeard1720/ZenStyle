@@ -1,10 +1,4 @@
-@extends('layouts.frontend.app')
-
-@section('title', 'ZenStyle — Đặt lịch')
-
-@section('main_class', 'bg-stone-50 pt-20')
-
-@section('content')
+<x-frontend.layout title="ZenStyle — Đặt lịch" main-class="bg-stone-50 pt-20">
     {{--
         Flow EasySalon (Ant-style). Tailwind v4 + JS (frontend/booking.js): chọn salon/ngày/giờ/dịch vụ/stylist/khách, cập nhật tóm tắt.
         Chưa gửi form backend.
@@ -23,32 +17,8 @@
 
         </div>
 
-        <div class="mx-auto grid max-w-6xl gap-5 px-4 sm:px-6 lg:grid-cols-12 lg:gap-6">
+        <div class="mx-auto mt-5 grid max-w-6xl gap-5 px-4 sm:mt-6 sm:px-6 lg:grid-cols-12 lg:gap-6">
             <div class="space-y-5 lg:col-span-8">
-                {{-- Chi nhánh --}}
-                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
-                    <h2 class="text-base font-semibold text-black/85">Chọn salon</h2>
-                    <p class="mt-1 text-sm text-black/45">Vui lòng chọn cơ sở bạn muốn đến.</p>
-                    <div class="mt-4 grid gap-3 sm:grid-cols-2">
-                        <label class="flex cursor-pointer gap-3 rounded border border-black/15 bg-white p-4 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/50">
-                            <input type="radio" name="booking_branch" value="trieukhuc" class="peer sr-only" checked>
-                            <span class="mt-0.5 size-4 shrink-0 rounded-full border-2 border-black/25 bg-white peer-checked:border-[#1677ff] peer-checked:bg-[#1677ff] peer-checked:shadow-[inset_0_0_0_2px_white]"></span>
-                            <span>
-                                <span class="block text-sm font-semibold text-black/85" data-branch-label>ZenStyle Triều Khúc</span>
-                                <span class="mt-1 block text-sm text-black/45">123 Triều Khúc, Thanh Xuân, Hà Nội</span>
-                            </span>
-                        </label>
-                        <label class="flex cursor-pointer gap-3 rounded border border-black/15 bg-white p-4 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/50">
-                            <input type="radio" name="booking_branch" value="hadong" class="peer sr-only">
-                            <span class="mt-0.5 size-4 shrink-0 rounded-full border-2 border-black/25 bg-white peer-checked:border-[#1677ff] peer-checked:bg-[#1677ff] peer-checked:shadow-[inset_0_0_0_2px_white]"></span>
-                            <span>
-                                <span class="block text-sm font-semibold text-black/85" data-branch-label>ZenStyle Hà Đông</span>
-                                <span class="mt-1 block text-sm text-black/45">58 Nguyễn Văn Lộc, Hà Đông</span>
-                            </span>
-                        </label>
-                    </div>
-                </section>
-
                 {{-- Số lượng khách (EasySalon có bước này) --}}
                 <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
                     <h2 class="text-base font-semibold text-black/85">Số lượng khách</h2>
@@ -61,6 +31,23 @@
                 </section>
 
                 {{-- Ngày + lịch tuần (nút) + khung giờ --}}
+                @php
+                    $bookingToday = now()->startOfDay();
+                    $bookingWeekStart = $bookingToday->copy()->startOfWeek(\Carbon\CarbonInterface::MONDAY);
+                    $bookingDayLabels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+                    $bookingDaySummaries = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+                    $bookingDays = collect(range(0, 6))->map(function ($offset) use ($bookingWeekStart, $bookingToday, $bookingDayLabels, $bookingDaySummaries) {
+                        $date = $bookingWeekStart->copy()->addDays($offset);
+
+                        return [
+                            'label' => $bookingDayLabels[$offset],
+                            'display' => $date->format('d/m'),
+                            'iso' => $date->toDateString(),
+                            'summary' => $bookingDaySummaries[$offset].', '.$date->format('d/m/Y'),
+                            'selected' => $date->isSameDay($bookingToday),
+                        ];
+                    });
+                @endphp
                 <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
                     <h2 class="text-base font-semibold text-black/85">Chọn ngày &amp; giờ</h2>
                     <p class="mt-1 text-sm text-black/45">Chọn ngày trong tuần và khung giờ bắt đầu.</p>
@@ -70,34 +57,25 @@
                         <input
                             id="booking-date"
                             type="date"
-                            value="2026-05-06"
+                            value="{{ $bookingToday->toDateString() }}"
+                            min="{{ $bookingToday->toDateString() }}"
                             class="h-10 max-w-xs rounded border border-black/15 bg-white px-3 text-sm text-black/85 outline-none ring-[#1677ff] focus:border-[#1677ff] focus:ring-2 focus:ring-[#1677ff]/20"
                         >
                     </div>
 
                     <p class="mb-2 mt-6 text-sm font-medium text-black/65">Tuần này</p>
                     <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Chọn ngày trong tuần">
-                        @foreach ([
-                            ['T2', '05/05', '2026-05-05', 'Thứ 2, 05/05/2026', false],
-                            ['T3', '06/05', '2026-05-06', 'Thứ 3, 06/05/2026', true],
-                            ['T4', '07/05', '2026-05-07', 'Thứ 4, 07/05/2026', false],
-                            ['T5', '08/05', '2026-05-08', 'Thứ 5, 08/05/2026', false],
-                            ['T6', '09/05', '2026-05-09', 'Thứ 6, 09/05/2026', false],
-                            ['T7', '10/05', '2026-05-10', 'Thứ 7, 10/05/2026', false],
-                            ['CN', '11/05', '2026-05-11', 'Chủ nhật, 11/05/2026', false],
-                        ] as $d)
-                            @php [$dayLabel, $dayDisp, $dayIso, $daySummary, $daySelected] = $d;
-                            @endphp
+                        @foreach ($bookingDays as $day)
                             <button
                                 type="button"
                                 data-booking-day
-                                data-date="{{ $dayIso }}"
-                                data-summary="{{ $daySummary }}"
-                                aria-pressed="{{ $daySelected ? 'true' : 'false' }}"
+                                data-date="{{ $day['iso'] }}"
+                                data-summary="{{ $day['summary'] }}"
+                                aria-pressed="{{ $day['selected'] ? 'true' : 'false' }}"
                                 class="min-w-[4.5rem] rounded border px-3 py-2 text-left text-sm transition-colors border-black/15 bg-white text-black/65 hover:border-[#1677ff]/40"
                             >
-                                <span class="block text-xs text-black/45">{{ $dayLabel }}</span>
-                                <span class="block tabular-nums">{{ $dayDisp }}</span>
+                                <span class="block text-xs text-black/45">{{ $day['label'] }}</span>
+                                <span class="block tabular-nums">{{ $day['display'] }}</span>
                             </button>
                         @endforeach
                     </div>
@@ -109,7 +87,7 @@
                                 type="button"
                                 data-booking-slot
                                 data-slot="{{ $slot }}"
-                                aria-pressed="{{ $slot === '10:00' ? 'true' : 'false' }}"
+                                aria-pressed="false"
                                 class="rounded border px-2 py-2 text-sm transition-colors border-black/15 bg-white text-black/65 hover:border-[#1677ff]/50"
                             >
                                 {{ $slot }}
@@ -118,6 +96,28 @@
                     </div>
                 </section>
 
+                {{-- Nhân viên --}}
+                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
+                    <h2 class="text-base font-semibold text-black/85">Chọn nhân viên</h2>
+                    <p class="mt-1 text-sm text-black/45">Để salon sắp xếp lịch hoặc chọn stylist yêu thích.</p>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
+                            <input type="radio" name="booking_stylist" value="any" class="peer sr-only" checked>
+
+                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Quách Tùng Dương</span></span>
+                        </label>
+                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
+                            <input type="radio" name="booking_stylist" value="lan-chi" class="peer sr-only">
+
+                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Đinh Văn Hải</span></span>
+                        </label>
+                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
+                            <input type="radio" name="booking_stylist" value="hoang-nam" class="peer sr-only">
+                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Lê Hoàng Nam</span></span>
+                        </label>
+                    </div>
+                </section>
+                
                 {{-- Dịch vụ --}}
                 <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
                     <h2 class="text-base font-semibold text-black/85">Chọn dịch vụ</h2>
@@ -164,28 +164,6 @@
                             <span class="text-sm font-semibold text-[#1677ff]">320.000đ</span>
                         </li>
                     </ul>
-                </section>
-
-                {{-- Nhân viên --}}
-                <section class="rounded border border-black/8 bg-white p-5 shadow-sm sm:p-6">
-                    <h2 class="text-base font-semibold text-black/85">Chọn nhân viên</h2>
-                    <p class="mt-1 text-sm text-black/45">Để salon sắp xếp lịch hoặc chọn stylist yêu thích.</p>
-                    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
-                            <input type="radio" name="booking_stylist" value="any" class="peer sr-only" checked>
-
-                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Quách Tùng Dương</span></span>
-                        </label>
-                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
-                            <input type="radio" name="booking_stylist" value="lan-chi" class="peer sr-only">
-
-                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Đinh Văn Hải</span></span>
-                        </label>
-                        <label class="flex cursor-pointer items-center gap-3 rounded border border-black/15 bg-white p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-[#1677ff] has-[:checked]:bg-[#e6f4ff] hover:border-[#1677ff]/40">
-                            <input type="radio" name="booking_stylist" value="hoang-nam" class="peer sr-only">
-                            <span class="min-w-0 text-sm font-medium text-black/85"><span data-stylist-label>Lê Hoàng Nam</span></span>
-                        </label>
-                    </div>
                 </section>
 
                 {{-- Khuyến mãi --}}
@@ -269,13 +247,13 @@
                     <dl class="mt-4 space-y-3 text-sm">
                         <div class="flex justify-between gap-3 border-b border-dashed border-black/10 pb-3">
                             <dt class="text-black/45">Salon</dt>
-                            <dd id="booking-summary-branch" class="text-right font-medium text-black/85">ZenStyle Triều Khúc</dd>
+                            <dd id="booking-summary-branch" class="text-right font-medium text-black/85">ZenStyle FPT Aptech</dd>
                         </div>
                         <div class="flex justify-between gap-3 border-b border-dashed border-black/10 pb-3">
                             <dt class="text-black/45">Thời gian</dt>
                             <dd class="text-right font-medium text-black/85">
-                                <span id="booking-summary-time-line" class="block">10:00</span>
-                                <span id="booking-summary-date-line" class="text-xs font-normal text-black/45">Thứ 3, 06/05/2026</span>
+                                <span id="booking-summary-time-line" class="block">—</span>
+                                <span id="booking-summary-date-line" class="text-xs font-normal text-black/45">{{ $bookingDaySummaries[$bookingToday->dayOfWeekIso - 1] }}, {{ $bookingToday->format('d/m/Y') }}</span>
                             </dd>
                         </div>
                         <div class="flex justify-between gap-3 border-b border-dashed border-black/10 pb-3">
@@ -314,4 +292,4 @@
             </aside>
         </div>
     </div>
-@endsection
+</x-frontend.layout>

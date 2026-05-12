@@ -1,8 +1,4 @@
-@extends('layouts.frontend.app')
-
-@section('title', $post['title'].' — Tin tức ZenStyle')
-
-@section('content')
+<x-frontend.layout :title="$post['title'].' — Tin tức ZenStyle'">
     <article itemscope itemtype="https://schema.org/Article" class="mx-auto max-w-3xl px-4 pb-14 sm:px-6 md:pb-16">
         <nav class="text-xs font-medium text-stone-500" aria-label="Breadcrumb">
             <a href="{{ route('news') }}" class="text-rose-700 transition hover:text-rose-900">← Tin tức &amp; ưu đãi</a>
@@ -77,4 +73,4 @@
             @endif
         </nav>
     </article>
-@endsection
+</x-frontend.layout>

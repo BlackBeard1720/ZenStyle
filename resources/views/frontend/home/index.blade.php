@@ -1,10 +1,4 @@
-@extends('layouts.frontend.app')
-
-@section('main_class', 'pt-0')
-
-@section('title', 'ZenStyle — Trang chủ')
-
-@section('content')
+<x-frontend.layout title="ZenStyle — Trang chủ" main-class="pt-0">
     {{--
         Nền trang chủ — luồng hợp lý:
         stone-50 (canvas đồng bộ body) → band trắng (#dịch vụ, #đặt-lịch) → capsule rose nhấn trong CTA.
@@ -283,4 +277,4 @@
         =====================================================================
     --}}
 
-@endsection
+</x-frontend.layout>

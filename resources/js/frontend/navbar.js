@@ -42,6 +42,8 @@ function initNavbarAutoHide() {
             activeKey = 'about';
         } else if (path.startsWith('/news')) {
             activeKey = 'news';
+        } else if (path === '/lien-he') {
+            activeKey = 'contact';
         }
 
         if (!activeKey) {

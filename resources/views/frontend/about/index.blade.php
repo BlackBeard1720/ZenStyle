@@ -1,15 +1,9 @@
-@extends('layouts.frontend.app')
-
-@section('title', 'ZenStyle — Giới thiệu')
-
-@section('main_class', 'pt-0')
-
-@section('content')
+<x-frontend.layout title="ZenStyle — Giới thiệu" main-class="pt-0">
     @php
         /** Dữ liệu tĩnh mẫu — có thể chuyển sang Model/Seeder sau */
         $storyIntro = [
             'label' => 'Câu chuyện ZenStyle',
-            'headline' => 'Từ một studio nhỏ đến điểm hẹn làm đẹp tại Triều Khúc',
+            'headline' => 'Từ một studio nhỏ đến điểm hẹn làm đẹp tại FPT Aptech',
             'lead' => 'ZenStyle ra đời với mong muốn mang phong cách salon hiện đại, gần gũi và tận tâm đến từng khách hàng. Chúng tôi tin làm đẹp không chỉ là một dịch vụ — đó là trải nghiệm được lắng nghe và được chăm sóc trọn vẹn.',
         ];
 
@@ -17,7 +11,7 @@
             [
                 'year' => '2022',
                 'title' => 'Khởi đầu',
-                'body' => 'ZenStyle mở cửa tại Triều Khúc với đội ngũ 3 stylist, tập trung cắt tạo kiểu và chăm sóc tóc cơ bản. Không gian nhỏ nhưng ấm cúng, đặt nền móng cho triết lý “chậm mà chắc, đẹp mà bền”.',
+                'body' => 'ZenStyle mở cửa tại FPT Aptech với đội ngũ 3 stylist, tập trung cắt tạo kiểu và chăm sóc tóc cơ bản. Không gian nhỏ nhưng ấm cúng, đặt nền móng cho triết lý “chậm mà chắc, đẹp mà bền”.',
             ],
             [
                 'year' => '2023',
@@ -165,4 +159,4 @@
             </div>
         </div>
     </section>
-@endsection
+</x-frontend.layout>

@@ -1,17 +1,11 @@
-@extends('layouts.frontend.app')
-
-@section('title', 'ZenStyle — Tin tức')
-
-@section('main_class', 'pt-0')
-
-@section('content')
+<x-frontend.layout title="ZenStyle — Tin tức" main-class="pt-0">
     <section id="site-banner" class="relative bg-cover bg-center" style="background-image: url('{{ asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png') }}'); background-position: center;">
         <div class="absolute inset-0 bg-black/30"></div>
         <div class="relative mx-auto max-w-6xl px-4 py-20 sm:py-28">
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-100/90">Blog &amp; ưu đãi</p>
             <h1 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-white sm:text-4xl">Tin tức &amp; ưu đãi</h1>
             <p class="mt-3 max-w-2xl text-sm text-white/85">
-                Cập nhật khuyến mãi, xu hướng làm đẹp và hoạt động tại ZenStyle Triều Khúc.
+                Cập nhật khuyến mãi, xu hướng làm đẹp và hoạt động tại ZenStyle FPT Aptech.
             </p>
         </div>
     </section>
@@ -113,4 +107,4 @@
             @endif
         </div>
     </section>
-@endsection
+</x-frontend.layout>

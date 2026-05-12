@@ -10,18 +10,19 @@ const SEL = {
     promoInput: '[data-booking-promo-input]',
     promoHint: '[data-booking-promo-hint]',
     dateInput: '#booking-date',
-    branchRadios: 'input[name="booking_branch"]',
     stylistRadios: 'input[name="booking_stylist"]',
 };
 
 const dayClasses = {
     sel: ['border-[#1677ff]', 'bg-[#e6f4ff]', 'font-medium', 'text-[#1677ff]'],
     idle: ['border-black/15', 'bg-white', 'text-black/65', 'hover:border-[#1677ff]/40'],
+    disabled: ['cursor-not-allowed', 'border-black/10', 'bg-black/5', 'text-black/30', 'opacity-60'],
 };
 
 const slotClasses = {
     sel: ['border-[#1677ff]', 'bg-[#1677ff]', 'font-medium', 'text-white'],
     idle: ['border-black/15', 'bg-white', 'text-black/65', 'hover:border-[#1677ff]/50'],
+    disabled: ['cursor-not-allowed', 'border-black/10', 'bg-black/5', 'text-black/30', 'opacity-60'],
 };
 
 function formatVnd(n) {
@@ -44,6 +45,63 @@ function toggleClasses(el, active, map) {
     const off = active ? map.idle : map.sel;
     off.forEach((c) => el.classList.remove(c));
     on.forEach((c) => el.classList.add(c));
+}
+
+function localIsoDate(date = new Date()) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+
+    return `${y}-${m}-${d}`;
+}
+
+function currentMinuteOfDay(date = new Date()) {
+    return date.getHours() * 60 + date.getMinutes();
+}
+
+function minutesFromSlot(slot) {
+    const [h, m] = String(slot).split(':').map(Number);
+    if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
+
+    return h * 60 + m;
+}
+
+function isValidIsoDate(isoDate) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(isoDate ?? '');
+}
+
+function isPastDate(isoDate, todayIso = localIsoDate()) {
+    return isValidIsoDate(isoDate) && isoDate < todayIso;
+}
+
+function isPastSlot(isoDate, slot) {
+    if (!isValidIsoDate(isoDate)) return true;
+
+    const now = new Date();
+    const todayIso = localIsoDate(now);
+    if (isoDate < todayIso) return true;
+    if (isoDate > todayIso) return false;
+
+    const slotMinutes = minutesFromSlot(slot);
+    if (slotMinutes === null) return true;
+
+    return slotMinutes <= currentMinuteOfDay(now);
+}
+
+function setAvailability(el, disabled, map) {
+    [...map.sel, ...map.idle, ...map.disabled].forEach((c) => el.classList.remove(c));
+
+    if (disabled) {
+        el.disabled = true;
+        el.setAttribute('aria-disabled', 'true');
+        el.setAttribute('aria-pressed', 'false');
+        map.disabled.forEach((c) => el.classList.add(c));
+        return;
+    }
+
+    el.disabled = false;
+    el.removeAttribute('aria-disabled');
+    toggleClasses(el, el.getAttribute('aria-pressed') === 'true', map);
 }
 
 function initBookingPage(root) {
@@ -75,6 +133,74 @@ function initBookingPage(root) {
         return dayButtons.find((b) => b.getAttribute('aria-pressed') === 'true');
     }
 
+    function selectedDateIso() {
+        return selectedDay()?.dataset.date ?? dateInput?.value ?? '';
+    }
+
+    function selectDayButton(btn) {
+        dayButtons.forEach((b) => {
+            const on = b === btn && !b.disabled;
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            setAvailability(b, b.disabled, dayClasses);
+        });
+    }
+
+    function selectSlotButton(btn) {
+        slotButtons.forEach((b) => {
+            const on = b === btn && !b.disabled;
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            setAvailability(b, b.disabled, slotClasses);
+        });
+    }
+
+    function ensureDateInputIsFutureSafe() {
+        if (!dateInput) return localIsoDate();
+
+        const todayIso = localIsoDate();
+        dateInput.min = todayIso;
+
+        if (!isValidIsoDate(dateInput.value) || dateInput.value < todayIso) {
+            dateInput.value = todayIso;
+        }
+
+        return dateInput.value;
+    }
+
+    function syncDayAvailability() {
+        const todayIso = localIsoDate();
+        let hasSelectedDay = false;
+
+        dayButtons.forEach((btn) => {
+            const disabled = isPastDate(btn.dataset.date, todayIso);
+            if (disabled) btn.setAttribute('aria-pressed', 'false');
+            setAvailability(btn, disabled, dayClasses);
+            hasSelectedDay ||= btn.getAttribute('aria-pressed') === 'true';
+        });
+
+        if (!hasSelectedDay) {
+            const matchingDate = dateInput?.value;
+            const matchingBtn = dayButtons.find((btn) => btn.dataset.date === matchingDate && !btn.disabled);
+            if (matchingBtn) selectDayButton(matchingBtn);
+        }
+    }
+
+    function syncSlotAvailability() {
+        const dateIso = selectedDateIso();
+        let hasSelectedSlot = false;
+
+        slotButtons.forEach((btn) => {
+            const disabled = isPastSlot(dateIso, btn.dataset.slot);
+            if (disabled) btn.setAttribute('aria-pressed', 'false');
+            setAvailability(btn, disabled, slotClasses);
+            hasSelectedSlot ||= btn.getAttribute('aria-pressed') === 'true';
+        });
+
+        if (!hasSelectedSlot) {
+            const firstAvailable = slotButtons.find((btn) => !btn.disabled);
+            if (firstAvailable) selectSlotButton(firstAvailable);
+        }
+    }
+
     function updateDateTimeSummary() {
         const slot = selectedSlot()?.getAttribute('data-slot') ?? '—';
         const dayBtn = selectedDay();
@@ -90,12 +216,6 @@ function initBookingPage(root) {
                 summaryDateLine.textContent = '—';
             }
         }
-    }
-
-    function syncBranchSummary() {
-        const picked = root.querySelector(`${SEL.branchRadios}:checked`);
-        const labelEl = picked?.closest('label')?.querySelector('[data-branch-label]');
-        if (labelEl && summaryBranch) summaryBranch.textContent = labelEl.textContent?.trim() ?? '—';
     }
 
     function syncStylistSummary() {
@@ -145,34 +265,34 @@ function initBookingPage(root) {
 
     dayButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
-            dayButtons.forEach((b) => {
-                const on = b === btn;
-                b.setAttribute('aria-pressed', on ? 'true' : 'false');
-                toggleClasses(b, on, dayClasses);
-                if (dateInput?.dataset.dateLinked !== 'false' && on && b.dataset.date) {
-                    dateInput.value = b.dataset.date;
-                }
-            });
+            if (btn.disabled) return;
+
+            selectDayButton(btn);
+            if (dateInput?.dataset.dateLinked !== 'false' && btn.dataset.date) {
+                dateInput.value = btn.dataset.date;
+            }
+            syncSlotAvailability();
             updateDateTimeSummary();
         });
     });
 
     slotButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
-            slotButtons.forEach((b) => {
-                const on = b === btn;
-                b.setAttribute('aria-pressed', on ? 'true' : 'false');
-                toggleClasses(b, on, slotClasses);
-            });
+            if (btn.disabled) return;
+
+            selectSlotButton(btn);
             updateDateTimeSummary();
         });
     });
 
     dateInput?.addEventListener('input', () => {
+        const safeDate = ensureDateInputIsFutureSafe();
         dayButtons.forEach((b) => {
-            b.setAttribute('aria-pressed', 'false');
-            toggleClasses(b, false, dayClasses);
+            const on = b.dataset.date === safeDate && !b.disabled;
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
+        syncDayAvailability();
+        syncSlotAvailability();
         updateDateTimeSummary();
     });
 
@@ -192,9 +312,6 @@ function initBookingPage(root) {
         cb.addEventListener('change', syncServicesAndTotal),
     );
 
-    root.querySelectorAll(SEL.branchRadios).forEach((radio) =>
-        radio.addEventListener('change', syncBranchSummary),
-    );
     root.querySelectorAll(SEL.stylistRadios).forEach((radio) =>
         radio.addEventListener('change', syncStylistSummary),
     );
@@ -215,11 +332,12 @@ function initBookingPage(root) {
         promoHint.textContent = `Đã ghi nhận mã “${raw}” (demo, chưa trừ tiền).`;
     });
 
-    syncBranchSummary();
+    ensureDateInputIsFutureSafe();
+    syncDayAvailability();
+    syncSlotAvailability();
+    if (summaryBranch) summaryBranch.textContent = 'ZenStyle FPT Aptech';
     syncStylistSummary();
     syncGuestSummary();
-    dayButtons.forEach((b) => toggleClasses(b, b.getAttribute('aria-pressed') === 'true', dayClasses));
-    slotButtons.forEach((b) => toggleClasses(b, b.getAttribute('aria-pressed') === 'true', slotClasses));
     updateDateTimeSummary();
     syncServicesAndTotal();
 }
