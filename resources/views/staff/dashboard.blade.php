@@ -1,5 +1,5 @@
 <x-staff.layout
-    title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template"
+    title="ZenStyle Dashboard"
     page-name="ecommerce"
 >
     <div class="grid grid-cols-12 gap-4 md:gap-6">

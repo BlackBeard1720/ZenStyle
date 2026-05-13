@@ -13,15 +13,16 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;'); // Tắt kiểm tra khóa ngoại
-        DB::table('roles')->truncate(); // Xóa toàn bộ dữ liệu trong bảng roles
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('roles')->truncate();
 
         Role::insert([
-            ['role_name' => 'admin'], // Vai trò quản trị viên
-            ['role_name' => 'receptionist'], // Vai trò lễ tân
-            ['role_name' => 'stylist'], // Vai trò nhà tạo mẫu
+            ['role_name' => 'admin'],
+            ['role_name' => 'receptionist'],
+            ['role_name' => 'stylist'],
+            ['role_name' => 'client'],
         ]);
 
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;'); // Bật lại kiểm tra khóa ngoại
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

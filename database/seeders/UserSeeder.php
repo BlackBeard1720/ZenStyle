@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
             'role_id' => 1,
             'status' => true,
         ]);
-        User::factory(199)->create();
+        User::factory(20)->create();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }

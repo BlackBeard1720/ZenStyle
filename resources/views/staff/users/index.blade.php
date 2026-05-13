@@ -1,11 +1,11 @@
 <x-staff.layout
-    title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template"
-    page-name="ecommerce"
+  title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template"
+  page-name="ecommerce"
 >
 
   <!-- Breadcrumb Start -->
   <div x-data="{ pageName: `Users management`}">
-    <x-staff.partials.breadcrumb />
+    <x-staff.partials.breadcrumb/>
   </div>
   <!-- Breadcrumb End -->
 
@@ -67,7 +67,7 @@
               </button>
 
               <!-- FILTER POPUP -->
-              <x-staff.partials.filter-popup />
+              <x-staff.partials.filter-popup/>
             </div>
           </div>
         </div>
@@ -109,42 +109,42 @@
                   <td class="px-4 pb-3 pt-4 sm:px-6">
                     <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ $user->id }}</p>
                   </td>
+
                   <td class="px-4 pb-3 pt-4 sm:px-6">
                     <div class="flex items-center gap-3">
+
                       <div class="h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}" alt="User"/>
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->username) }}" alt="User"/>
                       </div>
+
                       <div>
-                                <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                    {{ $user->username }}
-                                </span>
+                        <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          {{ $user->username }}
+                        </span>
                         <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
-                                    @if($user->role_id == 1)
-                            Admin
-                          @elseif($user->role_id == 2)
-                            Receptionist
-                          @elseif($user->role_id == 3)
-                            Stylist
-                          @endif
-                                </span>
+                          {{ $user->role->role_name }}
+                        </span>
                       </div>
+
                     </div>
                   </td>
+
                   <td class="px-4 pb-3 pt-4 sm:px-6">
                     <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ $user->email }}</p>
                   </td>
+
                   <td class="px-4 pb-3 pt-4 sm:px-6">
-                    @if($user->status == 1)
-                      <span
-                        class="inline-flex items-center justify-center gap-1 rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
-                                Active
-                            </span>
-                    @else
-                      <span
-                        class="inline-flex items-center justify-center gap-1 rounded-full bg-error-50 px-2.5 py-0.5 text-xs font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
-                                Inactive
-                            </span>
-                    @endif
+                    @php
+                      $isActive = $user->status === 'active';
+                    @endphp
+
+                    <span class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium
+                      {{ $isActive
+                          ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
+                          : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
+                      }}">
+                      {{ $isActive ? 'Active' : 'Inactive' }}
+                    </span>
                   </td>
                   <td class="px-4 pb-3 pt-4 sm:px-6">
                     <div class="flex items-center justify-end gap-2">

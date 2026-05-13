@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class, // Gieo dữ liệu cho bảng roles
-            UserSeeder::class, // Gieo dữ liệu cho bảng users
+            RoleSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

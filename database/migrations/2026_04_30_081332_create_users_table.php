@@ -12,14 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id(); // ID tự tăng của người dùng
-            $table->string('username'); // Tên đăng nhập của người dùng
-            $table->string('email')->unique(); // Email của người dùng
-            $table->string('phone')->nullable(); // Số điện thoại của người dùng
-            $table->string('password'); // Mật khẩu của người dùng
-            $table->foreignId('role_id')->constrained(); // ID vai trò của người dùng
-            $table->boolean('status')->default(true); // Trạng thái của người dùng
-            $table->timestamp('email_verified_at')->nullable(); // Thời gian xác thực email
+            $table->id();
+
+            $table->string('username');
+            $table->string('email')->unique();
+            $table->string('phone')->nullable();
+
+            $table->string('password');
+
+            $table->foreignId('role_id')->constrained();
+            $table->string('status')->default('active');
+            $table->timestamp('email_verified_at')->nullable();
+
             $table->rememberToken(); // Token nhớ
             $table->timestamps(); // Thời gian tạo và cập nhật
         });

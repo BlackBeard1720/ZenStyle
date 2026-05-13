@@ -10,126 +10,70 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * Tất cả thao tác CRUD đều dùng Eloquent (Model)
-     * Không dùng Query Builder (DB)
-     */
     public function index(Request $request)
     {
-        // Tạo query builder từ model User
-        // Chưa query DB ngay, chỉ mới "chuẩn bị câu SQL"
-        $query = User::with('role');
-        // with('role') = eager load relation role để tránh N+1 query
+        $users = User::query()->with('role')
+            ->when($request->id, function ($query, $id) {
+                $query->where('id', $id);
+            })
+            ->when($request->username, function ($query, $username) {
+                $query->where('username', 'like', '%' . $username . '%');
+            })
+            ->latest()->paginate(10)->withQueryString();
 
-        // =========================
-        // FILTER THEO ID
-        // =========================
-        // Nếu request có truyền 'id' và không rỗng
-        if ($request->filled('id')) {
-            // Thêm điều kiện WHERE id = giá trị người dùng nhập
-            $query->where('id', $request->id);
-        }
-
-        // =========================
-        // FILTER THEO NAME
-        // =========================
-        // Nếu request có truyền 'name' và không rỗng
-        if ($request->filled('name')) {
-            // Thêm điều kiện tìm kiếm gần đúng (LIKE)
-            // Ví dụ: 'alex' => '%alex%'
-            $query->where('username', 'like', '%' . $request->name . '%');
-        }
-
-        // =========================
-        // EXECUTE QUERY + PAGINATION
-        // =========================
-        // Lúc này Laravel mới thực sự query database:
-        // - chạy SQL
-        // - lấy dữ liệu theo trang (10 user / page)
-        // - tạo pagination object
-        // - withQueryString(): giữ lại ?id=...&name=... khi chuyển trang
-        $users = $query->paginate(10)->withQueryString();
-
-        // Trả dữ liệu sang view Blade
-        return view('staff.users.index', compact('users'));
+        return view('staff.users.index', ['users' => $users]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('staff.users.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreUserRequest $request)
     {
+        // validate the request
         $data = $request->validated();
-        // mã hóa mật khẩu trước khi lưu
+        // create the user in the database
         $data['password'] = Hash::make($data['password']);
-        // mặc định tài khoản hoạt động
-        $data['status'] = true;
+        $data['status'] = 'active';
         User::create($data);
-        // redirect sau khi tạo thành công
-        return redirect()->route('staff.users.index')
+        // redirect to dashboard
+        return to_route('staff.users.index')
             ->with('success', 'User created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        /*
-        Tìm user trong DB có id = 5
-        Nếu tìm thấy → trả về object $user
-        Nếu không có → tự động 404 (khỏi viết if)
-         */
-        $user = User::findOrFail($id);
-        // Trả dữ liệu sang view Blade
-        return view('staff.users.edit', compact('user'));
+        return view('staff.users.edit', ['user' => $user]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUserRequest $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $user = User::findOrFail($id);
+        // validate the request
         $data = $request->validated();
-        // chỉ update password nếu có nhập
+        // update password only when provided
         if ($request->filled('password')) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);
         }
+        //update user in database
         $user->update($data);
-
-        return redirect()->route('staff.users.index')
+        // redirect to user list
+        return to_route('staff.users.index')
             ->with('success', 'User updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('staff.users.index')
+        return to_route('staff.users.index')
             ->with('success', 'User deleted successfully.');
     }
 }

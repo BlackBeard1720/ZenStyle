@@ -23,11 +23,11 @@
 
         <!-- NAME -->
         <div class="mb-4">
-            <label class="text-sm text-gray-600 dark:text-gray-400">Name</label>
+            <label class="text-sm text-gray-600 dark:text-gray-400">Username</label>
             <input
-                name="name"
+                name="username"
                 type="text"
-                value="{{ request('name') }}"
+                value="{{ request('username') }}"
                 class="w-full mt-1 rounded-lg border px-3 py-2 dark:bg-gray-700 dark:border-gray-600 focus:border-brand-500 focus:ring-brand-500"
                 placeholder="e.g. Alex"
             />
@@ -42,7 +42,12 @@
             >
                 Cancel
             </button>
-
+            <a
+              href="{{ url()->current() }}"
+              class="inline-flex items-center gap-2 rounded-lg bg-error-50 px-4 py-3 text-sm font-medium text-error-600 shadow-theme-xs transition hover:bg-error-100 dark:bg-error-500/15 dark:text-error-500 dark:hover:bg-error-500/25"
+            >
+              Reset
+            </a>
             <button
                 type="submit"
                 class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
