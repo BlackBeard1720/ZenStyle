@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\StaffAuthController;
-use App\Http\Controllers\FrontendController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Staff\Auth\SessionController;
+use App\Http\Controllers\Staff\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Các Route giao diện của thành viên (feature 2.2)
@@ -21,20 +21,21 @@ Route::view('/booking', 'frontend.booking.index')->name('booking');
 
 // Các Route hệ thống/quản trị của bạn (HEAD)
 Route::prefix('staff')->name('staff.')->group(function () {
-    // login
-    Route::get('login', [StaffAuthController::class, 'showLogin'])->name('login');
-    Route::post('login', [StaffAuthController::class, 'login'])->name('login.post');
-    // logout
-    Route::post('logout', [StaffAuthController::class, 'logout'])->name('logout');
+    // auth
+    Route::controller(SessionController::class)->group(function () {
+       Route::get('/login', 'create')->name('login');
+       Route::post('/login', 'store')->name('login.store');
+       Route::delete('/logout', 'destroy')->name('logout');
+    });
 
     // dashboard
     Route::get('/', function () {
-        return view('staff.dashboard');
+        return view('staff.dashboard.index');
     })->name('dashboard');
 
     Route::resource('users', UserController::class);
 });
 
 Route::fallback(function (){
-    return view('staff.404');
+    return view('staff.errors.404');
 });

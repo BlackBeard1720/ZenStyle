@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Frontend;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 
 class FrontendController extends Controller
@@ -20,13 +21,13 @@ class FrontendController extends Controller
     {
         $allPosts = static::demoNewsPosts();
         $category = request('category', '');
-        
-        $posts = $category 
+
+        $posts = $category
             ? collect($allPosts)->filter(fn($post) => $post['tag'] === $category)->all()
             : $allPosts;
-        
+
         $categories = collect($allPosts)->pluck('tag')->unique()->sort()->values()->all();
-        
+
         return view('frontend.news.index', [
             'posts' => $posts,
             'categories' => $categories,
