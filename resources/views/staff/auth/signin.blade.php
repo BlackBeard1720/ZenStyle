@@ -33,7 +33,7 @@
                 </p>
             </div>
 
-            <form method="POST" action="{{ route('staff.login.post') }}" novalidate>
+            <form method="POST" action="{{ route('staff.login.store') }}" novalidate>
                 @csrf
                 <div class="space-y-5">
                     <!-- Email -->

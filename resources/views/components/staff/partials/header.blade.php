@@ -602,6 +602,9 @@
       </div>
 
       <!-- User Area -->
+      @php
+        $user = auth()->user();
+      @endphp
       <div
         class="relative"
         x-data="{ dropdownOpen: false }"
@@ -616,7 +619,7 @@
             <img src="{{ asset('images/tailadmin/user/owner.jpg') }}" alt="User" />
           </span>
 
-          <span class="text-theme-sm mr-1 block font-medium"> Minh </span>
+          <span class="text-theme-sm mr-1 block font-medium"> Chưa có tên </span>
 
           <svg
             :class="dropdownOpen && 'rotate-180'"
@@ -646,12 +649,12 @@
             <span
               class="text-theme-sm block font-medium text-gray-700 dark:text-gray-400"
             >
-              Minh Pham
+              {{ $user?->username ?? 'Guest' }}
             </span>
             <span
               class="text-theme-xs mt-0.5 block text-gray-500 dark:text-gray-400"
             >
-              minh@email.com
+              {{ $user?->email ?? 'guest@example.com' }}
             </span>
           </div>
 
@@ -728,9 +731,8 @@
               </a>
             </li>
           </ul>
-          <form action="{{ route('staff.logout') }}" method="POST">
-            @csrf
-            <button
+          <button
+              form="form-logout"
               type="submit"
               class="group text-theme-sm mt-3 flex items-center gap-3 rounded-lg px-3 py-2 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
             >
@@ -752,11 +754,14 @@
 
               Sign out
             </button>
-          </form>
         </div>
         <!-- Dropdown End -->
       </div>
       <!-- User Area -->
     </div>
   </div>
+  <form action="{{ route('staff.logout') }}" method="POST" hidden id="form-logout">
+    @csrf
+    @method('DELETE')
+  </form>
 </header>
