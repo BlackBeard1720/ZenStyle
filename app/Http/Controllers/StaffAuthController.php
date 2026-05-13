@@ -6,7 +6,7 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class StaffAuthController extends Controller
 {
     public function showLogin()
     {

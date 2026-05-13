@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StaffAuthController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -22,10 +22,10 @@ Route::view('/booking', 'frontend.booking.index')->name('booking');
 // Các Route hệ thống/quản trị của bạn (HEAD)
 Route::prefix('staff')->name('staff.')->group(function () {
     // login
-    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('login', [AuthController::class, 'login'])->name('login.post');
+    Route::get('login', [StaffAuthController::class, 'showLogin'])->name('login');
+    Route::post('login', [StaffAuthController::class, 'login'])->name('login.post');
     // logout
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('logout', [StaffAuthController::class, 'logout'])->name('logout');
 
     // dashboard
     Route::get('/', function () {

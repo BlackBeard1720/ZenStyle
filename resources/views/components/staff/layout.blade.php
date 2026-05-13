@@ -1,4 +1,8 @@
-@props(['title' => 'TailAdmin', 'pageName' => 'ecommerce'])
+@props([
+  'title' => 'TailAdmin',
+  'pageName' => 'ecommerce',
+  'showHeaderSide' => true
+ ])
 
 <!doctype html>
 <html lang="en">
@@ -22,7 +26,7 @@
     <!-- ===== Preloader Start ===== -->
     <x-staff.partials.preloader />
     <!-- ===== Preloader End ===== -->
-
+    @if($showHeaderSide)
     <!-- ===== Page Wrapper Start ===== -->
     <div class="flex h-screen overflow-hidden">
         <!-- ===== Sidebar Start ===== -->
@@ -51,7 +55,6 @@
                     <!-- Error Message -->
                     <x-staff.partials.alert.alert-error />
                     <!-- Alert Messages End -->
-
                     {{ $slot }}
                 </div>
             </main>
@@ -60,7 +63,9 @@
         <!-- ===== Content Area End ===== -->
     </div>
     <!-- ===== Page Wrapper End ===== -->
-
+    @else
+      {{ $slot }}
+    @endif
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     @stack('scripts')

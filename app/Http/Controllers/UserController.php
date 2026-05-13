@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -29,15 +29,24 @@ class UserController extends Controller
         return view('staff.users.create');
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(Request $request)
     {
+        $request->validate([
+            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', Password::default()],
+            'role_id' => ['required', 'exists:roles,id'],
+        ]);
         // validate the request
-        $data = $request->validated();
-        // create the user in the database
-        $data['password'] = Hash::make($data['password']);
-        $data['status'] = 'active';
-        User::create($data);
-        // redirect to dashboard
+        User::create([
+            // create the user in the database
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id,
+            'status' => 'active',
+        ]);
+        // redirect to user list
         return to_route('staff.users.index')
             ->with('success', 'User created successfully.');
     }
@@ -52,18 +61,28 @@ class UserController extends Controller
         return view('staff.users.edit', ['user' => $user]);
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(Request $request, User $user)
     {
         // validate the request
-        $data = $request->validated();
-        // update password only when provided
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($data['password']);
-        } else {
-            unset($data['password']);
-        }
-        //update user in database
-        $user->update($data);
+        $request->validate([
+            'username' => ['required', 'string', 'max:255',
+                Rule::unique('users', 'username')->ignore($user),
+            ],
+            'email' => ['required', 'string', 'email', 'max:255',
+                Rule::unique('users', 'email')->ignore($user),
+            ],
+            'password' => ['nullable', Password::default()],
+            'role_id' => ['required', 'exists:roles,id'],
+        ]);
+        // update the user in the database
+        $user->update([
+            'username' => $request->username,
+            'email' => $request->email,
+            'role_id' => $request->role_id,
+            'password' => $request->filled('password')
+                ? Hash::make($request->password)
+                : $user->password,
+        ]);
         // redirect to user list
         return to_route('staff.users.index')
             ->with('success', 'User updated successfully.');
@@ -72,7 +91,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-
+        // redirect to user list
         return to_route('staff.users.index')
             ->with('success', 'User deleted successfully.');
     }

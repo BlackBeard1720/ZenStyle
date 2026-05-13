@@ -1,6 +1,7 @@
 <x-staff.layout
-    title="404 Error Page | TailAdmin - Tailwind CSS Admin Dashboard Template"
+    title="404 Dashboard Error Page"
     page-name="page404"
+    :show-header-side="false"
 >
     <!-- ===== Preloader Start ===== -->
     <x-staff.partials.preloader />

@@ -35,9 +35,7 @@
                    class="dark:bg-dark-900 shadow-theme-xs focus:ring-brand-500/10 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30
                             @error('username') border-error-300 focus:border-error-300 dark:border-error-700 dark:focus:border-error-800 @else border-gray-300 focus:border-brand-300 dark:focus:border-brand-800 dark:border-gray-700 @enderror"
             />
-            @error('username')
-            <p class="text-theme-xs text-error-500 mt-1.5">{{ $message }}</p>
-            @enderror
+            <x-staff.form.error name="username" />
           </div>
 
           <!-- Email Field -->
@@ -49,9 +47,7 @@
                    class="dark:bg-dark-900 shadow-theme-xs focus:ring-brand-500/10 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30
                             @error('email') border-error-300 focus:border-error-300 dark:border-error-700 dark:focus:border-error-800 @else border-gray-300 focus:border-brand-300 dark:focus:border-brand-800 dark:border-gray-700 @enderror"
             />
-            @error('email')
-            <p class="text-theme-xs text-error-500 mt-1.5">{{ $message }}</p>
-            @enderror
+            <x-staff.form.error name="email" />
           </div>
 
           <!-- Password Field (with Alpine.js Toggle) -->
@@ -81,9 +77,7 @@
                                 </svg>
                             </span>
             </div>
-            @error('password')
-            <p class="text-theme-xs text-error-500 mt-1.5">{{ $message }}</p>
-            @enderror
+            <x-staff.form.error name="password" />
           </div>
 
           <!-- Role ID Field -->
@@ -121,9 +115,7 @@
                                 </svg>
                             </span>
             </div>
-            @error('role_id')
-            <p class="text-theme-xs text-error-500 mt-1.5">{{ $message }}</p>
-            @enderror
+            <x-staff.form.error name="role_id" />
           </div>
 
           <!-- Form Actions -->
