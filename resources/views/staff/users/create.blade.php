@@ -1,4 +1,4 @@
-<x-staff.layout
+  <x-staff.layout
     title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template"
     page-name="ecommerce"
 >

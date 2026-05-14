@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\Auth\SessionController;
+use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\Staff\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,4 +39,9 @@ Route::prefix('staff')->name('staff.')->group(function () {
 
 Route::fallback(function (){
     return view('staff.errors.404');
+});
+
+Route::prefix('staff')->name('staff.')->group(function () {
+   Route::resource('clients', ClientController::class);
+   Route::resource('users', UserController::class);
 });
