@@ -19,16 +19,17 @@ Route::controller(FrontendController::class)->group(function () {
 
 Route::view('/booking', 'frontend.booking.index')->name('booking');
 
-// Các Route hệ thống/quản trị của bạn (HEAD)
-Route::prefix('staff')->name('staff.')->group(function () {
-    // auth
-    Route::controller(SessionController::class)->group(function () {
-       Route::get('/login', 'create')->name('login');
-       Route::post('/login', 'store')->name('login.store');
-       Route::delete('/logout', 'destroy')->name('logout');
+// Admin/Staff
+Route::prefix('staff')->name('staff.')->middleware('guest')
+    ->controller(SessionController::class)->group(function () {
+        Route::get('/login', 'create')->name('login');
+        Route::post('/login', 'store')->name('login.store');
     });
 
-    // dashboard
+Route::prefix('staff')->name('staff.')
+    ->middleware('auth')->group(function () {
+    Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
+
     Route::get('/', function () {
         return view('staff.dashboard.index');
     })->name('dashboard');
