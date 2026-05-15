@@ -24,5 +24,21 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage-staff-users', function (User $user) {
             return $user->hasRole('admin');
         });
+
+        Gate::define('view-appointments', function (User $user) {
+            return $user->hasRole('admin')
+                || $user->hasRole('receptionist')
+                || $user->hasRole('stylist');
+        });
+
+        Gate::define('manage-appointments', function (User $user) {
+            return $user->hasRole('admin')
+                || $user->hasRole('receptionist');
+        });
+
+        Gate::define('cancel-appointments', function (User $user) {
+            return $user->hasRole('admin')
+                || $user->hasRole('receptionist');
+        });
     }
 }

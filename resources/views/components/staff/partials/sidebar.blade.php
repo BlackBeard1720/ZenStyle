@@ -136,6 +136,7 @@
           <!-- Menu Item Dashboard -->
 
           <!-- Menu Item Appointments -->
+          @can('view-appointments')
           <li>
             <a
               href="{{ route('staff.appointments.index') }}"
@@ -167,6 +168,7 @@
               </span>
             </a>
           </li>
+          @endcan
           <!-- Menu Item Appointments -->
 
           <!-- Menu Item Profile -->

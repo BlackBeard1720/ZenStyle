@@ -16,8 +16,20 @@ class AppointmentController extends Controller
 {
     public function index(Request $request)
     {
+        $user = $request->user();
+        $staffId = $user->staff?->id;
+
         $appointments = Appointment::query()
             ->with(['client', 'appointmentServices.service', 'appointmentServices.staff'])
+            ->when($user->hasRole('stylist'), function ($query) use ($staffId) {
+                if (! $staffId) {
+                    return $query->whereRaw('1 = 0');
+                }
+
+                return $query->whereHas('appointmentServices', function ($query) use ($staffId) {
+                    $query->where('staff_id', $staffId);
+                });
+            })
             ->when($request->keyword, function ($query, $keyword) {
                 $query->where(function ($query) use ($keyword) {
                     $query->where('id', $keyword)

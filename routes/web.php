@@ -38,9 +38,40 @@ Route::prefix('staff')->name('staff.')
     Route::resource('users', UserController::class)
         ->middleware('can:manage-staff-users');
 
-    Route::resource('appointments', AppointmentController::class);
+    Route::get('appointments', [AppointmentController::class, 'index'])
+        ->middleware('can:view-appointments')
+        ->name('appointments.index');
+
+    Route::get('appointments/create', [AppointmentController::class, 'create'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.create');
+
+    Route::post('appointments', [AppointmentController::class, 'store'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.store');
+
+    Route::get('appointments/{appointment}/edit', [AppointmentController::class, 'edit'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.edit');
+
+    Route::put('appointments/{appointment}', [AppointmentController::class, 'update'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.update');
+
+    Route::patch('appointments/{appointment}', [AppointmentController::class, 'update'])
+        ->middleware('can:manage-appointments');
+
+    Route::delete('appointments/{appointment}', [AppointmentController::class, 'destroy'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.destroy');
+
     Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
+        ->middleware('can:cancel-appointments')
         ->name('appointments.cancel');
+
+    Route::get('appointments/{appointment}', [AppointmentController::class, 'show'])
+        ->middleware('can:view-appointments')
+        ->name('appointments.show');
 
     Route::fallback(function (){
         return response()->view('staff.errors.404', [
