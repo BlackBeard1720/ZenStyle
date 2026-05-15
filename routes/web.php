@@ -34,9 +34,15 @@ Route::prefix('staff')->name('staff.')
         return view('staff.dashboard.index');
     })->name('dashboard');
 
-    Route::resource('users', UserController::class);
-});
+    Route::resource('users', UserController::class)
+        ->middleware('can:manage-staff-users');
 
-Route::fallback(function (){
-    return view('staff.errors.404');
+    Route::fallback(function (){
+        return response()->view('staff.errors.404', [
+            'code' => 404,
+            'title' => '404 Page Not Found',
+            'heading' => 'ERROR',
+            'message' => 'We can’t seem to find the page you are looking for!',
+        ], 404);
+    });
 });
