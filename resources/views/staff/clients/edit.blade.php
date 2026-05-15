@@ -92,14 +92,7 @@
       @error('dob') border-error-300 focus:border-error-300 dark:border-error-700 dark:focus:border-error-800 @else focus:border-brand-300 dark:focus:border-brand-800 @enderror"
                 onclick="this.showPicker()"
               />
-                <svg
-                  class="fill-current"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+
                   <path
                     fill-rule="evenodd"
                     clip-rule="evenodd"
