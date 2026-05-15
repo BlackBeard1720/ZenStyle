@@ -92,7 +92,6 @@
       @error('dob') border-error-300 focus:border-error-300 dark:border-error-700 dark:focus:border-error-800 @else focus:border-brand-300 dark:focus:border-brand-800 @enderror"
                 onclick="this.showPicker()"
               />
-              <span class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 <svg
                   class="fill-current"
                   width="20"
