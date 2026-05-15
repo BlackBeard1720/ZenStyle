@@ -9,7 +9,7 @@
     <x-frontend.head :title="$title" />
     @vite(['resources/css/frontend.css', 'resources/js/frontend.js'])
 </head>
-<body class="min-h-screen bg-stone-50 font-outfit text-stone-900 antialiased">
+<body class="bg-zen-bg text-zen-text min-h-screen font-outfit antialiased">
 <x-frontend.header />
 <main class="{{ $mainClass }}">
     {{ $slot }}

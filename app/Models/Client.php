@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-
 class Client extends Model
 {
     use HasFactory;
@@ -23,10 +22,6 @@ class Client extends Model
         'status',
     ];
 
-    protected $casts = [
-        'dob' => 'date',
-    ];
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -37,4 +32,3 @@ class Client extends Model
         return $this->hasMany(Appointment::class);
     }
 }
-

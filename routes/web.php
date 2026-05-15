@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\Staff\UserController;
@@ -20,25 +21,67 @@ Route::controller(FrontendController::class)->group(function () {
 
 Route::view('/booking', 'frontend.booking.index')->name('booking');
 
-// Các Route hệ thống/quản trị của bạn (HEAD)
-Route::prefix('staff')->name('staff.')->group(function () {
-    // auth
-    Route::controller(SessionController::class)->group(function () {
-       Route::get('/login', 'create')->name('login');
-       Route::post('/login', 'store')->name('login.store');
-       Route::delete('/logout', 'destroy')->name('logout');
+// Admin/Staff
+Route::prefix('staff')->name('staff.')->middleware('guest')
+    ->controller(SessionController::class)->group(function () {
+        Route::get('/login', 'create')->name('login');
+        Route::post('/login', 'store')->name('login.store');
     });
 
-    // dashboard
+Route::prefix('staff')->name('staff.')
+    ->middleware('auth')->group(function () {
+    Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
+
     Route::get('/', function () {
         return view('staff.dashboard.index');
     })->name('dashboard');
 
-    Route::resource('users', UserController::class);
-});
+    Route::resource('users', UserController::class)
+        ->middleware('can:manage-staff-users');
 
-Route::fallback(function (){
-    return view('staff.errors.404');
+    Route::get('appointments', [AppointmentController::class, 'index'])
+        ->middleware('can:view-appointments')
+        ->name('appointments.index');
+
+    Route::get('appointments/create', [AppointmentController::class, 'create'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.create');
+
+    Route::post('appointments', [AppointmentController::class, 'store'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.store');
+
+    Route::get('appointments/{appointment}/edit', [AppointmentController::class, 'edit'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.edit');
+
+    Route::put('appointments/{appointment}', [AppointmentController::class, 'update'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.update');
+
+    Route::patch('appointments/{appointment}', [AppointmentController::class, 'update'])
+        ->middleware('can:manage-appointments');
+
+    Route::delete('appointments/{appointment}', [AppointmentController::class, 'destroy'])
+        ->middleware('can:manage-appointments')
+        ->name('appointments.destroy');
+
+    Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
+        ->middleware('can:cancel-appointments')
+        ->name('appointments.cancel');
+
+    Route::get('appointments/{appointment}', [AppointmentController::class, 'show'])
+        ->middleware('can:view-appointments')
+        ->name('appointments.show');
+
+    Route::fallback(function (){
+        return response()->view('staff.errors.404', [
+            'code' => 404,
+            'title' => '404 Page Not Found',
+            'heading' => 'ERROR',
+            'message' => 'We can’t seem to find the page you are looking for!',
+        ], 404);
+    });
 });
 
 Route::prefix('staff')->name('staff.')->group(function () {

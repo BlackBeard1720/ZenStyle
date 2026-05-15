@@ -1,6 +1,6 @@
 <x-staff.layout
-    title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template"
-    page-name="ecommerce"
+    title="User management"
+    page-name="UserManagement"
 >
   <!-- ===== BREADCRUMB: Hiển thị tiêu đề trang "Edit User" ===== -->
   <div x-data="{ pageName: `Edit User`}">

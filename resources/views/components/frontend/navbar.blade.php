@@ -3,7 +3,7 @@
     @if (request()->is('/') || request()->is('home'))
         data-on-banner="true"
     @endif
-    class="fixed inset-x-0 top-0 z-50 border-b border-stone-200/80 bg-white/90 backdrop-blur
+    class="fixed inset-x-0 top-0 z-50 border-b border-zen-border bg-zen-bg backdrop-blur
         transition-[transform,background-color,border-color,backdrop-filter,text-color] duration-300 ease-out will-change-transform
         data-[on-banner='true']:border-transparent data-[on-banner='true']:!border-b-transparent data-[on-banner='true']:!bg-transparent data-[on-banner='true']:!backdrop-blur-none data-[on-banner='true']:shadow-none"
 >
@@ -36,35 +36,35 @@
                 <a
                     href="{{ route('home') }}"
                     data-nav-key="home"
-                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 {{ $isHomeRoute ? 'is-active text-stone-900 after:scale-x-100' : 'text-stone-600 hover:text-stone-900 after:scale-x-0 hover:after:scale-x-100' }}"
+                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-zen-primary after:transition-transform after:duration-200 {{ $isHomeRoute ? 'is-active text-zen-text after:scale-x-100' : 'text-zen-muted hover:text-zen-text after:scale-x-0 hover:after:scale-x-100' }}"
                 >
                     Trang chủ
                 </a>
                 <a
                     href="{{ route('about') }}"
                     data-nav-key="about"
-                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 {{ $isAboutRoute ? 'is-active text-stone-900 after:scale-x-100' : 'text-stone-600 hover:text-stone-900 after:scale-x-0 hover:after:scale-x-100' }}"
+                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-zen-primary after:transition-transform after:duration-200 {{ $isAboutRoute ? 'is-active text-zen-text after:scale-x-100' : 'text-zen-muted hover:text-zen-text after:scale-x-0 hover:after:scale-x-100' }}"
                 >
                     Giới thiệu
                 </a>
                 <a
                     href="{{ route('news') }}"
                     data-nav-key="news"
-                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 {{ $isNewsRoute ? 'is-active text-stone-900 after:scale-x-100' : 'text-stone-600 hover:text-stone-900 after:scale-x-0 hover:after:scale-x-100' }}"
+                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-zen-primary after:transition-transform after:duration-200 {{ $isNewsRoute ? 'is-active text-zen-text after:scale-x-100' : 'text-zen-muted hover:text-zen-text after:scale-x-0 hover:after:scale-x-100' }}"
                 >
                     Tin Tức
                 </a>
                 <a
                     href="{{ route('home') }}#dich-vu"
                     data-nav-key="services"
-                    class="site-nav-link relative pb-1 text-stone-600 transition-colors hover:text-stone-900 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 hover:after:scale-x-100"
+                    class="site-nav-link relative pb-1 text-zen-muted transition-colors hover:text-zen-text after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-zen-primary after:transition-transform after:duration-200 hover:after:scale-x-100"
                 >
                     Dịch vụ
                 </a>
                 <a
                     href="{{ route('contact') }}"
                     data-nav-key="contact"
-                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-rose-500 after:transition-transform after:duration-200 {{ $isContactRoute ? 'is-active text-stone-900 after:scale-x-100' : 'text-stone-600 hover:text-stone-900 after:scale-x-0 hover:after:scale-x-100' }}"
+                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-zen-primary after:transition-transform after:duration-200 {{ $isContactRoute ? 'is-active text-zen-text after:scale-x-100' : 'text-zen-muted hover:text-zen-text after:scale-x-0 hover:after:scale-x-100' }}"
                 >
                     Liên hệ
                 </a>
@@ -73,7 +73,7 @@
 
         <a
             href="{{ route('booking') }}"
-            class="site-nav-cta booking-cta relative z-10 ml-auto shrink-0 rounded-full px-4 py-2 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1677ff]/50 focus-visible:ring-offset-2"
+            class="site-nav-cta booking-cta relative z-10 ml-auto shrink-0 rounded-full px-4 py-2 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary focus-visible:ring-offset-2"
         >
             Đặt lịch ngay
         </a>

@@ -1,32 +1,32 @@
 {{--
-    Footer: liên hệ + bản đồ (rose-50) + 4 cột tối + bar cuối.
+    Footer: liên hệ + bản đồ (zen-bg-soft) + 4 cột tối + bar cuối.
     #lien-he nằm trong footer. Bản đồ: Google embed (không dùng OSM iframe — tránh thanh attribution dày).
 --}}
-<footer class="border-t border-stone-200/80">
-  <div id="lien-he" class="scroll-mt-24 bg-rose-50 px-4 py-14 text-stone-800 sm:px-6 lg:py-16">
+<footer class="border-t border-zen-border">
+  <div id="lien-he" class="bg-zen-bg-soft text-zen-text scroll-mt-24 px-4 py-14 sm:px-6 lg:py-16">
     <div class="mx-auto max-w-6xl lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-12">
       <div class="flex flex-col justify-center">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-900/80">Liên hệ</p>
-        <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-stone-900 sm:text-4xl">
+        <p class="text-zen-primary-dark text-xs font-semibold uppercase tracking-[0.2em]">Liên hệ</p>
+        <h2 class="text-zen-text mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight sm:text-4xl">
           Ghé thăm ZenStyle
         </h2>
-        <p class="mt-4 max-w-md text-sm leading-relaxed text-stone-600">
+        <p class="text-zen-muted mt-4 max-w-md text-sm leading-relaxed">
           Hệ thống chi nhánh ZenStyle có mặt tại các khu vực trung tâm. Chọn địa chỉ gần bạn nhất để được phục vụ nhanh chóng.
         </p>
 
         <ul class="mt-8 space-y-6">
           <li class="flex gap-3">
-                        <span class="mt-0.5 shrink-0 text-rose-500" aria-hidden="true">
+                        <span class="mt-0.5 shrink-0 text-zen-primary" aria-hidden="true">
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 7a2.5 2.5 0 0 1 0 4.5z" />
                             </svg>
                         </span>
             <div>
-              <p class="font-semibold text-stone-900">ZenStyle FPT Aptech</p>
-              <p class="mt-1 text-sm text-stone-600">
+              <p class="font-semibold text-zen-text">ZenStyle FPT Aptech</p>
+              <p class="text-zen-muted mt-1 text-sm">
                 FPT Aptech, Hà Nội
-                <span class="text-stone-400"> · </span>
-                <a href="tel:+84901234567" class="text-stone-700 underline decoration-stone-300 underline-offset-2 hover:text-rose-700">0901 234 567</a>
+                <span class="text-zen-border-dark"> · </span>
+                <a href="tel:+84901234567" class="text-zen-primary hover:text-zen-primary-dark underline decoration-zen-border-dark underline-offset-2">0901 234 567</a>
               </p>
             </div>
           </li>
@@ -35,9 +35,9 @@
         <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
           <a
             href="mailto:hello@zenstyle.vn"
-            class="inline-flex w-fit items-center gap-2 rounded-full border border-stone-400/90 bg-white/60 px-4 py-2.5 text-sm font-medium text-stone-900 shadow-sm transition hover:border-stone-500 hover:bg-white"
+            class="border-zen-border-dark bg-zen-secondary text-zen-text hover:bg-zen-primary-light inline-flex w-fit items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-sm transition"
           >
-            <svg class="h-4 w-4 text-stone-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg class="h-4 w-4 text-zen-primary-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
               <path d="m22 6-10 7L2 6" />
             </svg>
@@ -45,7 +45,7 @@
           </a>
           <a
             href="{{ route('contact') }}"
-            class="inline-flex w-fit items-center gap-2 rounded-full bg-rose-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-600"
+            class="bg-zen-primary text-zen-text-light hover:bg-zen-primary-dark inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition"
           >
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M9 12h6" />
@@ -55,21 +55,21 @@
             </svg>
             Biểu mẫu liên hệ
           </a>
-          <div class="flex flex-wrap items-center gap-4 text-sm text-stone-600">
-            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-rose-700">Facebook</a>
-            <span class="text-stone-300">·</span>
-            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="font-medium hover:text-rose-700">Instagram</a>
+          <div class="text-zen-muted flex flex-wrap items-center gap-4 text-sm">
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="text-zen-primary hover:text-zen-primary-dark font-medium">Facebook</a>
+            <span class="text-zen-border-dark">·</span>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="text-zen-primary hover:text-zen-primary-dark font-medium">Instagram</a>
           </div>
         </div>
       </div>
 
       <!-- PHẦN BẢN ĐỒ ĐÃ ĐƯỢC CẬP NHẬT Ở ĐÂY -->
-      <div class="relative mt-10 min-h-[280px] overflow-hidden rounded-2xl border border-stone-200/90 bg-stone-200 shadow-lg ring-1 ring-stone-900/5 lg:mt-0 lg:min-h-[360px]">
+      <div class="relative mt-10 min-h-[280px] overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg shadow-zen ring-1 ring-zen-border lg:mt-0 lg:min-h-[360px]">
         <a
           href="https://www.google.com/maps/search/?api=1&amp;query={{ rawurlencode('Trường Cao đẳng FPT Polytechnic') }}"
           target="_blank"
           rel="noopener noreferrer"
-          class="absolute right-3 top-3 z-10 rounded-lg bg-white/95 px-3 py-2 text-xs font-semibold text-stone-800 shadow-md ring-1 ring-stone-200/90 backdrop-blur-sm transition hover:bg-white"
+          class="absolute right-3 top-3 z-10 rounded-zen-sm bg-zen-bg px-3 py-2 text-xs font-semibold text-zen-text shadow-md ring-1 ring-zen-border backdrop-blur-sm transition hover:bg-zen-accent-soft"
         >
           Mở trong Maps
         </a>
@@ -85,11 +85,11 @@
     </div>
   </div>
 
-  <div class="bg-stone-900 text-white">
+  <div class="bg-zen-bg-dark text-zen-text-light">
     <div class="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-12">
       <div class="lg:col-span-1">
         <a href="{{ route('home') }}" class="inline-flex items-center gap-2.5">
-                    <span class="grid h-10 w-10 place-items-center rounded-full bg-rose-500 text-lg font-semibold text-white shadow-lg shadow-rose-900/30">
+                    <span class="grid h-10 w-10 place-items-center rounded-full bg-zen-primary-light text-lg font-semibold text-zen-bg-dark shadow-lg">
                         Z
                     </span>
           <span class="text-xl font-semibold tracking-tight">ZenStyle</span>
@@ -105,11 +105,11 @@
           </p>
           <p class="flex flex-wrap items-center gap-2">
             <span aria-hidden="true">📞</span>
-            <a href="tel:+84901234567" class="hover:text-rose-300">0901 234 567</a>
+            <a href="tel:+84901234567" class="hover:text-zen-secondary">0901 234 567</a>
           </p>
           <p class="flex gap-2">
             <span aria-hidden="true">✉</span>
-            <a href="mailto:hello@zenstyle.vn" class="hover:text-rose-300">hello@zenstyle.vn</a>
+            <a href="mailto:hello@zenstyle.vn" class="hover:text-zen-secondary">hello@zenstyle.vn</a>
           </p>
         </div>
         <p class="mt-6 text-xs text-white/50">© {{ date('Y') }} ZenStyle. All rights reserved.</p>
@@ -118,23 +118,23 @@
       <div>
         <h4 class="text-sm font-semibold uppercase tracking-wide text-white">Dịch vụ</h4>
         <ul class="mt-4 space-y-2.5 text-sm text-white/75">
-          <li><a href="#dich-vu" class="transition hover:text-rose-300">Tạo kiểu &amp; cắt tóc</a></li>
-          <li><a href="#dich-vu" class="transition hover:text-rose-300">Nhuộm &amp; uốn</a></li>
-          <li><a href="#dich-vu" class="transition hover:text-rose-300">Spa &amp; phục hồi tóc</a></li>
-          <li><a href="#dich-vu" class="transition hover:text-rose-300">Chăm sóc da</a></li>
-          <li><a href="#dich-vu" class="transition hover:text-rose-300">Gói Bridal</a></li>
+          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Tạo kiểu &amp; cắt tóc</a></li>
+          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Nhuộm &amp; uốn</a></li>
+          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Spa &amp; phục hồi tóc</a></li>
+          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Chăm sóc da</a></li>
+          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Gói Bridal</a></li>
         </ul>
       </div>
 
       <div>
         <h4 class="text-sm font-semibold uppercase tracking-wide text-white">Liên kết</h4>
         <ul class="mt-4 space-y-2.5 text-sm text-white/75">
-          <li><a href="{{ route('home') }}" class="transition hover:text-rose-300">Trang chủ</a></li>
-          <li><a href="#site-banner" class="transition hover:text-rose-300">Giới thiệu</a></li>
-          <li><a href="#dich-vu" class="transition hover:text-rose-300">Hottrend</a></li>
-          <li><a href="#dich-vu" class="transition hover:text-rose-300">Dịch vụ</a></li>
-          <li><a href="#dat-lich" class="transition hover:text-rose-300">Đặt lịch</a></li>
-          <li><a href="{{ route('contact') }}" class="transition hover:text-rose-300">Liên hệ</a></li>
+          <li><a href="{{ route('home') }}" class="transition hover:text-zen-secondary">Trang chủ</a></li>
+          <li><a href="{{ route('about') }}" class="transition hover:text-zen-secondary">Giới thiệu</a></li>
+          <li><a href="{{ route('home') }}#hot-trend" class="transition hover:text-zen-secondary">Hottrend</a></li>
+          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Dịch vụ</a></li>
+          <li><a href="{{ route('booking') }}" class="transition hover:text-zen-secondary">Đặt lịch</a></li>
+          <li><a href="{{ route('contact') }}" class="transition hover:text-zen-secondary">Liên hệ</a></li>
         </ul>
       </div>
 
@@ -150,21 +150,21 @@
             type="email"
             required
             placeholder="Email của bạn"
-            class="min-w-0 flex-1 rounded-full border border-white/15 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-rose-400 focus:outline-none focus:ring-1 focus:ring-rose-400"
+            class="min-w-0 flex-1 rounded-full border border-white/15 bg-white/10 px-4 py-2.5 text-sm text-white placeholder:text-white/40 focus:border-zen-secondary focus:outline-none focus:ring-1 focus:ring-zen-secondary"
           />
           <button
             type="submit"
-            class="shrink-0 rounded-full bg-rose-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-400"
+            class="bg-zen-primary text-zen-text-light hover:bg-zen-primary-dark shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition"
           >
             Đăng ký
           </button>
         </form>
         <div class="mt-6 flex gap-3">
-          <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-white/60 hover:text-rose-300" aria-label="Facebook">Facebook</a>
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-white/60 hover:text-zen-secondary" aria-label="Facebook">Facebook</a>
           <span class="text-white/30">·</span>
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-white/60 hover:text-rose-300" aria-label="Instagram">Instagram</a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-white/60 hover:text-zen-secondary" aria-label="Instagram">Instagram</a>
           <span class="text-white/30">·</span>
-          <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-white/60 hover:text-rose-300" aria-label="TikTok">TikTok</a>
+          <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" class="text-xs text-white/60 hover:text-zen-secondary" aria-label="TikTok">TikTok</a>
         </div>
       </div>
     </div>
