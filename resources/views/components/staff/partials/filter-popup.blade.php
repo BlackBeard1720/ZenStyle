@@ -44,7 +44,7 @@
             </button>
             <a
               href="{{ url()->current() }}"
-              class="inline-flex items-center gap-2 rounded-lg bg-error-50 px-4 py-3 text-sm font-medium text-error-600 shadow-theme-xs transition hover:bg-error-100 dark:bg-error-500/15 dark:text-error-500 dark:hover:bg-error-500/25"
+              class="inline-flex items-center gap-2 rounded-lg border border-error-300 px-4 py-3 text-sm font-medium text-error-600 shadow-theme-xs transition hover:bg-error-50 dark:bg-error-500/15 dark:text-error-500 dark:hover:bg-error-500/25"
             >
               Reset
             </a>
