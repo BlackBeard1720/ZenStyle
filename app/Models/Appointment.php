@@ -55,6 +55,11 @@ class Appointment extends Model
 
     public function canBeCancelled(): bool
     {
-        return ! $this->isCancelled();
+        return in_array($this->status, ['pending', 'confirmed'], true);
+    }
+
+    public function canBeEdited(): bool
+    {
+        return in_array($this->status, ['pending', 'confirmed'], true);
     }
 }

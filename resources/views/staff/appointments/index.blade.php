@@ -132,15 +132,24 @@
                     <a href="{{ route('staff.appointments.show', $appointment) }}" title="View appointment" class="text-gray-500 hover:text-brand-600 dark:text-gray-400">
                       <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
                     </a>
-                    <a href="{{ route('staff.appointments.edit', $appointment) }}" title="Edit appointment" class="text-gray-500 hover:text-blue-600 dark:text-gray-400">
-                      <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.862 4.487 18.55 2.8a1.875 1.875 0 0 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 7.125 16.875 4.5"/></svg>
-                    </a>
+                    @if($appointment->canBeEdited())
+                      <a href="{{ route('staff.appointments.edit', $appointment) }}" title="Edit appointment" class="text-gray-500 hover:text-blue-600 dark:text-gray-400">
+                        <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.862 4.487 18.55 2.8a1.875 1.875 0 0 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 7.125 16.875 4.5"/></svg>
+                      </a>
+                    @endif
                     @if($appointment->canBeCancelled())
                       <form method="POST" action="{{ route('staff.appointments.cancel', $appointment) }}" onsubmit="return confirm('Cancel this appointment?')">
                         @csrf
                         @method('PATCH')
-                        <button type="submit" title="Cancel appointment" class="text-gray-500 hover:text-error-600 dark:text-gray-400">
-                          <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+                        <button type="submit" title="Cancel appointment" aria-label="Cancel appointment" class="text-gray-500 hover:text-error-600 dark:text-gray-400">
+                          <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 2.75v3"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 2.75v3"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 9.25h16.5"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.25 12.5V7.75A3.25 3.25 0 0 0 16 4.5H8a3.25 3.25 0 0 0-3.25 3.25v8.5A3.25 3.25 0 0 0 8 19.5h4.25"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m15.75 15.75 4.5 4.5"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m20.25 15.75-4.5 4.5"/>
+                          </svg>
                         </button>
                       </form>
                     @endif

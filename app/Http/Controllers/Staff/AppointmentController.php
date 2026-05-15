@@ -106,6 +106,11 @@ class AppointmentController extends Controller
 
     public function edit(Appointment $appointment)
     {
+        if (! $appointment->canBeEdited()) {
+            return to_route('staff.appointments.show', $appointment)
+                ->with('error', 'Completed or cancelled appointments cannot be edited.');
+        }
+
         $appointment->load(['client', 'appointmentServices.service', 'appointmentServices.staff']);
 
         return view('staff.appointments.edit', [
@@ -118,6 +123,11 @@ class AppointmentController extends Controller
 
     public function update(Request $request, Appointment $appointment)
     {
+        if (! $appointment->canBeEdited()) {
+            return to_route('staff.appointments.show', $appointment)
+                ->with('error', 'Completed or cancelled appointments cannot be edited.');
+        }
+
         $data = $request->validate([
             'client_id' => ['required', 'exists:clients,id'],
             'appointment_date' => ['required', 'date'],
@@ -166,9 +176,9 @@ class AppointmentController extends Controller
 
     public function cancel(Appointment $appointment)
     {
-        if ($appointment->isCancelled()) {
+        if (! $appointment->canBeCancelled()) {
             return to_route('staff.appointments.index')
-                ->with('error', 'Appointment is already cancelled.');
+                ->with('error', 'Only pending or confirmed appointments can be cancelled.');
         }
 
         $appointment->update([
