@@ -19,9 +19,9 @@ function initNavbarAutoHide() {
         }
 
         navLinks.forEach((link) => {
-            link.classList.remove('is-active', 'text-stone-900', 'after:scale-x-100');
-            if (!link.classList.contains('text-stone-600')) {
-                link.classList.add('text-stone-600');
+            link.classList.remove('is-active', 'text-zen-text', 'after:scale-x-100');
+            if (!link.classList.contains('text-zen-muted')) {
+                link.classList.add('text-zen-muted');
             }
         });
 
@@ -55,8 +55,8 @@ function initNavbarAutoHide() {
             return;
         }
 
-        activeLink.classList.add('is-active', 'text-stone-900', 'after:scale-x-100');
-        activeLink.classList.remove('text-stone-600');
+        activeLink.classList.add('is-active', 'text-zen-text', 'after:scale-x-100');
+        activeLink.classList.remove('text-zen-muted');
     }
 
     function updateHeroNavTheme() {

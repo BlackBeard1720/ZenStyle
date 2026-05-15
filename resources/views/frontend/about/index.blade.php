@@ -74,7 +74,7 @@
     <section id="site-banner" class="relative bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=1600&q=80');">
         <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-transparent"></div>
         <div class="relative mx-auto max-w-6xl px-4 py-32 sm:py-40">
-            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-100/90">{{ $storyIntro['label'] }}</p>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-accent-soft">{{ $storyIntro['label'] }}</p>
             <h1 class="mt-3 max-w-3xl font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-[3rem]">
                 {{ $storyIntro['headline'] }}
             </h1>
@@ -82,7 +82,7 @@
                 {{ $storyIntro['lead'] }}
             </p>
             <div class="mt-8">
-                <a href="#dich-vu" class="inline-flex rounded-full bg-rose-500 px-5 py-3 text-sm font-semibold text-white shadow hover:bg-rose-600">Khám phá dịch vụ</a>
+                <a href="#dich-vu" class="inline-flex rounded-full bg-zen-primary px-5 py-3 text-sm font-semibold text-white shadow hover:bg-zen-primary-dark">Khám phá dịch vụ</a>
             </div>
         </div>
     </section>
@@ -91,23 +91,23 @@
     </script>
 
     {{-- STORY — timeline --}}
-    <section class="border-b border-stone-200/70 bg-white px-4 py-16 sm:px-6">
+    <section class="border-b border-zen-border bg-white px-4 py-16 sm:px-6">
         <div class="mx-auto max-w-6xl">
             <div class="mx-auto max-w-2xl text-center">
-                <h2 class="font-['Playfair_Display',serif] text-2xl font-semibold text-stone-900 sm:text-3xl">Hành trình ZenStyle</h2>
-                <p class="mt-3 text-sm text-stone-600">Từ 2022 đến 2025 — những mốc đáng nhớ.</p>
+                <h2 class="font-['Playfair_Display',serif] text-2xl font-semibold text-zen-text sm:text-3xl">Hành trình ZenStyle</h2>
+                <p class="mt-3 text-sm text-zen-muted">Từ 2022 đến 2025 — những mốc đáng nhớ.</p>
             </div>
 
-            <ol class="relative mx-auto mt-12 max-w-3xl border-l border-stone-200 pl-8">
+            <ol class="relative mx-auto mt-12 max-w-3xl border-l border-zen-border pl-8">
                 @foreach ($storyTimeline as $item)
                     <li class="mb-12 last:mb-0">
                         <span
-                            class="absolute -left-[9px] mt-1.5 h-[11px] w-[11px] rounded-full border-2 border-white bg-rose-500 shadow ring-2 ring-rose-200"
+                            class="absolute -left-[9px] mt-1.5 h-[11px] w-[11px] rounded-full border-2 border-white bg-zen-primary shadow ring-2 ring-zen-border"
                             aria-hidden="true"
                         ></span>
-                        <p class="text-xs font-bold uppercase tracking-wider text-rose-700">{{ $item['year'] }}</p>
-                        <h3 class="mt-1 text-lg font-semibold text-stone-900">{{ $item['title'] }}</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-stone-600">{{ $item['body'] }}</p>
+                        <p class="text-xs font-bold uppercase tracking-wider text-zen-primary">{{ $item['year'] }}</p>
+                        <h3 class="mt-1 text-lg font-semibold text-zen-text">{{ $item['title'] }}</h3>
+                        <p class="mt-2 text-sm leading-relaxed text-zen-muted">{{ $item['body'] }}</p>
                     </li>
                 @endforeach
             </ol>
@@ -118,17 +118,17 @@
         Đội ngũ — lưới 12 cột: cột nhãn ~2/12 + nội dung ~8/12 (bố cục 2–8, kiểu trang about salon quốc tế).
         Mobile: xếp dọc; lg+: sidebar trái + lưới thẻ bên phải.
     --}}
-    <section class="bg-stone-50 px-4 py-16 sm:px-6">
+    <section class="bg-gradient-to-b from-zen-accent-soft/45 via-zen-bg-soft to-white px-4 py-16 sm:px-6 lg:pb-20">
         <div class="mx-auto max-w-6xl">
             <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-12">
                 <aside class="lg:col-span-2 lg:pt-2">
-                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-rose-900/80">Our team</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.25em] text-zen-primary-dark">Our team</p>
                     <h2
-                        class="mt-3 font-['Playfair_Display',serif] text-2xl font-semibold leading-none text-stone-900 sm:text-3xl lg:[writing-mode:vertical-rl] lg:rotate-180 lg:text-4xl"
+                        class="mt-3 font-['Playfair_Display',serif] text-2xl font-semibold leading-none text-zen-text sm:text-3xl lg:[writing-mode:vertical-rl] lg:rotate-180 lg:text-4xl"
                     >
                         Đội ngũ
                     </h2>
-                    <p class="mt-4 max-w-xs text-sm leading-relaxed text-stone-600 lg:mt-8">
+                    <p class="mt-4 max-w-xs text-sm leading-relaxed text-zen-muted lg:mt-8">
                         Stylists và chuyên gia ZenStyle — luôn lắng nghe để tạo kiểu đúng người, đúng gu.
                     </p>
                 </aside>
@@ -137,9 +137,9 @@
                     <div class="grid gap-8 sm:grid-cols-2 lg:gap-10">
                         @foreach ($team as $member)
                             <article
-                                class="group overflow-hidden rounded-2xl border border-stone-200/90 bg-white shadow-sm ring-1 ring-stone-900/5 transition hover:shadow-md"
+                                class="group overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg shadow-zen ring-1 ring-zen-border transition hover:shadow-md"
                             >
-                                <div class="aspect-[4/3] overflow-hidden bg-stone-200">
+                                <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
                                     <img
                                         src="{{ $member['image'] }}"
                                         alt="{{ $member['name'] }}"
@@ -148,9 +148,9 @@
                                     />
                                 </div>
                                 <div class="p-5 sm:p-6">
-                                    <h3 class="text-lg font-semibold text-stone-900">{{ $member['name'] }}</h3>
-                                    <p class="mt-1 text-sm font-medium text-rose-700">{{ $member['role'] }}</p>
-                                    <p class="mt-3 text-sm leading-relaxed text-stone-600">{{ $member['bio'] }}</p>
+                                    <h3 class="text-lg font-semibold text-zen-text">{{ $member['name'] }}</h3>
+                                    <p class="mt-1 text-sm font-medium text-zen-primary">{{ $member['role'] }}</p>
+                                    <p class="mt-3 text-sm leading-relaxed text-zen-muted">{{ $member['bio'] }}</p>
                                 </div>
                             </article>
                         @endforeach

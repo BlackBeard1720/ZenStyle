@@ -14,15 +14,15 @@ const SEL = {
 };
 
 const dayClasses = {
-    sel: ['border-[#1677ff]', 'bg-[#e6f4ff]', 'font-medium', 'text-[#1677ff]'],
-    idle: ['border-black/15', 'bg-white', 'text-black/65', 'hover:border-[#1677ff]/40'],
-    disabled: ['cursor-not-allowed', 'border-black/10', 'bg-black/5', 'text-black/30', 'opacity-60'],
+    sel: ['border-zen-primary', 'bg-zen-accent-soft', 'font-medium', 'text-zen-primary'],
+    idle: ['border-zen-border', 'bg-white', 'text-zen-muted', 'hover:border-zen-primary/40'],
+    disabled: ['cursor-not-allowed', 'border-zen-border', 'bg-zen-bg-soft', 'text-zen-muted/60', 'opacity-60'],
 };
 
 const slotClasses = {
-    sel: ['border-[#1677ff]', 'bg-[#1677ff]', 'font-medium', 'text-white'],
-    idle: ['border-black/15', 'bg-white', 'text-black/65', 'hover:border-[#1677ff]/50'],
-    disabled: ['cursor-not-allowed', 'border-black/10', 'bg-black/5', 'text-black/30', 'opacity-60'],
+    sel: ['border-zen-primary', 'bg-zen-primary', 'font-medium', 'text-white'],
+    idle: ['border-zen-border', 'bg-white', 'text-zen-muted', 'hover:border-zen-primary/50'],
+    disabled: ['cursor-not-allowed', 'border-zen-border', 'bg-zen-bg-soft', 'text-zen-muted/60', 'opacity-60'],
 };
 
 function formatVnd(n) {
@@ -236,7 +236,7 @@ function initBookingPage(root) {
 
         if (lis.length === 0) {
             const p = document.createElement('p');
-            p.className = 'text-xs font-normal text-black/45';
+            p.className = 'text-xs font-normal text-zen-muted';
             p.textContent = 'Chưa chọn dịch vụ';
             summaryServicesEl.appendChild(p);
         } else {
@@ -250,7 +250,7 @@ function initBookingPage(root) {
                 summaryServicesEl.appendChild(p);
 
                 const sub = document.createElement('p');
-                sub.className = 'mt-0.5 text-xs font-normal text-black/45';
+                sub.className = 'mt-0.5 text-xs font-normal text-zen-muted';
                 sub.textContent = formatVnd(price);
                 summaryServicesEl.appendChild(sub);
             });
@@ -322,13 +322,13 @@ function initBookingPage(root) {
         if (!raw) {
             promoHint.textContent = 'Vui lòng nhập mã.';
             promoHint.hidden = false;
-            promoHint.classList.remove('text-green-600');
-            promoHint.classList.add('text-black/55');
+            promoHint.classList.remove('text-zen-success');
+            promoHint.classList.add('text-zen-muted');
             return;
         }
         promoHint.hidden = false;
-        promoHint.classList.remove('text-black/55');
-        promoHint.classList.add('text-green-600');
+        promoHint.classList.remove('text-zen-muted');
+        promoHint.classList.add('text-zen-success');
         promoHint.textContent = `Đã ghi nhận mã “${raw}” (demo, chưa trừ tiền).`;
     });
 
