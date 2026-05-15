@@ -82,7 +82,7 @@
                 {{ $storyIntro['lead'] }}
             </p>
             <div class="mt-8">
-                <a href="#dich-vu" class="inline-flex rounded-full bg-zen-primary px-5 py-3 text-sm font-semibold text-white shadow hover:bg-zen-primary-dark">Khám phá dịch vụ</a>
+                <a href="{{ route('home') }}#dich-vu" class="inline-flex rounded-full bg-zen-primary px-5 py-3 text-sm font-semibold text-white shadow hover:bg-zen-primary-dark">Khám phá dịch vụ</a>
             </div>
         </div>
     </section>
