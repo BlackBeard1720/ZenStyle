@@ -203,6 +203,7 @@
           </li>
           <!-- Menu Item Profile -->
 
+          @can('manage-staff-users')
           <!-- Menu Item Forms -->
           <li>
             <a
@@ -276,6 +277,7 @@
             <!-- Dropdown Menu End -->
           </li>
           <!-- Menu Item Forms -->
+          @endcan
 
           <!-- Menu Item Tables -->
           <li>
