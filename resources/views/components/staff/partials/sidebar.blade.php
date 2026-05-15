@@ -135,10 +135,10 @@
           </li>
           <!-- Menu Item Dashboard -->
 
-          <!-- Menu Item Calendar -->
+          <!-- Menu Item Appointments -->
           <li>
             <a
-              href="calendar.html"
+              href="{{ route('staff.appointments.index') }}"
               @click="selected = (selected === 'Calendar' ? '':'Calendar')"
               class="menu-item group"
               :class=" (selected === 'Calendar') && (page === 'calendar') ? 'menu-item-active' : 'menu-item-inactive'"
@@ -163,11 +163,11 @@
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
-                Calendar
+                Appointments
               </span>
             </a>
           </li>
-          <!-- Menu Item Calendar -->
+          <!-- Menu Item Appointments -->
 
           <!-- Menu Item Profile -->
           <li>
@@ -204,16 +204,15 @@
           <!-- Menu Item Profile -->
 
           @can('manage-staff-users')
-          <!-- Menu Item Forms -->
+          <!-- Menu Item Users -->
           <li>
             <a
-              href="{{ route('staff.users.index') }}"
-              @click.prevent="selected = (selected === 'Forms' ? '':'Forms')"
+              href="{{route('staff.users.index')}}"
               class="menu-item group"
-              :class=" (selected === 'Forms') || (page === 'formElements' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="page === 'UserManagement' ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="(selected === 'Forms') || (page === 'formElements' || page === 'formLayout' || page === 'proFormElements' || page === 'proFormLayout') ? 'menu-item-icon-active'  :'menu-item-icon-inactive'"
+                :class="page === 'UserManagement' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -223,7 +222,7 @@
                 <path
                   fill-rule="evenodd"
                   clip-rule="evenodd"
-                  d="M5.5 3.25C4.25736 3.25 3.25 4.25736 3.25 5.5V18.5C3.25 19.7426 4.25736 20.75 5.5 20.75H18.5001C19.7427 20.75 20.7501 19.7426 20.7501 18.5V5.5C20.7501 4.25736 19.7427 3.25 18.5001 3.25H5.5ZM4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5001C18.9143 4.75 19.2501 5.08579 19.2501 5.5V18.5C19.2501 18.9142 18.9143 19.25 18.5001 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V5.5ZM6.25005 9.7143C6.25005 9.30008 6.58583 8.9643 7.00005 8.9643L17 8.96429C17.4143 8.96429 17.75 9.30008 17.75 9.71429C17.75 10.1285 17.4143 10.4643 17 10.4643L7.00005 10.4643C6.58583 10.4643 6.25005 10.1285 6.25005 9.7143ZM6.25005 14.2857C6.25005 13.8715 6.58583 13.5357 7.00005 13.5357H17C17.4143 13.5357 17.75 13.8715 17.75 14.2857C17.75 14.6999 17.4143 15.0357 17 15.0357H7.00005C6.58583 15.0357 6.25005 14.6999 6.25005 14.2857Z"
+                  d="M12 12.75C9.37665 12.75 7.25 10.6234 7.25 8C7.25 5.37665 9.37665 3.25 12 3.25C14.6234 3.25 16.75 5.37665 16.75 8C16.75 10.6234 14.6234 12.75 12 12.75ZM12 4.75C10.2051 4.75 8.75 6.20507 8.75 8C8.75 9.79493 10.2051 11.25 12 11.25C13.7949 11.25 15.25 9.79493 15.25 8C15.25 6.20507 13.7949 4.75 12 4.75ZM4.25 20C4.25 16.8244 6.82436 14.25 10 14.25H14C17.1756 14.25 19.75 16.8244 19.75 20C19.75 20.4142 19.4142 20.75 19 20.75C18.5858 20.75 18.25 20.4142 18.25 20C18.25 17.6528 16.3472 15.75 14 15.75H10C7.65279 15.75 5.75 17.6528 5.75 20C5.75 20.4142 5.41421 20.75 5 20.75C4.58579 20.75 4.25 20.4142 4.25 20Z"
                   fill=""
                 />
               </svg>
@@ -232,51 +231,13 @@
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
-                Forms
+                User Management
               </span>
 
-              <svg
-                class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                :class="[(selected === 'Forms') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-                  stroke=""
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
             </a>
 
-            <!-- Dropdown Menu Start -->
-            <div
-              class="overflow-hidden transform translate"
-              :class="(selected === 'Forms') ? 'block' :'hidden'"
-            >
-              <ul
-                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
-              >
-                <li>
-                  <a
-                    href=" {{route('staff.users.index')}} "
-                    class="menu-dropdown-item group"
-                    :class="page === 'formElements' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                  >
-                    Form Elements
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <!-- Dropdown Menu End -->
           </li>
-          <!-- Menu Item Forms -->
+          <!-- Menu Item Users -->
           @endcan
 
           <!-- Menu Item Tables -->

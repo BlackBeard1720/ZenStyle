@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\UserController;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,10 @@ Route::prefix('staff')->name('staff.')
 
     Route::resource('users', UserController::class)
         ->middleware('can:manage-staff-users');
+
+    Route::resource('appointments', AppointmentController::class);
+    Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
+        ->name('appointments.cancel');
 
     Route::fallback(function (){
         return response()->view('staff.errors.404', [
