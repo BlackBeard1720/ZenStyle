@@ -35,14 +35,30 @@
 
       <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="w-full overflow-x-auto">
-          <table class="min-w-full">
+          <table class="min-w-full table-fixed">
             <thead>
             <tr class="border-b border-gray-100 dark:border-gray-800">
-              @foreach(['ID', 'Client', 'Phone', 'Date', 'Time', 'Services', 'Staff', 'Total', 'Status', 'Actions'] as $heading)
-                <th class="px-4 pb-3 pt-4 text-left sm:px-6 {{ $heading === 'Actions' ? 'text-right' : '' }}">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">{{ $heading }}</p>
-                </th>
-              @endforeach
+              <th class="w-20 px-4 pb-3 pt-4 text-left sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">ID</p>
+              </th>
+              <th class="w-52 px-4 pb-3 pt-4 text-left sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Khách hàng</p>
+              </th>
+              <th class="w-36 px-4 pb-3 pt-4 text-left sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Lịch hẹn</p>
+              </th>
+              <th class="px-4 pb-3 pt-4 text-left sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Dịch vụ</p>
+              </th>
+              <th class="w-36 px-4 pb-3 pt-4 text-left sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Tổng tiền</p>
+              </th>
+              <th class="w-32 px-4 pb-3 pt-4 text-left sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Trạng thái</p>
+              </th>
+              <th class="w-28 px-4 pb-3 pt-4 text-right sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Thao tác</p>
+              </th>
             </tr>
             </thead>
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -54,18 +70,36 @@
                   'completed' => 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
                   default => 'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-500',
                 };
-                $serviceNames = $appointment->appointmentServices->pluck('service.service_name')->filter();
+                $serviceNames = $appointment->appointmentServices->pluck('service.service_name')->filter()->values();
                 $staffNames = $appointment->appointmentServices->pluck('staff.full_name')->filter()->unique();
               @endphp
-              <tr>
-                <td class="px-4 py-4 sm:px-6"><p class="text-theme-sm text-gray-500 dark:text-gray-400">#{{ $appointment->id }}</p></td>
-                <td class="px-4 py-4 sm:px-6"><p class="font-medium text-theme-sm text-gray-800 dark:text-white/90">{{ $appointment->client?->full_name ?? '-' }}</p></td>
-                <td class="px-4 py-4 sm:px-6"><p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ $appointment->client?->phone ?? '-' }}</p></td>
-                <td class="px-4 py-4 sm:px-6"><p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ $appointment->appointment_date?->format('d/m/Y') }}</p></td>
-                <td class="px-4 py-4 sm:px-6"><p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('H:i') }}</p></td>
-                <td class="px-4 py-4 sm:px-6"><p class="max-w-48 text-theme-sm text-gray-500 dark:text-gray-400">{{ $serviceNames->take(2)->join(', ') ?: '-' }}@if($serviceNames->count() > 2) +{{ $serviceNames->count() - 2 }} more @endif</p></td>
-                <td class="px-4 py-4 sm:px-6"><p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ $staffNames->join(', ') ?: 'Unassigned' }}</p></td>
-                <td class="px-4 py-4 sm:px-6"><p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ number_format($appointment->total_amount) }} VND</p></td>
+              <tr class="align-top">
+                <td class="px-4 py-4 sm:px-6">
+                  <p class="text-theme-sm text-gray-500 dark:text-gray-400">#{{ $appointment->id }}</p>
+                </td>
+                <td class="px-4 py-4 sm:px-6">
+                  <div class="min-w-0">
+                    <p class="truncate font-medium text-theme-sm text-gray-800 dark:text-white/90">{{ $appointment->client?->full_name ?? '-' }}</p>
+                    <p class="mt-0.5 truncate text-theme-xs text-gray-500 dark:text-gray-400">{{ $appointment->client?->phone ?? '-' }}</p>
+                  </div>
+                </td>
+                <td class="px-4 py-4 sm:px-6">
+                  <p class="text-theme-sm text-gray-800 dark:text-white/90">{{ $appointment->appointment_date?->format('d/m/Y') }}</p>
+                  <p class="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('H:i') }}</p>
+                </td>
+                <td class="px-4 py-4 sm:px-6">
+                  <div class="min-w-0">
+                    <p class="truncate text-theme-sm text-gray-700 dark:text-gray-300">
+                      {{ $serviceNames->take(2)->join(', ') ?: '-' }}
+                    </p>
+                    @if($serviceNames->count() > 2)
+                      <p class="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">+{{ $serviceNames->count() - 2 }} dịch vụ khác</p>
+                    @elseif($staffNames->isNotEmpty())
+                      <p class="mt-0.5 truncate text-theme-xs text-gray-500 dark:text-gray-400">{{ $staffNames->join(', ') }}</p>
+                    @endif
+                  </div>
+                </td>
+                <td class="px-4 py-4 sm:px-6"><p class="whitespace-nowrap text-theme-sm text-gray-500 dark:text-gray-400">{{ number_format($appointment->total_amount) }} VND</p></td>
                 <td class="px-4 py-4 sm:px-6"><span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium {{ $badgeClass }}">{{ ucfirst($appointment->status) }}</span></td>
                 <td class="px-4 py-4 sm:px-6">
                   <div class="flex items-center justify-end gap-2">
@@ -89,7 +123,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="10" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No appointments found.</td>
+                <td colspan="7" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No appointments found.</td>
               </tr>
             @endforelse
             </tbody>

@@ -12,7 +12,7 @@
     <form method="POST" action="{{ route('staff.appointments.update', $appointment) }}" class="space-y-6 p-5 sm:p-6" novalidate>
       @csrf
       @method('PUT')
-      @include('staff.appointments._form')
+      @include('staff.partials.appointments.form')
 
       <div class="flex items-center justify-end gap-3 border-t border-gray-100 pt-5 dark:border-gray-800">
         <a href="{{ route('staff.appointments.show', $appointment) }}" class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">

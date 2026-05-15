@@ -81,7 +81,7 @@
         Status <span class="text-error-500">*</span>
       </label>
       <select name="status" class="{{ $inputClass }}">
-        @foreach(['pending' => 'Pending', 'confirmed' => 'Confirmed', 'cancelled' => 'Cancelled', 'completed' => 'Completed'] as $value => $label)
+        @foreach(['pending' => 'Pending', 'confirmed' => 'Confirmed', 'cancelled' => 'Cancelled', 'completed'] as $value => $label)
           <option value="{{ $value }}" @selected(old('status', $appointment->status) === $value)>{{ $label }}</option>
         @endforeach
       </select>
