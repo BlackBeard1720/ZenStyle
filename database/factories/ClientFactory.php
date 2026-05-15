@@ -1,0 +1,26 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Client;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends Factory<Client>
+ */
+class ClientFactory extends Factory
+{
+    public function definition(): array
+    {
+        return [
+            'user_id' => null,
+            'full_name' => fake()->name(),
+            'phone' => fake()->numerify('09########'),
+            'email' => fake()->unique()->safeEmail(),
+            'dob' => fake()->optional()->dateTimeBetween('-50 years', '-18 years')?->format('Y-m-d'),
+            'preferences' => fake()->optional()->sentence(),
+            'loyalty_points' => fake()->numberBetween(0, 500),
+            'status' => 'active',
+        ];
+    }
+}

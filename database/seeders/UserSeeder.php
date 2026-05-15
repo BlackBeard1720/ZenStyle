@@ -19,12 +19,29 @@ class UserSeeder extends Seeder
         DB::table('users')->truncate();
 
         User::create([
-            'username' => 'admin',
-            'email' => 'admin@gmail.com',
+            'username' => 'minhpham',
+            'email' => 'minhpham@gmail.com',
             'password' => Hash::make('123456'),
             'role_id' => 1,
             'status' => true,
         ]);
+
+        User::create([
+            'username' => 'huyphg',
+            'email' => 'huyphg@gmail.com',
+            'password' => Hash::make('123456'),
+            'role_id' => 2,
+            'status' => true,
+        ]);
+
+        User::create([
+            'username' => 'linhvn',
+            'email' => 'linhvn@gmail.com',
+            'password' => Hash::make('123456'),
+            'role_id' => 3,
+            'status' => true,
+        ]);
+
         User::factory(20)->create();
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
