@@ -108,6 +108,7 @@
                             'status' => 'Đang rảnh',
                             'status_class' => 'bg-zen-success/10 text-zen-success ring-zen-success/20',
                             'image' => asset('images/tailadmin/user/user-01.jpg'),
+                            'is_available' => true,
                             'checked' => true,
                         ],
                         [
@@ -120,6 +121,7 @@
                             'status' => 'Có thể đặt lịch',
                             'status_class' => 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20',
                             'image' => asset('images/tailadmin/user/user-02.jpg'),
+                            'is_available' => true,
                             'checked' => false,
                         ],
                         [
@@ -132,6 +134,7 @@
                             'status' => 'Bận',
                             'status_class' => 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
                             'image' => asset('images/tailadmin/user/user-03.jpg'),
+                            'is_available' => false,
                             'checked' => false,
                         ],
                     ];
@@ -143,18 +146,29 @@
                     <p class="mt-1 text-sm text-zen-muted">Để salon sắp xếp lịch hoặc chọn stylist yêu thích.</p>
                     <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3" role="radiogroup" aria-label="Chọn nhân viên phụ trách">
                         @foreach ($bookingStylists as $stylist)
+                            @php
+                                $stylistAvailable = $stylist['is_available'] ?? true;
+                            @endphp
                             <label
                                 data-booking-stylist-card
+                                data-booking-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
                                 role="radio"
-                                class="group relative flex min-h-full cursor-pointer flex-col rounded-zen-md border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-zen-primary/50 hover:shadow-zen has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft has-[:checked]:shadow-zen-md has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40"
+                                aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
+                                @class([
+                                    'group relative flex min-h-full flex-col rounded-zen-md border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
+                                    'cursor-pointer hover:-translate-y-0.5 hover:border-zen-primary/50 hover:shadow-zen has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft has-[:checked]:shadow-zen-md' => $stylistAvailable,
+                                    'cursor-not-allowed opacity-60 grayscale-[.15]' => ! $stylistAvailable,
+                                ])
                             >
                                 <input
                                     type="radio"
                                     name="booking_stylist"
                                     value="{{ $stylist['id'] }}"
                                     data-stylist-name="{{ $stylist['name'] }}"
+                                    data-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
                                     class="peer sr-only"
-                                    @checked($stylist['checked'])
+                                    @checked($stylist['checked'] && $stylistAvailable)
+                                    @disabled(! $stylistAvailable)
                                 >
 
                                 <span class="flex items-start gap-3">
