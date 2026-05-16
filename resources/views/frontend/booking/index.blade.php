@@ -96,25 +96,99 @@
                     </div>
                 </section>
 
+                @php
+                    $bookingStylists = [
+                        [
+                            'id' => 'quach-tung-duong',
+                            'name' => 'Quách Tùng Dương',
+                            'role' => 'Stylist tóc',
+                            'experience' => '7 năm kinh nghiệm',
+                            'featured_service' => 'Cắt tóc nam cao cấp, tư vấn tạo kiểu',
+                            'rating' => '4.9/5',
+                            'status' => 'Đang rảnh',
+                            'status_class' => 'bg-zen-success/10 text-zen-success ring-zen-success/20',
+                            'image' => asset('images/tailadmin/user/user-01.jpg'),
+                            'checked' => true,
+                        ],
+                        [
+                            'id' => 'dinh-van-hai',
+                            'name' => 'Đinh Văn Hải',
+                            'role' => 'Kỹ thuật viên spa',
+                            'experience' => '5 năm kinh nghiệm',
+                            'featured_service' => 'Massage da đầu, treatment phục hồi',
+                            'rating' => '4.8/5',
+                            'status' => 'Có thể đặt lịch',
+                            'status_class' => 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20',
+                            'image' => asset('images/tailadmin/user/user-02.jpg'),
+                            'checked' => false,
+                        ],
+                        [
+                            'id' => 'le-hoang-nam',
+                            'name' => 'Lê Hoàng Nam',
+                            'role' => 'Chuyên viên gội đầu dưỡng sinh',
+                            'experience' => '4 năm kinh nghiệm',
+                            'featured_service' => 'Gội thư giãn, massage cổ vai gáy',
+                            'rating' => '4.7/5',
+                            'status' => 'Bận',
+                            'status_class' => 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
+                            'image' => asset('images/tailadmin/user/user-03.jpg'),
+                            'checked' => false,
+                        ],
+                    ];
+                @endphp
+
                 {{-- Nhân viên --}}
                 <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
                     <h2 class="text-base font-semibold text-zen-text">Chọn nhân viên</h2>
                     <p class="mt-1 text-sm text-zen-muted">Để salon sắp xếp lịch hoặc chọn stylist yêu thích.</p>
-                    <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                        <label class="flex cursor-pointer items-center gap-3 rounded-zen-md border border-zen-border bg-zen-bg p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft hover:border-zen-primary/40">
-                            <input type="radio" name="booking_stylist" value="any" class="peer sr-only" checked>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3" role="radiogroup" aria-label="Chọn nhân viên phụ trách">
+                        @foreach ($bookingStylists as $stylist)
+                            <label
+                                data-booking-stylist-card
+                                role="radio"
+                                class="group relative flex min-h-full cursor-pointer flex-col rounded-zen-md border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-zen-primary/50 hover:shadow-zen has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft has-[:checked]:shadow-zen-md has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40"
+                            >
+                                <input
+                                    type="radio"
+                                    name="booking_stylist"
+                                    value="{{ $stylist['id'] }}"
+                                    data-stylist-name="{{ $stylist['name'] }}"
+                                    class="peer sr-only"
+                                    @checked($stylist['checked'])
+                                >
 
-                            <span class="min-w-0 text-sm font-medium text-zen-text"><span data-stylist-label>Quách Tùng Dương</span></span>
-                        </label>
-                        <label class="flex cursor-pointer items-center gap-3 rounded-zen-md border border-zen-border bg-zen-bg p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft hover:border-zen-primary/40">
-                            <input type="radio" name="booking_stylist" value="lan-chi" class="peer sr-only">
+                                <span class="flex items-start gap-3">
+                                    <img
+                                        src="{{ $stylist['image'] }}"
+                                        alt="Ảnh đại diện {{ $stylist['name'] }}"
+                                        class="size-16 shrink-0 rounded-full border-2 border-white object-cover shadow-sm ring-1 ring-zen-border"
+                                        loading="lazy"
+                                    >
+                                    <span class="min-w-0 flex-1">
+                                        <span data-stylist-label class="block text-sm font-semibold text-zen-text">{{ $stylist['name'] }}</span>
+                                        <span class="mt-1 block text-xs font-medium text-zen-primary">{{ $stylist['role'] }}</span>
+                                        <span class="mt-2 inline-flex rounded-full px-2.5 py-1 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
+                                            {{ $stylist['status'] }}
+                                        </span>
+                                    </span>
+                                </span>
 
-                            <span class="min-w-0 text-sm font-medium text-zen-text"><span data-stylist-label>Đinh Văn Hải</span></span>
-                        </label>
-                        <label class="flex cursor-pointer items-center gap-3 rounded-zen-md border border-zen-border bg-zen-bg p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft hover:border-zen-primary/40">
-                            <input type="radio" name="booking_stylist" value="hoang-nam" class="peer sr-only">
-                            <span class="min-w-0 text-sm font-medium text-zen-text"><span data-stylist-label>Lê Hoàng Nam</span></span>
-                        </label>
+                                <span class="mt-4 grid gap-2 text-xs text-zen-muted">
+                                    <span class="flex items-center justify-between gap-3">
+                                        <span>Kinh nghiệm</span>
+                                        <span class="text-right font-semibold text-zen-text">{{ $stylist['experience'] }}</span>
+                                    </span>
+                                    <span class="flex items-center justify-between gap-3">
+                                        <span>Đánh giá</span>
+                                        <span class="text-right font-semibold text-zen-primary">{{ $stylist['rating'] }}</span>
+                                    </span>
+                                    <span class="rounded-zen-sm bg-zen-bg-soft px-3 py-2 leading-relaxed text-zen-text">
+                                        <span class="block text-[11px] font-medium uppercase tracking-wide text-zen-muted">Dịch vụ nổi bật</span>
+                                        <span class="mt-0.5 block font-medium">{{ $stylist['featured_service'] }}</span>
+                                    </span>
+                                </span>
+                            </label>
+                        @endforeach
                     </div>
                 </section>
                 

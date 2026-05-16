@@ -221,7 +221,17 @@ function initBookingPage(root) {
     function syncStylistSummary() {
         const picked = root.querySelector(`${SEL.stylistRadios}:checked`);
         const labelEl = picked?.closest('label')?.querySelector('[data-stylist-label]');
-        if (labelEl && summaryStylist) summaryStylist.textContent = labelEl.textContent?.trim() ?? '—';
+        const stylistName = picked?.dataset.stylistName ?? labelEl?.textContent?.trim() ?? '—';
+
+        root.dataset.selectedStylistId = picked?.value ?? '';
+        root.dataset.selectedStylistName = stylistName;
+
+        root.querySelectorAll('[data-booking-stylist-card]').forEach((card) => {
+            const checked = card.querySelector(SEL.stylistRadios)?.checked === true;
+            card.setAttribute('aria-checked', checked ? 'true' : 'false');
+        });
+
+        if (summaryStylist) summaryStylist.textContent = stylistName;
     }
 
     function syncServicesAndTotal() {
