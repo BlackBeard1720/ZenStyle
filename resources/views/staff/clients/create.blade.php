@@ -106,26 +106,6 @@
             <x-staff.form.error name="preferences" />
           </div>
 
-          <!-- Status -->
-          <div>
-            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-              Status <span class="text-error-500">*</span>
-            </label>
-            <div class="relative z-20 bg-transparent" x-data="{ isOptionSelected: true }">
-              <select
-                name="status"
-                class="dark:bg-dark-900 shadow-theme-xs focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:bg-gray-900 dark:text-white/90
-                  @error('status') border-error-300 focus:border-error-300 dark:border-error-700 dark:focus:border-error-800 @else border-gray-300 focus:border-brand-300 dark:focus:border-brand-800 dark:border-gray-700 @enderror"
-                @change="isOptionSelected = true"
-              >
-                <option value="active" @selected(old('status', 'active') === 'active')>Active</option>
-                <option value="inactive" @selected(old('status') === 'inactive')>Inactive</option>
-              </select>
-
-            </div>
-            <x-staff.form.error name="status" />
-          </div>
-
           <!-- Actions -->
           <div class="flex items-center justify-end gap-3 border-t border-gray-100 pt-5 dark:border-gray-800">
             <a

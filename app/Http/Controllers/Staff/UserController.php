@@ -17,6 +17,9 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::query()->with('role')
+            ->whereHas('role', function ($query) {
+                $query->where('role_name', '!=', 'client');
+            })
             ->when($request->id, function ($query, $id) {
                 $query->where('id', $id);
             })
@@ -46,7 +49,10 @@ class UserController extends Controller
             'username' => ['required', 'string', 'max:255', 'unique:users,username'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', Password::default()],
-            'role_id' => ['required', 'exists:roles,id'],
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')->where(fn ($query) => $query->where('role_name', '!=', 'client')),
+            ],
         ]);
         // create new user in the database
         User::create([
@@ -65,9 +71,13 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        $this->abortForClientAccount($user);
+
+        $user->load(['role', 'staff']);
+
+        return view('staff.users.show', ['user' => $user]);
     }
 
     /**
@@ -75,6 +85,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->abortForClientAccount($user);
+
         return view('staff.users.edit', ['user' => $user]);
     }
 
@@ -83,6 +95,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->abortForClientAccount($user);
+
         // validate the request
         $request->validate([
             'username' => ['required', 'string', 'max:255',
@@ -92,7 +106,10 @@ class UserController extends Controller
                 Rule::unique('users', 'email')->ignore($user),
             ],
             'password' => ['nullable', Password::default()],
-            'role_id' => ['required', 'exists:roles,id'],
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')->where(fn ($query) => $query->where('role_name', '!=', 'client')),
+            ],
         ]);
         // update the user in the database
         $user->update([
@@ -113,9 +130,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->abortForClientAccount($user);
+
         $user->delete();
         // redirect to user list
         return to_route('staff.users.index')
             ->with('success', 'User deleted successfully.');
+    }
+
+    private function abortForClientAccount(User $user): void
+    {
+        abort_if($user->hasRole('client'), 404);
     }
 }

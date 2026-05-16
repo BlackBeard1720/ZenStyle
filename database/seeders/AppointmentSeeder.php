@@ -17,12 +17,12 @@ class AppointmentSeeder extends Seeder
         DB::table('appointment_service')->delete();
         DB::table('appointments')->delete();
 
-        $clients = Client::where('status', 'active')->get();
+        $clients = Client::all();
         $staff = Staff::where('status', 'active')->get();
         $services = Service::where('status', 'active')->get();
 
         if ($clients->isEmpty() || $staff->isEmpty() || $services->isEmpty()) {
-            throw new RuntimeException('AppointmentSeeder requires active clients, staff, and services. Run ClientSeeder, StaffSeeder, and ServiceSeeder first.');
+            throw new RuntimeException('AppointmentSeeder requires clients, active staff, and active services. Run ClientSeeder, StaffSeeder, and ServiceSeeder first.');
         }
 
         for ($i = 0; $i < 28; $i++) {

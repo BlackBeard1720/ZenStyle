@@ -19,7 +19,6 @@ class Client extends Model
         'dob',
         'preferences',
         'loyalty_points',
-        'status',
     ];
 
     public function user(): BelongsTo

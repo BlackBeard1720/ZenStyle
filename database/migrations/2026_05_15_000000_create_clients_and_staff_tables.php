@@ -18,7 +18,6 @@ return new class extends Migration
                 $table->date('dob')->nullable();
                 $table->text('preferences')->nullable();
                 $table->unsignedInteger('loyalty_points')->default(0);
-                $table->string('status')->default('active');
                 $table->timestamps();
             });
         }

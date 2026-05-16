@@ -96,9 +96,6 @@
                 <th class="px-4 pb-3 pt-4 sm:px-6 text-left">
                   <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Email</p>
                 </th>
-                <th class="px-4 pb-3 pt-4 sm:px-6 text-left">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>
-                </th>
                 <th class="px-4 pb-3 pt-4 sm:px-6 text-right">
                   <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Action</p>
                 </th>
@@ -142,19 +139,6 @@
                   </td>
 
                   <td class="px-4 pb-3 pt-4 sm:px-6">
-                    @php
-                      $isActive = $client->status === 'active';
-                    @endphp
-
-                    <span class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium
-                      {{ $isActive
-                          ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                          : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
-                      }}">
-                      {{ $isActive ? 'Active' : 'Inactive' }}
-                    </span>
-                  </td>
-                  <td class="px-4 pb-3 pt-4 sm:px-6">
                     <div class="flex items-center justify-end gap-2">
 
                       <!-- View -->
@@ -178,9 +162,9 @@
                         </svg>
                       </a>
 
-                      <!-- Deactivate (DELETE → controller sets inactive) -->
+                      <!-- Delete -->
                       <form action="{{ route('staff.clients.destroy', $client) }}" method="POST"
-                            onsubmit="return confirm('Deactivate this client?');">
+                            onsubmit="return confirm('Delete this client?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit"

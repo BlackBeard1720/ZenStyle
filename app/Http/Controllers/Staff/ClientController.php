@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+
 class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(request $request)
+    public function index(Request $request)
     {
         $clients = Client::query()
             ->with('user')->when($request->id, function ($query, $id) {
@@ -22,9 +23,6 @@ class ClientController extends Controller
             })
             ->when($request->phone, function ($query, $phone) {
                 $query->where('phone', 'like', '%' . $phone . '%');
-            })
-            ->when($request->status, function ($query, $status) {
-                $query->where('status', $status);
             })
             ->latest()
             ->paginate(10)
@@ -54,7 +52,6 @@ class ClientController extends Controller
             'email' => ['nullable', 'email', 'max:255', 'unique:clients,email'],
             'dob' => ['nullable', 'date'],
             'preferences' => ['nullable', 'string'],
-            'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
 
         Client::create([
@@ -63,7 +60,6 @@ class ClientController extends Controller
             'email' => $request->filled('email') ? $request->email : null,
             'dob' => $request->dob,
             'preferences' => $request->preferences,
-            'status' => $request->status,
         ]);
 
         return to_route('staff.clients.index')
@@ -113,7 +109,6 @@ class ClientController extends Controller
             ],
             'dob' => ['nullable', 'date'],
             'preferences' => ['nullable', 'string'],
-            'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
 
         $client->update([
@@ -122,7 +117,6 @@ class ClientController extends Controller
             'email' => $request->filled('email') ? $request->email : null,
             'dob' => $request->dob,
             'preferences' => $request->preferences,
-            'status' => $request->status,
         ]);
 
         return to_route('staff.clients.index')
@@ -134,11 +128,9 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        $client->update([
-            'status' => 'inactive',
-        ]);
+        $client->delete();
 
         return to_route('staff.clients.index')
-            ->with('success', 'Client deactivated successfully.');
+            ->with('success', 'Client deleted successfully.');
     }
 }

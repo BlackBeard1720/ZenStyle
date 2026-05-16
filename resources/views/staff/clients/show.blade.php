@@ -60,19 +60,6 @@
           <dd class="text-sm text-gray-800 dark:text-white/90">{{ $client->loyalty_points ?? 0 }}</dd>
         </div>
         <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
-          <dd>
-            @php $isActive = $client->status === 'active'; @endphp
-            <span class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium
-              {{ $isActive
-                  ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                  : 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500'
-              }}">
-              {{ $isActive ? 'Active' : 'Inactive' }}
-            </span>
-          </dd>
-        </div>
-        <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
           <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Linked account</dt>
           <dd class="text-sm text-gray-800 dark:text-white/90">
             {{ $client->user?->username ?? '—' }}

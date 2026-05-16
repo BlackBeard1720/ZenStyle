@@ -42,18 +42,6 @@
             />
         </div>
 
-        <div class="mb-4">
-            <label class="text-sm text-gray-600 dark:text-gray-400">Status</label>
-            <select
-                name="status"
-                class="w-full mt-1 rounded-lg border px-3 py-2 dark:bg-gray-700 dark:border-gray-600 focus:border-brand-500 focus:ring-brand-500"
-            >
-                <option value="">All</option>
-                <option value="active" @selected(request('status') === 'active')>Active</option>
-                <option value="inactive" @selected(request('status') === 'inactive')>Inactive</option>
-            </select>
-        </div>
-
         <div class="flex justify-end gap-2">
             <button
                 type="button"

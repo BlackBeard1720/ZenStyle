@@ -21,7 +21,6 @@ class ClientFactory extends Factory
             'dob' => fake()->optional()->dateTimeBetween('-50 years', '-18 years')?->format('Y-m-d'),
             'preferences' => fake()->optional()->sentence(),
             'loyalty_points' => fake()->numberBetween(0, 500),
-            'status' => fake()->randomElement(['active', 'inactive']),
         ];
     }
 
@@ -32,9 +31,6 @@ class ClientFactory extends Factory
             'full_name' => $user->username,
             'phone' => $user->phone ?: fake()->numerify('09########'),
             'email' => $user->email,
-            'status' => in_array($user->status, ['active', 'inactive'], true)
-                ? $user->status
-                : fake()->randomElement(['active', 'inactive']),
         ]);
     }
 }
