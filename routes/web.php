@@ -3,6 +3,7 @@
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
+use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\Staff\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -81,4 +82,9 @@ Route::prefix('staff')->name('staff.')
             'message' => 'We can’t seem to find the page you are looking for!',
         ], 404);
     });
+});
+
+Route::prefix('staff')->name('staff.')->group(function () {
+   Route::resource('clients', ClientController::class);
+   Route::resource('users', UserController::class);
 });
