@@ -19,6 +19,9 @@
 
         <div class="mx-auto mt-5 grid max-w-6xl gap-5 px-4 sm:mt-6 sm:px-6 lg:grid-cols-12 lg:gap-6">
             <div class="space-y-5 lg:col-span-8">
+              <form method="POST" action="{{ route('customer.booking.store') }}">
+
+                @csrf
                 {{-- Số lượng khách (EasySalon có bước này) --}}
                 <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
                     <h2 class="text-base font-semibold text-zen-text">Số lượng khách</h2>
@@ -102,17 +105,17 @@
                     <p class="mt-1 text-sm text-zen-muted">Để salon sắp xếp lịch hoặc chọn stylist yêu thích.</p>
                     <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         <label class="flex cursor-pointer items-center gap-3 rounded-zen-md border border-zen-border bg-zen-bg p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft hover:border-zen-primary/40">
-                            <input type="radio" name="booking_stylist" value="any" class="peer sr-only" checked>
+                            <input type="radio" name="staff_id" value="any" class="peer sr-only" checked>
 
                             <span class="min-w-0 text-sm font-medium text-zen-text"><span data-stylist-label>Quách Tùng Dương</span></span>
                         </label>
                         <label class="flex cursor-pointer items-center gap-3 rounded-zen-md border border-zen-border bg-zen-bg p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft hover:border-zen-primary/40">
-                            <input type="radio" name="booking_stylist" value="lan-chi" class="peer sr-only">
+                            <input type="radio" name="staff_id" value="lan-chi" class="peer sr-only">
 
                             <span class="min-w-0 text-sm font-medium text-zen-text"><span data-stylist-label>Đinh Văn Hải</span></span>
                         </label>
                         <label class="flex cursor-pointer items-center gap-3 rounded-zen-md border border-zen-border bg-zen-bg p-3 transition-colors has-[:checked]:border-2 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft hover:border-zen-primary/40">
-                            <input type="radio" name="booking_stylist" value="hoang-nam" class="peer sr-only">
+                            <input type="radio" name="staff_id" value="hoang-nam" class="peer sr-only">
                             <span class="min-w-0 text-sm font-medium text-zen-text"><span data-stylist-label>Lê Hoàng Nam</span></span>
                         </label>
                     </div>
@@ -125,7 +128,7 @@
                     <ul class="mt-4 divide-y divide-zen-border rounded border border-zen-border">
                         <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Cắt tóc nam cao cấp" data-service-price="150000">
                             <label class="flex flex-1 cursor-pointer items-start gap-3">
-                                <input type="checkbox" checked name="booking_services[]" value="cut" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                                <input type="checkbox" checked name="service_ids[]" value="cut" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
                                 <span>
                                     <span class="block text-sm font-medium text-zen-text">Cắt tóc nam cao cấp</span>
                                     <span class="mt-0.5 block text-xs text-zen-muted">Khoảng 45 phút</span>
@@ -135,7 +138,7 @@
                         </li>
                         <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Gội + massage da đầu" data-service-price="120000">
                             <label class="flex flex-1 cursor-pointer items-start gap-3">
-                                <input type="checkbox" name="booking_services[]" value="wash" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                                <input type="checkbox" checked name="service_ids[]" value="wash" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
                                 <span>
                                     <span class="block text-sm font-medium text-zen-text">Gội + massage da đầu</span>
                                     <span class="mt-0.5 block text-xs text-zen-muted">30 phút</span>
@@ -145,7 +148,7 @@
                         </li>
                         <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Uốn / nhuộm cơ bản" data-service-price="650000">
                             <label class="flex flex-1 cursor-pointer items-start gap-3">
-                                <input type="checkbox" name="booking_services[]" value="perm" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                                <input type="checkbox" checked name="service_ids[]" value="perm" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
                                 <span>
                                     <span class="block text-sm font-medium text-zen-text">Uốn / nhuộm cơ bản</span>
                                     <span class="mt-0.5 block text-xs text-zen-muted">~120 phút</span>
@@ -155,7 +158,7 @@
                         </li>
                         <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Treatment phục hồi" data-service-price="320000">
                             <label class="flex flex-1 cursor-pointer items-start gap-3">
-                                <input type="checkbox" name="booking_services[]" value="treatment" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                                <input type="checkbox" checked name="service_ids[]" value="treatment" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
                                 <span>
                                     <span class="block text-sm font-medium text-zen-text">Treatment phục hồi</span>
                                     <span class="mt-0.5 block text-xs text-zen-muted">60 phút</span>
@@ -173,6 +176,7 @@
                     <div class="mt-4 flex flex-col gap-2 sm:flex-row">
                         <input
                             type="text"
+                            name="coupon_code"
                             data-booking-promo-input
                             placeholder="VD: SUMMER2026"
                             class="h-10 flex-1 rounded-zen-sm border border-zen-border px-3 text-sm outline-none placeholder:text-zen-muted/70 focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
@@ -197,6 +201,7 @@
                             <label for="full-name" class="mb-1.5 block text-sm font-medium text-zen-muted">Họ và tên</label>
                             <input
                                 id="full-name"
+                                name="full_name"
                                 type="text"
                                 placeholder="Nguyễn Văn A"
                                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
@@ -206,6 +211,7 @@
                             <label for="phone" class="mb-1.5 block text-sm font-medium text-zen-muted">Số điện thoại</label>
                             <input
                                 id="phone"
+                                name="phone"
                                 type="tel"
                                 placeholder="09xx xxx xxx"
                                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
@@ -215,6 +221,7 @@
                             <label for="note" class="mb-1.5 block text-sm font-medium text-zen-muted">Ghi chú (tuỳ chọn)</label>
                             <textarea
                                 id="note"
+                                name="notes"
                                 rows="4"
                                 placeholder="Ví dụ: mong muốn tư vấn màu, tình trạng tóc..."
                                 class="w-full resize-y rounded-zen-sm border border-zen-border px-3 py-2 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
@@ -226,18 +233,19 @@
                 {{-- Thanh hành động dưới (kiểu wizard) --}}
                 <div class="flex flex-col-reverse gap-3 border-t border-zen-border pt-2 sm:flex-row sm:justify-end">
                     <button
-                        type="button"
+                        type="submit"
                         class="h-10 rounded-zen-sm border border-zen-border bg-zen-bg px-5 text-sm font-medium text-zen-muted hover:border-zen-primary/40 hover:text-zen-primary"
                     >
                         Quay lại
                     </button>
                     <button
-                        type="button"
+                        type="submit"
                         class="h-10 rounded-zen-sm bg-zen-primary px-8 text-sm font-medium text-white shadow-sm transition hover:bg-zen-primary-dark"
                     >
                         Tiếp tục / Xác nhận đặt lịch
                     </button>
                 </div>
+              </form>
             </div>
 
             {{-- Sidebar tóm tắt --}}

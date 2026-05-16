@@ -16,10 +16,9 @@ class CustomerBookController extends Controller
 {
     public function create()
     {
-        $services = [];
-        $staff = [];
 
-        return view('frontend.booking.index', compact('services', 'staff'));
+
+        return view('frontend.booking.index');
     }
 
     public function store(Request $request)
@@ -33,10 +32,9 @@ class CustomerBookController extends Controller
             'appointment_date' => ['required', 'date'],
             'appointment_time' => ['required', 'date_format:H:i'],
 
-            'service_ids' => ['required', 'array', 'min:1'],
-            'service_ids.*' => ['exists:services,id'],
+            'service_ids' => ['nullable', 'array'],
 
-            'staff_id' => ['nullable', 'exists:staff,id'],
+            'staff_id' => ['nullable'],
 
             'coupon_code' => ['nullable', 'string', 'max:50'],
 
