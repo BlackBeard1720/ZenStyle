@@ -62,7 +62,7 @@
         <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
           <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Linked account</dt>
           <dd class="text-sm text-gray-800 dark:text-white/90">
-            {{ $client->user?->username ?? '—' }}
+            {{ $client->user?->username ?? 'No account' }}
           </dd>
         </div>
         <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">

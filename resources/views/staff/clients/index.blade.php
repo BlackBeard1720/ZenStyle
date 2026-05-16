@@ -123,7 +123,7 @@
                           {{ $client->full_name }}
                         </span>
                         <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {{ $client->user?->username ?? '—' }}
+                          {{ $client->user?->username ?? 'No account' }}
                         </span>
                       </div>
 

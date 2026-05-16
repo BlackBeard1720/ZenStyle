@@ -11,9 +11,10 @@ class StaffSeeder extends Seeder
 {
     public function run(): void
     {
-        $staffRole = Role::where('role_name', 'stylist')->firstOrFail();
+        $internalRoleIds = Role::whereIn('role_name', ['admin', 'receptionist', 'stylist'])
+            ->pluck('id');
 
-        $staffUsers = User::where('role_id', $staffRole->id)
+        $staffUsers = User::whereIn('role_id', $internalRoleIds)
             ->whereDoesntHave('staff')
             ->get();
 
@@ -26,6 +27,8 @@ class StaffSeeder extends Seeder
         $neededStaff = max(0, 5 - Staff::where('status', 'active')->count());
 
         if ($neededStaff > 0) {
+            $staffRole = Role::where('role_name', 'stylist')->firstOrFail();
+
             $staffUsers = User::factory($neededStaff)->create([
                 'role_id' => $staffRole->id,
                 'status' => 'active',

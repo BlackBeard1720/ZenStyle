@@ -107,6 +107,16 @@
           </div>
         </dl>
       </div>
+    @else
+      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="border-b border-gray-100 px-5 py-4 sm:px-6 sm:py-5 dark:border-gray-800">
+          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Staff profile</h3>
+        </div>
+
+        <div class="p-5 sm:p-6">
+          <p class="text-sm text-gray-500 dark:text-gray-400">No staff profile linked to this account.</p>
+        </div>
+      </div>
     @endif
 
     @if($user->client)
