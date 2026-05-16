@@ -93,6 +93,9 @@
                   <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Email</p>
                 </th>
                 <th class="px-4 pb-3 pt-4 sm:px-6 text-left">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Role</p>
+                </th>
+                <th class="px-4 pb-3 pt-4 sm:px-6 text-left">
                   <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>
                 </th>
                 <th class="px-4 pb-3 pt-4 sm:px-6 text-right">
@@ -104,6 +107,9 @@
 
               <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
               @foreach($users as $user)
+                @php
+                  $displayName = $user->staff?->full_name ?? $user->client?->full_name ?? $user->username;
+                @endphp
                 <!-- table item -->
                 <tr>
                   <td class="px-4 pb-3 pt-4 sm:px-6">
@@ -114,15 +120,15 @@
                     <div class="flex items-center gap-3">
 
                       <div class="h-10 w-10 overflow-hidden rounded-full bg-gray-100">
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->username) }}" alt="User"/>
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($displayName) }}" alt="User"/>
                       </div>
 
                       <div>
                         <span class="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                          {{ $user->username }}
+                          {{ $displayName }}
                         </span>
                         <span class="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {{ $user->role->role_name }}
+                          {{ '@' . $user->username }}
                         </span>
                       </div>
 
@@ -131,6 +137,10 @@
 
                   <td class="px-4 pb-3 pt-4 sm:px-6">
                     <p class="text-gray-500 text-theme-sm dark:text-gray-400">{{ $user->email }}</p>
+                  </td>
+
+                  <td class="px-4 pb-3 pt-4 sm:px-6">
+                    <x-staff.role-badge :role="$user->role->role_name" />
                   </td>
 
                   <td class="px-4 pb-3 pt-4 sm:px-6">

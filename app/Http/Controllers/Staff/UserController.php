@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::query()->with('role')
+        $users = User::query()->with(['role', 'staff', 'client'])
             ->whereHas('role', function ($query) {
                 $query->whereIn('role_name', self::INTERNAL_ROLES);
             })
