@@ -218,10 +218,43 @@ function initBookingPage(root) {
         }
     }
 
+    function isStylistAvailable(radio) {
+        return radio?.dataset.stylistAvailable !== 'false' && radio?.disabled !== true;
+    }
+
     function syncStylistSummary() {
-        const picked = root.querySelector(`${SEL.stylistRadios}:checked`);
+        const radios = [...root.querySelectorAll(SEL.stylistRadios)];
+        let picked = radios.find((radio) => radio.checked) ?? null;
+
+        if (picked && !isStylistAvailable(picked)) {
+            picked.checked = false;
+            picked = null;
+        }
+
+        if (!picked) {
+            picked = radios.find(isStylistAvailable) ?? null;
+            if (picked) picked.checked = true;
+        }
+
         const labelEl = picked?.closest('label')?.querySelector('[data-stylist-label]');
-        if (labelEl && summaryStylist) summaryStylist.textContent = labelEl.textContent?.trim() ?? '—';
+        const stylistName = picked
+            ? picked.dataset.stylistName ?? labelEl?.textContent?.trim() ?? '—'
+            : 'Bất kỳ nhân viên';
+
+        root.dataset.selectedStylistId = picked?.value ?? '';
+        root.dataset.selectedStylistName = stylistName;
+
+        root.querySelectorAll('[data-booking-stylist-card]').forEach((card) => {
+            const radio = card.querySelector(SEL.stylistRadios);
+            const available = isStylistAvailable(radio);
+            if (!available && radio) radio.checked = false;
+
+            const checked = available && radio?.checked === true;
+            card.setAttribute('aria-checked', checked ? 'true' : 'false');
+            card.setAttribute('aria-disabled', available ? 'false' : 'true');
+        });
+
+        if (summaryStylist) summaryStylist.textContent = stylistName;
     }
 
     function syncServicesAndTotal() {
@@ -312,8 +345,20 @@ function initBookingPage(root) {
         cb.addEventListener('change', syncServicesAndTotal),
     );
 
+    root.querySelectorAll('[data-booking-stylist-card]').forEach((card) => {
+        card.addEventListener('click', (event) => {
+            if (isStylistAvailable(card.querySelector(SEL.stylistRadios))) return;
+
+            event.preventDefault();
+            syncStylistSummary();
+        });
+    });
+
     root.querySelectorAll(SEL.stylistRadios).forEach((radio) =>
-        radio.addEventListener('change', syncStylistSummary),
+        radio.addEventListener('change', () => {
+            if (!isStylistAvailable(radio)) radio.checked = false;
+            syncStylistSummary();
+        }),
     );
 
     promoBtn?.addEventListener('click', () => {
