@@ -13,19 +13,14 @@ class ClientSeeder extends Seeder
     {
         $clientRole = Role::where('role_name', 'client')->firstOrFail();
 
-        User::factory(10)
-            ->create([
-                'role_id' => $clientRole->id,
-                'status' => 'active',
-            ])
-            ->each(function (User $user) {
-                Client::factory()->create([
-                    'user_id' => $user->id,
-                    'full_name' => $user->username,
-                    'phone' => $user->phone ?: fake()->numerify('09########'),
-                    'email' => $user->email,
-                    'status' => 'active',
-                ]);
-            });
+        $clientUsers = User::factory(10)->create([
+            'role_id' => $clientRole->id,
+        ]);
+
+        $clientUsers->each(function (User $user) {
+            Client::factory()
+                ->forUser($user)
+                ->create();
+        });
     }
 }

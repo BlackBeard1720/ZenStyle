@@ -13,34 +13,29 @@ class StaffSeeder extends Seeder
     {
         $staffRole = Role::where('role_name', 'stylist')->firstOrFail();
 
-        User::where('role_id', $staffRole->id)
+        $staffUsers = User::where('role_id', $staffRole->id)
             ->whereDoesntHave('staff')
-            ->get()
-            ->each(function (User $user) {
-                Staff::factory()->create([
-                    'user_id' => $user->id,
-                    'full_name' => $user->username,
-                    'phone' => $user->phone,
-                    'email' => $user->email,
-                    'status' => 'active',
-                ]);
-            });
+            ->get();
+
+        $staffUsers->each(function (User $user) {
+            Staff::factory()
+                ->forUser($user)
+                ->create();
+        });
 
         $neededStaff = max(0, 5 - Staff::where('status', 'active')->count());
 
-        User::factory($neededStaff)
-            ->create([
+        if ($neededStaff > 0) {
+            $staffUsers = User::factory($neededStaff)->create([
                 'role_id' => $staffRole->id,
                 'status' => 'active',
-            ])
-            ->each(function (User $user) {
-                Staff::factory()->create([
-                    'user_id' => $user->id,
-                    'full_name' => $user->username,
-                    'phone' => $user->phone,
-                    'email' => $user->email,
-                    'status' => 'active',
-                ]);
+            ]);
+
+            $staffUsers->each(function (User $user) {
+                Staff::factory()
+                    ->forUser($user)
+                    ->create();
             });
+        }
     }
 }

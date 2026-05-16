@@ -1,6 +1,6 @@
 <x-staff.layout
-  title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template"
-  page-name="ecommerce"
+  title="Edit client"
+  page-name="ClientManagement"
 >
   <div x-data="{ pageName: `Edit client`}">
     <x-staff.partials.breadcrumb />

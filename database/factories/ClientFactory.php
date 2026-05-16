@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +21,20 @@ class ClientFactory extends Factory
             'dob' => fake()->optional()->dateTimeBetween('-50 years', '-18 years')?->format('Y-m-d'),
             'preferences' => fake()->optional()->sentence(),
             'loyalty_points' => fake()->numberBetween(0, 500),
-            'status' => 'active',
+            'status' => fake()->randomElement(['active', 'inactive']),
         ];
+    }
+
+    public function forUser(User $user): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'user_id' => $user->id,
+            'full_name' => $user->username,
+            'phone' => $user->phone ?: fake()->numerify('09########'),
+            'email' => $user->email,
+            'status' => in_array($user->status, ['active', 'inactive'], true)
+                ? $user->status
+                : fake()->randomElement(['active', 'inactive']),
+        ]);
     }
 }

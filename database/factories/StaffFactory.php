@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Staff;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,5 +23,16 @@ class StaffFactory extends Factory
             'hire_date' => fake()->dateTimeBetween('-3 years', '-1 month')->format('Y-m-d'),
             'status' => 'active',
         ];
+    }
+
+    public function forUser(User $user): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'user_id' => $user->id,
+            'full_name' => $user->username,
+            'phone' => $user->phone ?: fake()->numerify('09########'),
+            'email' => $user->email,
+            'status' => 'active',
+        ]);
     }
 }

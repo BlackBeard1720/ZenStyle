@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Appointment;
+use App\Models\AppointmentService;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Collection;
 
 /**
  * @extends Factory<Appointment>
@@ -23,5 +25,25 @@ class AppointmentFactory extends Factory
             'notes' => fake()->optional()->sentence(),
             'total_amount' => 0,
         ];
+    }
+
+    public function withServices(Collection $services, Collection $staff): static
+    {
+        return $this->afterCreating(function (Appointment $appointment) use ($services, $staff) {
+            $selectedServices = $services->random(fake()->numberBetween(1, min(3, $services->count())));
+
+            foreach ($selectedServices as $service) {
+                AppointmentService::create([
+                    'appointment_id' => $appointment->id,
+                    'service_id' => $service->id,
+                    'staff_id' => $staff->random()->id,
+                    'price_at_booking' => $service->price,
+                ]);
+            }
+
+            $appointment->update([
+                'total_amount' => $selectedServices->sum('price'),
+            ]);
+        });
     }
 }
