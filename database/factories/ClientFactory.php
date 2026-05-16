@@ -16,7 +16,7 @@ class ClientFactory extends Factory
         return [
             'user_id' => null,
             'full_name' => fake()->name(),
-            'phone' => fake()->numerify('09########'),
+            'phone' => fake()->unique()->numerify('09########'),
             'email' => fake()->unique()->safeEmail(),
             'dob' => fake()->optional()->dateTimeBetween('-50 years', '-18 years')?->format('Y-m-d'),
             'preferences' => fake()->optional()->sentence(),
@@ -29,7 +29,7 @@ class ClientFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'user_id' => $user->id,
             'full_name' => $user->username,
-            'phone' => $user->phone ?: fake()->numerify('09########'),
+            'phone' => $user->phone ?: fake()->unique()->numerify('09########'),
             'email' => $user->email,
         ]);
     }

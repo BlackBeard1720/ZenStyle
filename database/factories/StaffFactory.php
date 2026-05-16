@@ -27,10 +27,9 @@ class StaffFactory extends Factory
 
     public function forUser(User $user): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn () => [
             'user_id' => $user->id,
-            'full_name' => $user->username,
-            'phone' => $user->phone ?: fake()->numerify('09########'),
+            'phone' => $user->phone ?: fake()->unique()->numerify('09########'),
             'email' => $user->email,
             'status' => 'active',
         ]);
