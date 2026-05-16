@@ -73,34 +73,76 @@
       </dl>
     </div>
 
-    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-      <div class="border-b border-gray-100 px-5 py-4 sm:px-6 sm:py-5 dark:border-gray-800">
-        <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Staff profile</h3>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Operational details linked to this account.</p>
-      </div>
+    @if($user->staff)
+      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="border-b border-gray-100 px-5 py-4 sm:px-6 sm:py-5 dark:border-gray-800">
+          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Staff profile</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Operational details linked to this account.</p>
+        </div>
 
-      <dl class="space-y-4 p-5 sm:p-6">
-        <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Full name</dt>
-          <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff?->full_name ?? '-' }}</dd>
+        <dl class="space-y-4 p-5 sm:p-6">
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Full name</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff->full_name }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Phone</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff->phone ?? '-' }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff->email ?? '-' }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Specialization</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff->specialization ?? '-' }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Hire date</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff->hire_date ?? '-' }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ ucfirst($user->staff->status ?? '-') }}</dd>
+          </div>
+        </dl>
+      </div>
+    @endif
+
+    @if($user->client)
+      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="border-b border-gray-100 px-5 py-4 sm:px-6 sm:py-5 dark:border-gray-800">
+          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Client profile</h3>
+          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Customer profile linked to this account.</p>
         </div>
-        <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Phone</dt>
-          <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff?->phone ?? '-' }}</dd>
-        </div>
-        <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</dt>
-          <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff?->email ?? '-' }}</dd>
-        </div>
-        <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Specialization</dt>
-          <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff?->specialization ?? '-' }}</dd>
-        </div>
-        <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
-          <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Hire date</dt>
-          <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff?->hire_date ?? '-' }}</dd>
-        </div>
-      </dl>
-    </div>
+
+        <dl class="space-y-4 p-5 sm:p-6">
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Client ID</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->client->id }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Full name</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->client->full_name }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Phone</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->client->phone ?? '-' }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->client->email ?? '-' }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Date of birth</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->client->dob ?? '-' }}</dd>
+          </div>
+          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
+            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Loyalty points</dt>
+            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->client->loyalty_points ?? 0 }}</dd>
+          </div>
+        </dl>
+      </div>
+    @endif
   </div>
 </x-staff.layout>

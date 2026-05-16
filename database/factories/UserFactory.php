@@ -22,7 +22,7 @@ class UserFactory extends Factory
             "email" => fake()->unique()->safeEmail(),
             "phone" => fake()->phoneNumber(),
             "password" => static::$password,
-            'role_id' => fake()->numberBetween(1, 4),
+            'role_id' => fake()->numberBetween(1, 3),
             'status' => fake()->randomElement(['active', 'inactive']),
             'email_verified_at' => now(),
         ];

@@ -11,6 +11,8 @@ use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
+    private const INTERNAL_ROLES = ['admin', 'receptionist', 'stylist'];
+
     /**
      * Display a listing of the resource.
      */
@@ -18,7 +20,7 @@ class UserController extends Controller
     {
         $users = User::query()->with('role')
             ->whereHas('role', function ($query) {
-                $query->where('role_name', '!=', 'client');
+                $query->whereIn('role_name', self::INTERNAL_ROLES);
             })
             ->when($request->id, function ($query, $id) {
                 $query->where('id', $id);
@@ -51,7 +53,7 @@ class UserController extends Controller
             'password' => ['required', Password::default()],
             'role_id' => [
                 'required',
-                Rule::exists('roles', 'id')->where(fn ($query) => $query->where('role_name', '!=', 'client')),
+                Rule::exists('roles', 'id')->where(fn ($query) => $query->whereIn('role_name', self::INTERNAL_ROLES)),
             ],
         ]);
         // create new user in the database
@@ -73,9 +75,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $this->abortForClientAccount($user);
-
-        $user->load(['role', 'staff']);
+        $user->load(['role', 'staff', 'client']);
 
         return view('staff.users.show', ['user' => $user]);
     }
@@ -108,7 +108,7 @@ class UserController extends Controller
             'password' => ['nullable', Password::default()],
             'role_id' => [
                 'required',
-                Rule::exists('roles', 'id')->where(fn ($query) => $query->where('role_name', '!=', 'client')),
+                Rule::exists('roles', 'id')->where(fn ($query) => $query->whereIn('role_name', self::INTERNAL_ROLES)),
             ],
         ]);
         // update the user in the database

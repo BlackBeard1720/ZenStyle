@@ -8,17 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (! Schema::hasTable('services')) {
-            Schema::create('services', function (Blueprint $table) {
-                $table->id();
-                $table->string('service_name');
-                $table->text('description')->nullable();
-                $table->decimal('price', 10, 2)->default(0);
-                $table->unsignedInteger('duration_minutes')->default(60);
-                $table->string('status')->default('active');
-                $table->timestamps();
-            });
-        }
+        Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->string('service_name');
+            $table->text('description')->nullable();
+            $table->decimal('price', 10, 2)->default(0);
+            $table->unsignedInteger('duration_minutes')->default(60);
+            $table->string('status')->default('active');
+            $table->timestamps();
+        });
     }
 
     public function down(): void

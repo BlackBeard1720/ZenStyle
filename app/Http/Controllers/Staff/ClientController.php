@@ -128,6 +128,11 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
+        if ($client->appointments()->exists()) {
+            return to_route('staff.clients.index')
+                ->with('error', 'Cannot delete client because this client already has appointments.');
+        }
+
         $client->delete();
 
         return to_route('staff.clients.index')
