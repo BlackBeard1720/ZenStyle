@@ -24,8 +24,8 @@ class SessionController extends Controller
     {
         // validate the request
         $credentials = $request->validate([
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'string'],
+            'email' => 'required|email',
+            'password' => 'required',
         ]);
         // attempt a login
         if(Auth::attempt($credentials)) {
@@ -41,9 +41,11 @@ class SessionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy()
+    public function destroy(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate(); //hủy session cũ
+        $request->session()->regenerateToken(); //tạo CSRF token mới
         return to_route('staff.login');
     }
 }
