@@ -25,7 +25,10 @@ Route::controller(CustomerBookController::class)->group(function () {
         ->name('booking');
 
     Route::post('/booking', 'store')
-        ->name('customer.booking.store');
+        ->name('booking.store');
+
+    Route::post('/booking/verify-otp', [CustomerBookController::class, 'verifyOtp'])
+        ->name('booking.verify.otp');
 
     Route::get('/booking/success/{appointment}', 'success')
         ->name('customer.booking.success');
