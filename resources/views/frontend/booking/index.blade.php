@@ -205,7 +205,7 @@
                         @endforeach
                     </div>
                 </section>
-                
+
                 {{-- Dịch vụ --}}
                 <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
                     <h2 class="text-base font-semibold text-zen-text">Chọn dịch vụ</h2>
