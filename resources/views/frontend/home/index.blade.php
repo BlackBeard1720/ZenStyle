@@ -1,7 +1,7 @@
 <x-frontend.layout title="ZenStyle — Trang chủ" main-class="pt-0">
     {{--
         Nền trang chủ — luồng hợp lý:
-        zen-bg-soft (canvas đồng bộ body) → band sáng (#dịch-vụ, #đặt-lịch) → capsule zen-primary nhấn trong CTA.
+        stone-50 (canvas đồng bộ body) → band trắng (#dịch vụ, #đặt-lịch) → capsule rose nhấn trong CTA.
     --}}
     {{--
         =====================================================================
@@ -39,10 +39,10 @@
 
     <section
         id="site-banner"
-        class="relative min-h-screen w-full overflow-hidden bg-zen-bg-dark"
+        class="relative min-h-screen w-full overflow-hidden bg-stone-900"
         aria-label="ZenStyle Banner">
         {{-- Overlay gradient để text dễ đọc --}}
-        <div class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-zen-bg-dark/40 via-zen-bg-dark/20 to-zen-bg-dark/60"></div>
+        <div class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-stone-900/40 via-stone-900/20 to-stone-900/60"></div>
 
         {{-- Khối chứa toàn bộ slide --}}
         <div class="relative h-screen">
@@ -76,7 +76,7 @@
         </div>
 
         {{-- Wave separator --}}
-        <div class="pointer-events-none absolute bottom-0 left-0 right-0 text-zen-bg" aria-hidden="true">
+        <div class="pointer-events-none absolute bottom-0 left-0 right-0 text-stone-50" aria-hidden="true">
             <svg class="block h-12 w-full sm:h-16" viewBox="0 0 1440 100" preserveAspectRatio="none"
                  xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor" d="M0,48 C240,95 480,5 720,58 C960,112 1200,18 1440,52 L1440,100 L0,100 Z"/>
@@ -89,39 +89,39 @@
         SECTION GIỚI THIỆU
         =====================================================================
     --}}
-    <section id="gioi-thieu" class="scroll-mt-24 bg-zen-bg-soft px-4 py-20 sm:px-6">
+    <section id="gioi-thieu" class="scroll-mt-24 bg-stone-50 px-4 py-20 sm:px-6">
         <div class="mx-auto max-w-6xl">
             <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-bold text-zen-text">Về ZenStyle</h2>
-                <p class="mt-4 text-lg text-zen-muted max-w-2xl mx-auto">
+                <h2 class="text-3xl sm:text-4xl font-bold text-stone-900">Về ZenStyle</h2>
+                <p class="mt-4 text-lg text-stone-600 max-w-2xl mx-auto">
                     Chúng tôi là điểm đến tin cậy cho dịch vụ tóc, da, và spa chuyên nghiệp.
                     Với đội ngũ stylist tận tâm, chúng tôi mang đến trải nghiệm thư giãn tuyệt vời.
                 </p>
             </div>
 
             <div class="grid gap-8 md:grid-cols-3">
-                <div class="rounded-zen-lg bg-zen-bg p-8 shadow-zen hover:shadow-zen-md transition">
-                    <div class="mb-4 h-12 w-12 rounded-lg bg-zen-accent-soft flex items-center justify-center">
+                <div class="rounded-2xl bg-white p-8 shadow-sm hover:shadow-md transition">
+                    <div class="mb-4 h-12 w-12 rounded-lg bg-rose-100 flex items-center justify-center">
                         <span class="text-2xl">✨</span>
                     </div>
-                    <h3 class="text-xl font-semibold text-zen-text">Chất lượng cao</h3>
-                     <p class="mt-3 text-zen-muted">Sử dụng sản phẩm cao cấp và kỹ thuật chuyên nghiệp.</p>
+                    <h3 class="text-xl font-semibold text-stone-900">Chất lượng cao</h3>
+                     <p class="mt-3 text-stone-600">Sử dụng sản phẩm cao cấp và kỹ thuật chuyên nghiệp.</p>
                 </div>
 
-                <div class="rounded-zen-lg bg-zen-bg p-8 shadow-zen hover:shadow-zen-md transition">
-                    <div class="mb-4 h-12 w-12 rounded-lg bg-zen-accent-soft flex items-center justify-center">
+                <div class="rounded-2xl bg-white p-8 shadow-sm hover:shadow-md transition">
+                    <div class="mb-4 h-12 w-12 rounded-lg bg-rose-100 flex items-center justify-center">
                         <span class="text-2xl">👥</span>
                     </div>
-                    <h3 class="text-xl font-semibold text-zen-text">Đội ngũ tận tâm</h3>
-                    <p class="mt-3 text-zen-muted">Stylist có kinh nghiệm, tư vấn phù hợp với bạn.</p>
+                    <h3 class="text-xl font-semibold text-stone-900">Đội ngũ tận tâm</h3>
+                    <p class="mt-3 text-stone-600">Stylist có kinh nghiệm, tư vấn phù hợp với bạn.</p>
                 </div>
 
-                <div class="rounded-zen-lg bg-zen-bg p-8 shadow-zen hover:shadow-zen-md transition">
-                    <div class="mb-4 h-12 w-12 rounded-lg bg-zen-accent-soft flex items-center justify-center">
+                <div class="rounded-2xl bg-white p-8 shadow-sm hover:shadow-md transition">
+                    <div class="mb-4 h-12 w-12 rounded-lg bg-rose-100 flex items-center justify-center">
                         <span class="text-2xl">🌿</span>
                     </div>
-                    <h3 class="text-xl font-semibold text-zen-text">Không gian thư giãn</h3>
-                    <p class="mt-3 text-zen-muted">Môi trường sạch sẽ, yên tĩnh, thư giãn tối đa.</p>
+                    <h3 class="text-xl font-semibold text-stone-900">Không gian thư giãn</h3>
+                    <p class="mt-3 text-stone-600">Môi trường sạch sẽ, yên tĩnh, thư giãn tối đa.</p>
                 </div>
             </div>
         </div>
@@ -135,11 +135,11 @@
         - Dữ liệu hiện tại viết cứng, sau này có thể thay bằng DB.
         =====================================================================
     --}}
-    <section id="dich-vu" class="scroll-mt-24 border-y border-zen-border bg-white px-4 py-16 sm:px-6">
+    <section id="dich-vu" class="scroll-mt-24 border-y border-stone-200/80 bg-white px-4 py-16 sm:px-6">
         <div class="mx-auto max-w-6xl">
             <div class="text-center">
-                <h2 class="text-2xl font-semibold text-zen-text sm:text-3xl">Dịch vụ nổi bật</h2>
-                <p class="mt-2 text-zen-muted">Chọn gói phù hợp — đội ngũ tư vấn tận tâm.</p>
+                <h2 class="text-2xl font-semibold text-stone-800 sm:text-3xl">Dịch vụ nổi bật</h2>
+                <p class="mt-2 text-stone-600">Chọn gói phù hợp — đội ngũ tư vấn tận tâm.</p>
             </div>
 
             <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
@@ -163,8 +163,8 @@
                         'alt' => 'Phòng massage ZenStyle — không gian thư giãn',
                     ],
                 ] as $item)
-                    <article class="overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg shadow-zen transition hover:shadow-md">
-                        <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
+                    <article class="overflow-hidden rounded-2xl border border-rose-100/90 bg-white shadow-sm transition hover:shadow-md">
+                        <div class="aspect-[4/3] overflow-hidden bg-stone-200">
                             <img
                                 src="{{ $item['image'] }}"
                                 alt="{{ $item['alt'] }}"
@@ -174,8 +174,8 @@
                             >
                         </div>
                         <div class="p-6">
-                            <h3 class="text-lg font-semibold text-zen-text">{{ $item['title'] }}</h3>
-                            <p class="mt-2 text-sm text-zen-muted">{{ $item['desc'] }}</p>
+                            <h3 class="text-lg font-semibold text-stone-900">{{ $item['title'] }}</h3>
+                            <p class="mt-2 text-sm text-stone-600">{{ $item['desc'] }}</p>
                         </div>
                     </article>
                 @endforeach
@@ -184,7 +184,7 @@
             <div class="mt-12 text-center">
                 <a
                     href="{{ route('booking') }}"
-                    class="booking-cta inline-flex rounded-full px-8 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/50 focus-visible:ring-offset-2"
+                    class="booking-cta inline-flex rounded-full px-8 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1677ff]/50 focus-visible:ring-offset-2"
                 >
                     Đặt lịch ngay
                 </a>
@@ -232,12 +232,12 @@
         ];
     @endphp
 
-    <section id="hot-trend" class="scroll-mt-24 bg-gradient-to-b from-zen-bg-soft via-zen-bg-soft to-white px-4 py-16 sm:px-6">
+    <section id="hot-trend" class="scroll-mt-24 bg-gradient-to-b from-stone-50 via-stone-50 to-white px-4 py-16 sm:px-6">
         <div class="mx-auto max-w-6xl">
             <div class="text-center">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle picks</p>
-                <h2 class="mt-2 text-2xl font-semibold text-zen-text sm:text-3xl">Hot trend tóc</h2>
-                <p class="mx-auto mt-2 max-w-2xl text-sm text-zen-muted sm:text-base">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-600">ZenStyle picks</p>
+                <h2 class="mt-2 text-2xl font-semibold text-stone-900 sm:text-3xl">Hot trend tóc</h2>
+                <p class="mx-auto mt-2 max-w-2xl text-sm text-stone-600 sm:text-base">
                     Các kiểu mẫu đang được yêu thích — tham khảo và đặt lịch tư vấn cùng stylist.
                 </p>
             </div>
@@ -245,7 +245,7 @@
             {{-- Hai hàng × 3 cột: chia đều 33% · 33% · 33% --}}
             <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
                 @foreach ($hotTrendStyles as $trend)
-                    <figure class="group overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg-soft shadow-zen">
+                    <figure class="group overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 shadow-sm">
                         <div class="aspect-square overflow-hidden">
                             <img
                                 src="{{ $trend['image'] }}"
@@ -256,7 +256,7 @@
                                 sizes="(min-width: 640px) 33vw, 100vw"
                             >
                         </div>
-                        <figcaption class="border-t border-zen-border bg-white px-3 py-2.5 text-center text-sm font-medium text-zen-text">
+                        <figcaption class="border-t border-stone-100 bg-white px-3 py-2.5 text-center text-sm font-medium text-stone-800">
                             {{ $trend['label'] }}
                         </figcaption>
                     </figure>
@@ -264,5 +264,17 @@
             </div>
         </div>
     </section>
+
+    {{--
+        =====================================================================
+        ANCHOR "ĐẶT LỊCH NGAY"
+        =====================================================================
+        - Trước đó navbar/CTA trỏ tới #dat-lich nhưng chưa có section tương ứng.
+        - Bổ sung section mẫu để không còn link chết.
+
+
+
+        =====================================================================
+    --}}
 
 </x-frontend.layout>
