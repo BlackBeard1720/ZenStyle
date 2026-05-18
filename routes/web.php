@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
@@ -54,6 +55,8 @@ Route::prefix('staff')->name('staff.')
     Route::resource('appointments', AppointmentController::class);
     Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
         ->name('appointments.cancel');
+
+    Route::resource('clients', ClientController::class);
 
     Route::fallback(function (){
         return response()->view('staff.errors.404', [
