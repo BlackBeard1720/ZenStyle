@@ -148,6 +148,204 @@
                 <label class="flex flex-1 cursor-pointer items-start gap-3">
                   <input type="checkbox" checked name="service_ids[]" value="cut" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
                   <span>
+        <div class="mx-auto mt-5 grid max-w-6xl gap-5 px-4 sm:mt-6 sm:px-6 lg:grid-cols-12 lg:gap-6">
+            <div class="space-y-5 lg:col-span-8">
+                {{-- Số lượng khách (EasySalon có bước này) --}}
+                <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
+                    <h2 class="text-base font-semibold text-zen-text">Số lượng khách</h2>
+                    <p class="mt-1 text-sm text-zen-muted">Số người sử dụng dịch vụ trong buổi hẹn.</p>
+                    <div class="mt-4 inline-flex items-center rounded border border-zen-border">
+                        <button type="button" data-booking-guest-minus class="px-4 py-2 text-sm text-zen-muted transition hover:bg-zen-bg-soft hover:text-zen-text focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40" aria-label="Giảm số khách">−</button>
+                        <span data-booking-guest-value class="min-w-[3rem] border-x border-zen-border py-2 text-center text-sm font-medium text-zen-text tabular-nums">1</span>
+                        <button type="button" data-booking-guest-plus class="px-4 py-2 text-sm text-zen-muted transition hover:bg-zen-bg-soft hover:text-zen-text focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40" aria-label="Tăng số khách">+</button>
+                    </div>
+                </section>
+
+                {{-- Ngày + lịch tuần (nút) + khung giờ --}}
+                @php
+                    $bookingToday = now()->startOfDay();
+                    $bookingWeekStart = $bookingToday->copy()->startOfWeek(\Carbon\CarbonInterface::MONDAY);
+                    $bookingDayLabels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+                    $bookingDaySummaries = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật'];
+                    $bookingDays = collect(range(0, 6))->map(function ($offset) use ($bookingWeekStart, $bookingToday, $bookingDayLabels, $bookingDaySummaries) {
+                        $date = $bookingWeekStart->copy()->addDays($offset);
+
+                        return [
+                            'label' => $bookingDayLabels[$offset],
+                            'display' => $date->format('d/m'),
+                            'iso' => $date->toDateString(),
+                            'summary' => $bookingDaySummaries[$offset].', '.$date->format('d/m/Y'),
+                            'selected' => $date->isSameDay($bookingToday),
+                        ];
+                    });
+                @endphp
+                <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
+                    <h2 class="text-base font-semibold text-zen-text">Chọn ngày &amp; giờ</h2>
+                    <p class="mt-1 text-sm text-zen-muted">Chọn ngày trong tuần và khung giờ bắt đầu.</p>
+
+                    <div class="mt-4">
+                        <label for="booking-date" class="mb-2 block text-sm font-medium text-zen-muted">Hoặc chọn ngày</label>
+                        <input
+                            id="booking-date"
+                            type="date"
+                            value="{{ $bookingToday->toDateString() }}"
+                            min="{{ $bookingToday->toDateString() }}"
+                            class="h-10 max-w-xs rounded border border-zen-border bg-white px-3 text-sm text-zen-text outline-none ring-zen-primary focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
+                        >
+                    </div>
+
+                    <p class="mb-2 mt-6 text-sm font-medium text-zen-muted">Tuần này</p>
+                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Chọn ngày trong tuần">
+                        @foreach ($bookingDays as $day)
+                            <button
+                                type="button"
+                                data-booking-day
+                                data-date="{{ $day['iso'] }}"
+                                data-summary="{{ $day['summary'] }}"
+                                aria-pressed="{{ $day['selected'] ? 'true' : 'false' }}"
+                                class="min-w-[4.5rem] rounded border px-3 py-2 text-left text-sm transition-colors border-zen-border bg-white text-zen-muted hover:border-zen-primary/40"
+                            >
+                                <span class="block text-xs text-zen-muted">{{ $day['label'] }}</span>
+                                <span class="block tabular-nums">{{ $day['display'] }}</span>
+                            </button>
+                        @endforeach
+                    </div>
+
+                    <p class="mb-2 mt-6 text-sm font-medium text-zen-muted">Khung giờ trống</p>
+                    <div class="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6" role="radiogroup" aria-label="Giờ bắt đầu">
+                        @foreach (['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '17:00'] as $slot)
+                            <button
+                                type="button"
+                                data-booking-slot
+                                data-slot="{{ $slot }}"
+                                aria-pressed="false"
+                                class="rounded border px-2 py-2 text-sm transition-colors border-zen-border bg-white text-zen-muted hover:border-zen-primary/50"
+                            >
+                                {{ $slot }}
+                            </button>
+                        @endforeach
+                    </div>
+                </section>
+
+                @php
+                    $bookingStylists = [
+                        [
+                            'id' => 'quach-tung-duong',
+                            'name' => 'Quách Tùng Dương',
+                            'role' => 'Stylist tóc',
+                            'experience' => '7 năm kinh nghiệm',
+                            'featured_service' => 'Cắt tóc nam cao cấp, tư vấn tạo kiểu',
+                            'rating' => '4.9/5',
+                            'status' => 'Đang rảnh',
+                            'status_class' => 'bg-zen-success/10 text-zen-success ring-zen-success/20',
+                            'image' => asset('images/tailadmin/user/user-01.jpg'),
+                            'is_available' => true,
+                            'checked' => true,
+                        ],
+                        [
+                            'id' => 'dinh-van-hai',
+                            'name' => 'Đinh Văn Hải',
+                            'role' => 'Kỹ thuật viên spa',
+                            'experience' => '5 năm kinh nghiệm',
+                            'featured_service' => 'Massage da đầu, treatment phục hồi',
+                            'rating' => '4.8/5',
+                            'status' => 'Có thể đặt lịch',
+                            'status_class' => 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20',
+                            'image' => asset('images/tailadmin/user/user-02.jpg'),
+                            'is_available' => true,
+                            'checked' => false,
+                        ],
+                        [
+                            'id' => 'le-hoang-nam',
+                            'name' => 'Lê Hoàng Nam',
+                            'role' => 'Chuyên viên gội đầu dưỡng sinh',
+                            'experience' => '4 năm kinh nghiệm',
+                            'featured_service' => 'Gội thư giãn, massage cổ vai gáy',
+                            'rating' => '4.7/5',
+                            'status' => 'Bận',
+                            'status_class' => 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
+                            'image' => asset('images/tailadmin/user/user-03.jpg'),
+                            'is_available' => false,
+                            'checked' => false,
+                        ],
+                    ];
+                @endphp
+
+                {{-- Nhân viên --}}
+                <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
+                    <h2 class="text-base font-semibold text-zen-text">Chọn nhân viên</h2>
+                    <p class="mt-1 text-sm text-zen-muted">Để salon sắp xếp lịch hoặc chọn stylist yêu thích.</p>
+                    <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3" role="radiogroup" aria-label="Chọn nhân viên phụ trách">
+                        @foreach ($bookingStylists as $stylist)
+                            @php
+                                $stylistAvailable = $stylist['is_available'] ?? true;
+                            @endphp
+                            <label
+                                data-booking-stylist-card
+                                data-booking-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
+                                role="radio"
+                                aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
+                                @class([
+                                    'group relative flex min-h-full flex-col rounded-zen-md border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
+                                    'cursor-pointer hover:-translate-y-0.5 hover:border-zen-primary/50 hover:shadow-zen has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft has-[:checked]:shadow-zen-md' => $stylistAvailable,
+                                    'cursor-not-allowed opacity-60 grayscale-[.15]' => ! $stylistAvailable,
+                                ])
+                            >
+                                <input
+                                    type="radio"
+                                    name="booking_stylist"
+                                    value="{{ $stylist['id'] }}"
+                                    data-stylist-name="{{ $stylist['name'] }}"
+                                    data-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
+                                    class="peer sr-only"
+                                    @checked($stylist['checked'] && $stylistAvailable)
+                                    @disabled(! $stylistAvailable)
+                                >
+
+                                <span class="flex items-start gap-3">
+                                    <img
+                                        src="{{ $stylist['image'] }}"
+                                        alt="Ảnh đại diện {{ $stylist['name'] }}"
+                                        class="size-16 shrink-0 rounded-full border-2 border-white object-cover shadow-sm ring-1 ring-zen-border"
+                                        loading="lazy"
+                                    >
+                                    <span class="min-w-0 flex-1">
+                                        <span data-stylist-label class="block text-sm font-semibold text-zen-text">{{ $stylist['name'] }}</span>
+                                        <span class="mt-1 block text-xs font-medium text-zen-primary">{{ $stylist['role'] }}</span>
+                                        <span class="mt-2 inline-flex rounded-full px-2.5 py-1 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
+                                            {{ $stylist['status'] }}
+                                        </span>
+                                    </span>
+                                </span>
+
+                                <span class="mt-4 grid gap-2 text-xs text-zen-muted">
+                                    <span class="flex items-center justify-between gap-3">
+                                        <span>Kinh nghiệm</span>
+                                        <span class="text-right font-semibold text-zen-text">{{ $stylist['experience'] }}</span>
+                                    </span>
+                                    <span class="flex items-center justify-between gap-3">
+                                        <span>Đánh giá</span>
+                                        <span class="text-right font-semibold text-zen-primary">{{ $stylist['rating'] }}</span>
+                                    </span>
+                                    <span class="rounded-zen-sm bg-zen-bg-soft px-3 py-2 leading-relaxed text-zen-text">
+                                        <span class="block text-[11px] font-medium uppercase tracking-wide text-zen-muted">Dịch vụ nổi bật</span>
+                                        <span class="mt-0.5 block font-medium">{{ $stylist['featured_service'] }}</span>
+                                    </span>
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+                </section>
+                
+                {{-- Dịch vụ --}}
+                <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
+                    <h2 class="text-base font-semibold text-zen-text">Chọn dịch vụ</h2>
+                    <p class="mt-1 text-sm text-zen-muted">Có thể chọn nhiều dịch vụ trong một lịch.</p>
+                    <ul class="mt-4 divide-y divide-zen-border rounded border border-zen-border">
+                        <li class="flex flex-wrap items-center justify-between gap-3 p-4" data-booking-service-row data-service-name="Cắt tóc nam cao cấp" data-service-price="150000">
+                            <label class="flex flex-1 cursor-pointer items-start gap-3">
+                                <input type="checkbox" checked name="booking_services[]" value="cut" class="mt-0.5 size-4 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                                <span>
                                     <span class="block text-sm font-medium text-zen-text">Cắt tóc nam cao cấp</span>
                                     <span class="mt-0.5 block text-xs text-zen-muted">Khoảng 45 phút</span>
                                 </span>
