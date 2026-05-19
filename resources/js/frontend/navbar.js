@@ -40,6 +40,8 @@ function initNavbarAutoHide() {
             }
         } else if (path === '/about') {
             activeKey = 'about';
+        } else if (path === '/dich-vu') {
+            activeKey = 'services';
         } else if (path.startsWith('/news')) {
             activeKey = 'news';
         } else if (path === '/lien-he') {

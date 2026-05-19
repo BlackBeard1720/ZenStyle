@@ -20,6 +20,9 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/lien-he', 'contact')->name('contact');
 });
 
+// mở trang dịch vụ
+Route::view('/dich-vu', 'frontend.services.index')->name('services');
+
 Route::controller(CustomerBookController::class)->group(function () {
 
     Route::get('/booking', 'create')
