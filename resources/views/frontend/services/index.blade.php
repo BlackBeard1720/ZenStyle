@@ -256,35 +256,4 @@
         </div>
     </section>
 
-    <section class="bg-zen-bg-soft px-4 py-16 sm:px-6 lg:py-20">
-        <div class="mx-auto grid max-w-6xl gap-8 lg:grid-cols-12 lg:items-center">
-            <div class="lg:col-span-7">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Đặt lịch</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
-                    Sẵn sàng giữ lịch cho buổi chăm sóc tiếp theo?
-                </h2>
-                <p class="mt-4 text-sm leading-relaxed text-zen-muted">
-                    Chọn ngày, khung giờ, dịch vụ và nhân viên mong muốn. Form đặt lịch hiện tại vẫn giữ nguyên luồng thao tác của ZenStyle.
-                </p>
-            </div>
-            <div class="space-y-4 lg:col-span-5">
-                <div class="grid gap-3 sm:grid-cols-2">
-                    <div class="rounded-zen-md border border-zen-border bg-white p-4">
-                        <p class="text-sm font-semibold text-zen-text">Thứ 2 - Thứ 6</p>
-                        <p class="mt-1 text-sm text-zen-muted">09:00 - 20:00</p>
-                    </div>
-                    <div class="rounded-zen-md border border-zen-border bg-white p-4">
-                        <p class="text-sm font-semibold text-zen-text">Thứ 7 - Chủ nhật</p>
-                        <p class="mt-1 text-sm text-zen-muted">09:30 - 21:00</p>
-                    </div>
-                </div>
-                <a
-                    href="{{ route('booking') }}"
-                    class="booking-cta inline-flex w-full justify-center rounded-full px-8 py-3 text-sm font-semibold sm:w-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/50 focus-visible:ring-offset-2"
-                >
-                    Đặt lịch ngay
-                </a>
-            </div>
-        </div>
-    </section>
 </x-frontend.layout>

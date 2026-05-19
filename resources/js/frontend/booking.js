@@ -1,5 +1,6 @@
 const SEL = {
     page: '#booking-page',
+    form: '#booking-form',
     dayBtn: '[data-booking-day]',
     slotBtn: '[data-booking-slot]',
     guestMinus: '[data-booking-guest-minus]',
@@ -10,7 +11,9 @@ const SEL = {
     promoInput: '[data-booking-promo-input]',
     promoHint: '[data-booking-promo-hint]',
     dateInput: '#booking-date',
-    stylistRadios: 'input[name="booking_stylist"]',
+    stylistRadios: 'input[data-booking-stylist-radio]',
+    guestInput: '[data-booking-guest-input]',
+    timeInput: '[data-booking-time-input]',
 };
 
 const dayClasses = {
@@ -105,6 +108,7 @@ function setAvailability(el, disabled, map) {
 }
 
 function initBookingPage(root) {
+    const form = root.querySelector(SEL.form);
     const summaryBranch = root.querySelector('#booking-summary-branch');
     const summaryTimeLine = root.querySelector('#booking-summary-time-line');
     const summaryDateLine = root.querySelector('#booking-summary-date-line');
@@ -122,6 +126,8 @@ function initBookingPage(root) {
     const promoBtn = root.querySelector(SEL.promoBtn);
     const promoInput = root.querySelector(SEL.promoInput);
     const promoHint = root.querySelector(SEL.promoHint);
+    const guestInput = root.querySelector(SEL.guestInput);
+    const timeInput = root.querySelector(SEL.timeInput);
 
     let guestCount = Math.max(1, parseInt(guestValue?.textContent ?? '1', 10) || 1);
 
@@ -206,6 +212,7 @@ function initBookingPage(root) {
         const dayBtn = selectedDay();
 
         if (summaryTimeLine) summaryTimeLine.textContent = slot;
+        if (timeInput) timeInput.value = slot === '—' ? '' : slot;
 
         if (summaryDateLine) {
             if (dayBtn?.dataset.summary) {
@@ -294,6 +301,25 @@ function initBookingPage(root) {
 
     function syncGuestSummary() {
         if (summaryGuests) summaryGuests.textContent = `${guestCount} người`;
+        if (guestInput) guestInput.value = String(guestCount);
+    }
+
+    function clearPromoHint() {
+        if (!promoHint) return;
+
+        promoHint.hidden = true;
+        promoHint.textContent = '';
+        promoHint.classList.remove('text-zen-success');
+        promoHint.classList.add('text-zen-muted');
+    }
+
+    function syncAllSummaries() {
+        syncDayAvailability();
+        syncSlotAvailability();
+        syncStylistSummary();
+        syncGuestSummary();
+        updateDateTimeSummary();
+        syncServicesAndTotal();
     }
 
     dayButtons.forEach((btn) => {
@@ -377,14 +403,27 @@ function initBookingPage(root) {
         promoHint.textContent = `Đã ghi nhận mã “${raw}” (demo, chưa trừ tiền).`;
     });
 
+    form?.addEventListener('reset', () => {
+        window.setTimeout(() => {
+            guestCount = Math.max(1, parseInt(guestInput?.defaultValue ?? '1', 10) || 1);
+            if (guestValue) guestValue.textContent = String(guestCount);
+
+            const resetDate = ensureDateInputIsFutureSafe();
+            dayButtons.forEach((btn) => {
+                btn.setAttribute('aria-pressed', btn.dataset.date === resetDate ? 'true' : 'false');
+            });
+            slotButtons.forEach((btn) => {
+                btn.setAttribute('aria-pressed', 'false');
+            });
+
+            clearPromoHint();
+            syncAllSummaries();
+        });
+    });
+
     ensureDateInputIsFutureSafe();
-    syncDayAvailability();
-    syncSlotAvailability();
     if (summaryBranch) summaryBranch.textContent = 'ZenStyle FPT Aptech';
-    syncStylistSummary();
-    syncGuestSummary();
-    updateDateTimeSummary();
-    syncServicesAndTotal();
+    syncAllSummaries();
 }
 
 export function initBookingIfPresent() {
