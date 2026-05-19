@@ -603,7 +603,8 @@
 
       <!-- User Area -->
       @php
-        $user = auth()->user();
+        // Staff area dùng JWT tự viết, nên lấy user từ middleware thay vì auth()->user().
+        $user = $authUser ?? request()->attributes->get('auth_user');
         $user?->loadMissing(['staff', 'client']);
         $displayName = $user?->staff?->full_name
           ?? $user?->client?->full_name

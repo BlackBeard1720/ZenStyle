@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Các Gate này nhận User từ Laravel Auth resolver.
+        // JwtAuthMiddleware đã set Auth::setUser($user), nên middleware can vẫn hoạt động với JWT.
         Gate::define('manage-staff-users', function (User $user) {
             return $user->hasRole('admin');
         });
