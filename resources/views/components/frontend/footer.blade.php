@@ -118,11 +118,11 @@
       <div>
         <h4 class="text-sm font-semibold uppercase tracking-wide text-white">Dịch vụ</h4>
         <ul class="mt-4 space-y-2.5 text-sm text-white/75">
-          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Tạo kiểu &amp; cắt tóc</a></li>
-          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Nhuộm &amp; uốn</a></li>
-          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Spa &amp; phục hồi tóc</a></li>
-          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Chăm sóc da</a></li>
-          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Gói Bridal</a></li>
+          <li><a href="{{ route('services') }}#service-group-0" class="transition hover:text-zen-secondary">Tạo kiểu &amp; cắt tóc</a></li>
+          <li><a href="{{ route('services') }}#service-group-1" class="transition hover:text-zen-secondary">Nhuộm &amp; uốn</a></li>
+          <li><a href="{{ route('services') }}#service-group-2" class="transition hover:text-zen-secondary">Gội &amp; phục hồi tóc</a></li>
+          <li><a href="{{ route('services') }}#service-group-3" class="transition hover:text-zen-secondary">Spa &amp; chăm sóc</a></li>
+          <li><a href="{{ route('services') }}#service-list" class="transition hover:text-zen-secondary">Bảng dịch vụ</a></li>
         </ul>
       </div>
 
@@ -132,7 +132,7 @@
           <li><a href="{{ route('home') }}" class="transition hover:text-zen-secondary">Trang chủ</a></li>
           <li><a href="{{ route('about') }}" class="transition hover:text-zen-secondary">Giới thiệu</a></li>
           <li><a href="{{ route('home') }}#hot-trend" class="transition hover:text-zen-secondary">Hottrend</a></li>
-          <li><a href="{{ route('home') }}#dich-vu" class="transition hover:text-zen-secondary">Dịch vụ</a></li>
+          <li><a href="{{ route('services') }}" class="transition hover:text-zen-secondary">Dịch vụ</a></li>
           <li><a href="{{ route('booking') }}" class="transition hover:text-zen-secondary">Đặt lịch</a></li>
           <li><a href="{{ route('contact') }}" class="transition hover:text-zen-secondary">Liên hệ</a></li>
         </ul>

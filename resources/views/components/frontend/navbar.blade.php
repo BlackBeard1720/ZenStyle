@@ -1,6 +1,6 @@
 <header
     id="site-header"
-    @if (request()->is('/') || request()->is('home'))
+    @if (request()->is('/') || request()->is('home') || request()->routeIs('services'))
         data-on-banner="true"
     @endif
     class="fixed inset-x-0 top-0 z-50 border-b border-zen-border bg-zen-bg backdrop-blur
@@ -11,6 +11,7 @@
         $isHomeRoute = request()->routeIs('home');
         $isAboutRoute = request()->routeIs('about');
         $isNewsRoute = request()->routeIs('news') || request()->routeIs('news.show');
+        $isServicesRoute = request()->routeIs('services');
         $isContactRoute = request()->routeIs('contact');
     @endphp
 
@@ -55,9 +56,9 @@
                     Tin Tức
                 </a>
                 <a
-                    href="{{ route('home') }}#dich-vu"
+                    href="{{ route('services') }}"
                     data-nav-key="services"
-                    class="site-nav-link relative pb-1 text-zen-muted transition-colors hover:text-zen-text after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:scale-x-0 after:rounded-full after:bg-zen-primary after:transition-transform after:duration-200 hover:after:scale-x-100"
+                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-zen-primary after:transition-transform after:duration-200 {{ $isServicesRoute ? 'is-active text-zen-text after:scale-x-100' : 'text-zen-muted hover:text-zen-text after:scale-x-0 hover:after:scale-x-100' }}"
                 >
                     Dịch vụ
                 </a>

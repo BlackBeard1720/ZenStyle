@@ -131,57 +131,75 @@
         =====================================================================
         SECTION DỊCH VỤ NỔI BẬT
         =====================================================================
-        - Đáp ứng AC: có layout hiển thị dịch vụ nổi bật.
+        - Trang chủ chỉ giữ preview ngắn; click card để sang trang dịch vụ riêng.
         - Dữ liệu hiện tại viết cứng, sau này có thể thay bằng DB.
         =====================================================================
     --}}
     <section id="dich-vu" class="scroll-mt-24 border-y border-stone-200/80 bg-white px-4 py-16 sm:px-6">
         <div class="mx-auto max-w-6xl">
-            <div class="text-center">
-                <h2 class="text-2xl font-semibold text-stone-800 sm:text-3xl">Dịch vụ nổi bật</h2>
-                <p class="mt-2 text-stone-600">Chọn gói phù hợp — đội ngũ tư vấn tận tâm.</p>
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div class="max-w-2xl">
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Dịch vụ</p>
+                    <h2 class="mt-2 text-2xl font-semibold text-zen-text sm:text-3xl">Khám phá các nhóm dịch vụ chính</h2>
+                    <p class="mt-2 text-zen-muted">Một vài lựa chọn nổi bật trên trang chủ. Bảng chi tiết được tách sang trang dịch vụ riêng.</p>
+                </div>
+                <a href="{{ route('services') }}" class="text-sm font-semibold text-zen-primary hover:text-zen-primary-dark">
+                    Xem tất cả dịch vụ
+                </a>
             </div>
 
             <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 @foreach ([
                     [
-                        'title' => 'Tóc',
-                        'desc' => 'Cắt, uốn, nhuộm với xu hướng mới nhất.',
+                        'title' => 'Tóc & tạo kiểu',
+                        'desc' => 'Cắt, tư vấn form tóc và styling theo phong cách cá nhân.',
                         'image' => asset('images/frontend/services/featured-toc.png'),
                         'alt' => 'Stylist đang tạo kiểu tóc cho khách tại ZenStyle',
+                        'href' => route('services').'#service-group-0',
                     ],
                     [
-                        'title' => 'Gội & dưỡng tóc',
-                        'desc' => 'Gội massage thư giãn, sản phẩm chăm sóc chuyên nghiệp.',
+                        'title' => 'Gội & phục hồi',
+                        'desc' => 'Gội massage thư giãn, treatment và chăm sóc da đầu.',
                         'image' => asset('images/frontend/services/featured-spa.png'),
                         'alt' => 'Dịch vụ gội đầu và massage da đầu tại salon',
+                        'href' => route('services').'#service-group-2',
                     ],
                     [
                         'title' => 'Spa & thư giãn',
-                        'desc' => 'Massage, gói trị liệu giúp phục hồi năng lượng.',
-                        'image' => asset('images/frontend/services/featured-goi.png '),
+                        'desc' => 'Massage, chăm sóc cơ bản và các gói thư giãn cuối tuần.',
+                        'image' => asset('images/frontend/services/featured-goi.png'),
                         'alt' => 'Phòng massage ZenStyle — không gian thư giãn',
+                        'href' => route('services').'#service-group-3',
                     ],
                 ] as $item)
-                    <article class="overflow-hidden rounded-2xl border border-rose-100/90 bg-white shadow-sm transition hover:shadow-md">
-                        <div class="aspect-[4/3] overflow-hidden bg-stone-200">
+                    <a href="{{ $item['href'] }}" class="group overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg shadow-zen transition hover:-translate-y-1 hover:shadow-zen-md">
+                        <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
                             <img
                                 src="{{ $item['image'] }}"
                                 alt="{{ $item['alt'] }}"
-                                class="h-full w-full object-cover transition duration-500 ease-out hover:scale-105"
+                                class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-105"
                                 loading="lazy"
                                 decoding="async"
                             >
                         </div>
                         <div class="p-6">
-                            <h3 class="text-lg font-semibold text-stone-900">{{ $item['title'] }}</h3>
-                            <p class="mt-2 text-sm text-stone-600">{{ $item['desc'] }}</p>
+                            <h3 class="text-lg font-semibold text-zen-text">{{ $item['title'] }}</h3>
+                            <p class="mt-2 text-sm text-zen-muted">{{ $item['desc'] }}</p>
+                            <span class="mt-5 inline-flex text-sm font-semibold text-zen-primary group-hover:text-zen-primary-dark">
+                                Xem chi tiết
+                            </span>
                         </div>
-                    </article>
+                    </a>
                 @endforeach
             </div>
 
-            <div class="mt-12 text-center">
+            <div class="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a
+                    href="{{ route('services') }}"
+                    class="inline-flex rounded-full border border-zen-border-dark bg-zen-bg px-8 py-3 text-sm font-semibold text-zen-text transition hover:bg-zen-accent-soft"
+                >
+                    Xem bảng dịch vụ
+                </a>
                 <a
                     href="{{ route('booking') }}"
                     class="booking-cta inline-flex rounded-full px-8 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1677ff]/50 focus-visible:ring-offset-2"
