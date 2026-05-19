@@ -34,15 +34,17 @@ Route::controller(CustomerBookController::class)->group(function () {
     Route::get('/booking/success/{appointment}', 'success')
         ->name('customer.booking.success');
 });
-// Admin/Staff
-Route::prefix('staff')->name('staff.')->middleware('guest')
+// Auth staff: không dùng middleware guest vì guest dựa trên Laravel session auth.
+// Staff login hiện tạo JWT và lưu vào cookie access_token.
+Route::prefix('staff')->name('staff.')
     ->controller(SessionController::class)->group(function () {
         Route::get('/login', 'create')->name('login');
         Route::post('/login', 'store')->name('login.store');
     });
 
+// Staff area: mọi route bên dưới được bảo vệ bằng JWT middleware tự viết.
 Route::prefix('staff')->name('staff.')
-    ->middleware('auth')->group(function () {
+    ->middleware('jwt.auth')->group(function () {
     Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
 
     Route::get('/', function () {
