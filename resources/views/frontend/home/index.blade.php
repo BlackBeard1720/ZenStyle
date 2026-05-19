@@ -131,7 +131,7 @@
         =====================================================================
         SECTION DỊCH VỤ NỔI BẬT
         =====================================================================
-        - Trang chủ chỉ giữ preview ngắn; click card để sang trang dịch vụ riêng.
+        - Trang chủ chỉ giữ preview ngắn; click card để sang từng dịch vụ riêng.
         - Dữ liệu hiện tại viết cứng, sau này có thể thay bằng DB.
         =====================================================================
     --}}
@@ -140,8 +140,8 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div class="max-w-2xl">
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Dịch vụ</p>
-                    <h2 class="mt-2 text-2xl font-semibold text-zen-text sm:text-3xl">Khám phá các nhóm dịch vụ chính</h2>
-                    <p class="mt-2 text-zen-muted">Một vài lựa chọn nổi bật trên trang chủ. Bảng chi tiết được tách sang trang dịch vụ riêng.</p>
+                    <h2 class="mt-2 text-2xl font-semibold text-zen-text sm:text-3xl">Khám phá dịch vụ nổi bật</h2>
+                    <p class="mt-2 text-zen-muted">Một vài lựa chọn nổi bật trên trang chủ. Bảng chi tiết được tách thành từng dịch vụ riêng.</p>
                 </div>
                 <a href="{{ route('services') }}" class="text-sm font-semibold text-zen-primary hover:text-zen-primary-dark">
                     Xem tất cả dịch vụ
@@ -151,25 +151,25 @@
             <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
                 @foreach ([
                     [
-                        'title' => 'Tóc & tạo kiểu',
-                        'desc' => 'Cắt, tư vấn form tóc và styling theo phong cách cá nhân.',
+                        'title' => 'Cắt tóc nam cao cấp',
+                        'desc' => 'Tư vấn form tóc và hoàn thiện styling theo phong cách cá nhân.',
                         'image' => asset('images/frontend/services/featured-toc.png'),
                         'alt' => 'Stylist đang tạo kiểu tóc cho khách tại ZenStyle',
-                        'href' => route('services').'#service-group-0',
+                        'href' => route('services').'#service-cat-toc-nam-cao-cap',
                     ],
                     [
-                        'title' => 'Gội & phục hồi',
-                        'desc' => 'Gội massage thư giãn, treatment và chăm sóc da đầu.',
+                        'title' => 'Gội dưỡng sinh chuyên sâu',
+                        'desc' => 'Gội massage thư giãn và chăm sóc da đầu chuyên sâu.',
                         'image' => asset('images/frontend/services/featured-spa.png'),
                         'alt' => 'Dịch vụ gội đầu và massage da đầu tại salon',
-                        'href' => route('services').'#service-group-2',
+                        'href' => route('services').'#service-goi-duong-sinh-chuyen-sau',
                     ],
                     [
-                        'title' => 'Spa & thư giãn',
-                        'desc' => 'Massage, chăm sóc cơ bản và các gói thư giãn cuối tuần.',
+                        'title' => 'Chăm sóc da cơ bản',
+                        'desc' => 'Làm sạch, cân bằng ẩm và tư vấn chu trình chăm sóc tại nhà.',
                         'image' => asset('images/frontend/services/featured-goi.png'),
                         'alt' => 'Phòng massage ZenStyle — không gian thư giãn',
-                        'href' => route('services').'#service-group-3',
+                        'href' => route('services').'#service-cham-soc-da-co-ban',
                     ],
                 ] as $item)
                     <a href="{{ $item['href'] }}" class="group overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg shadow-zen transition hover:-translate-y-1 hover:shadow-zen-md">
