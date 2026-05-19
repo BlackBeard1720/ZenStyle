@@ -188,7 +188,7 @@
                 <div class="max-w-2xl">
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Bảng dịch vụ</p>
                     <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
-                        Các dịch vụ của chúng tôi.
+                        Dịch vụ cung cấp
                     </h2>
                 </div>
                 <p class="max-w-md text-sm leading-relaxed text-zen-muted sm:text-right">
