@@ -138,7 +138,7 @@
     </section>
 
     {{-- ===== SECTION 2: SERVICE DISCOVERY ===== --}}
-    <section id="dich-vu" class="scroll-mt-24 bg-white px-4 py-12 sm:px-6 lg:py-16">
+    <section id="dich-vu" class="scroll-mt-24 bg-white px-4 py-12 sm:px-6 lg:py-14">
         <div class="mx-auto max-w-6xl">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Dịch vụ</p>
@@ -152,27 +152,26 @@
 
             <div class="mt-10 grid gap-6 md:grid-cols-3">
                 @foreach ($serviceGroups as $group)
-                    <article class="rounded-zen-lg border border-zen-border bg-stone-50 p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                    <article class="overflow-hidden rounded-lg border border-zen-border/40 bg-white shadow-xs transition hover:-translate-y-1 hover:shadow-sm">
                         <img
                             src="{{ $group['image'] }}"
                             alt="{{ $group['alt'] }}"
-                            class="aspect-video w-full rounded-zen-md object-cover"
+                            class="h-44 w-full object-cover"
                             loading="lazy"
                             decoding="async"
                         >
-                        <h3 class="mt-4 text-lg font-semibold text-zen-text">{{ $group['title'] }}</h3>
-                        <p class="mt-2 text-sm leading-6 text-zen-muted">{{ $group['description'] }}</p>
-                        <ul class="mt-4 space-y-2">
-                            @foreach ($group['items'] as $item)
-                                <li class="flex gap-2 text-sm text-zen-muted">
-                                    <span class="mt-1.5 size-1 flex-shrink-0 rounded-full bg-zen-primary/70"></span>
-                                    <span>{{ $item }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                        <a href="{{ route('services') }}" class="mt-4 inline-flex text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark">
-                            Xem dịch vụ →
-                        </a>
+                        <div class="p-5">
+                            <h3 class="text-base font-semibold text-zen-text">{{ $group['title'] }}</h3>
+                            <p class="mt-1 text-xs leading-5 text-zen-muted">{{ $group['description'] }}</p>
+                            <div class="mt-3 flex flex-wrap gap-1.5">
+                                @foreach ($group['items'] as $item)
+                                    <span class="inline-block rounded-full bg-zen-primary/10 px-2.5 py-1 text-xs text-zen-primary">{{ $item }}</span>
+                                @endforeach
+                            </div>
+                            <a href="{{ route('services') }}" class="mt-3 inline-flex text-xs font-semibold text-zen-primary transition hover:text-zen-primary-dark">
+                                Xem dịch vụ →
+                            </a>
+                        </div>
                     </article>
                 @endforeach
             </div>
