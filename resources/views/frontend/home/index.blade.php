@@ -192,13 +192,13 @@
                 </p>
             </div>
 
-            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($salonImages as $image)
                     <div class="group relative overflow-hidden rounded-lg border border-zen-border/40 shadow-sm transition hover:shadow-md">
                         <img
                             src="{{ $image }}"
                             alt="Không gian ZenStyle"
-                            class="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-105"
+                            class="aspect-[3/2] w-full object-cover transition duration-300 group-hover:scale-105"
                             loading="lazy"
                             decoding="async"
                         >
