@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\AppointmentCreated;
+use App\Models\Appointment;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
 use App\Http\Controllers\Frontend\FrontendController;
@@ -40,6 +42,12 @@ Route::controller(CustomerBookController::class)->group(function () {
 
     Route::get('/booking/success/{appointment}', 'success')
         ->name('customer.booking.success');
+});
+
+Route::get('/test-reverb/appointment/{appointment}', function (Appointment $appointment) {
+    broadcast(new AppointmentCreated($appointment));
+
+    return 'Broadcast sent for appointment #' . $appointment->id;
 });
 // Auth staff: không dùng middleware guest vì guest dựa trên Laravel session auth.
 // Staff login hiện tạo JWT và lưu vào cookie access_token.
