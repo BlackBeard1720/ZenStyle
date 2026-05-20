@@ -223,7 +223,7 @@
 
             <div class="mt-10 grid gap-6 md:grid-cols-3">
                 @foreach ($hotTrendImages as $image)
-                    <div class="group relative overflow-hidden rounded-zen-lg border border-zen-border shadow-sm transition hover:shadow-md">
+                    <a href="{{ route('hot-trend.index') }}" class="group relative overflow-hidden rounded-zen-lg border border-zen-border shadow-sm transition hover:shadow-md">
                         <img
                             src="{{ $image }}"
                             alt="Phong cách tóc ZenStyle"
@@ -231,7 +231,7 @@
                             loading="lazy"
                             decoding="async"
                         >
-                    </div>
+                    </a>
                 @endforeach
             </div>
 
