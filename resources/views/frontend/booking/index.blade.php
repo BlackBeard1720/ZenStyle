@@ -63,16 +63,15 @@
     >
       @csrf
 
-      <input type="hidden" name="customer_count" value="1" data-booking-guest-input>
       <input type="hidden" name="appointment_time" value="" data-booking-time-input>
+      <input type="hidden" name="staff_name" value="Quách Tùng Dương" data-booking-staff-name-input>
 
       <div class="min-w-0 space-y-5">
-        @if($errors->any())
+        @if($errors->any() && ! $errors->has('otp'))
           <div class="rounded-zen-md border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700">
             {{ $errors->first() }}
           </div>
         @endif
-
 
         {{-- Ngày + lịch tuần + khung giờ --}}
         <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
@@ -190,39 +189,47 @@
           <h2 class="text-base font-semibold text-zen-text">Chọn dịch vụ</h2>
           <p class="mt-1 text-sm text-zen-muted">Có thể chọn nhiều dịch vụ trong một lịch.</p>
           <ul class="mt-4 divide-y divide-zen-border rounded border border-zen-border">
-                @forelse ($services as $service)
-                  <li
-                    class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
-                    data-booking-service-row
-                    data-service-name="{{ $service->service_name }}"
-                    data-service-price="{{ (int) $service->price }}"
-                  >
-                    <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                      <input
-                        type="checkbox"
-                        name="service_ids[]"
-                        value="{{ $service->id }}"
-                        class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30"
-                      >
-                      <span class="min-w-0">
-                        <span class="block break-words text-sm font-medium text-zen-text">
-                          {{ $service->service_name }}
-                        </span>
-                        <span class="mt-0.5 block text-xs text-zen-muted">
-                          {{ $service->duration_minutes }} phút
-                        </span>
-                      </span>
-                    </label>
-                    <span class="text-sm font-semibold text-zen-primary sm:text-right">
-                      {{ number_format($service->price, 0, ',', '.') }}đ
-                    </span>
-                  </li>
-                @empty
-                  <li class="p-4 text-sm text-zen-muted">
-                    Hiện chưa có dịch vụ khả dụng.
-                  </li>
-                @endforelse
-              </ul>
+            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Cắt tóc nam cao cấp" data-service-price="150000">
+              <label class="flex min-w-0 cursor-pointer items-start gap-3">
+                <input type="checkbox" name="service_ids[]" value="cut" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                <span class="min-w-0">
+                  <span class="block break-words text-sm font-medium text-zen-text">Cắt tóc nam cao cấp</span>
+                  <span class="mt-0.5 block text-xs text-zen-muted">Khoảng 45 phút</span>
+                </span>
+              </label>
+              <span class="text-sm font-semibold text-zen-primary sm:text-right">150.000đ</span>
+            </li>
+            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Gội + massage da đầu" data-service-price="120000">
+              <label class="flex min-w-0 cursor-pointer items-start gap-3">
+                <input type="checkbox" name="service_ids[]" value="wash" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                <span class="min-w-0">
+                  <span class="block break-words text-sm font-medium text-zen-text">Gội + massage da đầu</span>
+                  <span class="mt-0.5 block text-xs text-zen-muted">30 phút</span>
+                </span>
+              </label>
+              <span class="text-sm font-semibold text-zen-primary sm:text-right">120.000đ</span>
+            </li>
+            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Uốn / nhuộm cơ bản" data-service-price="650000">
+              <label class="flex min-w-0 cursor-pointer items-start gap-3">
+                <input type="checkbox" name="service_ids[]" value="perm" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                <span class="min-w-0">
+                  <span class="block break-words text-sm font-medium text-zen-text">Uốn / nhuộm cơ bản</span>
+                  <span class="mt-0.5 block text-xs text-zen-muted">~120 phút</span>
+                </span>
+              </label>
+              <span class="text-sm font-semibold text-zen-primary sm:text-right">650.000đ</span>
+            </li>
+            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Treatment phục hồi" data-service-price="320000">
+              <label class="flex min-w-0 cursor-pointer items-start gap-3">
+                <input type="checkbox" name="service_ids[]" value="treatment" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
+                <span class="min-w-0">
+                  <span class="block break-words text-sm font-medium text-zen-text">Treatment phục hồi</span>
+                  <span class="mt-0.5 block text-xs text-zen-muted">60 phút</span>
+                </span>
+              </label>
+              <span class="text-sm font-semibold text-zen-primary sm:text-right">320.000đ</span>
+            </li>
+          </ul>
         </section>
 
         {{-- Khuyến mãi --}}
@@ -305,16 +312,14 @@
               </dd>
             </div>
             <div class="grid grid-cols-[6rem_minmax(0,1fr)] gap-3 border-b border-dashed border-zen-border pb-3">
-              <dt class="text-zen-muted">Khách</dt>
-              <dd id="booking-summary-guests" class="min-w-0 text-right font-medium text-zen-text">1 người</dd>
-            </div>
-            <div class="grid grid-cols-[6rem_minmax(0,1fr)] gap-3 border-b border-dashed border-zen-border pb-3">
               <dt class="text-zen-muted">Nhân viên</dt>
               <dd id="booking-summary-stylist" class="min-w-0 break-words text-right font-medium text-zen-text">Bất kỳ nhân viên</dd>
             </div>
             <div>
               <dt class="text-zen-muted">Dịch vụ</dt>
-              <dd id="booking-summary-services" class="mt-2 min-w-0 space-y-1 break-words text-right font-medium text-zen-text"></dd>
+              <dd id="booking-summary-services" class="mt-2 min-w-0 space-y-1 break-words text-right font-medium text-zen-text">
+                <p class="text-xs font-normal text-zen-muted">Chưa chọn dịch vụ</p>
+              </dd>
             </div>
           </dl>
 
@@ -322,7 +327,7 @@
 
           <div class="flex items-baseline justify-between gap-4">
             <span class="text-sm text-zen-muted">Tạm tính</span>
-            <span id="booking-summary-total" class="text-xl font-semibold text-zen-primary">150.000đ</span>
+            <span id="booking-summary-total" class="text-xl font-semibold text-zen-primary">0đ</span>
           </div>
 
           <button
@@ -341,19 +346,25 @@
     </form>
   </div>
 
-  @if(session('otp_pending'))
+  @if(session('otp_pending') || $errors->has('otp'))
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
       <div class="w-full max-w-md rounded-zen-md bg-white p-6 shadow-zen-md">
         <h2 class="text-xl font-bold text-zen-text">Xác nhận OTP</h2>
 
-        <p class="mt-3 rounded bg-yellow-100 p-3 text-sm text-zen-text">
-          OTP TEST: <strong>{{ session('otp_demo') }}</strong>
-        </p>
+        @if(session('otp_demo'))
+          <p class="mt-3 rounded bg-yellow-100 p-3 text-sm text-zen-text">
+            OTP TEST: <strong>{{ session('otp_demo') }}</strong>
+          </p>
+        @endif
 
         <form method="POST" action="{{ route('booking.verify.otp') }}" class="mt-4">
           @csrf
 
           <input name="otp" maxlength="6" class="h-11 w-full rounded border border-zen-border px-3 text-zen-text outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20">
+
+          @error('otp')
+            <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
+          @enderror
 
           <button type="submit" class="mt-4 h-10 w-full rounded bg-zen-primary text-white transition hover:bg-zen-primary-dark">
             Xác nhận OTP

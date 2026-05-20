@@ -51,15 +51,7 @@ class CustomerBookController extends Controller
 
     public function create(): View
     {
-        $staff = Staff::where('status', 'active')
-            ->orderBy('full_name')
-            ->get();
-
-        $services = Service::where('status', 'active')
-            ->orderBy('service_name')
-            ->get();
-
-        return view('frontend.booking.index', compact('staff', 'services'));
+        return view('frontend.booking.index');
     }
 
     public function store(Request $request): RedirectResponse

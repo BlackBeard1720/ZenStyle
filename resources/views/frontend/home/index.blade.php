@@ -1,16 +1,7 @@
 <x-frontend.layout title="ZenStyle — Trang chủ" main-class="pt-0">
     {{--
-        Nền trang chủ — luồng hợp lý:
-        stone-50 (canvas đồng bộ body) → band trắng (#dịch vụ, #đặt-lịch) → capsule rose nhấn trong CTA.
-    --}}
-    {{--
-        =====================================================================
-        HERO / SLIDER TĨNH
-        ---------------------------------------------------------------------
-        - Đây là "banner đầu trang" theo AC.
-        - Slider này là slider tĩnh: dữ liệu slide viết cứng trong Blade (không lấy DB).
-        - JS chỉ điều khiển chuyển slide thủ công (Prev/Next + dot).
-        =====================================================================
+        Redesign: Chuyển từ "ép booking" sang "tham quan salon"
+        Cấu trúc: Hero → Greeting → Services Discovery → Salon Space → Hot Trend → Experience Flow → Final CTA
     --}}
     @php
         $heroSlides = [
@@ -35,16 +26,58 @@
                 'alt' => 'ZenStyle Spa Service',
             ],
         ];
+
+        $serviceGroups = [
+            [
+                'title' => 'Tóc & tạo kiểu',
+                'description' => 'Cắt, uốn texture, tạo kiểu sự kiện.',
+                'image' => asset('images/frontend/services/featured-toc.png'),
+                'alt' => 'Dịch vụ tóc và tạo kiểu tại ZenStyle',
+                'items' => ['Cắt tóc nam', 'Uốn texture', 'Tạo kiểu sự kiện'],
+            ],
+            [
+                'title' => 'Gội dưỡng & phục hồi',
+                'description' => 'Gội thư giãn, massage da đầu, chăm sóc thân tóc.',
+                'image' => asset('images/frontend/services/featured-spa.png'),
+                'alt' => 'Dịch vụ gội dưỡng và phục hồi tại ZenStyle',
+                'items' => ['Gội thư giãn', 'Massage da đầu', 'Chăm sóc thân tóc'],
+            ],
+            [
+                'title' => 'Spa & chăm sóc da',
+                'description' => 'Chăm sóc da cơ bản, thư giãn vùng vai gáy.',
+                'image' => asset('images/frontend/services/featured-goi.png'),
+                'alt' => 'Dịch vụ spa và chăm sóc da tại ZenStyle',
+                'items' => ['Chăm sóc da cơ bản', 'Thư giãn vai gáy', 'Tư vấn routine'],
+            ],
+        ];
+
+        $salonImages = [
+            asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png'),
+            asset('images/frontend/banner/Gemini_Generated_Image_7sr4oq7sr4oq7sr4.png'),
+            asset('images/frontend/banner/Gemini_Generated_Image_7w6kln7w6kln7w6k.png'),
+            asset('images/frontend/banner/Gemini_Generated_Image_os1lsdos1lsdos1l.png'),
+        ];
+
+        $hotTrendImages = [
+            ['image' => asset('images/frontend/hottrend/hottrend-01.png'), 'name' => 'Spike texture', 'tag' => 'Tóc nam'],
+            ['image' => asset('images/frontend/hottrend/hottrend-02.png'), 'name' => 'Lịch lãm office', 'tag' => 'Công sở'],
+            ['image' => asset('images/frontend/hottrend/hottrend-03.png'), 'name' => 'Textured crop', 'tag' => 'Dễ chăm sóc'],
+        ];
+
+        $experienceSteps = [
+            ['title' => 'Tham khảo dịch vụ', 'desc' => 'Xem nhóm dịch vụ, phong cách và đội ngũ phù hợp với nhu cầu.'],
+            ['title' => 'Chọn thời gian phù hợp', 'desc' => 'Giữ khung giờ mà bạn muốn và chọn stylist nếu cần.'],
+            ['title' => 'Đến salon và được tư vấn', 'desc' => 'Stylist sẽ tư vấn kỹ tình trạng tóc/da trước khi thực hiện.'],
+        ];
     @endphp
 
+    {{-- ===== HERO / BANNER ===== --}}
     <section
         id="site-banner"
         class="relative min-h-screen w-full overflow-hidden bg-stone-900"
         aria-label="ZenStyle Banner">
-        {{-- Overlay gradient để text dễ đọc --}}
         <div class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-stone-900/40 via-stone-900/20 to-stone-900/60"></div>
 
-        {{-- Khối chứa toàn bộ slide --}}
         <div class="relative h-screen">
             @foreach ($heroSlides as $index => $slide)
                 <article
@@ -61,7 +94,7 @@
                 </article>
             @endforeach
         </div>
-        {{-- Navigation dots (dưới cùng) --}}
+
         <div class="absolute inset-x-0 bottom-8 z-30 flex justify-center gap-3 pointer-events-auto">
             @foreach ($heroSlides as $index => $slide)
                 <button
@@ -75,7 +108,6 @@
             @endforeach
         </div>
 
-        {{-- Wave separator --}}
         <div class="pointer-events-none absolute bottom-0 left-0 right-0 text-stone-50" aria-hidden="true">
             <svg class="block h-12 w-full sm:h-16" viewBox="0 0 1440 100" preserveAspectRatio="none"
                  xmlns="http://www.w3.org/2000/svg">
@@ -84,215 +116,229 @@
         </div>
     </section>
 
-    {{--
-        =====================================================================
-        SECTION GIỚI THIỆU
-        =====================================================================
-    --}}
-    <section id="gioi-thieu" class="scroll-mt-24 bg-stone-50 px-4 py-20 sm:px-6">
+    {{-- ===== SECTION 1: GREETING ===== --}}
+    <section class="scroll-mt-24 bg-stone-50 px-4 py-12 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-bold text-stone-900">Về ZenStyle</h2>
-                <p class="mt-4 text-lg text-stone-600 max-w-2xl mx-auto">
-                    Chúng tôi là điểm đến tin cậy cho dịch vụ tóc, da, và spa chuyên nghiệp.
-                    Với đội ngũ stylist tận tâm, chúng tôi mang đến trải nghiệm thư giãn tuyệt vời.
-                </p>
-            </div>
-
-            <div class="grid gap-8 md:grid-cols-3">
-                <div class="rounded-2xl bg-white p-8 shadow-sm hover:shadow-md transition">
-                    <div class="mb-4 h-12 w-12 rounded-lg bg-rose-100 flex items-center justify-center">
-                        <span class="text-2xl">✨</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-stone-900">Chất lượng cao</h3>
-                     <p class="mt-3 text-stone-600">Sử dụng sản phẩm cao cấp và kỹ thuật chuyên nghiệp.</p>
-                </div>
-
-                <div class="rounded-2xl bg-white p-8 shadow-sm hover:shadow-md transition">
-                    <div class="mb-4 h-12 w-12 rounded-lg bg-rose-100 flex items-center justify-center">
-                        <span class="text-2xl">👥</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-stone-900">Đội ngũ tận tâm</h3>
-                    <p class="mt-3 text-stone-600">Stylist có kinh nghiệm, tư vấn phù hợp với bạn.</p>
-                </div>
-
-                <div class="rounded-2xl bg-white p-8 shadow-sm hover:shadow-md transition">
-                    <div class="mb-4 h-12 w-12 rounded-lg bg-rose-100 flex items-center justify-center">
-                        <span class="text-2xl">🌿</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-stone-900">Không gian thư giãn</h3>
-                    <p class="mt-3 text-stone-600">Môi trường sạch sẽ, yên tĩnh, thư giãn tối đa.</p>
-                </div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle Salon</p>
+            <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                Một không gian để bạn thư giãn và làm mới diện mạo
+            </h2>
+            <p class="mt-4 max-w-2xl text-sm leading-7 text-zen-muted sm:text-base">
+                ZenStyle kết hợp dịch vụ tóc, gội dưỡng và spa trong một không gian nhẹ nhàng. Hãy khám phá dịch vụ, xem không gian và gặp gỡ đội ngũ trước khi đặt lịch.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-3 sm:gap-4">
+                <a href="#dich-vu" class="inline-flex items-center justify-center rounded-full bg-zen-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-zen-primary-dark">
+                    Khám phá dịch vụ
+                </a>
+                <a href="#khong-gian" class="inline-flex items-center justify-center rounded-full border border-zen-primary px-6 py-3 text-sm font-semibold text-zen-primary transition hover:bg-zen-primary/5">
+                    Xem không gian
+                </a>
             </div>
         </div>
     </section>
 
-    {{--
-        =====================================================================
-        SECTION DỊCH VỤ NỔI BẬT
-        =====================================================================
-        - Trang chủ chỉ giữ preview ngắn; click card để sang trang dịch vụ riêng.
-        - Dữ liệu hiện tại viết cứng, sau này có thể thay bằng DB.
-        =====================================================================
-    --}}
-    <section id="dich-vu" class="scroll-mt-24 border-y border-stone-200/80 bg-white px-4 py-16 sm:px-6">
+    {{-- ===== SECTION 2: SERVICE DISCOVERY ===== --}}
+    <section id="dich-vu" class="scroll-mt-24 bg-white px-4 py-12 sm:px-6 lg:py-14">
         <div class="mx-auto max-w-6xl">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div class="max-w-2xl">
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Dịch vụ</p>
-                    <h2 class="mt-2 text-2xl font-semibold text-zen-text sm:text-3xl">Khám phá các nhóm dịch vụ chính</h2>
-                    <p class="mt-2 text-zen-muted">Một vài lựa chọn nổi bật trên trang chủ. Bảng chi tiết được tách sang trang dịch vụ riêng.</p>
-                </div>
-                <a href="{{ route('services') }}" class="text-sm font-semibold text-zen-primary hover:text-zen-primary-dark">
-                    Xem tất cả dịch vụ
-                </a>
+            <div class="max-w-2xl">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Dịch vụ</p>
+                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                    Khám phá dịch vụ tại ZenStyle
+                </h2>
+                <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
+                    Từ chăm sóc tóc, gội dưỡng đến spa thư giãn, mỗi dịch vụ được trình bày rõ để bạn dễ tham khảo.
+                </p>
             </div>
 
-            <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-                @foreach ([
-                    [
-                        'title' => 'Tóc & tạo kiểu',
-                        'desc' => 'Cắt, tư vấn form tóc và styling theo phong cách cá nhân.',
-                        'image' => asset('images/frontend/services/featured-toc.png'),
-                        'alt' => 'Stylist đang tạo kiểu tóc cho khách tại ZenStyle',
-                        'href' => route('services').'#service-group-0',
-                    ],
-                    [
-                        'title' => 'Gội & phục hồi',
-                        'desc' => 'Gội massage thư giãn, treatment và chăm sóc da đầu.',
-                        'image' => asset('images/frontend/services/featured-spa.png'),
-                        'alt' => 'Dịch vụ gội đầu và massage da đầu tại salon',
-                        'href' => route('services').'#service-group-2',
-                    ],
-                    [
-                        'title' => 'Spa & thư giãn',
-                        'desc' => 'Massage, chăm sóc cơ bản và các gói thư giãn cuối tuần.',
-                        'image' => asset('images/frontend/services/featured-goi.png'),
-                        'alt' => 'Phòng massage ZenStyle — không gian thư giãn',
-                        'href' => route('services').'#service-group-3',
-                    ],
-                ] as $item)
-                    <a href="{{ $item['href'] }}" class="group overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg shadow-zen transition hover:-translate-y-1 hover:shadow-zen-md">
-                        <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
+            <div class="mt-10 grid gap-6 md:grid-cols-3">
+                @foreach ($serviceGroups as $group)
+                    <article class="group overflow-hidden rounded-3xl border border-zen-border/50 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                        <div class="relative overflow-hidden bg-stone-100">
                             <img
-                                src="{{ $item['image'] }}"
-                                alt="{{ $item['alt'] }}"
-                                class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-105"
+                                src="{{ $group['image'] }}"
+                                alt="{{ $group['alt'] }}"
+                                class="h-48 w-full object-cover transition duration-300 group-hover:scale-105"
+                                style="object-position: center top"
                                 loading="lazy"
                                 decoding="async"
                             >
                         </div>
                         <div class="p-6">
-                            <h3 class="text-lg font-semibold text-zen-text">{{ $item['title'] }}</h3>
-                            <p class="mt-2 text-sm text-zen-muted">{{ $item['desc'] }}</p>
-                            <span class="mt-5 inline-flex text-sm font-semibold text-zen-primary group-hover:text-zen-primary-dark">
-                                Xem chi tiết
-                            </span>
+                            <h3 class="text-base font-semibold text-zen-text">{{ $group['title'] }}</h3>
+                            <p class="mt-2 text-sm leading-5 text-zen-muted">{{ $group['description'] }}</p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                @foreach ($group['items'] as $item)
+                                    <span class="inline-block rounded-full bg-zen-primary/10 px-3 py-1.5 text-xs text-zen-primary">{{ $item }}</span>
+                                @endforeach
+                            </div>
+                            <a href="{{ route('services') }}" class="mt-4 inline-flex text-xs font-semibold text-zen-primary transition hover:text-zen-primary-dark">
+                                Xem dịch vụ →
+                            </a>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ===== SECTION 3: SALON SPACE GALLERY ===== --}}
+    <section id="khong-gian" class="scroll-mt-24 bg-zen-bg-soft px-4 py-12 sm:px-6 lg:py-14">
+        <div class="mx-auto max-w-6xl">
+            <div class="max-w-2xl">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Không gian</p>
+                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                    Không gian chăm sóc nhẹ nhàng
+                </h2>
+                <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
+                    ZenStyle hướng tới cảm giác sạch, yên tĩnh và dễ thư giãn trong từng buổi hẹn.
+                </p>
+            </div>
+
+            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($salonImages as $image)
+                    <div class="group relative overflow-hidden rounded-lg border border-zen-border/40 shadow-sm transition hover:shadow-md">
+                        <img
+                            src="{{ $image }}"
+                            alt="Không gian ZenStyle"
+                            class="aspect-[3/2] w-full object-cover transition duration-300 group-hover:scale-105"
+                            loading="lazy"
+                            decoding="async"
+                        >
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- ===== SECTION 4: HOT TREND / INSPIRATION (preview) ===== --}}
+    <section class="bg-white px-4 py-12 sm:px-6 lg:py-16">
+        <div class="mx-auto max-w-6xl">
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                <div class="max-w-2xl">
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Cảm hứng</p>
+                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                        Cảm hứng kiểu tóc
+                    </h2>
+                    <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
+                        Tham khảo một vài phong cách trước khi ghé salon.
+                    </p>
+                </div>
+                <a href="{{ route('hot-trend.index') }}" class="hidden text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark sm:inline-flex">
+                    Xem Hot Trend →
+                </a>
+            </div>
+
+            @php
+                $homeTrends = [
+                    [
+                        'title' => 'Spike texture',
+                        'image' => asset('images/frontend/hottrend/hottrend-01.png'),
+                        'tags' => ['Tóc nam','Cá tính'],
+                        'shortDescription' => 'Form dựng nhẹ, nhiều texture và tạo cảm giác năng động.',
+                    ],
+                    [
+                        'title' => 'Textured crop',
+                        'image' => asset('images/frontend/hottrend/hottrend-03.png'),
+                        'tags' => ['Tóc nam','Dễ chăm sóc'],
+                        'shortDescription' => 'Kiểu tóc gọn, phần mái xử lý texture để giữ form tự nhiên.',
+                    ],
+                    [
+                        'title' => 'Wolf cut / Mullet',
+                        'image' => asset('images/frontend/hottrend/hottrend-04.png'),
+                        'tags' => ['Tóc nam','Cá tính'],
+                        'shortDescription' => 'Layer rõ ở phần gáy và hai bên, tạo chất riêng cho tổng thể.',
+                    ],
+                    [
+                        'title' => 'Undercut hard part',
+                        'image' => asset('images/frontend/hottrend/hottrend-06.png'),
+                        'tags' => ['Tóc nam','Công sở'],
+                        'shortDescription' => 'Đường ngôi rõ, hai bên gọn và phần đỉnh dễ tạo kiểu lịch sự.',
+                    ],
+                ];
+            @endphp
+
+            <div class="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                @foreach ($homeTrends as $trend)
+                    <a href="{{ route('hot-trend.index') }}" class="group overflow-hidden rounded-3xl border border-zen-border/70 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                        <div class="overflow-hidden bg-zen-bg-soft">
+                            <div class="h-[260px] sm:h-[260px] lg:h-[300px] w-full overflow-hidden">
+                                <img
+                                    src="{{ $trend['image'] }}"
+                                    alt="{{ $trend['title'] }}"
+                                    class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex flex-wrap gap-2">
+                                @foreach ($trend['tags'] as $tag)
+                                    <span class="inline-block rounded-full bg-[#f3e4cf] px-3 py-1 text-xs font-semibold text-zen-text">{{ $tag }}</span>
+                                @endforeach
+                            </div>
+                            <h3 class="mt-3 text-lg font-semibold text-zen-text">{{ $trend['title'] }}</h3>
+                            <p class="mt-2 text-sm leading-6 text-zen-muted line-clamp-2">{{ $trend['shortDescription'] }}</p>
+                            <div class="mt-4">
+                                <span class="inline-flex items-center gap-2 text-sm font-semibold text-zen-primary">Xem thêm ảnh <span aria-hidden="true">→</span></span>
+                            </div>
                         </div>
                     </a>
                 @endforeach
             </div>
 
-            <div class="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <a
-                    href="{{ route('services') }}"
-                    class="inline-flex rounded-full border border-zen-border-dark bg-zen-bg px-8 py-3 text-sm font-semibold text-zen-text transition hover:bg-zen-accent-soft"
-                >
-                    Xem bảng dịch vụ
-                </a>
-                <a
-                    href="{{ route('booking') }}"
-                    class="booking-cta inline-flex rounded-full px-8 py-3 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1677ff]/50 focus-visible:ring-offset-2"
-                >
-                    Đặt lịch ngay
+            <div class="mt-6 text-center sm:hidden">
+                <a href="{{ route('hot-trend.index') }}" class="inline-flex text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark">
+                    Xem Hot Trend →
                 </a>
             </div>
         </div>
     </section>
 
-    {{--
-        =====================================================================
-        HOT TREND — mẫu tóc hot, lưới 3 cột đều (tỉ lệ cột 1:1:1)
-        =====================================================================
-    --}}
-    @php
-        $hotTrendStyles = [
-            [
-                'image' => asset('images/frontend/hottrend/hottrend-01.png'),
-                'alt' => 'Kiểu spike texture, kính gọng đen',
-                'label' => 'Spike texture',
-            ],
-            [
-                'image' => asset('images/frontend/hottrend/hottrend-02.png'),
-                'alt' => 'Tóc nam gọn, phong cách công sở hiện đại',
-                'label' => 'Lịch lãm office',
-            ],
-            [
-                'image' => asset('images/frontend/hottrend/hottrend-03.png'),
-                'alt' => 'Crop texture, kính không gọng, nền studio',
-                'label' => 'Textured crop',
-            ],
-            [
-                'image' => asset('images/frontend/hottrend/hottrend-04.png'),
-                'alt' => 'Wolf cut mullet, layer messy',
-                'label' => 'Wolf cut / Mullet',
-            ],
-            [
-                'image' => asset('images/frontend/hottrend/hottrend-05.png'),
-                'alt' => 'Skin fade cao, spike gọn, profile',
-                'label' => 'Skin fade + spike',
-            ],
-            [
-                'image' => asset('images/frontend/hottrend/hottrend-06.png'),
-                'alt' => 'Undercut mái bạc khói, đường hard part',
-                'label' => 'Undercut + hard part',
-            ],
-        ];
-    @endphp
-
-    <section id="hot-trend" class="scroll-mt-24 bg-gradient-to-b from-stone-50 via-stone-50 to-white px-4 py-16 sm:px-6">
+    {{-- ===== SECTION 5: EXPERIENCE FLOW ===== --}}
+    <section class="bg-zen-bg-soft px-4 py-12 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
-            <div class="text-center">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-600">ZenStyle picks</p>
-                <h2 class="mt-2 text-2xl font-semibold text-stone-900 sm:text-3xl">Hot trend tóc</h2>
-                <p class="mx-auto mt-2 max-w-2xl text-sm text-stone-600 sm:text-base">
-                    Các kiểu mẫu đang được yêu thích — tham khảo và đặt lịch tư vấn cùng stylist.
-                </p>
+            <div class="max-w-2xl">
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Quy trình</p>
+                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                    Một buổi hẹn tại ZenStyle diễn ra thế nào?
+                </h2>
             </div>
 
-            {{-- Hai hàng × 3 cột: chia đều 33% · 33% · 33% --}}
-            <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
-                @foreach ($hotTrendStyles as $trend)
-                    <figure class="group overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 shadow-sm">
-                        <div class="aspect-square overflow-hidden">
-                            <img
-                                src="{{ $trend['image'] }}"
-                                alt="{{ $trend['alt'] }}"
-                                class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.03]"
-                                loading="lazy"
-                                decoding="async"
-                                sizes="(min-width: 640px) 33vw, 100vw"
-                            >
-                        </div>
-                        <figcaption class="border-t border-stone-100 bg-white px-3 py-2.5 text-center text-sm font-medium text-stone-800">
-                            {{ $trend['label'] }}
-                        </figcaption>
-                    </figure>
+            <ol class="mt-10 grid gap-6 lg:grid-cols-3">
+                @foreach ($experienceSteps as $step)
+                    <li class="rounded-zen-lg border border-zen-border bg-white p-6">
+                        <p class="text-2xl font-bold text-zen-primary/60">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</p>
+                        <h3 class="mt-3 text-base font-semibold text-zen-text">{{ $step['title'] }}</h3>
+                        <p class="mt-2 text-sm leading-6 text-zen-muted">{{ $step['desc'] }}</p>
+                    </li>
                 @endforeach
-            </div>
+            </ol>
         </div>
     </section>
 
-    {{--
-        =====================================================================
-        ANCHOR "ĐẶT LỊCH NGAY"
-        =====================================================================
-        - Trước đó navbar/CTA trỏ tới #dat-lich nhưng chưa có section tương ứng.
-        - Bổ sung section mẫu để không còn link chết.
-
-
-
-        =====================================================================
-    --}}
+    {{-- ===== SECTION 6: FINAL CTA ===== --}}
+    <section class="bg-white px-4 py-12 sm:px-6 lg:py-16">
+        <div class="mx-auto max-w-6xl rounded-zen-lg border border-zen-border/50 bg-zen-bg-soft p-6 shadow-sm sm:p-8">
+            <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+                <div>
+                    <h2 class="font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                        Khi bạn đã sẵn sàng, ZenStyle luôn sẵn lịch hẹn
+                    </h2>
+                    <p class="mt-3 max-w-2xl text-sm leading-7 text-zen-muted sm:text-base">
+                        Xem dịch vụ, chọn stylist và đặt lịch trong vài bước đơn giản.
+                    </p>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <a href="{{ route('booking') }}" class="inline-flex items-center justify-center rounded-full bg-zen-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-zen-primary-dark">
+                        Đặt lịch ngay
+                    </a>
+                    <a href="{{ route('services') }}" class="inline-flex items-center justify-center rounded-full border border-zen-primary px-6 py-3 text-sm font-semibold text-zen-primary transition hover:bg-zen-primary/5">
+                        Xem dịch vụ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
 </x-frontend.layout>

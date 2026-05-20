@@ -118,10 +118,10 @@
       <div>
         <h4 class="text-sm font-semibold uppercase tracking-wide text-white">Dịch vụ</h4>
         <ul class="mt-4 space-y-2.5 text-sm text-white/75">
-          <li><a href="{{ route('services') }}#service-group-0" class="transition hover:text-zen-secondary">Tạo kiểu &amp; cắt tóc</a></li>
-          <li><a href="{{ route('services') }}#service-group-1" class="transition hover:text-zen-secondary">Nhuộm &amp; uốn</a></li>
-          <li><a href="{{ route('services') }}#service-group-2" class="transition hover:text-zen-secondary">Gội &amp; phục hồi tóc</a></li>
-          <li><a href="{{ route('services') }}#service-group-3" class="transition hover:text-zen-secondary">Spa &amp; chăm sóc</a></li>
+          <li><a href="{{ route('services') }}#service-cat-toc-nam-cao-cap" class="transition hover:text-zen-secondary">Cắt tóc nam cao cấp</a></li>
+          <li><a href="{{ route('services') }}#service-nhuom-tone-co-ban" class="transition hover:text-zen-secondary">Nhuộm tone cơ bản</a></li>
+          <li><a href="{{ route('services') }}#service-goi-duong-sinh-chuyen-sau" class="transition hover:text-zen-secondary">Gội dưỡng sinh</a></li>
+          <li><a href="{{ route('services') }}#service-cham-soc-da-co-ban" class="transition hover:text-zen-secondary">Chăm sóc da</a></li>
           <li><a href="{{ route('services') }}#service-list" class="transition hover:text-zen-secondary">Bảng dịch vụ</a></li>
         </ul>
       </div>
@@ -131,7 +131,7 @@
         <ul class="mt-4 space-y-2.5 text-sm text-white/75">
           <li><a href="{{ route('home') }}" class="transition hover:text-zen-secondary">Trang chủ</a></li>
           <li><a href="{{ route('about') }}" class="transition hover:text-zen-secondary">Giới thiệu</a></li>
-          <li><a href="{{ route('home') }}#hot-trend" class="transition hover:text-zen-secondary">Hottrend</a></li>
+          <li><a href="{{ route('hot-trend.index') }}" class="transition hover:text-zen-secondary">Hot Trend</a></li>
           <li><a href="{{ route('services') }}" class="transition hover:text-zen-secondary">Dịch vụ</a></li>
           <li><a href="{{ route('booking') }}" class="transition hover:text-zen-secondary">Đặt lịch</a></li>
           <li><a href="{{ route('contact') }}" class="transition hover:text-zen-secondary">Liên hệ</a></li>
@@ -175,7 +175,7 @@
         <div class="flex flex-wrap items-center justify-center gap-4">
           <a href="{{ route('privacy-policy') }}" class="hover:text-white">Chính sách bảo mật</a>
           <a href="{{ route('terms-of-service') }}" class="hover:text-white">Điều khoản</a>
-          <a href="#" class="hover:text-white">Sitemap</a>
+          <a href="{{ route('faq') }}" class="hover:text-white">FAQ</a>
         </div>
       </div>
     </div>

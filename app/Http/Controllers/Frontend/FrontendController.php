@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Support\FrontendServiceCatalog;
 use Illuminate\Contracts\View\View;
 
 class FrontendController extends Controller
@@ -54,6 +55,39 @@ class FrontendController extends Controller
         ]);
     }
 
+    public function hotTrend(): View
+    {
+        return view('frontend.hot-trend.index');
+    }
+
+    public function services(): View
+    {
+        return view('frontend.services.index', [
+            'heroImage' => FrontendServiceCatalog::heroImage(),
+            'services' => FrontendServiceCatalog::all(),
+            'staff' => FrontendServiceCatalog::staff(),
+            'testimonials' => FrontendServiceCatalog::testimonials(),
+        ]);
+    }
+
+    public function serviceShow(string $slug): View
+    {
+        $services = FrontendServiceCatalog::all();
+        $service = collect($services)->firstWhere('slug', $slug);
+        abort_if(! $service, 404);
+
+        $relatedServices = collect($services)
+            ->reject(fn ($item) => $item['slug'] === $slug)
+            ->take(4)
+            ->values()
+            ->all();
+
+        return view('frontend.services.show', [
+            'service' => $service,
+            'relatedServices' => $relatedServices,
+        ]);
+    }
+
     public function privacyPolicy(): View
     {
         return view('frontend.privacy.index');
@@ -62,6 +96,11 @@ class FrontendController extends Controller
     public function termsOfService(): View
     {
         return view('frontend.terms.index');
+    }
+
+    public function faq(): View
+    {
+        return view('frontend.faq.index');
     }
 
     public function contact(): View
