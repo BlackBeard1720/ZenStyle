@@ -40,8 +40,14 @@ class AppointmentController extends Controller
                         });
                 });
             })
-            ->when($request->appointment_date, function ($query, $date) {
-                $query->whereDate('appointment_date', $date);
+            ->when($request->appointment_range, function ($query, $range) {
+                $dates = array_map('trim', explode(' - ', $range));
+
+                if (count($dates) === 2) {
+                    $query->whereBetween('appointment_date', [$dates[0], $dates[1]]);
+                } elseif (count($dates) === 1 && ! empty($dates[0])) {
+                    $query->whereDate('appointment_date', $dates[0]);
+                }
             })
             ->when($request->status, function ($query, $status) {
                 $query->where('status', $status);
