@@ -32,6 +32,10 @@ export default {
                 zen: '0 8px 24px rgba(43, 33, 26, 0.08)',
                 'zen-md': '0 12px 32px rgba(43, 33, 26, 0.14)',
             },
+            fontFamily: {
+                heading: ['Playfair Display', 'Georgia', 'serif'],
+                body: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            },
         },
     },
 };

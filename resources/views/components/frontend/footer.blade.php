@@ -175,7 +175,7 @@
         <div class="flex flex-wrap items-center justify-center gap-4">
           <a href="{{ route('privacy-policy') }}" class="hover:text-white">Chính sách bảo mật</a>
           <a href="{{ route('terms-of-service') }}" class="hover:text-white">Điều khoản</a>
-          <a href="#" class="hover:text-white">Sitemap</a>
+          <a href="{{ route('faq') }}" class="hover:text-white">FAQ</a>
         </div>
       </div>
     </div>
