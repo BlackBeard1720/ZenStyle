@@ -8,6 +8,43 @@ use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Js;
+
+Route::get('/firebase-messaging-sw.js', function () {
+    $firebaseConfig = [
+        'apiKey' => config('services.firebase.api_key'),
+        'authDomain' => config('services.firebase.auth_domain'),
+        'projectId' => config('services.firebase.project_id'),
+        'storageBucket' => config('services.firebase.storage_bucket'),
+        'messagingSenderId' => config('services.firebase.messaging_sender_id'),
+        'appId' => config('services.firebase.app_id'),
+    ];
+
+    $firebaseConfigJson = Js::from($firebaseConfig);
+
+    $javascript = <<<JS
+importScripts('https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.12.4/firebase-messaging-compat.js');
+
+firebase.initializeApp({$firebaseConfigJson});
+
+const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage(function(payload) {
+    const title = payload.notification?.title || 'ZenStyle Notification';
+    const options = {
+        body: payload.notification?.body || '',
+        icon: '/favicon.ico',
+    };
+
+    self.registration.showNotification(title, options);
+});
+JS;
+
+    return response($javascript, 200)
+        ->header('Content-Type', 'application/javascript')
+        ->header('Service-Worker-Allowed', '/');
+});
 
 // Các Route giao diện của thành viên (feature 2.2)
 Route::controller(FrontendController::class)->group(function () {

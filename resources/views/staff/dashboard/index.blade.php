@@ -42,14 +42,15 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-messaging-compat.js"></script>
 
     <script>
-      const firebaseConfig = {
-        apiKey: "DÁN_API_KEY",
-        authDomain: "DÁN_AUTH_DOMAIN",
-        projectId: "DÁN_PROJECT_ID",
-        storageBucket: "DÁN_STORAGE_BUCKET",
-        messagingSenderId: "DÁN_MESSAGING_SENDER_ID",
-        appId: "DÁN_APP_ID"
-      };
+      const firebaseConfig = {{ \Illuminate\Support\Js::from([
+        'apiKey' => config('services.firebase.api_key'),
+        'authDomain' => config('services.firebase.auth_domain'),
+        'projectId' => config('services.firebase.project_id'),
+        'storageBucket' => config('services.firebase.storage_bucket'),
+        'messagingSenderId' => config('services.firebase.messaging_sender_id'),
+        'appId' => config('services.firebase.app_id'),
+      ]) }};
+      const firebaseVapidKey = {{ \Illuminate\Support\Js::from(config('services.firebase.vapid_key')) }};
 
       firebase.initializeApp(firebaseConfig);
 
@@ -65,7 +66,7 @@
           }
 
           const token = await messaging.getToken({
-            vapidKey: "DÁN_VAPID_PUBLIC_KEY"
+            vapidKey: firebaseVapidKey
           });
 
           if (!token) {
