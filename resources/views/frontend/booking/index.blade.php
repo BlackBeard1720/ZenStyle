@@ -42,6 +42,7 @@
             'checked'      => $index === 0 && $isActive,
         ];
     })->all();
+    $defaultStylistName = collect($bookingStylists)->firstWhere('checked', true)['name'] ?? 'Bất kỳ nhân viên';
   @endphp
 
   <div id="booking-page" class="pb-12 pt-6 sm:pt-8">
@@ -64,7 +65,7 @@
       @csrf
 
       <input type="hidden" name="appointment_time" value="" data-booking-time-input>
-      <input type="hidden" name="staff_name" value="Quách Tùng Dương" data-booking-staff-name-input>
+      <input type="hidden" name="staff_name" value="{{ $defaultStylistName }}" data-booking-staff-name-input>
 
       <div class="min-w-0 space-y-5">
         @if($errors->any() && ! $errors->has('otp'))
@@ -189,46 +190,38 @@
           <h2 class="text-base font-semibold text-zen-text">Chọn dịch vụ</h2>
           <p class="mt-1 text-sm text-zen-muted">Có thể chọn nhiều dịch vụ trong một lịch.</p>
           <ul class="mt-4 divide-y divide-zen-border rounded border border-zen-border">
-            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Cắt tóc nam cao cấp" data-service-price="150000">
-              <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                <input type="checkbox" name="service_ids[]" value="cut" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
-                <span class="min-w-0">
-                  <span class="block break-words text-sm font-medium text-zen-text">Cắt tóc nam cao cấp</span>
-                  <span class="mt-0.5 block text-xs text-zen-muted">Khoảng 45 phút</span>
-                </span>
-              </label>
-              <span class="text-sm font-semibold text-zen-primary sm:text-right">150.000đ</span>
-            </li>
-            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Gội + massage da đầu" data-service-price="120000">
-              <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                <input type="checkbox" name="service_ids[]" value="wash" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
-                <span class="min-w-0">
-                  <span class="block break-words text-sm font-medium text-zen-text">Gội + massage da đầu</span>
-                  <span class="mt-0.5 block text-xs text-zen-muted">30 phút</span>
-                </span>
-              </label>
-              <span class="text-sm font-semibold text-zen-primary sm:text-right">120.000đ</span>
-            </li>
-            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Uốn / nhuộm cơ bản" data-service-price="650000">
-              <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                <input type="checkbox" name="service_ids[]" value="perm" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
-                <span class="min-w-0">
-                  <span class="block break-words text-sm font-medium text-zen-text">Uốn / nhuộm cơ bản</span>
-                  <span class="mt-0.5 block text-xs text-zen-muted">~120 phút</span>
-                </span>
-              </label>
-              <span class="text-sm font-semibold text-zen-primary sm:text-right">650.000đ</span>
-            </li>
-            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Treatment phục hồi" data-service-price="320000">
-              <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                <input type="checkbox" name="service_ids[]" value="treatment" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
-                <span class="min-w-0">
-                  <span class="block break-words text-sm font-medium text-zen-text">Treatment phục hồi</span>
-                  <span class="mt-0.5 block text-xs text-zen-muted">60 phút</span>
-                </span>
-              </label>
-              <span class="text-sm font-semibold text-zen-primary sm:text-right">320.000đ</span>
-            </li>
+            @forelse ($services as $service)
+              <li
+                class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+                data-booking-service-row
+                data-service-name="{{ $service->service_name }}"
+                data-service-price="{{ (int) $service->price }}"
+              >
+                <label class="flex min-w-0 cursor-pointer items-start gap-3">
+                  <input
+                    type="checkbox"
+                    name="service_ids[]"
+                    value="{{ $service->id }}"
+                    class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30"
+                    @checked(in_array((string) $service->id, old('service_ids', []), true))
+                  >
+                  <span class="min-w-0">
+                    <span class="block break-words text-sm font-medium text-zen-text">{{ $service->service_name }}</span>
+                    <span class="mt-0.5 block text-xs text-zen-muted">
+                      {{ $service->duration_minutes }} phút
+                      @if($service->description)
+                        - {{ $service->description }}
+                      @endif
+                    </span>
+                  </span>
+                </label>
+                <span class="text-sm font-semibold text-zen-primary sm:text-right">{{ number_format((float) $service->price, 0, ',', '.') }}đ</span>
+              </li>
+            @empty
+              <li class="p-4 text-sm text-zen-muted">
+                Hiện chưa có dịch vụ đang hoạt động.
+              </li>
+            @endforelse
           </ul>
         </section>
 

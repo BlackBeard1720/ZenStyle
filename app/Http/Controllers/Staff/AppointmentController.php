@@ -66,7 +66,7 @@ class AppointmentController extends Controller
     {
         $data = $request->validate([
             'client_id' => ['required', 'exists:clients,id'],
-            'appointment_date' => ['required', 'date'],
+            'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['required', 'array', 'min:1'],
             'service_ids.*' => ['exists:services,id'],
@@ -142,7 +142,7 @@ class AppointmentController extends Controller
 
         $data = $request->validate([
             'client_id' => ['required', 'exists:clients,id'],
-            'appointment_date' => ['required', 'date'],
+            'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['required', 'array', 'min:1'],
             'service_ids.*' => ['exists:services,id'],

@@ -51,7 +51,16 @@ class CustomerBookController extends Controller
 
     public function create(): View
     {
-        return view('frontend.booking.index');
+        return view('frontend.booking.index', [
+            'staff' => Staff::query()
+                ->orderByRaw("status = 'active' desc")
+                ->orderBy('full_name')
+                ->get(),
+            'services' => Service::query()
+                ->where('status', 'active')
+                ->orderBy('service_name')
+                ->get(),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -59,7 +68,7 @@ class CustomerBookController extends Controller
         $data = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
-            'appointment_date' => ['required', 'date'],
+            'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['nullable', 'array'],
             'service_ids.*' => ['nullable', 'string'],
