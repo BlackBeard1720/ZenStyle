@@ -74,7 +74,7 @@ class AppointmentController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        if ($this->hasStaffConflict($data)) {
+            if ($this->hasStaffConflict($data)) {
             return back()
                 ->withInput()
                 ->with('error', 'Nhan vien nay da co lich hen vao thoi gian da chon.');
