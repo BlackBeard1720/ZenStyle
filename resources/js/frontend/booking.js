@@ -203,7 +203,33 @@ function initBookingPage(root) {
 
         if (!hasSelectedSlot) {
             const firstAvailable = slotButtons.find((btn) => !btn.disabled);
-            if (firstAvailable) selectSlotButton(firstAvailable);
+            if (firstAvailable) {
+                selectSlotButton(firstAvailable);
+            } else if (dateIso === localIsoDate()) {
+                // All of today's slots are past — advance to tomorrow automatically
+                const [y, m, d] = dateIso.split('-').map(Number);
+                const t = new Date(Date.UTC(y, m - 1, d + 1));
+                const tomorrowIso = [
+                    t.getUTCFullYear(),
+                    String(t.getUTCMonth() + 1).padStart(2, '0'),
+                    String(t.getUTCDate()).padStart(2, '0'),
+                ].join('-');
+
+                if (dateInput) dateInput.value = tomorrowIso;
+
+                dayButtons.forEach((b) => {
+                    const on = b.dataset.date === tomorrowIso && !b.disabled;
+                    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                    setAvailability(b, b.disabled, dayClasses);
+                });
+
+                // Tomorrow's slots are never past — enable all and pick the first
+                slotButtons.forEach((btn) => {
+                    btn.setAttribute('aria-pressed', 'false');
+                    setAvailability(btn, false, slotClasses);
+                });
+                if (slotButtons[0]) selectSlotButton(slotButtons[0]);
+            }
         }
     }
 
@@ -401,6 +427,21 @@ function initBookingPage(root) {
         promoHint.classList.remove('text-zen-muted');
         promoHint.classList.add('text-zen-success');
         promoHint.textContent = `Đã ghi nhận mã “${raw}” (demo, chưa trừ tiền).`;
+    });
+
+    form?.addEventListener('submit', (e) => {
+        if (!timeInput?.value) {
+            e.preventDefault();
+            const slotGroup = root.querySelector('[aria-label="Giờ bắt đầu"]');
+            if (slotGroup && !root.querySelector('#booking-slot-error')) {
+                const err = document.createElement('p');
+                err.id = 'booking-slot-error';
+                err.className = 'mt-2 text-xs font-medium text-red-600';
+                err.textContent = 'Vui lòng chọn khung giờ trước khi đặt lịch.';
+                slotGroup.after(err);
+            }
+            root.querySelector('#booking-slot-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     });
 
     form?.addEventListener('reset', () => {

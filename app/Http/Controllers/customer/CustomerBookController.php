@@ -17,101 +17,52 @@ class CustomerBookController extends Controller
     public function create()
     {
 
+        $staff = Staff::where('status', 'active')
+            ->orderBy('full_name')
+            ->get();
 
-        return view('frontend.booking.index');
+        $services = Service::where('status', 'active')
+            ->orderBy('service_name')
+            ->get();
+
+        return view('frontend.booking.index', compact('staff', 'services'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:20'],
+            'phone' => ['required', 'string', 'max:10'],
 
-            'customer_count' => ['nullable'],
+            'appointment_date' => ['required', 'date'],
+            'appointment_time' => ['required', 'date_format:H:i'],
 
-            'appointment_date' => ['nullable', 'date'],
-            'appointment_time' => ['nullable', 'date_format:H:i'],
+            'service_ids' => ['required', 'array', 'min:1'],
+            'service_ids.*' => ['required', 'exists:services,id'],
 
-            'service_ids' => ['nullable', 'array'],
-
-            'staff_id' => ['nullable'],
+            'staff_id' => ['nullable', 'exists:staff,id'],
 
             'coupon_code' => ['nullable', 'string', 'max:50'],
 
             'notes' => ['nullable', 'string'],
         ]);
 
-        $otp = rand(100000, 999999);
+        if ($this->hasStaffConflict($data)) {
+            return back()->withInput()->withErrors([
+                'staff_id' => 'Nhân viên đã có lịch vào thời điểm này. Vui lòng chọn nhân viên khác.',
+            ]);
+        }
+
+        $otp = random_int(100000, 999999);
 
         session([
-            'booking_otp' => $otp,
             'booking_data' => $data,
+            'booking_otp'  => $otp,
+            'otp_pending'  => true,
+            'otp_demo'     => $otp,
         ]);
 
-        return back()
-            ->withInput()
-            ->with('otp_pending', true)
-            ->with('otp_demo', $otp);
-
-//        if ($this->hasStaffConflict($data)) {
-//            return back()
-//                ->withInput()
-//                ->withErrors([
-//                    'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
-//                ]);
-//        }
-//
-//        $services = Service::whereIn('id', $data['service_ids'])->get();
-//
-//        $subtotal = $services->sum('price');
-//        $discount = 0;
-//
-//        if (!empty($data['coupon_code'])) {
-//            $coupon = Coupon::where('code', $data['coupon_code'])->first();
-//
-//            if ($coupon) {
-//                $discount = $coupon->discount_amount ?? 0;
-//            }
-//        }
-//
-//        $totalAmount = max($subtotal - $discount, 0);
-//
-//        $appointment = DB::transaction(function () use ($data, $services, $totalAmount) {
-//            $client = Client::firstOrCreate(
-//                [
-//                    'phone' => $data['phone'],
-//                ],
-//                [
-//                    'full_name' => $data['full_name'],
-//                    'status' => 'active',
-//                ]
-//            );
-//
-//            $appointment = Appointment::create([
-//                'client_id' => $client->id,
-//                'appointment_date' => $data['appointment_date'],
-//                'appointment_time' => $data['appointment_time'],
-//                'customer_count' => $data['customer_count'],
-//                'status' => 'pending',
-//                'notes' => $data['notes'] ?? null,
-//                'total_amount' => $totalAmount,
-//            ]);
-//
-//            foreach ($services as $service) {
-//                AppointmentService::create([
-//                    'appointment_id' => $appointment->id,
-//                    'service_id' => $service->id,
-//                    'staff_id' => $data['staff_id'] ?? null,
-//                    'price_at_booking' => $service->price,
-//                ]);
-//            }
-//
-//            return $appointment;
-//        });
-//
-//        return redirect()
-//            ->route('customer.booking.success', $appointment)
-//            ->with('success', 'Đặt lịch thành công. Vui lòng chờ salon xác nhận.');
+        return redirect()->route('booking');
     }
 
     public function verifyOtp(Request $request)
@@ -126,7 +77,74 @@ class CustomerBookController extends Controller
             ]);
         }
 
-        dd('OTP đúng, lưu DB ở đây', session('booking_data'));
+        $data = session('booking_data');
+
+        if (!$data) {
+            return redirect()
+                ->route('booking')
+                ->withErrors([
+                    'otp' => 'Phiên đặt lịch đã hết hạn. Vui lòng đặt lịch lại.',
+                ]);
+        }
+
+        $services = Service::whereIn('id', $data['service_ids'])->get();
+
+        $subtotal = $services->sum('price');
+        $discount = 0;
+        $coupon = null;
+
+        if (!empty($data['coupon_code'])) {
+            $coupon = Coupon::where('code', $data['coupon_code'])->first();
+
+            if ($coupon) {
+                $discount = $coupon->discount_amount ?? 0;
+            }
+        }
+
+        $totalAmount = max($subtotal - $discount, 0);
+
+        $appointment = DB::transaction(function () use ($data, $services, $coupon, $totalAmount) {
+            $client = Client::updateOrCreate(
+                [
+                    'phone' => $data['phone'],
+                ],
+                [
+                    'full_name' => $data['full_name'],
+                ]
+            );
+
+            $appointment = Appointment::create([
+                'client_id' => $client->id,
+                'coupon_id' => $coupon?->id,
+                'appointment_date' => $data['appointment_date'],
+                'appointment_time' => $data['appointment_time'],
+                'status' => 'pending',
+                'notes' => $data['notes'] ?? null,
+                'total_amount' => $totalAmount,
+            ]);
+
+            foreach ($services as $service) {
+                AppointmentService::create([
+                    'appointment_id' => $appointment->id,
+                    'service_id' => $service->id,
+                    'staff_id' => $data['staff_id'] ?? null,
+                    'price_at_booking' => $service->price,
+                ]);
+            }
+
+            return $appointment;
+        });
+
+        session()->forget([
+            'booking_otp',
+            'booking_data',
+            'otp_pending',
+            'otp_demo',
+        ]);
+
+        return redirect()
+            ->route('customer.booking.success', $appointment)
+            ->with('success', 'Đặt lịch thành công. Vui lòng chờ salon xác nhận.');
     }
 
     public function success(Appointment $appointment)

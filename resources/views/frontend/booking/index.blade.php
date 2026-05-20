@@ -19,47 +19,29 @@
         ];
     });
 
-    $bookingStylists = [
-        [
-            'id' => 'quach-tung-duong',
-            'name' => 'Quách Tùng Dương',
-            'role' => 'Stylist tóc',
-            'experience' => '7 năm kinh nghiệm',
-            'featured_service' => 'Cắt tóc nam cao cấp, tư vấn tạo kiểu',
-            'rating' => '4.9/5',
-            'status' => 'Đang rảnh',
-            'status_class' => 'bg-zen-success/10 text-zen-success ring-zen-success/20',
-            'image' => asset('images/tailadmin/user/user-01.jpg'),
-            'is_available' => true,
-            'checked' => true,
-        ],
-        [
-            'id' => 'dinh-van-hai',
-            'name' => 'Đinh Văn Hải',
-            'role' => 'Kỹ thuật viên spa',
-            'experience' => '5 năm kinh nghiệm',
-            'featured_service' => 'Massage da đầu, treatment phục hồi',
-            'rating' => '4.8/5',
-            'status' => 'Có thể đặt lịch',
-            'status_class' => 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20',
-            'image' => asset('images/tailadmin/user/user-02.jpg'),
-            'is_available' => true,
-            'checked' => false,
-        ],
-        [
-            'id' => 'le-hoang-nam',
-            'name' => 'Lê Hoàng Nam',
-            'role' => 'Chuyên viên gội đầu dưỡng sinh',
-            'experience' => '4 năm kinh nghiệm',
-            'featured_service' => 'Gội thư giãn, massage cổ vai gáy',
-            'rating' => '4.7/5',
-            'status' => 'Bận',
-            'status_class' => 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
-            'image' => asset('images/tailadmin/user/user-03.jpg'),
-            'is_available' => false,
-            'checked' => false,
-        ],
-    ];
+    $bookingStylists = $staff->map(function ($s, $index) {
+        $isActive = $s->status === 'active';
+        $years = $s->hire_date
+            ? max(0, (int) \Carbon\Carbon::parse($s->hire_date)->diffInYears(now()))
+            : null;
+        $experience = $years !== null
+            ? ($years >= 1 ? $years . ' năm kinh nghiệm' : 'Dưới 1 năm kinh nghiệm')
+            : null;
+
+        return [
+            'id'           => $s->id,
+            'name'         => $s->full_name,
+            'role'         => $s->specialization ?? 'Nhân viên',
+            'experience'   => $experience,
+            'status'       => $isActive ? 'Có thể đặt lịch' : 'Bận',
+            'status_class' => $isActive
+                ? 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20'
+                : 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
+            'image'        => asset('images/tailadmin/user/user-0' . (($index % 3) + 1) . '.jpg'),
+            'is_available' => $isActive,
+            'checked'      => $index === 0 && $isActive,
+        ];
+    })->all();
   @endphp
 
   <div id="booking-page" class="pb-12 pt-6 sm:pt-8">
@@ -91,16 +73,6 @@
           </div>
         @endif
 
-        {{-- Số lượng khách --}}
-        <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
-          <h2 class="text-base font-semibold text-zen-text">Số lượng khách</h2>
-          <p class="mt-1 text-sm text-zen-muted">Số người sử dụng dịch vụ trong buổi hẹn.</p>
-          <div class="mt-4 inline-flex items-center rounded border border-zen-border">
-            <button type="button" data-booking-guest-minus class="px-4 py-2 text-sm text-zen-muted transition hover:bg-zen-bg-soft hover:text-zen-text focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40" aria-label="Giảm số khách">−</button>
-            <span data-booking-guest-value class="min-w-[3rem] border-x border-zen-border py-2 text-center text-sm font-medium text-zen-text tabular-nums">1</span>
-            <button type="button" data-booking-guest-plus class="px-4 py-2 text-sm text-zen-muted transition hover:bg-zen-bg-soft hover:text-zen-text focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40" aria-label="Tăng số khách">+</button>
-          </div>
-        </section>
 
         {{-- Ngày + lịch tuần + khung giờ --}}
         <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
@@ -200,20 +172,14 @@
                   </span>
                 </span>
 
-                <span class="mt-4 grid gap-2 text-xs text-zen-muted">
-                  <span class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                    <span>Kinh nghiệm</span>
-                    <span class="text-right font-semibold text-zen-text">{{ $stylist['experience'] }}</span>
+                @if($stylist['experience'])
+                  <span class="mt-4 grid gap-2 text-xs text-zen-muted">
+                    <span class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                      <span>Kinh nghiệm</span>
+                      <span class="text-right font-semibold text-zen-text">{{ $stylist['experience'] }}</span>
+                    </span>
                   </span>
-                  <span class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                    <span>Đánh giá</span>
-                    <span class="text-right font-semibold text-zen-primary">{{ $stylist['rating'] }}</span>
-                  </span>
-                  <span class="rounded-zen-sm bg-zen-bg-soft px-3 py-2 leading-relaxed text-zen-text">
-                    <span class="block text-[11px] font-medium uppercase tracking-wide text-zen-muted">Dịch vụ nổi bật</span>
-                    <span class="mt-0.5 block break-words font-medium">{{ $stylist['featured_service'] }}</span>
-                  </span>
-                </span>
+                @endif
               </label>
             @endforeach
           </div>
@@ -224,47 +190,39 @@
           <h2 class="text-base font-semibold text-zen-text">Chọn dịch vụ</h2>
           <p class="mt-1 text-sm text-zen-muted">Có thể chọn nhiều dịch vụ trong một lịch.</p>
           <ul class="mt-4 divide-y divide-zen-border rounded border border-zen-border">
-            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Cắt tóc nam cao cấp" data-service-price="150000">
-              <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                <input type="checkbox" checked name="service_ids[]" value="cut" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
-                <span class="min-w-0">
-                  <span class="block break-words text-sm font-medium text-zen-text">Cắt tóc nam cao cấp</span>
-                  <span class="mt-0.5 block text-xs text-zen-muted">Khoảng 45 phút</span>
-                </span>
-              </label>
-              <span class="text-sm font-semibold text-zen-primary sm:text-right">150.000đ</span>
-            </li>
-            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Gội + massage da đầu" data-service-price="120000">
-              <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                <input type="checkbox" checked name="service_ids[]" value="wash" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
-                <span class="min-w-0">
-                  <span class="block break-words text-sm font-medium text-zen-text">Gội + massage da đầu</span>
-                  <span class="mt-0.5 block text-xs text-zen-muted">30 phút</span>
-                </span>
-              </label>
-              <span class="text-sm font-semibold text-zen-primary sm:text-right">120.000đ</span>
-            </li>
-            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Uốn / nhuộm cơ bản" data-service-price="650000">
-              <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                <input type="checkbox" checked name="service_ids[]" value="perm" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
-                <span class="min-w-0">
-                  <span class="block break-words text-sm font-medium text-zen-text">Uốn / nhuộm cơ bản</span>
-                  <span class="mt-0.5 block text-xs text-zen-muted">~120 phút</span>
-                </span>
-              </label>
-              <span class="text-sm font-semibold text-zen-primary sm:text-right">650.000đ</span>
-            </li>
-            <li class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" data-booking-service-row data-service-name="Treatment phục hồi" data-service-price="320000">
-              <label class="flex min-w-0 cursor-pointer items-start gap-3">
-                <input type="checkbox" checked name="service_ids[]" value="treatment" class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30">
-                <span class="min-w-0">
-                  <span class="block break-words text-sm font-medium text-zen-text">Treatment phục hồi</span>
-                  <span class="mt-0.5 block text-xs text-zen-muted">60 phút</span>
-                </span>
-              </label>
-              <span class="text-sm font-semibold text-zen-primary sm:text-right">320.000đ</span>
-            </li>
-          </ul>
+                @forelse ($services as $service)
+                  <li
+                    class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+                    data-booking-service-row
+                    data-service-name="{{ $service->service_name }}"
+                    data-service-price="{{ (int) $service->price }}"
+                  >
+                    <label class="flex min-w-0 cursor-pointer items-start gap-3">
+                      <input
+                        type="checkbox"
+                        name="service_ids[]"
+                        value="{{ $service->id }}"
+                        class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30"
+                      >
+                      <span class="min-w-0">
+                        <span class="block break-words text-sm font-medium text-zen-text">
+                          {{ $service->service_name }}
+                        </span>
+                        <span class="mt-0.5 block text-xs text-zen-muted">
+                          {{ $service->duration_minutes }} phút
+                        </span>
+                      </span>
+                    </label>
+                    <span class="text-sm font-semibold text-zen-primary sm:text-right">
+                      {{ number_format($service->price, 0, ',', '.') }}đ
+                    </span>
+                  </li>
+                @empty
+                  <li class="p-4 text-sm text-zen-muted">
+                    Hiện chưa có dịch vụ khả dụng.
+                  </li>
+                @endforelse
+              </ul>
         </section>
 
         {{-- Khuyến mãi --}}
