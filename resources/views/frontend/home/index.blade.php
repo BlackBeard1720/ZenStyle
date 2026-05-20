@@ -55,6 +55,7 @@
             asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png'),
             asset('images/frontend/banner/Gemini_Generated_Image_7sr4oq7sr4oq7sr4.png'),
             asset('images/frontend/banner/Gemini_Generated_Image_7w6kln7w6kln7w6k.png'),
+            asset('images/frontend/banner/Gemini_Generated_Image_os1lsdos1lsdos1l.png'),
         ];
 
         $hotTrendImages = [
@@ -179,7 +180,7 @@
     </section>
 
     {{-- ===== SECTION 3: SALON SPACE GALLERY ===== --}}
-    <section id="khong-gian" class="scroll-mt-24 bg-zen-bg-soft px-4 py-12 sm:px-6 lg:py-16">
+    <section id="khong-gian" class="scroll-mt-24 bg-zen-bg-soft px-4 py-12 sm:px-6 lg:py-14">
         <div class="mx-auto max-w-6xl">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Không gian</p>
@@ -191,27 +192,18 @@
                 </p>
             </div>
 
-            <div class="mt-10 grid gap-6 lg:grid-cols-2">
-                @foreach ($salonImages as $index => $image)
-                    <div class="group relative overflow-hidden rounded-zen-lg border border-zen-border shadow-sm transition hover:shadow-md">
+            <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                @foreach ($salonImages as $image)
+                    <div class="group relative overflow-hidden rounded-lg border border-zen-border/40 shadow-sm transition hover:shadow-md">
                         <img
                             src="{{ $image }}"
                             alt="Không gian ZenStyle"
-                            class="aspect-square w-full object-cover transition group-hover:scale-105"
+                            class="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-105"
                             loading="lazy"
                             decoding="async"
                         >
                     </div>
                 @endforeach
-                <div class="group relative overflow-hidden rounded-zen-lg border border-zen-border shadow-sm transition hover:shadow-md lg:col-span-2 lg:max-w-md">
-                    <img
-                        src="{{ asset('images/frontend/banner/Gemini_Generated_Image_ympfunympfunympf.png') }}"
-                        alt="Không gian ZenStyle"
-                        class="aspect-square w-full object-cover transition group-hover:scale-105"
-                        loading="lazy"
-                        decoding="async"
-                    >
-                </div>
             </div>
         </div>
     </section>
