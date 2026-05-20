@@ -3,7 +3,6 @@ import "flatpickr/dist/flatpickr.min.css";
 import "dropzone/dist/dropzone.css";
 import "../../css/staff.css";
 
-import "../echo.js";
 import Alpine from "alpinejs";
 import persist from "@alpinejs/persist";
 import flatpickr from "flatpickr";
