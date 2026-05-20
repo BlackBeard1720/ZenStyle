@@ -407,6 +407,21 @@ function initBookingPage(root) {
         promoHint.textContent = `Đã ghi nhận mã “${raw}” (demo, chưa trừ tiền).`;
     });
 
+    form?.addEventListener('submit', (e) => {
+        if (!timeInput?.value) {
+            e.preventDefault();
+            const slotGroup = root.querySelector('[aria-label="Giờ bắt đầu"]');
+            if (slotGroup && !root.querySelector('#booking-slot-error')) {
+                const err = document.createElement('p');
+                err.id = 'booking-slot-error';
+                err.className = 'mt-2 text-xs font-medium text-red-600';
+                err.textContent = 'Vui lòng chọn khung giờ trước khi đặt lịch.';
+                slotGroup.after(err);
+            }
+            root.querySelector('#booking-slot-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
     form?.addEventListener('reset', () => {
         window.setTimeout(() => {
             const resetDate = ensureDateInputIsFutureSafe();

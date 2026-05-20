@@ -19,47 +19,29 @@
         ];
     });
 
-    $bookingStylists = [
-        [
-            'id' => 'quach-tung-duong',
-            'name' => 'Quách Tùng Dương',
-            'role' => 'Stylist tóc',
-            'experience' => '7 năm kinh nghiệm',
-            'featured_service' => 'Cắt tóc nam cao cấp, tư vấn tạo kiểu',
-            'rating' => '4.9/5',
-            'status' => 'Đang rảnh',
-            'status_class' => 'bg-zen-success/10 text-zen-success ring-zen-success/20',
-            'image' => asset('images/tailadmin/user/user-01.jpg'),
-            'is_available' => true,
-            'checked' => true,
-        ],
-        [
-            'id' => 'dinh-van-hai',
-            'name' => 'Đinh Văn Hải',
-            'role' => 'Kỹ thuật viên spa',
-            'experience' => '5 năm kinh nghiệm',
-            'featured_service' => 'Massage da đầu, treatment phục hồi',
-            'rating' => '4.8/5',
-            'status' => 'Có thể đặt lịch',
-            'status_class' => 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20',
-            'image' => asset('images/tailadmin/user/user-02.jpg'),
-            'is_available' => true,
-            'checked' => false,
-        ],
-        [
-            'id' => 'le-hoang-nam',
-            'name' => 'Lê Hoàng Nam',
-            'role' => 'Chuyên viên gội đầu dưỡng sinh',
-            'experience' => '4 năm kinh nghiệm',
-            'featured_service' => 'Gội thư giãn, massage cổ vai gáy',
-            'rating' => '4.7/5',
-            'status' => 'Bận',
-            'status_class' => 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
-            'image' => asset('images/tailadmin/user/user-03.jpg'),
-            'is_available' => false,
-            'checked' => false,
-        ],
-    ];
+    $bookingStylists = $staff->map(function ($s, $index) {
+        $isActive = $s->status === 'active';
+        $years = $s->hire_date
+            ? max(0, (int) \Carbon\Carbon::parse($s->hire_date)->diffInYears(now()))
+            : null;
+        $experience = $years !== null
+            ? ($years >= 1 ? $years . ' năm kinh nghiệm' : 'Dưới 1 năm kinh nghiệm')
+            : null;
+
+        return [
+            'id'           => $s->id,
+            'name'         => $s->full_name,
+            'role'         => $s->specialization ?? 'Nhân viên',
+            'experience'   => $experience,
+            'status'       => $isActive ? 'Có thể đặt lịch' : 'Bận',
+            'status_class' => $isActive
+                ? 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20'
+                : 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
+            'image'        => asset('images/tailadmin/user/user-0' . (($index % 3) + 1) . '.jpg'),
+            'is_available' => $isActive,
+            'checked'      => $index === 0 && $isActive,
+        ];
+    })->all();
   @endphp
 
   <div id="booking-page" class="pb-12 pt-6 sm:pt-8">
@@ -189,20 +171,14 @@
                   </span>
                 </span>
 
-                <span class="mt-4 grid gap-2 text-xs text-zen-muted">
-                  <span class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                    <span>Kinh nghiệm</span>
-                    <span class="text-right font-semibold text-zen-text">{{ $stylist['experience'] }}</span>
+                @if($stylist['experience'])
+                  <span class="mt-4 grid gap-2 text-xs text-zen-muted">
+                    <span class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                      <span>Kinh nghiệm</span>
+                      <span class="text-right font-semibold text-zen-text">{{ $stylist['experience'] }}</span>
+                    </span>
                   </span>
-                  <span class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                    <span>Đánh giá</span>
-                    <span class="text-right font-semibold text-zen-primary">{{ $stylist['rating'] }}</span>
-                  </span>
-                  <span class="rounded-zen-sm bg-zen-bg-soft px-3 py-2 leading-relaxed text-zen-text">
-                    <span class="block text-[11px] font-medium uppercase tracking-wide text-zen-muted">Dịch vụ nổi bật</span>
-                    <span class="mt-0.5 block break-words font-medium">{{ $stylist['featured_service'] }}</span>
-                  </span>
-                </span>
+                @endif
               </label>
             @endforeach
           </div>
