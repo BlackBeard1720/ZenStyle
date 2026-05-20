@@ -150,7 +150,44 @@ function initScrollTopButton() {
     syncVisibility();
 }
 
+function initFloatingBookingButton() {
+    const btn = document.querySelector('[data-floating-booking]');
+    if (!btn) return;
+
+    const banner = document.getElementById('site-banner');
+    let ticking = false;
+
+    function syncVisibility() {
+        const bannerBottom = banner ? banner.offsetTop + banner.offsetHeight : 420;
+        const shouldShow = window.scrollY > bannerBottom - 80;
+
+        btn.classList.toggle('pointer-events-auto', shouldShow);
+        btn.classList.toggle('pointer-events-none', !shouldShow);
+        btn.classList.toggle('opacity-100', shouldShow);
+        btn.classList.toggle('opacity-0', !shouldShow);
+        btn.classList.toggle('translate-y-0', shouldShow);
+        btn.classList.toggle('translate-y-2', !shouldShow);
+
+        ticking = false;
+    }
+
+    window.addEventListener(
+        'scroll',
+        () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(syncVisibility);
+        },
+        { passive: true },
+    );
+
+    window.addEventListener('resize', syncVisibility, { passive: true });
+
+    syncVisibility();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initNavbarAutoHide();
     initScrollTopButton();
+    initFloatingBookingButton();
 });

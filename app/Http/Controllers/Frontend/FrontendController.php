@@ -55,6 +55,11 @@ class FrontendController extends Controller
         ]);
     }
 
+    public function hotTrend(): View
+    {
+        return view('frontend.hot-trend.index');
+    }
+
     public function services(): View
     {
         return view('frontend.services.index', [
