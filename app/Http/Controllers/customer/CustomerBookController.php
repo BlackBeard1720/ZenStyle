@@ -16,39 +16,6 @@ use Illuminate\Support\Facades\Validator;
 
 class CustomerBookController extends Controller
 {
-    private const DEMO_SERVICES = [
-        'cut' => [
-            'service_name' => 'Hair Cut',
-            'description' => 'Cắt tóc nam cao cấp',
-            'price' => 150000,
-            'duration_minutes' => 45,
-        ],
-        'wash' => [
-            'service_name' => 'Hair Wash',
-            'description' => 'Gội + massage da đầu',
-            'price' => 120000,
-            'duration_minutes' => 30,
-        ],
-        'perm' => [
-            'service_name' => 'Hair Coloring',
-            'description' => 'Uốn / nhuộm cơ bản',
-            'price' => 650000,
-            'duration_minutes' => 120,
-        ],
-        'treatment' => [
-            'service_name' => 'Hair Treatment',
-            'description' => 'Treatment phục hồi',
-            'price' => 320000,
-            'duration_minutes' => 60,
-        ],
-    ];
-
-    private const DEMO_STYLISTS = [
-        'quach-tung-duong' => 'Quách Tùng Dương',
-        'dinh-van-hai' => 'Đinh Văn Hải',
-        'le-hoang-nam' => 'Lê Hoàng Nam',
-    ];
-
     public function create(): View
     {
         return view('frontend.booking.index', [
@@ -71,14 +38,11 @@ class CustomerBookController extends Controller
             'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['nullable', 'array'],
-            'service_ids.*' => ['nullable', 'string'],
-            'staff_id' => ['nullable'],
-            'staff_name' => ['nullable', 'string', 'max:255'],
+            'service_ids.*' => ['integer', 'exists:services,id'],
+            'staff_id' => ['nullable', 'integer', 'exists:staff,id'],
             'coupon_code' => ['nullable', 'string', 'max:50'],
             'notes' => ['nullable', 'string'],
         ]);
-
-        $data['staff_name'] = ($data['staff_name'] ?? null) ?: $this->displayStaffName($data['staff_id'] ?? null);
 
         $otp = rand(100000, 999999);
 
@@ -127,7 +91,7 @@ class CustomerBookController extends Controller
                 ->with('otp_demo', $expectedOtp);
         }
 
-        $staff = $this->resolveStaff($data['staff_id'] ?? null, $data['staff_name'] ?? null);
+        $staff = $this->resolveStaff($data['staff_id'] ?? null);
 
         if ($this->hasStaffConflict($data, $staff?->id)) {
             return redirect()
@@ -179,7 +143,7 @@ class CustomerBookController extends Controller
             'phone' => $data['phone'],
             'appointment_date' => $data['appointment_date'],
             'appointment_time' => $data['appointment_time'],
-            'staff_name' => $data['staff_name'] ?? $this->displayStaffName($data['staff_id'] ?? null),
+            'staff_name' => $staff?->full_name ?? 'Bất kỳ nhân viên',
             'coupon_code' => $data['coupon_code'] ?? null,
             'notes' => $data['notes'] ?? null,
         ]);
@@ -225,60 +189,26 @@ class CustomerBookController extends Controller
 
     private function resolveSelectedServices(array $serviceIds)
     {
-        return collect($serviceIds)
+        $ids = collect($serviceIds)
             ->filter()
             ->unique()
-            ->map(function ($serviceId) {
-                $serviceId = (string) $serviceId;
-
-                if (ctype_digit($serviceId)) {
-                    return Service::find((int) $serviceId);
-                }
-
-                $demoService = self::DEMO_SERVICES[$serviceId] ?? null;
-
-                if (! $demoService) {
-                    return null;
-                }
-
-                return Service::firstOrCreate(
-                    ['service_name' => $demoService['service_name']],
-                    [
-                        'description' => $demoService['description'],
-                        'price' => $demoService['price'],
-                        'duration_minutes' => $demoService['duration_minutes'],
-                        'status' => 'active',
-                    ]
-                );
-            })
-            ->filter()
+            ->map(fn ($serviceId) => (int) $serviceId)
             ->values();
+
+        if ($ids->isEmpty()) {
+            return collect();
+        }
+
+        return Service::whereIn('id', $ids)->get();
     }
 
-    private function resolveStaff(mixed $staffId, ?string $staffName): ?Staff
+    private function resolveStaff(mixed $staffId): ?Staff
     {
-        if ($staffId && ctype_digit((string) $staffId)) {
-            return Staff::find((int) $staffId);
+        if (! $staffId) {
+            return null;
         }
 
-        if ($staffName) {
-            return Staff::where('full_name', $staffName)->first();
-        }
-
-        if ($staffId && isset(self::DEMO_STYLISTS[$staffId])) {
-            return Staff::where('full_name', self::DEMO_STYLISTS[$staffId])->first();
-        }
-
-        return null;
-    }
-
-    private function displayStaffName(mixed $staffId): string
-    {
-        if ($staffId && ctype_digit((string) $staffId)) {
-            return Staff::find((int) $staffId)?->full_name ?? 'Bất kỳ nhân viên';
-        }
-
-        return self::DEMO_STYLISTS[$staffId] ?? 'Bất kỳ nhân viên';
+        return Staff::find((int) $staffId);
     }
 
     private function hasStaffConflict(array $data, ?int $staffId = null): bool

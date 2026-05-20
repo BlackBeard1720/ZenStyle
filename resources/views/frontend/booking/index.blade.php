@@ -42,7 +42,6 @@
             'checked'      => $index === 0 && $isActive,
         ];
     })->all();
-    $defaultStylistName = collect($bookingStylists)->firstWhere('checked', true)['name'] ?? 'Bất kỳ nhân viên';
   @endphp
 
   <div id="booking-page" class="pb-12 pt-6 sm:pt-8">
@@ -65,7 +64,6 @@
       @csrf
 
       <input type="hidden" name="appointment_time" value="" data-booking-time-input>
-      <input type="hidden" name="staff_name" value="{{ $defaultStylistName }}" data-booking-staff-name-input>
 
       <div class="min-w-0 space-y-5">
         @if($errors->any() && ! $errors->has('otp'))
