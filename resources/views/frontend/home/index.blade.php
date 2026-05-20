@@ -244,7 +244,7 @@
             </div>
 
             <div class="mt-6 text-center sm:text-left">
-                <a href="{{ route('hottrend') }}" class="inline-flex text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark">
+                <a href="{{ route('hot-trend.index') }}" class="inline-flex text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark">
                     Xem Hot Trend →
                 </a>
             </div>
