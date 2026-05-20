@@ -13,15 +13,16 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/', 'home')->name('home');
     Route::get('/home', 'home');
     Route::get('/about', 'about')->name('about');
+    Route::redirect('/gioi-thieu', '/about', 301)->name('about.vi');
     Route::get('/news', 'news')->name('news');
     Route::get('/news/{slug}', 'newsShow')->name('news.show');
+    Route::get('/dich-vu', 'services')->name('services');
+    Route::get('/dich-vu/{slug}', 'serviceShow')->name('services.show');
     Route::get('/chinh-sach-bao-mat', 'privacyPolicy')->name('privacy-policy');
     Route::get('/dieu-khoan-su-dung', 'termsOfService')->name('terms-of-service');
+    Route::get('/faq', 'faq')->name('faq');
     Route::get('/lien-he', 'contact')->name('contact');
 });
-
-// mở trang dịch vụ
-Route::view('/dich-vu', 'frontend.services.index')->name('services');
 
 Route::controller(CustomerBookController::class)->group(function () {
 
@@ -33,6 +34,9 @@ Route::controller(CustomerBookController::class)->group(function () {
 
     Route::post('/booking/verify-otp', [CustomerBookController::class, 'verifyOtp'])
         ->name('booking.verify.otp');
+
+    Route::get('/booking/success', 'successPage')
+        ->name('booking.success');
 
     Route::get('/booking/success/{appointment}', 'success')
         ->name('customer.booking.success');
