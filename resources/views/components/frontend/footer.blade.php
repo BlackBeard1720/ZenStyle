@@ -131,7 +131,7 @@
         <ul class="mt-4 space-y-2.5 text-sm text-white/75">
           <li><a href="{{ route('home') }}" class="transition hover:text-zen-secondary">Trang chủ</a></li>
           <li><a href="{{ route('about') }}" class="transition hover:text-zen-secondary">Giới thiệu</a></li>
-          <li><a href="{{ route('home') }}#hot-trend" class="transition hover:text-zen-secondary">Hottrend</a></li>
+          <li><a href="{{ route('hot-trend.index') }}" class="transition hover:text-zen-secondary">Hot Trend</a></li>
           <li><a href="{{ route('services') }}" class="transition hover:text-zen-secondary">Dịch vụ</a></li>
           <li><a href="{{ route('booking') }}" class="transition hover:text-zen-secondary">Đặt lịch</a></li>
           <li><a href="{{ route('contact') }}" class="transition hover:text-zen-secondary">Liên hệ</a></li>

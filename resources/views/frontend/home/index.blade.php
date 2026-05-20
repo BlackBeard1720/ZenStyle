@@ -59,9 +59,9 @@
         ];
 
         $hotTrendImages = [
-            asset('images/frontend/hottrend/hottrend-01.png'),
-            asset('images/frontend/hottrend/hottrend-02.png'),
-            asset('images/frontend/hottrend/hottrend-03.png'),
+            ['image' => asset('images/frontend/hottrend/hottrend-01.png'), 'name' => 'Spike texture', 'tag' => 'Tóc nam'],
+            ['image' => asset('images/frontend/hottrend/hottrend-02.png'), 'name' => 'Lịch lãm office', 'tag' => 'Công sở'],
+            ['image' => asset('images/frontend/hottrend/hottrend-03.png'), 'name' => 'Textured crop', 'tag' => 'Dễ chăm sóc'],
         ];
 
         $experienceSteps = [
@@ -152,23 +152,26 @@
 
             <div class="mt-10 grid gap-6 md:grid-cols-3">
                 @foreach ($serviceGroups as $group)
-                    <article class="overflow-hidden rounded-lg border border-zen-border/40 bg-white shadow-xs transition hover:-translate-y-1 hover:shadow-sm">
-                        <img
-                            src="{{ $group['image'] }}"
-                            alt="{{ $group['alt'] }}"
-                            class="h-44 w-full object-cover"
-                            loading="lazy"
-                            decoding="async"
-                        >
-                        <div class="p-5">
+                    <article class="group overflow-hidden rounded-3xl border border-zen-border/50 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                        <div class="relative overflow-hidden bg-stone-100">
+                            <img
+                                src="{{ $group['image'] }}"
+                                alt="{{ $group['alt'] }}"
+                                class="h-48 w-full object-cover transition duration-300 group-hover:scale-105"
+                                style="object-position: center top"
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </div>
+                        <div class="p-6">
                             <h3 class="text-base font-semibold text-zen-text">{{ $group['title'] }}</h3>
-                            <p class="mt-1 text-xs leading-5 text-zen-muted">{{ $group['description'] }}</p>
-                            <div class="mt-3 flex flex-wrap gap-1.5">
+                            <p class="mt-2 text-sm leading-5 text-zen-muted">{{ $group['description'] }}</p>
+                            <div class="mt-4 flex flex-wrap gap-2">
                                 @foreach ($group['items'] as $item)
-                                    <span class="inline-block rounded-full bg-zen-primary/10 px-2.5 py-1 text-xs text-zen-primary">{{ $item }}</span>
+                                    <span class="inline-block rounded-full bg-zen-primary/10 px-3 py-1.5 text-xs text-zen-primary">{{ $item }}</span>
                                 @endforeach
                             </div>
-                            <a href="{{ route('services') }}" class="mt-3 inline-flex text-xs font-semibold text-zen-primary transition hover:text-zen-primary-dark">
+                            <a href="{{ route('services') }}" class="mt-4 inline-flex text-xs font-semibold text-zen-primary transition hover:text-zen-primary-dark">
                                 Xem dịch vụ →
                             </a>
                         </div>
@@ -207,34 +210,84 @@
         </div>
     </section>
 
-    {{-- ===== SECTION 4: HOT TREND / INSPIRATION ===== --}}
+    {{-- ===== SECTION 4: HOT TREND / INSPIRATION (preview) ===== --}}
     <section class="bg-white px-4 py-12 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
-            <div class="max-w-2xl">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Cảm hứng</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
-                    Cảm hứng kiểu tóc
-                </h2>
-                <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
-                    Tham khảo một vài phong cách trước khi ghé salon.
-                </p>
+            <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                <div class="max-w-2xl">
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Cảm hứng</p>
+                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                        Cảm hứng kiểu tóc
+                    </h2>
+                    <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
+                        Tham khảo một vài phong cách trước khi ghé salon.
+                    </p>
+                </div>
+                <a href="{{ route('hot-trend.index') }}" class="hidden text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark sm:inline-flex">
+                    Xem Hot Trend →
+                </a>
             </div>
 
-            <div class="mt-10 grid gap-6 md:grid-cols-3">
-                @foreach ($hotTrendImages as $image)
-                    <a href="{{ route('hot-trend.index') }}" class="group relative overflow-hidden rounded-zen-lg border border-zen-border shadow-sm transition hover:shadow-md">
-                        <img
-                            src="{{ $image }}"
-                            alt="Phong cách tóc ZenStyle"
-                            class="aspect-square w-full object-cover transition group-hover:scale-105"
-                            loading="lazy"
-                            decoding="async"
-                        >
+            @php
+                $homeTrends = [
+                    [
+                        'title' => 'Spike texture',
+                        'image' => asset('images/frontend/hottrend/hottrend-01.png'),
+                        'tags' => ['Tóc nam','Cá tính'],
+                        'shortDescription' => 'Form dựng nhẹ, nhiều texture và tạo cảm giác năng động.',
+                    ],
+                    [
+                        'title' => 'Textured crop',
+                        'image' => asset('images/frontend/hottrend/hottrend-03.png'),
+                        'tags' => ['Tóc nam','Dễ chăm sóc'],
+                        'shortDescription' => 'Kiểu tóc gọn, phần mái xử lý texture để giữ form tự nhiên.',
+                    ],
+                    [
+                        'title' => 'Wolf cut / Mullet',
+                        'image' => asset('images/frontend/hottrend/hottrend-04.png'),
+                        'tags' => ['Tóc nam','Cá tính'],
+                        'shortDescription' => 'Layer rõ ở phần gáy và hai bên, tạo chất riêng cho tổng thể.',
+                    ],
+                    [
+                        'title' => 'Undercut hard part',
+                        'image' => asset('images/frontend/hottrend/hottrend-06.png'),
+                        'tags' => ['Tóc nam','Công sở'],
+                        'shortDescription' => 'Đường ngôi rõ, hai bên gọn và phần đỉnh dễ tạo kiểu lịch sự.',
+                    ],
+                ];
+            @endphp
+
+            <div class="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                @foreach ($homeTrends as $trend)
+                    <a href="{{ route('hot-trend.index') }}" class="group overflow-hidden rounded-3xl border border-zen-border/70 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+                        <div class="overflow-hidden bg-zen-bg-soft">
+                            <div class="h-[260px] sm:h-[260px] lg:h-[300px] w-full overflow-hidden">
+                                <img
+                                    src="{{ $trend['image'] }}"
+                                    alt="{{ $trend['title'] }}"
+                                    class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex flex-wrap gap-2">
+                                @foreach ($trend['tags'] as $tag)
+                                    <span class="inline-block rounded-full bg-[#f3e4cf] px-3 py-1 text-xs font-semibold text-zen-text">{{ $tag }}</span>
+                                @endforeach
+                            </div>
+                            <h3 class="mt-3 text-lg font-semibold text-zen-text">{{ $trend['title'] }}</h3>
+                            <p class="mt-2 text-sm leading-6 text-zen-muted line-clamp-2">{{ $trend['shortDescription'] }}</p>
+                            <div class="mt-4">
+                                <span class="inline-flex items-center gap-2 text-sm font-semibold text-zen-primary">Xem thêm ảnh <span aria-hidden="true">→</span></span>
+                            </div>
+                        </div>
                     </a>
                 @endforeach
             </div>
 
-            <div class="mt-6 text-center sm:text-left">
+            <div class="mt-6 text-center sm:hidden">
                 <a href="{{ route('hot-trend.index') }}" class="inline-flex text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark">
                     Xem Hot Trend →
                 </a>

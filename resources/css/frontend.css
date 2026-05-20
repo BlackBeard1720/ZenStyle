@@ -15,17 +15,19 @@
     :root {
         --font-heading: 'Playfair Display', Georgia, serif;
         --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        --reveal-delay: 0ms;
+        --hero-delay: 0ms;
     }
 
     html {
-        font-family: var(--font-body);
+        font-family: var(--font-body, 'Inter', ui-sans-serif, system-ui, sans-serif);
         font-size: 16px;
         text-rendering: optimizeLegibility;
     }
 
     body {
         @apply bg-zen-bg text-zen-text;
-        font-family: var(--font-body);
+        font-family: var(--font-body, 'Inter', ui-sans-serif, system-ui, sans-serif);
         font-size: 16px;
         line-height: 1.68;
         letter-spacing: 0;
@@ -43,7 +45,7 @@
     h3,
     .section-title,
     .hero-title {
-        font-family: var(--font-heading);
+        font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
         font-weight: 600;
         letter-spacing: 0;
         line-height: 1.12;
@@ -70,7 +72,7 @@
     .booking-cta,
     .site-nav-link,
     .site-nav-cta {
-        font-family: var(--font-body);
+        font-family: var(--font-body, 'Inter', ui-sans-serif, system-ui, sans-serif);
     }
 
     button,
@@ -90,13 +92,13 @@
     }
 
     main :is(p, span)[class*='uppercase'][class*='tracking'] {
-        font-family: var(--font-body);
+        font-family: var(--font-body, 'Inter', ui-sans-serif, system-ui, sans-serif);
         font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.14em;
     }
 
-    @media (width < theme(--breakpoint-sm)) {
+    @media (max-width: 639px) {
         body {
             font-size: 15px;
         }
@@ -117,7 +119,7 @@
 
 @layer components {
     .booking-cta {
-        @apply bg-gradient-to-r from-zen-primary via-zen-accent to-zen-primary-light text-zen-text-light shadow-zen-md ring-1 ring-white/50 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:from-zen-primary-dark hover:via-zen-primary hover:to-zen-accent hover:text-zen-text-light hover:shadow-zen-md active:translate-y-0;
+        @apply bg-linear-to-r from-zen-primary via-zen-accent to-zen-primary-light text-zen-text-light shadow-zen-md ring-1 ring-white/50 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:from-zen-primary-dark hover:via-zen-primary hover:to-zen-accent hover:text-zen-text-light hover:shadow-zen-md active:translate-y-0;
     }
 
     #site-header[data-on-banner='true'] {
@@ -125,7 +127,7 @@
     }
 
     #site-header[data-on-banner='true'] .site-nav-link {
-        @apply !text-white hover:!text-zen-bg-soft;
+        @apply text-white! hover:text-zen-bg-soft!;
     }
 
     #site-header[data-on-banner='true'] .site-nav-logo {
@@ -156,7 +158,9 @@
     }
 
     [data-service-gallery-main] {
-        transition: opacity 240ms ease, transform 320ms ease;
+        transition:
+            opacity 240ms ease,
+            transform 320ms ease;
     }
 
     [data-service-gallery-main].is-fading {
@@ -179,9 +183,9 @@
     }
 
     .scroll-top-btn {
-        @apply fixed z-40 grid h-11 w-11 place-items-center rounded-full border border-white/50 bg-gradient-to-r from-zen-primary via-zen-accent to-zen-primary-light text-lg font-extrabold text-zen-text-light shadow-zen-md ring-2 ring-zen-primary/30 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:scale-105 hover:from-zen-primary-dark hover:via-zen-primary hover:to-zen-accent hover:text-zen-text-light hover:shadow-zen-md focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/65 focus-visible:ring-offset-2;
+        @apply fixed z-40 grid h-10 w-10 place-items-center rounded-full border border-white/50 bg-linear-to-r from-zen-primary via-zen-accent to-zen-primary-light text-base font-extrabold text-zen-text-light shadow-zen ring-1 ring-zen-primary/25 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:from-zen-primary-dark hover:via-zen-primary hover:to-zen-accent hover:text-zen-text-light hover:shadow-zen-md focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/65 focus-visible:ring-offset-2;
         right: max(1rem, env(safe-area-inset-right, 0px));
-        bottom: calc(max(1.5rem, env(safe-area-inset-bottom, 0px)) + 4.8rem);
+        bottom: calc(max(1.25rem, env(safe-area-inset-bottom, 0px)) + 3.9rem);
         opacity: 0;
         transform: translateY(12px) scale(0.92);
         pointer-events: none;
@@ -193,10 +197,10 @@
         pointer-events: auto;
     }
 
-    @media (width >= theme(--breakpoint-md)) {
+    @media (min-width: 768px) {
         .scroll-top-btn {
             right: max(1.5rem, env(safe-area-inset-right, 0px));
-            bottom: calc(max(1.75rem, env(safe-area-inset-bottom, 0px)) + 5.1rem);
+            bottom: calc(max(1.5rem, env(safe-area-inset-bottom, 0px)) + 4.4rem);
         }
     }
 
@@ -205,6 +209,7 @@
             opacity: 0;
             transform: translate3d(0, 18px, 0);
         }
+
         to {
             opacity: 1;
             transform: translate3d(0, 0, 0);
