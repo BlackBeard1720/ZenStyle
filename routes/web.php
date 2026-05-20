@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\AppointmentCreated;
+use App\Http\Controllers\Staff\FcmTokenController;
 use App\Models\Appointment;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
@@ -60,6 +61,10 @@ Route::prefix('staff')->name('staff.')
 // Staff area: mọi route bên dưới được bảo vệ bằng JWT middleware tự viết.
 Route::prefix('staff')->name('staff.')
     ->middleware('jwt.auth')->group(function () {
+
+    Route::post('/fcm-token', [FcmTokenController::class, 'store'])
+            ->name('fcm-token.store');
+
     Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
 
     Route::get('/', function () {

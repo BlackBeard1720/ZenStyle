@@ -64,5 +64,73 @@
           });
       });
     </script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-messaging-compat.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "DÁN_API_KEY",
+        authDomain: "DÁN_AUTH_DOMAIN",
+        projectId: "DÁN_PROJECT_ID",
+        storageBucket: "DÁN_STORAGE_BUCKET",
+        messagingSenderId: "DÁN_MESSAGING_SENDER_ID",
+        appId: "DÁN_APP_ID"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+
+      const messaging = firebase.messaging();
+
+      async function initFcm() {
+        try {
+          const permission = await Notification.requestPermission();
+
+          if (permission !== 'granted') {
+            console.log('Notification permission denied.');
+            return;
+          }
+
+          const token = await messaging.getToken({
+            vapidKey: "DÁN_VAPID_PUBLIC_KEY"
+          });
+
+          if (!token) {
+            console.log('No FCM token received.');
+            return;
+          }
+
+          console.log('FCM token:', token);
+
+          await fetch("{{ route('staff.fcm-token.store') }}", {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+              token: token,
+              device_type: 'web'
+            })
+          });
+
+          console.log('FCM token saved.');
+        } catch (error) {
+          console.error('FCM error:', error);
+        }
+      }
+
+      messaging.onMessage((payload) => {
+        console.log('Foreground message:', payload);
+
+        alert(
+          (payload.notification?.title || 'ZenStyle') +
+          '\n' +
+          (payload.notification?.body || '')
+        );
+      });
+
+      initFcm();
+    </script>
   @endpush
 </x-staff.layout>
