@@ -6,17 +6,51 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\AppointmentService;
 use App\Models\Client;
-use App\Models\Coupon;
 use App\Models\Service;
 use App\Models\Staff;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerBookController extends Controller
 {
-    public function create()
-    {
+    private const DEMO_SERVICES = [
+        'cut' => [
+            'service_name' => 'Hair Cut',
+            'description' => 'Cắt tóc nam cao cấp',
+            'price' => 150000,
+            'duration_minutes' => 45,
+        ],
+        'wash' => [
+            'service_name' => 'Hair Wash',
+            'description' => 'Gội + massage da đầu',
+            'price' => 120000,
+            'duration_minutes' => 30,
+        ],
+        'perm' => [
+            'service_name' => 'Hair Coloring',
+            'description' => 'Uốn / nhuộm cơ bản',
+            'price' => 650000,
+            'duration_minutes' => 120,
+        ],
+        'treatment' => [
+            'service_name' => 'Hair Treatment',
+            'description' => 'Treatment phục hồi',
+            'price' => 320000,
+            'duration_minutes' => 60,
+        ],
+    ];
 
+    private const DEMO_STYLISTS = [
+        'quach-tung-duong' => 'Quách Tùng Dương',
+        'dinh-van-hai' => 'Đinh Văn Hải',
+        'le-hoang-nam' => 'Lê Hoàng Nam',
+    ];
+
+    public function create(): View
+    {
         $staff = Staff::where('status', 'active')
             ->orderBy('full_name')
             ->get();
@@ -28,94 +62,96 @@ class CustomerBookController extends Controller
         return view('frontend.booking.index', compact('staff', 'services'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:10'],
-
+            'phone' => ['required', 'string', 'max:20'],
             'appointment_date' => ['required', 'date'],
             'appointment_time' => ['required', 'date_format:H:i'],
-
-            'service_ids' => ['required', 'array', 'min:1'],
-            'service_ids.*' => ['required', 'exists:services,id'],
-
-            'staff_id' => ['nullable', 'exists:staff,id'],
-
+            'service_ids' => ['nullable', 'array'],
+            'service_ids.*' => ['nullable', 'string'],
+            'staff_id' => ['nullable'],
+            'staff_name' => ['nullable', 'string', 'max:255'],
             'coupon_code' => ['nullable', 'string', 'max:50'],
-
             'notes' => ['nullable', 'string'],
         ]);
 
-        if ($this->hasStaffConflict($data)) {
-            return back()->withInput()->withErrors([
-                'staff_id' => 'Nhân viên đã có lịch vào thời điểm này. Vui lòng chọn nhân viên khác.',
-            ]);
-        }
+        $data['staff_name'] = ($data['staff_name'] ?? null) ?: $this->displayStaffName($data['staff_id'] ?? null);
 
-        $otp = random_int(100000, 999999);
+        $otp = rand(100000, 999999);
 
         session([
+            'booking_otp' => $otp,
             'booking_data' => $data,
-            'booking_otp'  => $otp,
-            'otp_pending'  => true,
-            'otp_demo'     => $otp,
         ]);
 
-        return redirect()->route('booking');
+        return back()
+            ->withInput()
+            ->with('otp_pending', true)
+            ->with('otp_demo', $otp);
     }
 
-    public function verifyOtp(Request $request)
+    public function verifyOtp(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'otp' => ['required', 'digits:6'],
+        ], [
+            'otp.required' => 'Vui lòng nhập OTP.',
+            'otp.digits' => 'OTP phải gồm 6 số.',
         ]);
 
-        if ($request->otp != session('booking_otp')) {
-            return back()->withErrors([
-                'otp' => 'OTP không đúng',
-            ]);
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('otp_pending', true)
+                ->with('otp_demo', session('booking_otp'));
         }
 
+        $expectedOtp = session('booking_otp');
         $data = session('booking_data');
 
-        if (!$data) {
+        if (! $expectedOtp || ! $data) {
             return redirect()
                 ->route('booking')
+                ->withErrors(['booking' => 'Vui lòng hoàn tất đặt lịch trước.']);
+        }
+
+        if (! hash_equals((string) $expectedOtp, (string) $request->input('otp'))) {
+            return back()
+                ->withErrors(['otp' => 'OTP không đúng'])
+                ->withInput()
+                ->with('otp_pending', true)
+                ->with('otp_demo', $expectedOtp);
+        }
+
+        $staff = $this->resolveStaff($data['staff_id'] ?? null, $data['staff_name'] ?? null);
+
+        if ($this->hasStaffConflict($data, $staff?->id)) {
+            return redirect()
+                ->route('booking')
+                ->withInput($data)
                 ->withErrors([
-                    'otp' => 'Phiên đặt lịch đã hết hạn. Vui lòng đặt lịch lại.',
+                    'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
                 ]);
         }
 
-        $services = Service::whereIn('id', $data['service_ids'])->get();
+        $services = $this->resolveSelectedServices($data['service_ids'] ?? []);
+        $totalAmount = $services->sum('price');
 
-        $subtotal = $services->sum('price');
-        $discount = 0;
-        $coupon = null;
-
-        if (!empty($data['coupon_code'])) {
-            $coupon = Coupon::where('code', $data['coupon_code'])->first();
-
-            if ($coupon) {
-                $discount = $coupon->discount_amount ?? 0;
-            }
-        }
-
-        $totalAmount = max($subtotal - $discount, 0);
-
-        $appointment = DB::transaction(function () use ($data, $services, $coupon, $totalAmount) {
-            $client = Client::updateOrCreate(
-                [
-                    'phone' => $data['phone'],
-                ],
-                [
-                    'full_name' => $data['full_name'],
-                ]
+        $appointment = DB::transaction(function () use ($data, $services, $staff, $totalAmount): Appointment {
+            $client = Client::firstOrCreate(
+                ['phone' => $data['phone']],
+                ['full_name' => $data['full_name']]
             );
+
+            if ($client->full_name !== $data['full_name']) {
+                $client->update(['full_name' => $data['full_name']]);
+            }
 
             $appointment = Appointment::create([
                 'client_id' => $client->id,
-                'coupon_id' => $coupon?->id,
                 'appointment_date' => $data['appointment_date'],
                 'appointment_time' => $data['appointment_time'],
                 'status' => 'pending',
@@ -127,7 +163,7 @@ class CustomerBookController extends Controller
                 AppointmentService::create([
                     'appointment_id' => $appointment->id,
                     'service_id' => $service->id,
-                    'staff_id' => $data['staff_id'] ?? null,
+                    'staff_id' => $staff?->id,
                     'price_at_booking' => $service->price,
                 ]);
             }
@@ -135,19 +171,37 @@ class CustomerBookController extends Controller
             return $appointment;
         });
 
-        session()->forget([
-            'booking_otp',
-            'booking_data',
-            'otp_pending',
-            'otp_demo',
+        session()->forget(['booking_otp', 'booking_data']);
+        session()->flash('booking_success', [
+            'appointment_id' => $appointment->id,
+            'full_name' => $data['full_name'],
+            'phone' => $data['phone'],
+            'appointment_date' => $data['appointment_date'],
+            'appointment_time' => $data['appointment_time'],
+            'staff_name' => $data['staff_name'] ?? $this->displayStaffName($data['staff_id'] ?? null),
+            'coupon_code' => $data['coupon_code'] ?? null,
+            'notes' => $data['notes'] ?? null,
         ]);
 
-        return redirect()
-            ->route('customer.booking.success', $appointment)
-            ->with('success', 'Đặt lịch thành công. Vui lòng chờ salon xác nhận.');
+        return redirect()->route('booking.success');
     }
 
-    public function success(Appointment $appointment)
+    public function successPage(): View|RedirectResponse
+    {
+        $booking = session('booking_success');
+
+        if (! $booking) {
+            return redirect()
+                ->route('booking')
+                ->withErrors(['booking' => 'Vui lòng hoàn tất đặt lịch trước.']);
+        }
+
+        return view('frontend.booking.success', [
+            'booking' => $booking,
+        ]);
+    }
+
+    public function success(Appointment $appointment): View
     {
         $appointment->load([
             'client',
@@ -155,14 +209,80 @@ class CustomerBookController extends Controller
             'appointmentServices.staff',
         ]);
 
-        return view('booking-success', compact('appointment'));
+        return view('frontend.booking.success', [
+            'booking' => [
+                'appointment_id' => $appointment->id,
+                'full_name' => $appointment->client?->full_name,
+                'phone' => $appointment->client?->phone,
+                'appointment_date' => optional($appointment->appointment_date)->toDateString(),
+                'appointment_time' => $appointment->appointment_time,
+                'staff_name' => $appointment->appointmentServices->first()?->staff?->full_name ?? 'Bất kỳ nhân viên',
+                'notes' => $appointment->notes,
+            ],
+        ]);
     }
 
-    private function hasStaffConflict(array $data): bool
+    private function resolveSelectedServices(array $serviceIds)
     {
-        $staffId = $data['staff_id'] ?? null;
+        return collect($serviceIds)
+            ->filter()
+            ->unique()
+            ->map(function ($serviceId) {
+                $serviceId = (string) $serviceId;
 
-        if (!$staffId) {
+                if (ctype_digit($serviceId)) {
+                    return Service::find((int) $serviceId);
+                }
+
+                $demoService = self::DEMO_SERVICES[$serviceId] ?? null;
+
+                if (! $demoService) {
+                    return null;
+                }
+
+                return Service::firstOrCreate(
+                    ['service_name' => $demoService['service_name']],
+                    [
+                        'description' => $demoService['description'],
+                        'price' => $demoService['price'],
+                        'duration_minutes' => $demoService['duration_minutes'],
+                        'status' => 'active',
+                    ]
+                );
+            })
+            ->filter()
+            ->values();
+    }
+
+    private function resolveStaff(mixed $staffId, ?string $staffName): ?Staff
+    {
+        if ($staffId && ctype_digit((string) $staffId)) {
+            return Staff::find((int) $staffId);
+        }
+
+        if ($staffName) {
+            return Staff::where('full_name', $staffName)->first();
+        }
+
+        if ($staffId && isset(self::DEMO_STYLISTS[$staffId])) {
+            return Staff::where('full_name', self::DEMO_STYLISTS[$staffId])->first();
+        }
+
+        return null;
+    }
+
+    private function displayStaffName(mixed $staffId): string
+    {
+        if ($staffId && ctype_digit((string) $staffId)) {
+            return Staff::find((int) $staffId)?->full_name ?? 'Bất kỳ nhân viên';
+        }
+
+        return self::DEMO_STYLISTS[$staffId] ?? 'Bất kỳ nhân viên';
+    }
+
+    private function hasStaffConflict(array $data, ?int $staffId = null): bool
+    {
+        if (! $staffId || empty($data['appointment_date']) || empty($data['appointment_time'])) {
             return false;
         }
 
