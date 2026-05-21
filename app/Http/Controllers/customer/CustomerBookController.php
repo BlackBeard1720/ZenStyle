@@ -15,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CustomerBookController extends Controller
 {
@@ -40,7 +41,7 @@ class CustomerBookController extends Controller
             'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['nullable', 'array'],
-            'service_ids.*' => ['integer', 'exists:services,id'],
+            'service_ids.*' => ['integer', Rule::exists('services', 'id')->where(fn ($query) => $query->where('status', 'active'))],
             'staff_id' => ['nullable', 'integer', 'exists:staff,id'],
             'coupon_code' => ['nullable', 'string', 'max:50'],
             'notes' => ['nullable', 'string'],
@@ -220,7 +221,9 @@ class CustomerBookController extends Controller
             return collect();
         }
 
-        return Service::whereIn('id', $ids)->get();
+        return Service::whereIn('id', $ids)
+            ->where('status', 'active')
+            ->get();
     }
 
     private function resolveStaff(mixed $staffId): ?Staff

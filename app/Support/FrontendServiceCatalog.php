@@ -2,6 +2,10 @@
 
 namespace App\Support;
 
+use App\Models\Service;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+
 class FrontendServiceCatalog
 {
     public static function heroImage(): string
@@ -230,6 +234,69 @@ class FrontendServiceCatalog
         return null;
     }
 
+    public static function fromServiceModels(Collection $services): array
+    {
+        return $services
+            ->map(fn (Service $service) => static::fromServiceModel($service))
+            ->values()
+            ->all();
+    }
+
+    public static function fromServiceModel(Service $service): array
+    {
+        $profile = static::serviceProfile($service);
+        $slug = static::serviceSlug($service);
+
+        return [
+            'slug' => $slug,
+            'title' => $service->service_name,
+            'description' => $service->description ?: $profile['description'],
+            'longDescription' => $service->description
+                ? $service->description . ' Doi ngu ZenStyle se tu van them dua tren tinh trang thuc te truoc khi thuc hien.'
+                : $profile['longDescription'],
+            'duration' => $service->duration_minutes . ' phut',
+            'price' => number_format((float) $service->price, 0, ',', '.') . 'd',
+            'images' => $profile['images'],
+            'badges' => $profile['badges'],
+            'stylist' => $profile['stylist'],
+            'process' => $profile['process'],
+            'notes' => $profile['notes'],
+            'suitableFor' => $profile['suitableFor'],
+            'expectedResults' => $profile['expectedResults'],
+            'aftercare' => $profile['aftercare'],
+            'bookingUrl' => route('booking', ['service' => $slug]),
+            'showUrl' => route('services.show', $slug),
+        ];
+    }
+
+    public static function serviceSlug(Service $service): string
+    {
+        return Str::slug($service->service_name) . '-' . $service->id;
+    }
+
+    public static function homeGroupsFromServiceModels(Collection $services): array
+    {
+        return $services
+            ->take(3)
+            ->map(function (Service $service) {
+                $profile = static::serviceProfile($service);
+
+                return [
+                    'title' => $service->service_name,
+                    'description' => $service->description ?: $profile['description'],
+                    'image' => $profile['images'][0],
+                    'alt' => 'Dich vu ' . $service->service_name . ' tai ZenStyle',
+                    'items' => [
+                        $service->duration_minutes . ' phut',
+                        number_format((float) $service->price, 0, ',', '.') . 'd',
+                        ucfirst($service->status),
+                    ],
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
     public static function staff(): array
     {
         return [
@@ -308,6 +375,106 @@ class FrontendServiceCatalog
                 asset('images/frontend/services/featured-spa.png'),
                 asset('images/frontend/services/featured-goi.png'),
             ],
+        ];
+    }
+
+    private static function serviceProfile(Service $service): array
+    {
+        $name = Str::lower($service->service_name);
+        $gallery = static::gallery();
+
+        $defaultProcess = [
+            'Buoc 1: Tu van nhu cau va tinh trang hien tai.',
+            'Buoc 2: Thuc hien dich vu theo ky thuat phu hop.',
+            'Buoc 3: Kiem tra ket qua va huong dan cham soc tai nha.',
+        ];
+
+        if (Str::contains($name, ['wash', 'goi', 'head massage', 'massage da dau'])) {
+            return [
+                'description' => 'Lam sach toc va da dau, ket hop massage nhe de thu gian.',
+                'longDescription' => 'Dich vu tap trung vao cam giac sach, nhe dau va thu gian. Ky thuat vien dieu chinh luc massage theo phan hoi cua khach trong buoi lam.',
+                'images' => $gallery['goi'],
+                'badges' => ['Thu gian', 'Cham soc da dau'],
+                'stylist' => 'Spa & Treatment ZenStyle',
+                'process' => $defaultProcess,
+                'notes' => ['Thong bao neu da dau nhay cam.', 'Nen giu toc kho thoang sau khi goi.'],
+                'suitableFor' => ['Khach can lam sach toc nhanh.', 'Khach cang da dau hoac moi vai gay.', 'Khach muon thu gian truoc hoac sau khi cat toc.'],
+                'expectedResults' => ['Toc sach va nhe hon.', 'Da dau de chiu hon.', 'Cam giac thu gian ro hon.'],
+                'aftercare' => ['Han che doi mu qua lau ngay sau dich vu.', 'Dung san pham tao kieu vua du neu can giu nep.'],
+            ];
+        }
+
+        if (Str::contains($name, ['color', 'nhuom', 'highlight', 'balayage'])) {
+            return [
+                'description' => 'Tu van mau theo nen toc, mau da va kha nang cham soc sau dich vu.',
+                'longDescription' => 'Dich vu mau toc can danh gia nen toc truoc khi lam de chon cong thuc phu hop. Muc tieu la mau hai hoa voi tong the va co ke hoach giu mau tai nha.',
+                'images' => $gallery['mau'],
+                'badges' => ['Tu van mau', 'Can cham soc sau dich vu'],
+                'stylist' => 'Color Specialist ZenStyle',
+                'process' => ['Buoc 1: Kiem tra nen toc va lich su hoa chat.', 'Buoc 2: Chon tone mau, pha mau va xu ly theo nen toc.', 'Buoc 3: Xa mau, duong toc va huong dan giu mau.'],
+                'notes' => ['Gia co the thay doi theo do dai va nen toc.', 'Nen bao truoc neu toc da tung tay hoac nhuom den.'],
+                'suitableFor' => ['Khach muon lam moi mau toc.', 'Khach can mau toc hop mau da.', 'Khach muon che nen toc khong deu.'],
+                'expectedResults' => ['Mau toc deu va sang tong hon.', 'Tong the moi me hon.', 'Toc co chieu sau hon.'],
+                'aftercare' => ['Dung dau goi giu mau.', 'Han che nuoc qua nong.', 'Duong toc dinh ky neu toc kho.'],
+            ];
+        }
+
+        if (Str::contains($name, ['treatment', 'phuc hoi', 'skin', 'facial', 'body scrub'])) {
+            return [
+                'description' => 'Cham soc phuc hoi cho toc, da hoac co the theo nhu cau thu gian.',
+                'longDescription' => 'Dich vu cham soc giup cai thien cam giac kho, moi hoac thieu suc song. Ky thuat vien se tu van cach duy tri hieu qua sau buoi hen.',
+                'images' => $gallery['spa'],
+                'badges' => ['Phuc hoi', 'Cham soc nhe'],
+                'stylist' => 'Spa & Treatment ZenStyle',
+                'process' => $defaultProcess,
+                'notes' => ['Thong bao neu ban dang dung treatment manh.', 'Hieu qua phu thuoc vao tinh trang ban dau.'],
+                'suitableFor' => ['Khach can cham soc phuc hoi.', 'Khach muon thu gian sau ngay dai.', 'Khach moi bat dau routine cham soc.'],
+                'expectedResults' => ['Cam giac mem va de chiu hon.', 'Be mat toc hoac da duoc cham soc tot hon.', 'Biet cach duy tri tai nha.'],
+                'aftercare' => ['Duy tri san pham cham soc phu hop.', 'Han che tac dong nhiet hoac tay rua manh trong ngay dau.'],
+            ];
+        }
+
+        if (Str::contains($name, ['nail', 'manicure', 'pedicure'])) {
+            return [
+                'description' => 'Cham soc mong gon gang, sach va phu hop sinh hoat hang ngay.',
+                'longDescription' => 'Dich vu tap trung vao lam sach, tao dang va hoan thien mong theo phong cach gon nhe. Phu hop khi ban can mot dien mao chi tiet va chin chu hon.',
+                'images' => [$gallery['spa'][1], $gallery['spa'][0], $gallery['goi'][0]],
+                'badges' => ['Gon gang', 'Cham soc chi tiet'],
+                'stylist' => 'Beauty Care ZenStyle',
+                'process' => $defaultProcess,
+                'notes' => ['Bao truoc neu mong yeu hoac da quanh mong nhay cam.', 'Nen tranh va cham manh ngay sau dich vu.'],
+                'suitableFor' => ['Khach muon mong sach va gon.', 'Khach can chuan bi cho su kien.', 'Khach thich phong cach toi gian.'],
+                'expectedResults' => ['Mong gon va sach hon.', 'Ban tay hoac ban chan nhin chin chu hon.', 'Cam giac thoai mai sau cham soc.'],
+                'aftercare' => ['Duong am vung da quanh mong.', 'Han che tiep xuc hoa chat tay rua manh.'],
+            ];
+        }
+
+        if (Str::contains($name, ['massage', 'spa'])) {
+            return [
+                'description' => 'Thu gian co the voi thoi luong vua du, tap trung vao cam giac nhe va de chiu.',
+                'longDescription' => 'Dich vu massage giup giam cam giac cang moi nhe va tao khoang nghi ngan trong ngay. Luc massage duoc dieu chinh theo nhu cau cua khach.',
+                'images' => $gallery['spa'],
+                'badges' => ['Thu gian', 'Giam cang'],
+                'stylist' => 'Spa & Treatment ZenStyle',
+                'process' => $defaultProcess,
+                'notes' => ['Khong thay the tu van y khoa neu dau keo dai.', 'Bao truoc vung can tranh hoac tien su chan thuong.'],
+                'suitableFor' => ['Khach lam viec cang thang.', 'Khach can thu gian nhanh.', 'Khach thich cham soc co the nhe nhang.'],
+                'expectedResults' => ['Co the nhe hon.', 'Tinh than thu gian hon.', 'Cam giac de chiu sau buoi hen.'],
+                'aftercare' => ['Uong du nuoc.', 'Van dong nhe sau massage.'],
+            ];
+        }
+
+        return [
+            'description' => 'Tu van form toc, cat tao kieu va hoan thien styling phu hop voi khuon mat.',
+            'longDescription' => 'Dich vu cat va tao kieu giup mai toc gon hon, ro form hon va de cham soc trong sinh hoat hang ngay. Stylist se tu van theo chat toc, khuon mat va thoi quen tao kieu cua ban.',
+            'images' => $gallery['toc'],
+            'badges' => ['Pho bien', 'Tu van form toc'],
+            'stylist' => 'Senior Stylist ZenStyle',
+            'process' => ['Buoc 1: Tu van khuon mat, chat toc va mong muon thay doi.', 'Buoc 2: Cat tao form va dieu chinh do dai phu hop.', 'Buoc 3: Say tao kieu, kiem tra tong the va huong dan cham soc.'],
+            'notes' => ['Nen mang anh tham khao neu muon doi kieu ro ret.', 'Stylist se tu van san pham tao kieu phu hop neu can.'],
+            'suitableFor' => ['Khach muon mai toc gon gang.', 'Khach can doi form toc de di hoc, di lam.', 'Khach muon kieu toc de tu cham tai nha.'],
+            'expectedResults' => ['Toc vao form ro hon.', 'Tong the gon gang va sang hon.', 'De styling hang ngay hon.'],
+            'aftercare' => ['Cat chinh form sau 3-6 tuan tuy toc moc.', 'Dung san pham tao kieu vua du de tranh nang toc.'],
         ];
     }
 }

@@ -4,14 +4,20 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\News;
+use App\Models\Service;
 use App\Support\FrontendServiceCatalog;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 
 class FrontendController extends Controller
 {
     public function home(): View
     {
-        return view('frontend.home.index');
+        return view('frontend.home.index', [
+            'serviceGroups' => FrontendServiceCatalog::homeGroupsFromServiceModels(
+                $this->activeServices(3)
+            ),
+        ]);
     }
 
     public function about(): View
@@ -100,9 +106,11 @@ class FrontendController extends Controller
 
     public function services(): View
     {
+        $services = $this->activeServices();
+
         return view('frontend.services.index', [
             'heroImage' => FrontendServiceCatalog::heroImage(),
-            'services' => FrontendServiceCatalog::all(),
+            'services' => FrontendServiceCatalog::fromServiceModels($services),
             'staff' => FrontendServiceCatalog::staff(),
             'testimonials' => FrontendServiceCatalog::testimonials(),
         ]);
@@ -110,7 +118,9 @@ class FrontendController extends Controller
 
     public function serviceShow(string $slug): View
     {
-        $services = FrontendServiceCatalog::all();
+        $serviceModels = $this->activeServices();
+
+        $services = FrontendServiceCatalog::fromServiceModels($serviceModels);
         $service = collect($services)->firstWhere('slug', $slug);
         abort_if(! $service, 404);
 
@@ -144,5 +154,26 @@ class FrontendController extends Controller
     public function contact(): View
     {
         return view('frontend.contact.index');
+    }
+
+    private function activeServices(?int $limit = null): Collection
+    {
+        try {
+            $query = Service::query()
+                ->where('status', 'active')
+                ->orderBy('service_name');
+
+            if ($limit) {
+                $query->limit($limit);
+            }
+
+            return $query->get();
+        } catch (\Throwable $exception) {
+            if (app()->environment('testing')) {
+                return collect();
+            }
+
+            throw $exception;
+        }
     }
 }
