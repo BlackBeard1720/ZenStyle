@@ -136,7 +136,7 @@ Route::prefix('staff')->name('staff.')
             $fcmService->sendToUser(
                 $request->user(),
                 'Test FCM',
-                'ZenStyle đã gửi thông báo test thành công.',
+                'ZenStyle test notification was sent successfully.',
                 ['type' => 'test']
             );
 

@@ -42,7 +42,17 @@ class FcmService
     private function stringifyData(array $data): array
     {
         return collect($data)
-            ->map(fn ($value) => is_scalar($value) ? (string) $value : json_encode($value))
+            ->map(function ($value) {
+                if (is_bool($value)) {
+                    return $value ? 'true' : 'false';
+                }
+
+                if (is_scalar($value) && $value !== null) {
+                    return (string) $value;
+                }
+
+                return json_encode($value) ?: '';
+            })
             ->all();
     }
 }
