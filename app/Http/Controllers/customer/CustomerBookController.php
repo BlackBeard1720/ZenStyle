@@ -8,6 +8,8 @@ use App\Models\AppointmentService;
 use App\Models\Client;
 use App\Models\Service;
 use App\Models\Staff;
+use App\Models\User;
+use App\Services\FcmService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -135,6 +137,49 @@ class CustomerBookController extends Controller
 
             return $appointment;
         });
+
+        $admins = User::where('status', 'active')
+            ->whereHas('role', function ($query) {
+                $query->whereIn('role_name', ['admin', 'receptionist']);
+            })
+            ->get();
+
+        foreach ($admins as $admin) {
+            app(FcmService::class)->sendToUser(
+                $admin,
+                'Có lịch hẹn mới',
+                "{$data['full_name']} vừa đặt lịch lúc {$data['appointment_time']} ngày {$data['appointment_date']}.",
+                [
+                    'type' => 'appointment_created',
+                    'appointment_id' => $appointment->id,
+                    'url' => route('staff.appointments.show', $appointment),
+                ]
+            );
+        }
+
+        User::query()
+            ->where('status', 'active')
+            ->whereHas('role', function ($query) {
+                $query->whereIn('role_name', ['admin', 'receptionist']);
+            })
+            ->get()
+            ->each(function (User $user) use ($appointment, $data) {
+                app(FcmService::class)->sendToUser(
+                    $user,
+                    'Có lịch hẹn mới',
+                    sprintf(
+                        '%s - %s %s',
+                        $data['full_name'],
+                        $data['appointment_date'],
+                        $data['appointment_time']
+                    ),
+                    [
+                        'type' => 'appointment_created',
+                        'appointment_id' => (string) $appointment->id,
+                        'url' => route('staff.appointments.show', $appointment),
+                    ]
+                );
+            });
 
         session()->forget(['booking_otp', 'booking_data']);
         session()->flash('booking_success', [
