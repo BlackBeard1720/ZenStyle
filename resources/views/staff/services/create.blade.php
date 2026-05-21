@@ -1,4 +1,4 @@
-<x-staff.layout title="Create Service" page-name="ServicesManagement">
+<x-staff.layout title="Create Service" page-name="ServiceManagement">
   <div x-data="{ pageName: `Create Service` }">
     <x-staff.partials.breadcrumb />
   </div>

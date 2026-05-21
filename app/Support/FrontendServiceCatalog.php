@@ -246,6 +246,8 @@ class FrontendServiceCatalog
     {
         $profile = static::serviceProfile($service);
         $slug = static::serviceSlug($service);
+        $rawPrice = (float) $service->price;
+        $rawDuration = (int) $service->duration_minutes;
 
         return [
             'slug' => $slug,
@@ -255,7 +257,10 @@ class FrontendServiceCatalog
                 ? $service->description . ' Doi ngu ZenStyle se tu van them dua tren tinh trang thuc te truoc khi thuc hien.'
                 : $profile['longDescription'],
             'duration' => $service->duration_minutes . ' phut',
-            'price' => number_format((float) $service->price, 0, ',', '.') . 'd',
+            'price' => number_format($rawPrice, 0, ',', '.') . 'd',
+            'raw_price' => $rawPrice,
+            'raw_duration' => $rawDuration,
+            'category' => $service->category?->name ?? 'Khác',
             'images' => $profile['images'],
             'badges' => $profile['badges'],
             'stylist' => $profile['stylist'],
@@ -267,6 +272,37 @@ class FrontendServiceCatalog
             'bookingUrl' => route('booking', ['service' => $slug]),
             'showUrl' => route('services.show', $slug),
         ];
+    }
+
+    public static function inferCategory(string $serviceName): string
+    {
+        $name = Str::lower($serviceName);
+
+        if (Str::contains($name, ['cut', 'cat', 'layer', 'mullet', 'trim'])) {
+            return 'Cắt tóc';
+        }
+
+        if (Str::contains($name, ['color', 'nhuom', 'highlight', 'balayage', 'tone'])) {
+            return 'Nhuộm màu';
+        }
+
+        if (Str::contains($name, ['wash', 'goi', 'head massage', 'massage da dau', 'shampoo'])) {
+            return 'Gội & Massage';
+        }
+
+        if (Str::contains($name, ['treatment', 'phuc hoi', 'recovery', 'repair', 'spa', 'facial', 'body scrub'])) {
+            return 'Phục hồi & Spa';
+        }
+
+        if (Str::contains($name, ['nail', 'manicure', 'pedicure'])) {
+            return 'Nail & Beauty';
+        }
+
+        if (Str::contains($name, ['style', 'styling', 'wave', 'texture', 'uon', 'permanent', 'perm'])) {
+            return 'Tạo kiểu';
+        }
+
+        return 'Khác';
     }
 
     public static function serviceSlug(Service $service): string
@@ -380,7 +416,7 @@ class FrontendServiceCatalog
 
     private static function serviceProfile(Service $service): array
     {
-        $name = Str::lower($service->service_name);
+        $name = Str::lower($service->name);
         $gallery = static::gallery();
 
         $defaultProcess = [

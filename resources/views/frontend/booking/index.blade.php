@@ -192,7 +192,7 @@
               <li
                 class="grid gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
                 data-booking-service-row
-                data-service-name="{{ $service->service_name }}"
+                data-service-name="{{ $service->name }}"
                 data-service-price="{{ (int) $service->price }}"
               >
                 <label class="flex min-w-0 cursor-pointer items-start gap-3">
@@ -204,9 +204,9 @@
                     @checked(in_array((string) $service->id, old('service_ids', []), true))
                   >
                   <span class="min-w-0">
-                    <span class="block break-words text-sm font-medium text-zen-text">{{ $service->service_name }}</span>
+                    <span class="block break-words text-sm font-medium text-zen-text">{{ $service->name }}</span>
                     <span class="mt-0.5 block text-xs text-zen-muted">
-                      {{ $service->duration_minutes }} phút
+                      {{ $service->duration }} phút
                       @if($service->description)
                         - {{ $service->description }}
                       @endif

@@ -99,7 +99,7 @@
                   'completed' => 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
                   default => 'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-500',
                 };
-                $serviceNames = $appointment->appointmentServices->pluck('service.service_name')->filter()->values();
+                $serviceNames = $appointment->appointmentServices->pluck('service.name')->filter()->values();
                 $staffNames = $appointment->appointmentServices->pluck('staff.full_name')->filter()->unique();
               @endphp
               <tr class="align-top">

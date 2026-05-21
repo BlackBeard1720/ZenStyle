@@ -28,7 +28,7 @@ class CustomerBookController extends Controller
                 ->get(),
             'services' => Service::query()
                 ->where('status', 'active')
-                ->orderBy('service_name')
+                ->orderBy('name')
                 ->get(),
         ]);
     }

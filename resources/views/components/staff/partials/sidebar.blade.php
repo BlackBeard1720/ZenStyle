@@ -130,16 +130,17 @@
           @endcan
           <!-- Menu Item Appointments -->
 
-          <!-- Menu Item Services -->
-          @can('view-services')
+          <!-- Menu Item Service Management -->
+          @canany(['view-categories', 'view-services'])
           <li>
             <a
-              href="{{ route('staff.services.index') }}"
+              href="#"
+              @click.prevent="selected = (selected === 'ServiceManagement' ? '':'ServiceManagement')"
               class="menu-item group"
-              :class="page === 'ServicesManagement' ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement') ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="page === 'ServicesManagement' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -158,12 +159,69 @@
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
-                Services
+                Service Management
               </span>
+
+              <svg
+                class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
+                :class="[(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
+                  stroke=""
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
             </a>
+
+            <div
+              class="overflow-hidden transform translate"
+              :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement') ? 'block' :'hidden'"
+            >
+              <ul
+                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
+                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
+              >
+                @can('view-categories')
+                <li>
+                  <a
+                    href="{{ route('staff.categories.index') }}"
+                    class="menu-dropdown-item group flex items-center gap-2"
+                    :class="page === 'CategoryManagement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                  >
+                    <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M4.75 5.5C4.75 5.08579 5.08579 4.75 5.5 4.75H18.5C18.9142 4.75 19.25 5.08579 19.25 5.5V8.5C19.25 8.91421 18.9142 9.25 18.5 9.25H5.5C5.08579 9.25 4.75 8.91421 4.75 8.5V5.5ZM3.25 5.5C3.25 4.25736 4.25736 3.25 5.5 3.25H18.5C19.7426 3.25 20.75 4.25736 20.75 5.5V8.5C20.75 9.74264 19.7426 10.75 18.5 10.75H5.5C4.25736 10.75 3.25 9.74264 3.25 8.5V5.5ZM4.75 15.5C4.75 15.0858 5.08579 14.75 5.5 14.75H18.5C18.9142 14.75 19.25 15.0858 19.25 15.5V18.5C19.25 18.9142 18.9142 19.25 18.5 19.25H5.5C5.08579 19.25 4.75 18.9142 4.75 18.5V15.5ZM3.25 15.5C3.25 14.2574 4.25736 13.25 5.5 13.25H18.5C19.7426 13.25 20.75 14.2574 20.75 15.5V18.5C20.75 19.7426 19.7426 20.75 18.5 20.75H5.5C4.25736 20.75 3.25 19.7426 3.25 18.5V15.5Z" fill=""/>
+                    </svg>
+                    Categories
+                  </a>
+                </li>
+                @endcan
+                @can('view-services')
+                <li>
+                  <a
+                    href="{{ route('staff.services.index') }}"
+                    class="menu-dropdown-item group flex items-center gap-2"
+                    :class="page === 'ServiceManagement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                  >
+                    <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M5.25 4C4.55964 4 4 4.55964 4 5.25V18.75C4 19.4404 4.55964 20 5.25 20H18.75C19.4404 20 20 19.4404 20 18.75V5.25C20 4.55964 19.4404 4 18.75 4H5.25ZM2.5 5.25C2.5 3.73122 3.73122 2.5 5.25 2.5H18.75C20.2688 2.5 21.5 3.73122 21.5 5.25V18.75C21.5 20.2688 20.2688 21.5 18.75 21.5H5.25C3.73122 21.5 2.5 20.2688 2.5 18.75V5.25ZM7.25 7.5C7.25 7.08579 7.58579 6.75 8 6.75H16C16.4142 6.75 16.75 7.08579 16.75 7.5C16.75 7.91421 16.4142 8.25 16 8.25H8C7.58579 8.25 7.25 7.91421 7.25 7.5ZM7.25 12C7.25 11.5858 7.58579 11.25 8 11.25H16C16.4142 11.25 16.75 11.5858 16.75 12C16.75 12.4142 16.4142 12.75 16 12.75H8C7.58579 12.75 7.25 12.4142 7.25 12ZM7.25 16.5C7.25 16.0858 7.58579 15.75 8 15.75H13C13.4142 15.75 13.75 16.0858 13.75 16.5C13.75 16.9142 13.4142 17.25 13 17.25H8C7.58579 17.25 7.25 16.9142 7.25 16.5Z" fill=""/>
+                    </svg>
+                    Services
+                  </a>
+                </li>
+                @endcan
+              </ul>
+            </div>
           </li>
-          @endcan
-          <!-- Menu Item Services -->
+          @endcanany
+          <!-- Menu Item Service Management -->
 
           <!-- Menu Item Clients -->
           <li>

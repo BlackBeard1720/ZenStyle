@@ -1,4 +1,4 @@
-<x-staff.layout title="Edit Service" page-name="ServicesManagement">
+<x-staff.layout title="Edit Service" page-name="ServiceManagement">
   <div x-data="{ pageName: `Edit Service #{{ $service->id }}` }">
     <x-staff.partials.breadcrumb />
   </div>

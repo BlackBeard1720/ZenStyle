@@ -139,9 +139,9 @@
         <label class="flex items-start gap-3 rounded-lg border border-gray-100 p-3 text-sm dark:border-gray-800">
           <input type="checkbox" name="service_ids[]" value="{{ $service->id }}" @checked(in_array((string) $service->id, $selectedServices, true)) class="mt-1 size-4 rounded border-gray-300 text-brand-500 focus:ring-brand-500">
           <span>
-            <span class="block font-medium text-gray-800 dark:text-white/90">{{ $service->service_name }}</span>
+            <span class="block font-medium text-gray-800 dark:text-white/90">{{ $service->name }}</span>
             <span class="block text-xs text-gray-500 dark:text-gray-400">
-              {{ number_format($service->price) }} VND - {{ $service->duration_minutes }} minutes
+              {{ number_format($service->price) }} VND - {{ $service->duration }} minutes
             </span>
           </span>
         </label>

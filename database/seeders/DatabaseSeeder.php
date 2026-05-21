@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ClientSeeder::class,
             StaffSeeder::class,
+            CategorySeeder::class,
             ServiceSeeder::class,
             AppointmentSeeder::class,
             NewsSeeder::class,

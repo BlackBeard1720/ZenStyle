@@ -1,4 +1,4 @@
-<x-staff.layout title="Service Detail" page-name="ServicesManagement">
+<x-staff.layout title="Service Detail" page-name="ServiceManagement">
   <div x-data="{ pageName: `Service #{{ $service->id }}` }">
     <x-staff.partials.breadcrumb />
   </div>
@@ -29,8 +29,9 @@
         </div>
 
         <div>
-          <h4 class="mb-3 text-sm font-semibold text-gray-800 dark:text-white/90">Usage</h4>
+          <h4 class="mb-3 text-sm font-semibold text-gray-800 dark:text-white/90">Category and usage</h4>
           <dl class="space-y-2 text-sm">
+            <div><dt class="text-gray-500 dark:text-gray-400">Category</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ $service->category?->name ?? '-' }}</dd></div>
             <div><dt class="text-gray-500 dark:text-gray-400">Appointments</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ $service->appointment_services_count }}</dd></div>
             <div><dt class="text-gray-500 dark:text-gray-400">Updated at</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ optional($service->updated_at)->format('Y-m-d H:i') }}</dd></div>
           </dl>
