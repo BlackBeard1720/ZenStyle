@@ -12,11 +12,10 @@ class CreateNewsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('excerpt', 500)->nullable();
-            $table->text('body');
-            $table->string('image')->nullable();
-            $table->timestamp('published_at')->nullable();
-            $table->enum('status', ['draft', 'published'])->default('draft');
+            $table->string('summary', 500)->nullable();
+            $table->longText('body');
+            $table->text('image')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }
