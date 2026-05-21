@@ -218,6 +218,7 @@ class FrontendController extends Controller
     {
         try {
             $query = Service::query()
+                ->with('category')
                 ->where('status', 'active')
                 ->orderBy('name');
 

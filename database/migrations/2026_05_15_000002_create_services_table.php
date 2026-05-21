@@ -19,10 +19,10 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained('categories');
-            $table->string('service_name', 100);
+            $table->string('name', 100);
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2)->default(0);
-            $table->unsignedInteger('duration_minutes')->default(60);
+            $table->unsignedInteger('duration')->default(60);
             $table->string('status', 20)->default('active');
             $table->timestamps();
         });
