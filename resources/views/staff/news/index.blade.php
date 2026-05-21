@@ -26,7 +26,7 @@
           name="keyword"
           value="{{ request('keyword') }}"
           placeholder="ID or title"
-          class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+          class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
         >
 
         <div class="relative md:col-span-2">
@@ -53,8 +53,8 @@
             @change="isOptionSelected = true"
           >
             <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">All statuses</option>
-            <option value="draft" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('status') === 'draft')>Draft</option>
-            <option value="published" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('status') === 'published')>Published</option>
+            <option value="active" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('status') === 'active')>Active</option>
+            <option value="inactive" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('status') === 'inactive')>Inactive</option>
           </select>
           <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
             <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -70,9 +70,7 @@
             :class="isOptionSelected && 'text-gray-800 dark:text-white/90'"
             @change="isOptionSelected = true"
           >
-            <option value="published_desc" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('sort', 'published_desc') === 'published_desc')>Published newest</option>
-            <option value="published_asc" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('sort') === 'published_asc')>Published oldest</option>
-            <option value="created_desc" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('sort') === 'created_desc')>Created newest</option>
+            <option value="created_desc" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('sort', 'created_desc') === 'created_desc')>Created newest</option>
             <option value="created_asc" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('sort') === 'created_asc')>Created oldest</option>
             <option value="id_desc" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('sort') === 'id_desc')>ID newest</option>
             <option value="id_asc" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(request('sort') === 'id_asc')>ID oldest</option>
@@ -101,17 +99,17 @@
               <th class="w-24 px-4 pb-3 pt-4 text-left sm:px-6">
                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Image</p>
               </th>
-              <th class="w-80 px-4 pb-3 pt-4 text-left sm:px-6">
+              <th class="w-72 px-4 pb-3 pt-4 text-left sm:px-6">
                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Title</p>
               </th>
               <th class="px-4 pb-3 pt-4 text-left sm:px-6">
-                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Excerpt</p>
-              </th>
-              <th class="w-40 px-4 pb-3 pt-4 text-left sm:px-6">
-                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Published</p>
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Summary</p>
               </th>
               <th class="w-32 px-4 pb-3 pt-4 text-left sm:px-6">
                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>
+              </th>
+              <th class="w-40 px-4 pb-3 pt-4 text-left sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Created At</p>
               </th>
               <th class="w-28 px-4 pb-3 pt-4 text-right sm:px-6">
                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Actions</p>
@@ -121,9 +119,9 @@
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
             @forelse($items as $item)
               @php
-                $badgeClass = $item->status === 'published'
+                $badgeClass = $item->status === 'active'
                   ? 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500'
-                  : 'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-500';
+                  : 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300';
               @endphp
               <tr class="align-top">
                 <td class="px-4 py-4 sm:px-6">
@@ -138,21 +136,20 @@
                   <div class="min-w-0">
                     <p class="truncate font-medium text-theme-sm text-gray-800 dark:text-white/90">{{ $item->title }}</p>
                     <p class="mt-0.5 truncate text-theme-xs text-gray-500 dark:text-gray-400">{{ $item->slug }}</p>
-                    <p class="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">{{ optional($item->created_at)->format('Y-m-d H:i') }}</p>
                   </div>
                 </td>
                 <td class="px-4 py-4 sm:px-6">
-                  <p class="line-clamp-2 text-theme-sm text-gray-500 dark:text-gray-400">{{ \Illuminate\Support\Str::limit($item->excerpt, 100) }}</p>
-                </td>
-                <td class="px-4 py-4 sm:px-6">
-                  <p class="whitespace-nowrap text-theme-sm text-gray-500 dark:text-gray-400">{{ optional($item->published_at)->format('Y-m-d H:i') ?? '-' }}</p>
+                  <p class="line-clamp-2 text-theme-sm text-gray-500 dark:text-gray-400">{{ \Illuminate\Support\Str::limit($item->summary, 120) }}</p>
                 </td>
                 <td class="px-4 py-4 sm:px-6">
                   <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium {{ $badgeClass }}">{{ ucfirst($item->status) }}</span>
                 </td>
                 <td class="px-4 py-4 sm:px-6">
+                  <p class="whitespace-nowrap text-theme-sm text-gray-500 dark:text-gray-400">{{ optional($item->created_at)->format('Y-m-d H:i') }}</p>
+                </td>
+                <td class="px-4 py-4 sm:px-6">
                   <div class="flex items-center justify-end gap-2">
-                    <a href="{{ route('news.show', $item->slug) }}" title="View news" class="text-gray-500 hover:text-brand-600 dark:text-gray-400">
+                    <a href="{{ route('staff.news.show', $item) }}" title="View news" class="text-gray-500 hover:text-brand-600 dark:text-gray-400">
                       <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
@@ -164,10 +161,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 7.125 16.875 4.5"/>
                       </svg>
                     </a>
-                    <form action="{{ route('staff.news.destroy', $item) }}" method="POST" onsubmit="return confirm('Delete this news item?')">
+                    <form action="{{ route('staff.news.destroy', $item) }}" method="POST" onsubmit="return confirm('Hide this news item?')">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" title="Delete news" aria-label="Delete news" class="text-gray-500 hover:text-error-600 dark:text-gray-400">
+                      <button type="submit" title="Hide news" aria-label="Hide news" class="text-gray-500 hover:text-error-600 dark:text-gray-400">
                         <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673A2.25 2.25 0 0 1 15.916 21.75H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
                         </svg>

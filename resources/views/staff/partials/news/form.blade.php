@@ -2,13 +2,7 @@
   $inputClass = 'h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30';
   $textareaClass = 'w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30';
   $selectedImage = old('image', $news->image ?? '');
-  $previewImage = $selectedImage ?: ($news->image_url ?? asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png'));
-  $publishedAt = old(
-      'published_at',
-      isset($news) && $news->published_at
-          ? $news->published_at->format('Y-m-d\TH:i')
-          : ''
-  );
+  $previewImage = $selectedImage ?: ($news->image_url ?? asset('images/default-news.jpg'));
 @endphp
 
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -32,8 +26,8 @@
         :class="isOptionSelected && 'text-gray-800 dark:text-white/90'"
         @change="isOptionSelected = true"
       >
-        <option value="draft" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('status', $news->status ?? 'draft') === 'draft')>Draft</option>
-        <option value="published" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('status', $news->status ?? 'draft') === 'published')>Published</option>
+        <option value="active" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('status', $news->status ?? 'active') === 'active')>Active</option>
+        <option value="inactive" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('status', $news->status ?? 'active') === 'inactive')>Inactive</option>
       </select>
       <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
         <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -42,6 +36,12 @@
       </span>
     </div>
     <x-staff.form.error name="status" />
+  </div>
+
+  <div class="lg:col-span-2">
+    <label for="summary" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Summary</label>
+    <textarea id="summary" name="summary" rows="3" maxlength="500" class="{{ $textareaClass }}">{{ old('summary', $news->summary ?? '') }}</textarea>
+    <x-staff.form.error name="summary" />
   </div>
 
   <div class="lg:col-span-2">
@@ -73,30 +73,11 @@
   </div>
 
   <div class="lg:col-span-2">
-    <label for="excerpt" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Excerpt</label>
-    <textarea id="excerpt" name="excerpt" rows="3" class="{{ $textareaClass }}">{{ old('excerpt', $news->excerpt ?? '') }}</textarea>
-    <x-staff.form.error name="excerpt" />
-  </div>
-
-  <div class="lg:col-span-2">
     <label for="body-editor" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
       Body <span class="text-error-500">*</span>
     </label>
     <textarea id="body-editor" name="body" rows="10" class="{{ $textareaClass }}">{{ old('body', $news->body ?? '') }}</textarea>
     <x-staff.form.error name="body" />
-  </div>
-
-  @isset($news)
-    <div>
-      <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Created At</label>
-      <input type="datetime-local" value="{{ optional($news->created_at)->format('Y-m-d\TH:i') }}" readonly class="{{ $inputClass }} bg-gray-50 text-gray-500 dark:bg-gray-800 dark:text-gray-400" />
-    </div>
-  @endisset
-
-  <div>
-    <label for="published_at" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Published At</label>
-    <input id="published_at" type="datetime-local" name="published_at" value="{{ $publishedAt }}" class="{{ $inputClass }}" />
-    <x-staff.form.error name="published_at" />
   </div>
 </div>
 
@@ -110,15 +91,12 @@
       const imagePreview = document.getElementById('image-preview');
       const uploadButton = document.getElementById('upload-news-image');
       const removeButton = document.getElementById('remove-news-image');
-      const defaultImage = {{ \Illuminate\Support\Js::from(asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png')) }};
+      const defaultImage = {{ \Illuminate\Support\Js::from(asset('images/default-news.jpg')) }};
       const cloudName = {{ \Illuminate\Support\Js::from(config('services.cloudinary.cloud_name')) }};
       const uploadPreset = {{ \Illuminate\Support\Js::from(config('services.cloudinary.upload_preset')) }};
 
       if (window.CKEDITOR && document.getElementById('body-editor')) {
-        CKEDITOR.replace('body-editor', {
-          height: 360,
-          removeButtons: 'Save,NewPage,Preview,Print,Templates',
-        });
+        CKEDITOR.replace('body-editor');
       }
 
       if (form) {
@@ -146,35 +124,33 @@
         });
       }
 
-      if (!uploadButton) {
-        return;
-      }
-
-      uploadButton.addEventListener('click', function () {
-        if (!window.cloudinary || !cloudName || !uploadPreset) {
-          alert('Cloudinary cloud name or upload preset is missing.');
-          return;
-        }
-
-        const widget = cloudinary.createUploadWidget({
-          cloudName: cloudName,
-          uploadPreset: uploadPreset,
-          sources: ['local', 'url', 'camera'],
-          multiple: false,
-          maxFileSize: 5242880,
-          clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
-        }, function (error, result) {
-          if (error || !result || result.event !== 'success') {
+      if (uploadButton) {
+        uploadButton.addEventListener('click', function () {
+          if (!window.cloudinary || !cloudName || !uploadPreset) {
+            alert('Cloudinary cloud name or upload preset is missing.');
             return;
           }
 
-          const imageUrl = result.info.secure_url;
-          imageInput.value = imageUrl;
-          updatePreview(imageUrl);
-        });
+          const widget = cloudinary.createUploadWidget({
+            cloudName: cloudName,
+            uploadPreset: uploadPreset,
+            sources: ['local', 'url', 'camera'],
+            multiple: false,
+            maxFileSize: 5242880,
+            clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+          }, function (error, result) {
+            if (error || !result || result.event !== 'success') {
+              return;
+            }
 
-        widget.open();
-      });
+            const imageUrl = result.info.secure_url;
+            imageInput.value = imageUrl;
+            updatePreview(imageUrl);
+          });
+
+          widget.open();
+        });
+      }
     });
   </script>
 @endpush

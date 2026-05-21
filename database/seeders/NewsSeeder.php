@@ -12,16 +12,15 @@ class NewsSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
 
-        for ($i = 1; $i <= 8; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $title = $faker->sentence(6, true);
             News::create([
                 'title' => $title,
                 'slug' => Str::slug($title) . '-' . time() . $i,
-                'excerpt' => $faker->paragraph(),
+                'summary' => $faker->paragraph(),
                 'body' => '<p>' . implode('</p><p>', $faker->paragraphs(5)) . '</p>',
                 'image' => null,
-                'published_at' => now()->subDays(rand(0, 30)),
-                'status' => 'published',
+                'status' => 'active',
             ]);
         }
     }
