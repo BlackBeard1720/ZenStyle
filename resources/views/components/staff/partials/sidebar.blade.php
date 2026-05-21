@@ -130,6 +130,41 @@
           @endcan
           <!-- Menu Item Appointments -->
 
+          <!-- Menu Item Services -->
+          @can('view-services')
+          <li>
+            <a
+              href="{{ route('staff.services.index') }}"
+              class="menu-item group"
+              :class="page === 'ServicesManagement' ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+              <svg
+                :class="page === 'ServicesManagement' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M5.25 4C4.55964 4 4 4.55964 4 5.25V18.75C4 19.4404 4.55964 20 5.25 20H18.75C19.4404 20 20 19.4404 20 18.75V5.25C20 4.55964 19.4404 4 18.75 4H5.25ZM2.5 5.25C2.5 3.73122 3.73122 2.5 5.25 2.5H18.75C20.2688 2.5 21.5 3.73122 21.5 5.25V18.75C21.5 20.2688 20.2688 21.5 18.75 21.5H5.25C3.73122 21.5 2.5 20.2688 2.5 18.75V5.25ZM7.25 7.5C7.25 7.08579 7.58579 6.75 8 6.75H16C16.4142 6.75 16.75 7.08579 16.75 7.5C16.75 7.91421 16.4142 8.25 16 8.25H8C7.58579 8.25 7.25 7.91421 7.25 7.5ZM7.25 12C7.25 11.5858 7.58579 11.25 8 11.25H16C16.4142 11.25 16.75 11.5858 16.75 12C16.75 12.4142 16.4142 12.75 16 12.75H8C7.58579 12.75 7.25 12.4142 7.25 12ZM7.25 16.5C7.25 16.0858 7.58579 15.75 8 15.75H13C13.4142 15.75 13.75 16.0858 13.75 16.5C13.75 16.9142 13.4142 17.25 13 17.25H8C7.58579 17.25 7.25 16.9142 7.25 16.5Z"
+                  fill=""
+                />
+              </svg>
+
+              <span
+                class="menu-item-text"
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+                Services
+              </span>
+            </a>
+          </li>
+          @endcan
+          <!-- Menu Item Services -->
+
           <!-- Menu Item Clients -->
           <li>
             <a

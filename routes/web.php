@@ -8,6 +8,7 @@ use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
+use App\Http\Controllers\Staff\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
@@ -177,6 +178,13 @@ Route::prefix('staff')->name('staff.')
         Route::resource('appointments', AppointmentController::class);
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
             ->name('appointments.cancel');
+
+        Route::resource('services', ServiceController::class)
+            ->except(['index', 'show'])
+            ->middleware('can:manage-services');
+        Route::resource('services', ServiceController::class)
+            ->only(['index', 'show'])
+            ->middleware('can:view-services');
 
         Route::resource('clients', ClientController::class);
 

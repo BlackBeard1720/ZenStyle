@@ -27,7 +27,8 @@
             ],
         ];
 
-        $serviceGroups = [
+        if (! isset($serviceGroups) || empty($serviceGroups)) {
+            $serviceGroups = [
             [
                 'title' => 'Tóc & tạo kiểu',
                 'description' => 'Cắt, uốn texture, tạo kiểu sự kiện.',
@@ -49,7 +50,8 @@
                 'alt' => 'Dịch vụ spa và chăm sóc da tại ZenStyle',
                 'items' => ['Chăm sóc da cơ bản', 'Thư giãn vai gáy', 'Tư vấn routine'],
             ],
-        ];
+            ];
+        }
 
         $salonImages = [
             asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png'),

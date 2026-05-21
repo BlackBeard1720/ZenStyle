@@ -42,5 +42,15 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('admin')
                 || $user->hasRole('receptionist');
         });
+
+        Gate::define('view-services', function (User $user) {
+            return $user->hasRole('admin')
+                || $user->hasRole('receptionist')
+                || $user->hasRole('stylist');
+        });
+
+        Gate::define('manage-services', function (User $user) {
+            return $user->hasRole('admin');
+        });
     }
 }

@@ -63,7 +63,7 @@ class AppointmentController extends Controller
     {
         return view('staff.appointments.create', [
             'clients' => Client::orderBy('full_name')->get(),
-            'services' => Service::whereIn('status', ['active', 'available'])->orderBy('service_name')->get(),
+            'services' => Service::where('status', 'active')->orderBy('service_name')->get(),
             'staff' => Staff::where('status', 'active')->orderBy('full_name')->get(),
         ]);
     }
@@ -75,7 +75,7 @@ class AppointmentController extends Controller
             'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['required', 'array', 'min:1'],
-            'service_ids.*' => ['exists:services,id'],
+            'service_ids.*' => [Rule::exists('services', 'id')->where(fn ($query) => $query->where('status', 'active'))],
             'staff_id' => ['nullable', 'exists:staff,id'],
             'notes' => ['nullable', 'string'],
         ]);
@@ -130,11 +130,15 @@ class AppointmentController extends Controller
         }
 
         $appointment->load(['client', 'appointmentServices.service', 'appointmentServices.staff']);
+        $selectedServiceIds = $appointment->appointmentServices->pluck('service_id');
 
         return view('staff.appointments.edit', [
             'appointment' => $appointment,
             'clients' => Client::orderBy('full_name')->get(),
-            'services' => Service::whereIn('status', ['active', 'available'])->orderBy('service_name')->get(),
+            'services' => Service::where('status', 'active')
+                ->orWhereIn('id', $selectedServiceIds)
+                ->orderBy('service_name')
+                ->get(),
             'staff' => Staff::where('status', 'active')->orderBy('full_name')->get(),
         ]);
     }
@@ -151,7 +155,12 @@ class AppointmentController extends Controller
             'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['required', 'array', 'min:1'],
-            'service_ids.*' => ['exists:services,id'],
+            'service_ids.*' => [
+                Rule::exists('services', 'id')->where(function ($query) use ($appointment) {
+                    $query->where('status', 'active')
+                        ->orWhereIn('id', $appointment->appointmentServices()->pluck('service_id'));
+                }),
+            ],
             'staff_id' => ['nullable', 'exists:staff,id'],
             'notes' => ['nullable', 'string'],
             'status' => ['required', Rule::in(['pending', 'confirmed', 'cancelled', 'completed'])],
