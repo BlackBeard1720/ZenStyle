@@ -36,9 +36,41 @@ messaging.onBackgroundMessage(function(payload) {
     const options = {
         body: payload.notification?.body || '',
         icon: '/favicon.ico',
+        data: {
+            url: payload.data?.url || '',
+        },
     };
 
     self.registration.showNotification(title, options);
+});
+
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+
+    const notificationUrl = event.notification.data?.url || '';
+
+    if (!notificationUrl) {
+        return;
+    }
+
+    const targetUrl = new URL(notificationUrl, self.location.origin).href;
+
+    event.waitUntil(
+        clients.matchAll({
+            type: 'window',
+            includeUncontrolled: true,
+        }).then(function(clientList) {
+            for (const client of clientList) {
+                if (client.url === targetUrl && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+
+            if (clients.openWindow) {
+                return clients.openWindow(targetUrl);
+            }
+        })
+    );
 });
 JS;
 
@@ -96,6 +128,26 @@ Route::prefix('staff')->name('staff.')
 
     Route::post('/fcm-token', [FcmTokenController::class, 'store'])
             ->name('fcm-token.store');
+
+        // Temporary FCM test route. Remove after confirming staff notifications work.
+        Route::get('/test-fcm', function (\Illuminate\Http\Request $request) {
+            $fcmService = app(\App\Services\FcmService::class);
+            $tokens = $request->user()->fcmTokens()->pluck('token');
+
+            $fcmService->sendToUser(
+                $request->user(),
+                'Test FCM',
+                'ZenStyle test notification was sent successfully.',
+                ['type' => 'test']
+            );
+
+            return response()->json([
+                'message' => 'Sent',
+                'token_count' => $tokens->count(),
+                'token_ends' => $tokens->map(fn (string $token) => substr($token, -12))->values(),
+                'errors' => $fcmService->lastErrors(),
+            ]);
+        })->name('test-fcm');
 
     Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
 

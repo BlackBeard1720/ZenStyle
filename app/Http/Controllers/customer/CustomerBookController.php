@@ -8,6 +8,8 @@ use App\Models\AppointmentService;
 use App\Models\Client;
 use App\Models\Service;
 use App\Models\Staff;
+use App\Models\User;
+use App\Services\FcmService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -135,6 +137,25 @@ class CustomerBookController extends Controller
 
             return $appointment;
         });
+
+        User::query()
+            ->where('status', 'active')
+            ->whereHas('role', function ($query) {
+                $query->whereIn('role_name', ['admin', 'receptionist']);
+            })
+            ->get()
+            ->each(function (User $user) use ($appointment, $data) {
+                app(FcmService::class)->sendToUser(
+                    $user,
+                    'New appointment booked',
+                    "{$data['full_name']} booked an appointment at {$data['appointment_time']} on {$data['appointment_date']}.",
+                    [
+                        'type' => 'appointment_created',
+                        'appointment_id' => (string) $appointment->id,
+                        'url' => route('staff.appointments.show', $appointment),
+                    ]
+                );
+            });
 
         session()->forget(['booking_otp', 'booking_data']);
         session()->flash('booking_success', [
