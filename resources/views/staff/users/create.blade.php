@@ -1,9 +1,9 @@
 <x-staff.layout
-    title="User management"
-    page-name="UserManagement"
+    title="Create Staff Account"
+    page-name="StaffAccount"
 >
   <!-- Breadcrumb Start -->
-  <div x-data="{ pageName: `Form Elements`}">
+  <div x-data="{ pageName: `Create Staff Account`}">
     <x-staff.partials.breadcrumb />
   </div>
   <!-- Breadcrumb End -->
@@ -14,7 +14,7 @@
       <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="px-5 py-4 sm:px-6 sm:py-5 border-b border-gray-100 dark:border-gray-800">
           <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
-            User Details
+            Staff Account Details
           </h3>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Fill in the information to add a new staff member to the system.
@@ -126,7 +126,7 @@
             </a>
             <button type="submit"
                     class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-5 py-2.5 text-center text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600">
-              Save User
+              Save Staff Account
             </button>
           </div>
 

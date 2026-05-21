@@ -8,6 +8,7 @@ use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
 
@@ -126,7 +127,7 @@ Route::prefix('staff')->name('staff.')
 Route::prefix('staff')->name('staff.')
     ->middleware('jwt.auth')->group(function () {
 
-    Route::post('/fcm-token', [FcmTokenController::class, 'store'])
+        Route::post('/fcm-token', [FcmTokenController::class, 'store'])
             ->name('fcm-token.store');
 
         // Temporary FCM test route. Remove after confirming staff notifications work.
@@ -144,34 +145,49 @@ Route::prefix('staff')->name('staff.')
             return response()->json([
                 'message' => 'Sent',
                 'token_count' => $tokens->count(),
-                'token_ends' => $tokens->map(fn (string $token) => substr($token, -12))->values(),
+                'token_ends' => $tokens->map(fn(string $token) => substr($token, -12))->values(),
                 'errors' => $fcmService->lastErrors(),
             ]);
         })->name('test-fcm');
 
-    Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
+        Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
 
-    Route::get('/', function () {
-        return view('staff.dashboard.index');
-    })->name('dashboard');
+        Route::get('/', function () {
+            return view('staff.dashboard.index');
+        })->name('dashboard');
 
-    Route::resource('users', UserController::class)
-        ->middleware('can:manage-staff-users');
+        Route::get('/profile', function (Request $request) {
+            $user = $request->user()->loadMissing(['role', 'staff', 'client']);
 
-    Route::resource('appointments', AppointmentController::class);
-    Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
-        ->name('appointments.cancel');
+            return view('staff.profile.show', compact('user'));
+        })->name('profile.show');
 
-    Route::resource('clients', ClientController::class);
+        Route::resource('users', UserController::class)
+            ->middleware('can:manage-staff-users');
 
-    Route::resource('news', NewsController::class);
+        Route::get('client-accounts', function () {
+            return response()->view('staff.errors.404', [
+                'code' => 404,
+                'title' => 'Client Account',
+                'heading' => 'COMING SOON',
+                'message' => 'Client Account management is not available yet.',
+            ], 404);
+        })->middleware('can:manage-staff-users')->name('client-accounts.index');
 
-    Route::fallback(function (){
-        return response()->view('staff.errors.404', [
-            'code' => 404,
-            'title' => '404 Page Not Found',
-            'heading' => 'ERROR',
-            'message' => 'We can’t seem to find the page you are looking for!',
-        ], 404);
+        Route::resource('appointments', AppointmentController::class);
+        Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
+            ->name('appointments.cancel');
+
+        Route::resource('clients', ClientController::class);
+
+        Route::resource('news', NewsController::class);
+
+        Route::fallback(function () {
+            return response()->view('staff.errors.404', [
+                'code' => 404,
+                'title' => '404 Page Not Found',
+                'heading' => 'ERROR',
+                'message' => 'We can’t seem to find the page you are looking for!',
+            ], 404);
+        });
     });
-});

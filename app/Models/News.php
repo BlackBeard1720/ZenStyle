@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class News extends Model
 {
@@ -18,7 +17,7 @@ class News extends Model
 
     public function getImageUrlAttribute()
     {
-        return $this->image ? Storage::url($this->image) : asset('images/default-news.jpg');
+        return $this->image ?: asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png');
     }
 
     public function scopePublished($query)
