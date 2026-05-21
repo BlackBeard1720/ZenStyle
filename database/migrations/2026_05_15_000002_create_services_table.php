@@ -8,13 +8,22 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 100);
+            $table->text('description')->nullable();
+            $table->string('status', 20)->default('active');
+            $table->timestamps();
+        });
+
         Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->string('service_name');
+            $table->foreignId('category_id')->constrained('categories');
+            $table->string('name', 100);
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2)->default(0);
-            $table->unsignedInteger('duration_minutes')->default(60);
-            $table->string('status')->default('active');
+            $table->unsignedInteger('duration')->default(60);
+            $table->string('status', 20)->default('active');
             $table->timestamps();
         });
     }
@@ -22,5 +31,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('services');
+        Schema::dropIfExists('categories');
     }
 };

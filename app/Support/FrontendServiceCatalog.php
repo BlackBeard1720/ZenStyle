@@ -246,16 +246,21 @@ class FrontendServiceCatalog
     {
         $profile = static::serviceProfile($service);
         $slug = static::serviceSlug($service);
+        $rawPrice = (float) $service->price;
+        $rawDuration = (int) $service->duration;
 
         return [
             'slug' => $slug,
-            'title' => $service->service_name,
+            'title' => $service->name,
             'description' => $service->description ?: $profile['description'],
             'longDescription' => $service->description
                 ? $service->description . ' Doi ngu ZenStyle se tu van them dua tren tinh trang thuc te truoc khi thuc hien.'
                 : $profile['longDescription'],
-            'duration' => $service->duration_minutes . ' phut',
-            'price' => number_format((float) $service->price, 0, ',', '.') . 'd',
+            'duration' => $service->duration . ' phut',
+            'price' => number_format($rawPrice, 0, ',', '.') . 'd',
+            'raw_price' => $rawPrice,
+            'raw_duration' => $rawDuration,
+            'category' => static::inferCategory($service->name),
             'images' => $profile['images'],
             'badges' => $profile['badges'],
             'stylist' => $profile['stylist'],
@@ -269,9 +274,40 @@ class FrontendServiceCatalog
         ];
     }
 
+    public static function inferCategory(string $serviceName): string
+    {
+        $name = Str::lower($serviceName);
+
+        if (Str::contains($name, ['cut', 'cat', 'layer', 'mullet', 'trim'])) {
+            return 'Cắt tóc';
+        }
+
+        if (Str::contains($name, ['color', 'nhuom', 'highlight', 'balayage', 'tone'])) {
+            return 'Nhuộm màu';
+        }
+
+        if (Str::contains($name, ['wash', 'goi', 'head massage', 'massage da dau', 'shampoo'])) {
+            return 'Gội & Massage';
+        }
+
+        if (Str::contains($name, ['treatment', 'phuc hoi', 'recovery', 'repair', 'spa', 'facial', 'body scrub'])) {
+            return 'Phục hồi & Spa';
+        }
+
+        if (Str::contains($name, ['nail', 'manicure', 'pedicure'])) {
+            return 'Nail & Beauty';
+        }
+
+        if (Str::contains($name, ['style', 'styling', 'wave', 'texture', 'uon', 'permanent', 'perm'])) {
+            return 'Tạo kiểu';
+        }
+
+        return 'Khác';
+    }
+
     public static function serviceSlug(Service $service): string
     {
-        return Str::slug($service->service_name) . '-' . $service->id;
+        return Str::slug($service->name) . '-' . $service->id;
     }
 
     public static function homeGroupsFromServiceModels(Collection $services): array
@@ -282,12 +318,12 @@ class FrontendServiceCatalog
                 $profile = static::serviceProfile($service);
 
                 return [
-                    'title' => $service->service_name,
+                    'title' => $service->name,
                     'description' => $service->description ?: $profile['description'],
                     'image' => $profile['images'][0],
-                    'alt' => 'Dich vu ' . $service->service_name . ' tai ZenStyle',
+                    'alt' => 'Dich vu ' . $service->name . ' tai ZenStyle',
                     'items' => [
-                        $service->duration_minutes . ' phut',
+                        $service->duration . ' phut',
                         number_format((float) $service->price, 0, ',', '.') . 'd',
                         ucfirst($service->status),
                     ],
@@ -380,7 +416,7 @@ class FrontendServiceCatalog
 
     private static function serviceProfile(Service $service): array
     {
-        $name = Str::lower($service->service_name);
+        $name = Str::lower($service->name);
         $gallery = static::gallery();
 
         $defaultProcess = [

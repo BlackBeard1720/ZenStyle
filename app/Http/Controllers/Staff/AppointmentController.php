@@ -63,7 +63,7 @@ class AppointmentController extends Controller
     {
         return view('staff.appointments.create', [
             'clients' => Client::orderBy('full_name')->get(),
-            'services' => Service::where('status', 'active')->orderBy('service_name')->get(),
+            'services' => Service::where('status', 'active')->orderBy('name')->get(),
             'staff' => Staff::where('status', 'active')->orderBy('full_name')->get(),
         ]);
     }
@@ -137,7 +137,7 @@ class AppointmentController extends Controller
             'clients' => Client::orderBy('full_name')->get(),
             'services' => Service::where('status', 'active')
                 ->orWhereIn('id', $selectedServiceIds)
-                ->orderBy('service_name')
+                ->orderBy('name')
                 ->get(),
             'staff' => Staff::where('status', 'active')->orderBy('full_name')->get(),
         ]);

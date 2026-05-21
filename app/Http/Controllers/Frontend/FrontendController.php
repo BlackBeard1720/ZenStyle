@@ -8,6 +8,7 @@ use App\Models\Service;
 use App\Support\FrontendServiceCatalog;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class FrontendController extends Controller
 {
@@ -107,10 +108,67 @@ class FrontendController extends Controller
     public function services(): View
     {
         $services = $this->activeServices();
+        $mappedServices = FrontendServiceCatalog::fromServiceModels($services);
+
+        // Get filter parameters from request
+        $searchQuery = request('q', '');
+        $selectedCategories = array_filter((array) request('category', []));
+        $selectedSort = request('sort', 'name');
+
+        // Build available categories from all services
+        $allCategories = collect($mappedServices)
+            ->pluck('category')
+            ->unique()
+            ->sort()
+            ->values()
+            ->all();
+
+        // Filter by search query
+        $filteredServices = collect($mappedServices);
+
+        if ($searchQuery) {
+            $query = Str::lower($searchQuery);
+            $filteredServices = $filteredServices->filter(function ($service) use ($query) {
+                $title = Str::lower($service['title']);
+                $description = Str::lower($service['description']);
+                return Str::contains($title, $query) || Str::contains($description, $query);
+            });
+        }
+
+        // Filter by selected categories
+        if (!empty($selectedCategories)) {
+            $filteredServices = $filteredServices->filter(function ($service) use ($selectedCategories) {
+                return in_array($service['category'], $selectedCategories);
+            });
+        }
+
+        // Apply sorting
+        switch ($selectedSort) {
+            case 'price-asc':
+                $filteredServices = $filteredServices->sortBy('raw_price');
+                break;
+            case 'price-desc':
+                $filteredServices = $filteredServices->sortByDesc('raw_price');
+                break;
+            case 'duration-asc':
+                $filteredServices = $filteredServices->sortBy('raw_duration');
+                break;
+            case 'name':
+            default:
+                $filteredServices = $filteredServices->sortBy('title');
+                break;
+        }
+
+        $filteredServices = $filteredServices->values()->all();
 
         return view('frontend.services.index', [
             'heroImage' => FrontendServiceCatalog::heroImage(),
-            'services' => FrontendServiceCatalog::fromServiceModels($services),
+            'services' => $filteredServices,
+            'categories' => $allCategories,
+            'selectedCategories' => $selectedCategories,
+            'searchQuery' => $searchQuery,
+            'selectedSort' => $selectedSort,
+            'resultCount' => count($filteredServices),
             'staff' => FrontendServiceCatalog::staff(),
             'testimonials' => FrontendServiceCatalog::testimonials(),
         ]);
@@ -161,7 +219,7 @@ class FrontendController extends Controller
         try {
             $query = Service::query()
                 ->where('status', 'active')
-                ->orderBy('service_name');
+                ->orderBy('name');
 
             if ($limit) {
                 $query->limit($limit);

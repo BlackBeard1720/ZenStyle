@@ -5,11 +5,37 @@
 
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
   <div>
-    <label for="service_name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+    <label for="name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
       Service name <span class="text-error-500">*</span>
     </label>
-    <input id="service_name" type="text" name="service_name" value="{{ old('service_name', $service->service_name ?? '') }}" class="{{ $inputClass }}" />
-    <x-staff.form.error name="service_name" />
+    <input id="name" type="text" name="name" maxlength="100" value="{{ old('name', $service->name ?? '') }}" class="{{ $inputClass }}" />
+    <x-staff.form.error name="name" />
+  </div>
+
+  <div>
+    <label for="category_id" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+      Category <span class="text-error-500">*</span>
+    </label>
+    <div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
+      <select
+        id="category_id"
+        name="category_id"
+        class="h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+        :class="isOptionSelected && 'text-gray-800 dark:text-white/90'"
+        @change="isOptionSelected = true"
+      >
+        <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Select category</option>
+        @foreach($categories as $category)
+          <option value="{{ $category->id }}" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('category_id', $service->category_id ?? '') == $category->id)>{{ $category->name }}</option>
+        @endforeach
+      </select>
+      <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+    <x-staff.form.error name="category_id" />
   </div>
 
   <div>
@@ -45,11 +71,11 @@
   </div>
 
   <div>
-    <label for="duration_minutes" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-      Duration minutes <span class="text-error-500">*</span>
+    <label for="duration" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+      Duration <span class="text-error-500">*</span>
     </label>
-    <input id="duration_minutes" type="number" name="duration_minutes" min="1" step="1" value="{{ old('duration_minutes', $service->duration_minutes ?? 60) }}" class="{{ $inputClass }}" />
-    <x-staff.form.error name="duration_minutes" />
+    <input id="duration" type="number" name="duration" min="1" step="1" value="{{ old('duration', $service->duration ?? 60) }}" class="{{ $inputClass }}" />
+    <x-staff.form.error name="duration" />
   </div>
 
   <div class="lg:col-span-2">

@@ -58,7 +58,7 @@
               <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
               @foreach($appointment->appointmentServices as $appointmentService)
                 <tr>
-                  <td class="px-4 py-3 text-sm font-medium text-gray-800 dark:text-white/90">{{ $appointmentService->service?->service_name ?? '-' }}</td>
+                  <td class="px-4 py-3 text-sm font-medium text-gray-800 dark:text-white/90">{{ $appointmentService->service?->name ?? '-' }}</td>
                   <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $appointmentService->staff?->full_name ?? 'Unassigned' }}</td>
                   <td class="px-4 py-3 text-right text-sm text-gray-500 dark:text-gray-400">{{ number_format($appointmentService->price_at_booking) }} VND</td>
                 </tr>

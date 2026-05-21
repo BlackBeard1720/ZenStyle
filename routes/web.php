@@ -6,6 +6,7 @@ use App\Http\Controllers\customer\CustomerBookController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
+use App\Http\Controllers\Staff\CategoryController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
 use App\Http\Controllers\Staff\ServiceController;
@@ -179,12 +180,8 @@ Route::prefix('staff')->name('staff.')
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
             ->name('appointments.cancel');
 
-        Route::resource('services', ServiceController::class)
-            ->except(['index', 'show'])
-            ->middleware('can:manage-services');
-        Route::resource('services', ServiceController::class)
-            ->only(['index', 'show'])
-            ->middleware('can:view-services');
+        Route::resource('categories', CategoryController::class);
+        Route::resource('services', ServiceController::class);
 
         Route::resource('clients', ClientController::class);
 
