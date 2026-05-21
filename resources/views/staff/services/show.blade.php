@@ -13,7 +13,7 @@
     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
       <div class="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 dark:border-gray-800 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5">
         <div>
-          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ $service->name }}</h3>
+          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">{{ $service->service_name }}</h3>
           <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Service #{{ $service->id }}</p>
         </div>
         <span class="inline-flex w-fit rounded-full px-2.5 py-0.5 text-xs font-medium {{ $badgeClass }}">{{ ucfirst($service->status) }}</span>
@@ -24,7 +24,7 @@
           <h4 class="mb-3 text-sm font-semibold text-gray-800 dark:text-white/90">Pricing</h4>
           <dl class="space-y-2 text-sm">
             <div><dt class="text-gray-500 dark:text-gray-400">Price</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ number_format($service->price) }} VND</dd></div>
-            <div><dt class="text-gray-500 dark:text-gray-400">Duration</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ $service->duration }} minutes</dd></div>
+            <div><dt class="text-gray-500 dark:text-gray-400">Duration</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ $service->duration_minutes }} minutes</dd></div>
           </dl>
         </div>
 

@@ -247,20 +247,20 @@ class FrontendServiceCatalog
         $profile = static::serviceProfile($service);
         $slug = static::serviceSlug($service);
         $rawPrice = (float) $service->price;
-        $rawDuration = (int) $service->duration;
+        $rawDuration = (int) $service->duration_minutes;
 
         return [
             'slug' => $slug,
-            'title' => $service->name,
+            'title' => $service->service_name,
             'description' => $service->description ?: $profile['description'],
             'longDescription' => $service->description
                 ? $service->description . ' Doi ngu ZenStyle se tu van them dua tren tinh trang thuc te truoc khi thuc hien.'
                 : $profile['longDescription'],
-            'duration' => $service->duration . ' phut',
+            'duration' => $service->duration_minutes . ' phut',
             'price' => number_format($rawPrice, 0, ',', '.') . 'd',
             'raw_price' => $rawPrice,
             'raw_duration' => $rawDuration,
-            'category' => static::inferCategory($service->name),
+            'category' => $service->category?->name ?? 'Khác',
             'images' => $profile['images'],
             'badges' => $profile['badges'],
             'stylist' => $profile['stylist'],
@@ -307,7 +307,7 @@ class FrontendServiceCatalog
 
     public static function serviceSlug(Service $service): string
     {
-        return Str::slug($service->name) . '-' . $service->id;
+        return Str::slug($service->service_name) . '-' . $service->id;
     }
 
     public static function homeGroupsFromServiceModels(Collection $services): array
@@ -318,12 +318,12 @@ class FrontendServiceCatalog
                 $profile = static::serviceProfile($service);
 
                 return [
-                    'title' => $service->name,
+                    'title' => $service->service_name,
                     'description' => $service->description ?: $profile['description'],
                     'image' => $profile['images'][0],
-                    'alt' => 'Dich vu ' . $service->name . ' tai ZenStyle',
+                    'alt' => 'Dich vu ' . $service->service_name . ' tai ZenStyle',
                     'items' => [
-                        $service->duration . ' phut',
+                        $service->duration_minutes . ' phut',
                         number_format((float) $service->price, 0, ',', '.') . 'd',
                         ucfirst($service->status),
                     ],

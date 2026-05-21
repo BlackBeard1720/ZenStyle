@@ -20,7 +20,7 @@ class ServiceController extends Controller
             ->withCount('appointmentServices')
             ->when($request->keyword, function ($query, $keyword) {
                 $query->where(function ($query) use ($keyword) {
-                    $query->where('name', 'like', '%' . $keyword . '%')
+                    $query->where('service_name', 'like', '%' . $keyword . '%')
                         ->orWhere('description', 'like', '%' . $keyword . '%')
                         ->orWhereHas('category', function ($query) use ($keyword) {
                             $query->where('name', 'like', '%' . $keyword . '%');
@@ -113,10 +113,10 @@ class ServiceController extends Controller
     {
         return $request->validate([
             'category_id' => ['required', 'exists:categories,id'],
-            'name' => ['required', 'string', 'max:100'],
+            'service_name' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
-            'duration' => ['required', 'integer', 'min:1'],
+            'duration_minutes' => ['required', 'integer', 'min:1'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ]);
     }

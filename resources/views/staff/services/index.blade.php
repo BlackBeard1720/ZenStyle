@@ -116,7 +116,7 @@
                 </td>
                 <td class="px-4 py-4 sm:px-6">
                   <div class="min-w-0">
-                    <p class="truncate font-medium text-theme-sm text-gray-800 dark:text-white/90">{{ $service->name }}</p>
+                    <p class="truncate font-medium text-theme-sm text-gray-800 dark:text-white/90">{{ $service->service_name }}</p>
                     <p class="mt-0.5 text-theme-xs text-gray-500 dark:text-gray-400">{{ $service->appointment_services_count }} appointments</p>
                   </div>
                 </td>
@@ -130,7 +130,7 @@
                   <p class="whitespace-nowrap text-theme-sm text-gray-500 dark:text-gray-400">{{ number_format($service->price) }} VND</p>
                 </td>
                 <td class="px-4 py-4 sm:px-6">
-                  <p class="whitespace-nowrap text-theme-sm text-gray-500 dark:text-gray-400">{{ $service->duration }} minutes</p>
+                  <p class="whitespace-nowrap text-theme-sm text-gray-500 dark:text-gray-400">{{ $service->duration_minutes }} minutes</p>
                 </td>
                 <td class="px-4 py-4 sm:px-6">
                   <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium {{ $badgeClass }}">{{ ucfirst($service->status) }}</span>

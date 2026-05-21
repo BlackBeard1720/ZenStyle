@@ -5,11 +5,11 @@
 
 <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
   <div>
-    <label for="name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+    <label for="service_name" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
       Service name <span class="text-error-500">*</span>
     </label>
-    <input id="name" type="text" name="name" maxlength="100" value="{{ old('name', $service->name ?? '') }}" class="{{ $inputClass }}" />
-    <x-staff.form.error name="name" />
+    <input id="service_name" type="text" name="service_name" maxlength="100" value="{{ old('service_name', $service->service_name ?? '') }}" class="{{ $inputClass }}" />
+    <x-staff.form.error name="service_name" />
   </div>
 
   <div>
@@ -71,11 +71,11 @@
   </div>
 
   <div>
-    <label for="duration" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+    <label for="duration_minutes" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
       Duration <span class="text-error-500">*</span>
     </label>
-    <input id="duration" type="number" name="duration" min="1" step="1" value="{{ old('duration', $service->duration ?? 60) }}" class="{{ $inputClass }}" />
-    <x-staff.form.error name="duration" />
+    <input id="duration_minutes" type="number" name="duration_minutes" min="1" step="1" value="{{ old('duration_minutes', $service->duration_minutes ?? 60) }}" class="{{ $inputClass }}" />
+    <x-staff.form.error name="duration_minutes" />
   </div>
 
   <div class="lg:col-span-2">
