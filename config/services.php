@@ -45,4 +45,8 @@ return [
         'vapid_key' => env('FIREBASE_VAPID_KEY'),
     ],
 
+    'tinymce' => [
+        'api_key' => env('TINYMCE_API_KEY', 'no-api-key'),
+    ],
+
 ];

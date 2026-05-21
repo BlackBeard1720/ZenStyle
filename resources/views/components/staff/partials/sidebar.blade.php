@@ -204,6 +204,35 @@
           </li>
           <!-- Menu Item Clients -->
 
+          <!-- Menu Item News -->
+          <li>
+            <a
+              href="{{ route('staff.news.index') }}"
+              class="menu-item group"
+              :class="page === 'NewsManagement' ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+              <svg
+                :class="page === 'NewsManagement' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M4 5H20M4 9H20M7 13H17M7 17H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 3C2.89543 3 2 3.89543 2 5V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V5C22 3.89543 21.1046 3 20 3H4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+
+              <span
+                class="menu-item-text"
+                :class="sidebarToggle ? 'lg:hidden' : ''"
+              >
+                News
+              </span>
+            </a>
+          </li>
+          <!-- Menu Item News -->
+
           <!-- Menu Item Profile -->
           <li>
             <a
