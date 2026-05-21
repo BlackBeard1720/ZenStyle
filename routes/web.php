@@ -7,6 +7,7 @@ use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\UserController;
+use App\Http\Controllers\Staff\NewsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
 
@@ -110,6 +111,8 @@ Route::prefix('staff')->name('staff.')
         ->name('appointments.cancel');
 
     Route::resource('clients', ClientController::class);
+
+    Route::resource('news', NewsController::class);
 
     Route::fallback(function (){
         return response()->view('staff.errors.404', [

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             StaffSeeder::class,
             ServiceSeeder::class,
             AppointmentSeeder::class,
+            NewsSeeder::class,
         ]);
     }
 }

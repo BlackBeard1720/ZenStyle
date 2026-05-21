@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Support\FrontendServiceCatalog;
+use App\Models\News;
 use Illuminate\Contracts\View\View;
 
 class FrontendController extends Controller
@@ -20,14 +21,36 @@ class FrontendController extends Controller
 
     public function news(): View
     {
-        $allPosts = static::demoNewsPosts();
+        $query = News::published()->orderBy('published_at', 'desc');
+
         $category = request('category', '');
 
-        $posts = $category
-            ? collect($allPosts)->filter(fn($post) => $post['tag'] === $category)->all()
-            : $allPosts;
+        $postsCollection = $query->get()->map(function (News $n) {
+            // extract paragraphs from HTML body if possible
+            $paragraphs = [];
+            if (preg_match_all('/<p>(.*?)<\/p>/s', $n->body, $matches)) {
+                $paragraphs = array_map(fn($t) => trim(strip_tags($t)), $matches[1]);
+            } else {
+                $paragraphs = [trim(strip_tags($n->body))];
+            }
 
-        $categories = collect($allPosts)->pluck('tag')->unique()->sort()->values()->all();
+            return [
+                'slug' => $n->slug,
+                'date' => optional($n->published_at ?? $n->created_at)->toDateString(),
+                'date_label' => optional($n->published_at ?? $n->created_at)->format('d/m/Y'),
+                'title' => $n->title,
+                'excerpt' => $n->excerpt,
+                'image' => $n->image_url,
+                'tag' => 'Tin tức',
+                'paragraphs' => $paragraphs,
+            ];
+        })->values();
+
+        $posts = $category
+            ? $postsCollection->filter(fn($post) => ($post['tag'] ?? '') === $category)->values()->all()
+            : $postsCollection->all();
+
+        $categories = collect($postsCollection)->pluck('tag')->unique()->sort()->values()->all();
 
         return view('frontend.news.index', [
             'posts' => $posts,
@@ -39,14 +62,43 @@ class FrontendController extends Controller
 
     public function newsShow(string $slug): View
     {
-        $allPosts = static::demoNewsPosts();
-        $posts = collect($allPosts);
-        $post = $posts->firstWhere('slug', $slug);
-        abort_if(! $post, 404);
+        $postModel = News::where('slug', $slug)->firstOrFail();
 
-        $currentIndex = $posts->search(fn($p) => $p['slug'] === $slug);
-        $prevPost = $currentIndex > 0 ? $posts[$currentIndex - 1] : null;
-        $nextPost = $currentIndex < count($allPosts) - 1 ? $posts[$currentIndex + 1] : null;
+        $paragraphs = [];
+        if (preg_match_all('/<p>(.*?)<\/p>/s', $postModel->body, $matches)) {
+            $paragraphs = array_map(fn($t) => trim(strip_tags($t)), $matches[1]);
+        } else {
+            $paragraphs = [trim(strip_tags($postModel->body))];
+        }
+
+        $post = [
+            'slug' => $postModel->slug,
+            'date' => optional($postModel->published_at ?? $postModel->created_at)->toDateString(),
+            'date_label' => optional($postModel->published_at ?? $postModel->created_at)->format('d/m/Y'),
+            'title' => $postModel->title,
+            'excerpt' => $postModel->excerpt,
+            'image' => $postModel->image_url,
+            'tag' => 'Tin tức',
+            'paragraphs' => $paragraphs,
+        ];
+
+        // get prev / next based on published_at ordering
+        $all = News::published()->orderBy('published_at', 'desc')->get();
+        $index = $all->search(fn($n) => $n->id === $postModel->id);
+        $prev = $index > 0 ? $all[$index - 1] : null;
+        $next = $index < $all->count() - 1 ? $all[$index + 1] : null;
+
+        $prevPost = $prev ? [
+            'slug' => $prev->slug,
+            'title' => $prev->title,
+            'date_label' => optional($prev->published_at ?? $prev->created_at)->format('d/m/Y'),
+        ] : null;
+
+        $nextPost = $next ? [
+            'slug' => $next->slug,
+            'title' => $next->title,
+            'date_label' => optional($next->published_at ?? $next->created_at)->format('d/m/Y'),
+        ] : null;
 
         return view('frontend.news.show', [
             'post' => $post,
