@@ -45,8 +45,9 @@ return [
         'vapid_key' => env('FIREBASE_VAPID_KEY'),
     ],
 
-    'tinymce' => [
-        'api_key' => env('TINYMCE_API_KEY', 'no-api-key'),
+    'cloudinary' => [
+        'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+        'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
     ],
 
 ];

@@ -1,8 +1,8 @@
 <x-staff.layout
-  title="User detail"
-  page-name="UserManagement"
+  title="Staff Account Detail"
+  page-name="StaffAccount"
 >
-  <div x-data="{ pageName: `User detail`}">
+  <div x-data="{ pageName: `Staff Account Detail`}">
     <x-staff.partials.breadcrumb />
   </div>
 
@@ -24,8 +24,8 @@
   <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
       <div class="border-b border-gray-100 px-5 py-4 sm:px-6 sm:py-5 dark:border-gray-800">
-        <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Account information</h3>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">User account details and access state.</p>
+        <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Staff account information</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Staff account details and access state.</p>
       </div>
 
       <dl class="space-y-4 p-5 sm:p-6">

@@ -90,7 +90,7 @@
                             >
                                 {{ $post['tag'] }}
                             </span>
-                            <p class="mt-3 text-sm leading-relaxed text-zen-muted">{{ $post['excerpt'] }}</p>
+                            <p class="mt-3 text-sm leading-relaxed text-zen-muted">{{ $post['summary'] }}</p>
                         </div>
                         <a
                             href="{{ route('news.show', $post['slug']) }}"

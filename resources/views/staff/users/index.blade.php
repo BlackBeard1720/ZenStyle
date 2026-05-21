@@ -1,10 +1,10 @@
 <x-staff.layout
-  title="User management"
-  page-name="UserManagement"
+  title="Staff Account"
+  page-name="StaffAccount"
 >
 
   <!-- Breadcrumb Start -->
-  <div x-data="{ pageName: `Users management`}">
+  <div x-data="{ pageName: `Staff Account`}">
     <x-staff.partials.breadcrumb/>
   </div>
   <!-- Breadcrumb End -->
@@ -15,7 +15,7 @@
     >
       <div class="px-5 py-4 sm:px-6 sm:py-5">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Users list</h3>
+          <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Staff accounts</h3>
 
           <div class="flex items-center gap-2">
             <!-- ADD USER BUTTON -->
@@ -25,7 +25,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="M12 4v16m8-8H4"/>
               </svg>
-              Add User
+              Add Staff Account
             </a>
 
             <!-- FILTER BUTTON -->

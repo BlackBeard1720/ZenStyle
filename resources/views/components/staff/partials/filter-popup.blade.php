@@ -6,12 +6,12 @@
 >
     <form method="GET" action="{{ url()->current() }}" class="p-4">
         <h3 class="mb-4 text-lg font-semibold text-gray-800 dark:text-white">
-            Filter Users
+            Filter Staff Accounts
         </h3>
 
         <!-- ID -->
         <div class="mb-3">
-            <label class="text-sm text-gray-600 dark:text-gray-400">User ID</label>
+            <label class="text-sm text-gray-600 dark:text-gray-400">Account ID</label>
             <input
                 name="id"
                 type="text"

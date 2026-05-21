@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
@@ -20,30 +19,26 @@ class NewsController extends Controller
                 });
             })
             ->when($request->created_range, function ($query, $range) {
-                $dates = array_map('trim', explode(' - ', $range));
+                $dates = array_values(array_filter(array_map('trim', explode(' - ', $range))));
 
                 if (count($dates) === 2) {
                     $query->whereBetween('created_at', [$dates[0] . ' 00:00:00', $dates[1] . ' 23:59:59']);
-                } elseif (count($dates) === 1 && ! empty($dates[0])) {
+                } elseif (count($dates) === 1) {
                     $query->whereDate('created_at', $dates[0]);
+                }
+            })
+            ->when($request->status, function ($query, $status) {
+                if (in_array($status, ['active', 'inactive'], true)) {
+                    $query->where('status', $status);
                 }
             });
 
-        switch ($request->get('sort')) {
-            case 'published_asc':
-                $items->orderBy('published_at', 'asc');
-                break;
-            case 'id_asc':
-                $items->orderBy('id', 'asc');
-                break;
-            case 'id_desc':
-                $items->orderBy('id', 'desc');
-                break;
-            case 'published_desc':
-            default:
-                $items->orderBy('published_at', 'desc');
-                break;
-        }
+        match ($request->get('sort')) {
+            'created_asc' => $items->orderBy('created_at', 'asc'),
+            'id_asc' => $items->orderBy('id', 'asc'),
+            'id_desc' => $items->orderBy('id', 'desc'),
+            default => $items->orderBy('created_at', 'desc'),
+        };
 
         $items = $items->paginate(10)->withQueryString();
 
@@ -55,22 +50,26 @@ class NewsController extends Controller
         return view('staff.news.create');
     }
 
+    public function show(News $news)
+    {
+        if ($news->status !== 'active') {
+            return redirect()->route('staff.news.edit', $news);
+        }
+
+        return redirect()->route('news.show', $news->slug);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'excerpt' => 'nullable|string|max:500',
+            'summary' => 'nullable|string|max:500',
             'body' => 'required|string',
-            'image' => 'nullable|image|max:5120',
-            'published_at' => 'nullable|date',
-            'status' => 'required|in:draft,published',
+            'image' => 'nullable|url',
+            'status' => 'required|in:active,inactive',
         ]);
 
-        $data['slug'] = Str::slug($data['title']) . '-' . time();
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('news', 'public');
-        }
+        $data['slug'] = $this->makeUniqueSlug($data['title']);
 
         News::create($data);
 
@@ -86,20 +85,14 @@ class NewsController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'excerpt' => 'nullable|string|max:500',
+            'summary' => 'nullable|string|max:500',
             'body' => 'required|string',
-            'image' => 'nullable|image|max:5120',
-            'published_at' => 'nullable|date',
-            'status' => 'required|in:draft,published',
+            'image' => 'nullable|url',
+            'status' => 'required|in:active,inactive',
         ]);
 
-        $data['slug'] = Str::slug($data['title']) . '-' . time();
-
-        if ($request->hasFile('image')) {
-            if ($news->image) {
-                Storage::disk('public')->delete($news->image);
-            }
-            $data['image'] = $request->file('image')->store('news', 'public');
+        if ($data['title'] !== $news->title) {
+            $data['slug'] = $this->makeUniqueSlug($data['title'], $news);
         }
 
         $news->update($data);
@@ -109,11 +102,27 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
-        if ($news->image) {
-            Storage::disk('public')->delete($news->image);
-        }
-        $news->delete();
+        $news->update(['status' => 'inactive']);
 
-        return back()->with('success', 'Tin tức đã được xóa.');
+        return back()->with('success', 'Tin tức đã được ẩn.');
+    }
+
+    private function makeUniqueSlug(string $title, ?News $ignoreNews = null): string
+    {
+        $baseSlug = Str::slug($title) ?: 'news';
+        $slug = $baseSlug;
+        $counter = 2;
+
+        while (
+            News::query()
+                ->where('slug', $slug)
+                ->when($ignoreNews, fn ($query) => $query->whereKeyNot($ignoreNews->getKey()))
+                ->exists()
+        ) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
     }
 }

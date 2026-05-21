@@ -28,11 +28,11 @@
                 decoding="async"
             >
             <div itemprop="articleBody" class="border-t border-zen-border px-6 py-8 text-zen-text sm:px-8 sm:py-10">
-                <p class="text-base leading-relaxed text-zen-muted">{{ $post['excerpt'] }}</p>
+                @if($post['summary'])
+                    <p class="text-base leading-relaxed text-zen-muted">{{ $post['summary'] }}</p>
+                @endif
                 <div class="mt-8 space-y-5 text-[15px] leading-relaxed sm:text-base">
-                    @foreach ($post['paragraphs'] as $p)
-                        <p>{{ $p }}</p>
-                    @endforeach
+                    {!! $post['body'] !!}
                 </div>
             </div>
         </div>

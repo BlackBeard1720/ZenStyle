@@ -67,7 +67,7 @@ class UserController extends Controller
         ]);
         // redirect to user list
         return to_route('staff.users.index')
-            ->with('success', 'User created successfully.');
+            ->with('success', 'Staff account created successfully.');
     }
 
     /**
@@ -122,7 +122,7 @@ class UserController extends Controller
         ]);
         // redirect to user list
         return to_route('staff.users.index')
-            ->with('success', 'User updated successfully.');
+            ->with('success', 'Staff account updated successfully.');
     }
 
     /**
@@ -135,7 +135,7 @@ class UserController extends Controller
         $user->delete();
         // redirect to user list
         return to_route('staff.users.index')
-            ->with('success', 'User deleted successfully.');
+            ->with('success', 'Staff account deleted successfully.');
     }
 
     private function abortForClientAccount(User $user): void
