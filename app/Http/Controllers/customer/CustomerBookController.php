@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\Staff;
 use App\Models\User;
 use App\Services\FcmService;
+use App\Services\TelegramOtpService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -47,21 +48,74 @@ class CustomerBookController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        $otp = rand(100000, 999999);
+        $staff = $this->resolveStaff($data['staff_id'] ?? null);
 
-        session([
-            'booking_otp' => $otp,
-            'booking_data' => $data,
+        if ($this->hasStaffConflict($data, $staff?->id)) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
+                ]);
+        }
+
+        session(['booking_data' => $data]);
+        session()->forget(['booking_otp_failed_attempts', 'booking_otp_locked_until']);
+
+        return back()
+            ->withInput()
+            ->with('otp_pending', true);
+    }
+
+    public function cancelOtp(): RedirectResponse
+    {
+        session()->forget([
+            'booking_data',
+            'booking_otp_failed_attempts',
+            'booking_otp_locked_until',
         ]);
+
+        return redirect()->route('booking');
+    }
+
+    public function sendTelegramOtp(TelegramOtpService $telegramOtpService): RedirectResponse
+    {
+        // Lay du lieu booking dang cho xac thuc
+        $data = session('booking_data');
+
+        if (! $data || empty($data['phone'])) {
+            return redirect()
+                ->route('booking')
+                ->withErrors(['booking' => 'Vui lòng hoàn tất thông tin đặt lịch trước.']);
+        }
+
+        // Gui OTP qua Telegram
+        $result = $telegramOtpService->sendOtp($data['phone']);
+
+        if (! $result['ok']) {
+            return back()
+                ->withInput()
+                ->withErrors(['otp' => $result['message']])
+                ->with('otp_pending', true);
+        }
 
         return back()
             ->withInput()
             ->with('otp_pending', true)
-            ->with('otp_demo', $otp);
+            ->with('telegram_otp_sent', true)
+            ->with('success', $result['message']);
     }
 
-    public function verifyOtp(Request $request): RedirectResponse
+    public function verifyOtp(Request $request, TelegramOtpService $telegramOtpService): RedirectResponse
     {
+        $lockedUntil = (int) session('booking_otp_locked_until', 0);
+
+        if ($lockedUntil > now()->timestamp) {
+            return back()
+                ->withErrors(['otp' => 'Ban da nhap sai OTP qua nhieu lan. Vui long doi het thoi gian dem nguoc.'])
+                ->withInput()
+                ->with('otp_pending', true);
+        }
+
         $validator = Validator::make($request->all(), [
             'otp' => ['required', 'digits:6'],
         ], [
@@ -73,29 +127,20 @@ class CustomerBookController extends Controller
             return back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('otp_pending', true)
-                ->with('otp_demo', session('booking_otp'));
+                ->with('otp_pending', true);
         }
 
-        $expectedOtp = session('booking_otp');
+        // lấy booking_data
         $data = session('booking_data');
 
-        if (! $expectedOtp || ! $data) {
+        if (! $data) {
             return redirect()
                 ->route('booking')
                 ->withErrors(['booking' => 'Vui lòng hoàn tất đặt lịch trước.']);
         }
 
-        if (! hash_equals((string) $expectedOtp, (string) $request->input('otp'))) {
-            return back()
-                ->withErrors(['otp' => 'OTP không đúng'])
-                ->withInput()
-                ->with('otp_pending', true)
-                ->with('otp_demo', $expectedOtp);
-        }
-
+        // check trùng lịch trước
         $staff = $this->resolveStaff($data['staff_id'] ?? null);
-
         if ($this->hasStaffConflict($data, $staff?->id)) {
             return redirect()
                 ->route('booking')
@@ -103,6 +148,26 @@ class CustomerBookController extends Controller
                 ->withErrors([
                     'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
                 ]);
+        }
+
+        // sau đó mới verify OTP
+        $result = $telegramOtpService->verifyOtp($data['phone'], $request->input('otp'));
+        if (! $result['ok']) {
+            // Khoa OTP neu sai 2 lan
+            $failedAttempts = (int) session('booking_otp_failed_attempts', 0) + 1;
+            session(['booking_otp_failed_attempts' => $failedAttempts]);
+
+            if ($failedAttempts >= 2) {
+                session([
+                    'booking_otp_locked_until' => now()->addSeconds(60)->timestamp,
+                    'booking_otp_failed_attempts' => 0,
+                ]);
+            }
+
+            return back()
+                ->withErrors(['otp' => $result['message']])
+                ->withInput()
+                ->with('otp_pending', true);
         }
 
         $services = $this->resolveSelectedServices($data['service_ids'] ?? []);
@@ -158,7 +223,8 @@ class CustomerBookController extends Controller
                 );
             });
 
-        session()->forget(['booking_otp', 'booking_data']);
+        session()->forget(['booking_data']);
+        session()->forget(['booking_otp_failed_attempts', 'booking_otp_locked_until']);
         session()->flash('booking_success', [
             'appointment_id' => $appointment->id,
             'full_name' => $data['full_name'],
@@ -221,7 +287,8 @@ class CustomerBookController extends Controller
             return collect();
         }
 
-        return Service::whereIn('id', $ids)
+        return Service::query()
+            ->whereIn('id', $ids)
             ->where('status', 'active')
             ->get();
     }
@@ -232,7 +299,7 @@ class CustomerBookController extends Controller
             return null;
         }
 
-        return Staff::find((int) $staffId);
+        return Staff::query()->find((int) $staffId);
     }
 
     private function hasStaffConflict(array $data, ?int $staffId = null): bool
@@ -247,7 +314,6 @@ class CustomerBookController extends Controller
             ->where('status', '!=', 'cancelled')
             ->whereHas('appointmentServices', function ($query) use ($staffId) {
                 $query->where('staff_id', $staffId);
-            })
-            ->exists();
+            })->exists();
     }
 }
