@@ -337,7 +337,7 @@
     </form>
   </div>
 
-  @if(session('otp_pending') || $errors->has('otp'))
+  @if(session()->has('booking_data') || session('otp_pending') || $errors->has('otp'))
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
       <div class="w-full max-w-md rounded-zen-md bg-white p-6 shadow-zen-md">
         <h2 class="text-xl font-bold text-zen-text">Xác nhận OTP</h2>

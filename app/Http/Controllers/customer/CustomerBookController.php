@@ -48,9 +48,17 @@ class CustomerBookController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        session([
-            'booking_data' => $data,
-        ]);
+        $staff = $this->resolveStaff($data['staff_id'] ?? null);
+
+        if ($this->hasStaffConflict($data, $staff?->id)) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
+                ]);
+        }
+
+        session(['booking_data' => $data]);
 
         return back()
             ->withInput()
@@ -101,7 +109,7 @@ class CustomerBookController extends Controller
                 ->with('otp_pending', true);
         }
 
-        // Xac thuc OTP truoc khi tao lich
+        // lấy booking_data
         $data = session('booking_data');
 
         if (! $data) {
@@ -110,17 +118,8 @@ class CustomerBookController extends Controller
                 ->withErrors(['booking' => 'Vui lòng hoàn tất đặt lịch trước.']);
         }
 
-        $result = $telegramOtpService->verifyOtp($data['phone'], $request->input('otp'));
-
-        if (! $result['ok']) {
-            return back()
-                ->withErrors(['otp' => $result['message']])
-                ->withInput()
-                ->with('otp_pending', true);
-        }
-
+        // check trùng lịch trước
         $staff = $this->resolveStaff($data['staff_id'] ?? null);
-
         if ($this->hasStaffConflict($data, $staff?->id)) {
             return redirect()
                 ->route('booking')
@@ -128,6 +127,15 @@ class CustomerBookController extends Controller
                 ->withErrors([
                     'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
                 ]);
+        }
+
+        // sau đó mới verify OTP
+        $result = $telegramOtpService->verifyOtp($data['phone'], $request->input('otp'));
+        if (! $result['ok']) {
+            return back()
+                ->withErrors(['otp' => $result['message']])
+                ->withInput()
+                ->with('otp_pending', true);
         }
 
         $services = $this->resolveSelectedServices($data['service_ids'] ?? []);
