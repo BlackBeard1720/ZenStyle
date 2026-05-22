@@ -59,10 +59,22 @@ class CustomerBookController extends Controller
         }
 
         session(['booking_data' => $data]);
+        session()->forget(['booking_otp_failed_attempts', 'booking_otp_locked_until']);
 
         return back()
             ->withInput()
             ->with('otp_pending', true);
+    }
+
+    public function cancelOtp(): RedirectResponse
+    {
+        session()->forget([
+            'booking_data',
+            'booking_otp_failed_attempts',
+            'booking_otp_locked_until',
+        ]);
+
+        return redirect()->route('booking');
     }
 
     public function sendTelegramOtp(TelegramOtpService $telegramOtpService): RedirectResponse
@@ -95,6 +107,15 @@ class CustomerBookController extends Controller
 
     public function verifyOtp(Request $request, TelegramOtpService $telegramOtpService): RedirectResponse
     {
+        $lockedUntil = (int) session('booking_otp_locked_until', 0);
+
+        if ($lockedUntil > now()->timestamp) {
+            return back()
+                ->withErrors(['otp' => 'Ban da nhap sai OTP qua nhieu lan. Vui long doi het thoi gian dem nguoc.'])
+                ->withInput()
+                ->with('otp_pending', true);
+        }
+
         $validator = Validator::make($request->all(), [
             'otp' => ['required', 'digits:6'],
         ], [
@@ -132,6 +153,17 @@ class CustomerBookController extends Controller
         // sau đó mới verify OTP
         $result = $telegramOtpService->verifyOtp($data['phone'], $request->input('otp'));
         if (! $result['ok']) {
+            // Khoa OTP neu sai 2 lan
+            $failedAttempts = (int) session('booking_otp_failed_attempts', 0) + 1;
+            session(['booking_otp_failed_attempts' => $failedAttempts]);
+
+            if ($failedAttempts >= 2) {
+                session([
+                    'booking_otp_locked_until' => now()->addSeconds(60)->timestamp,
+                    'booking_otp_failed_attempts' => 0,
+                ]);
+            }
+
             return back()
                 ->withErrors(['otp' => $result['message']])
                 ->withInput()
@@ -192,6 +224,7 @@ class CustomerBookController extends Controller
             });
 
         session()->forget(['booking_data']);
+        session()->forget(['booking_otp_failed_attempts', 'booking_otp_locked_until']);
         session()->flash('booking_success', [
             'appointment_id' => $appointment->id,
             'full_name' => $data['full_name'],

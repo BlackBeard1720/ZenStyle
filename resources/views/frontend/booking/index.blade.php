@@ -339,13 +339,22 @@
 
   @if(session()->has('booking_data') || session('otp_pending') || $errors->has('otp'))
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div class="w-full max-w-md rounded-zen-md bg-white p-6 shadow-zen-md">
+      <div class="relative w-full max-w-md rounded-zen-md bg-white p-6 shadow-zen-md">
         <h2 class="text-xl font-bold text-zen-text">Xác nhận OTP</h2>
         @php
           $bookingData = session('booking_data', []);
           $otpPhone = $bookingData['phone'] ?? old('phone');
           $telegramLinked = $otpPhone ? \App\Models\TelegramUser::where('phone', $otpPhone)->exists() : false;
+          $otpLockedUntil = (int) session('booking_otp_locked_until', 0);
+          $otpLockSeconds = max(0, $otpLockedUntil - now()->timestamp);
         @endphp
+
+        <form method="POST" action="{{ route('booking.cancel-otp') }}" class="absolute right-4 top-4">
+          @csrf
+          <button type="submit" class="text-2xl leading-none text-zen-muted transition hover:text-zen-text" aria-label="Dong popup OTP">
+            &times;
+          </button>
+        </form>
 
         <div class="mt-4 rounded-zen-sm border border-zen-border bg-zen-bg-soft p-3">
           <p class="text-sm text-zen-muted">
@@ -386,16 +395,24 @@
           </p>
         @endif
 
+        @if($otpLockSeconds > 0)
+          <p id="otp-lock-message" class="mt-3 rounded bg-yellow-100 p-3 text-sm text-yellow-800">
+            Ban da nhap sai OTP qua nhieu lan. Vui long doi
+            <span id="otp-countdown" data-seconds="{{ $otpLockSeconds }}">{{ $otpLockSeconds }}</span>
+            giay de thu lai.
+          </p>
+        @endif
+
         <form method="POST" action="{{ route('booking.verify.otp') }}" class="mt-4">
           @csrf
 
-          <input name="otp" maxlength="6" class="h-11 w-full rounded border border-zen-border px-3 text-zen-text outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20">
+          <input name="otp" maxlength="6" @disabled($otpLockSeconds > 0) class="h-11 w-full rounded border border-zen-border px-3 text-zen-text outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20 disabled:cursor-not-allowed disabled:bg-gray-100">
 
           @error('otp')
             <p class="mt-2 text-sm font-medium text-red-600">{{ $message }}</p>
           @enderror
 
-          <button type="submit" class="mt-4 h-10 w-full rounded bg-zen-primary text-white transition hover:bg-zen-primary-dark">
+          <button type="submit" id="verify-otp-btn" @disabled($otpLockSeconds > 0) class="mt-4 h-10 w-full rounded bg-zen-primary text-white transition hover:bg-zen-primary-dark disabled:cursor-not-allowed disabled:bg-gray-400">
             Xác nhận OTP
           </button>
         </form>
@@ -416,12 +433,37 @@
             return;
           }
 
-          // Mo bot Telegram de khach bam Start
+          // Mo app Telegram, fallback sang web
           const botUsername = @json(config('services.telegram.bot_username'));
-          const telegramUrl = `https://t.me/${botUsername}`;
+          const appUrl = `tg://resolve?domain=${botUsername}`;
+          const webUrl = `https://t.me/${botUsername}`;
 
-          window.open(telegramUrl, '_blank');
+          window.location.href = appUrl;
+          setTimeout(function () {
+            window.open(webUrl, '_blank');
+          }, 800);
         });
+      }
+
+      const otpCountdown = document.getElementById('otp-countdown');
+      const otpLockMessage = document.getElementById('otp-lock-message');
+      const verifyOtpBtn = document.getElementById('verify-otp-btn');
+      const otpInput = document.querySelector('input[name="otp"]');
+
+      if (otpCountdown) {
+        let seconds = Number(otpCountdown.dataset.seconds);
+
+        const timer = setInterval(function () {
+          seconds -= 1;
+          otpCountdown.textContent = Math.max(seconds, 0);
+
+          if (seconds <= 0) {
+            clearInterval(timer);
+            otpLockMessage?.classList.add('hidden');
+            verifyOtpBtn?.removeAttribute('disabled');
+            otpInput?.removeAttribute('disabled');
+          }
+        }, 1000);
       }
     </script>
   @endpush

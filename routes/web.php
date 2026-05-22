@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
 use App\Services\TelegramOtpService;
 use App\Models\TelegramOtp;
 use App\Models\TelegramUser;
@@ -10,6 +9,7 @@ use Illuminate\Support\Carbon;
 use App\Http\Controllers\Staff\FcmTokenController;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
+use App\Http\Controllers\customer\TelegramBotController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
@@ -116,6 +116,9 @@ Route::controller(CustomerBookController::class)->group(function () {
 
     Route::post('/booking/send-telegram-otp', 'sendTelegramOtp')
         ->name('booking.send-telegram-otp');
+
+    Route::post('/booking/cancel-otp', 'cancelOtp')
+        ->name('booking.cancel-otp');
 
     Route::post('/booking/verify-otp', [CustomerBookController::class, 'verifyOtp'])
         ->name('booking.verify.otp');
@@ -341,86 +344,5 @@ if (app()->environment('local')) {
             ->with('success', $result['message']);
     })->name('telegram.otp.verify');
 
-    Route::get('/test-telegram-link-users', function () {
-        $token = config('services.telegram.bot_token');
-
-        // Lay update_id cuoi cung da xu ly
-        $lastUpdateId = Cache::get('telegram_last_update_id');
-
-        $params = [];
-
-        if ($lastUpdateId) {
-            // Cong 1 de Telegram chi tra update moi hon
-            $params['offset'] = $lastUpdateId + 1;
-        }
-
-        $response = Http::get("https://api.telegram.org/bot{$token}/getUpdates", $params);
-
-        $updates = $response->json('result', []);
-
-        $linkedUsers = [];
-
-        foreach ($updates as $update) {
-            $updateId = $update['update_id'] ?? null;
-
-            if ($updateId) {
-                // Luu update_id moi nhat
-                Cache::put('telegram_last_update_id', $updateId);
-            }
-
-            $message = $update['message'] ?? null;
-
-            if (! $message) {
-                continue;
-            }
-
-            $text = $message['text'] ?? '';
-
-            // Chi xu ly lenh /start co kem phone
-            if (! str_starts_with($text, '/start ')) {
-                continue;
-            }
-
-            // Tach phone tu lenh /start 0326477859
-            $phone = trim(str_replace('/start', '', $text));
-
-            if (! $phone) {
-                continue;
-            }
-
-            $chatId = $message['chat']['id'] ?? null;
-            $username = $message['from']['username'] ?? null;
-            $firstName = $message['from']['first_name'] ?? null;
-
-            if (! $chatId) {
-                continue;
-            }
-
-            TelegramUser::updateOrCreate(
-                [
-                    'telegram_chat_id' => $chatId,
-                ],
-                [
-                    'phone' => $phone,
-                    'telegram_username' => $username,
-                    'first_name' => $firstName,
-                ]
-            );
-
-            $linkedUsers[] = [
-                'phone' => $phone,
-                'telegram_chat_id' => $chatId,
-                'telegram_username' => $username,
-                'first_name' => $firstName,
-            ];
-        }
-
-        return [
-            'ok' => true,
-            'processed_update_count' => count($updates),
-            'linked_count' => count($linkedUsers),
-            'last_update_id' => Cache::get('telegram_last_update_id'),
-            'linked_users' => $linkedUsers,
-        ];
-    });
+    Route::get('/test-telegram-link-users', [TelegramBotController::class, 'processUpdates']);
 }
