@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fcm_tokens', function (Blueprint $table) {
+        Schema::create('telegram_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('token', 500);
-            $table->string('device_type')->nullable();
-            $table->timestamp('last_used_at')->nullable();
+            $table->string('phone')->unique();
+            $table->string('telegram_chat_id')->unique();
+            $table->string('telegram_username')->nullable();
+            $table->string('first_name')->nullable();
             $table->timestamps();
-            $table->unique(['user_id', 'token']);
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fcm_tokens');
+        Schema::dropIfExists('telegram_users');
     }
 };

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\TelegramOtp;
+use App\Models\TelegramUser;
 use App\Services\TelegramService;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Staff\FcmTokenController;
@@ -271,6 +272,24 @@ Route::post('/test-verify-otp', function (\Illuminate\Http\Request $request) {
         ->route('telegram.otp.verify.form')
         ->with('success', 'Xác thực OTP thành công!');
 })->name('telegram.otp.verify');
+
+Route::get('/test-link-telegram-user', function () {
+    TelegramUser::updateOrCreate(
+        [
+            'phone' => '0900000000',
+        ],
+        [
+            'telegram_chat_id' => '5493671447',
+            'telegram_username' => 'zenstyle_minh_t2512e_bot',
+            'first_name' => 'Minh',
+        ]
+    );
+
+    return [
+        'ok' => true,
+        'message' => 'Linked phone with telegram_chat_id successfully',
+    ];
+});
 
 /*
 // Code test Telegram chatbot. Tuyệt đối ko xóa
