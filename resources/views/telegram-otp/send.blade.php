@@ -37,6 +37,7 @@
       <input
         type="text"
         name="phone"
+        id="phone"
         value="{{ old('phone', '0900000000') }}"
         class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         placeholder="0900000000"
@@ -46,7 +47,13 @@
       <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
       @enderror
     </div>
-
+    <button
+      type="button"
+      id="link-telegram-btn"
+      class="w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 rounded-lg transition"
+    >
+      Lien ket Telegram
+    </button>
     <button
       type="submit"
       class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition"
@@ -55,5 +62,22 @@
     </button>
   </form>
 </div>
+<script>
+  document.getElementById('link-telegram-btn').addEventListener('click', function () {
+    const phoneInput = document.getElementById('phone');
+    const phone = phoneInput.value.trim();
+
+    if (!phone) {
+      alert('Vui long nhap so dien thoai truoc.');
+      phoneInput.focus();
+      return;
+    }
+    // Mo bot Telegram kem phone
+    const botUsername = 'zenstyle_minh_t2512e_bot';
+    const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(phone)}`;
+
+    window.open(telegramUrl, '_blank');
+  });
+</script>
 </body>
 </html>
