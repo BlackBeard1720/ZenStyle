@@ -235,6 +235,43 @@ Route::get('/test-send-otp', function (TelegramService $telegramService) {
     ];
 });
 
+Route::get('/test-verify-otp', function () {
+    return view('telegram-otp.verify');
+})->name('telegram.otp.verify.form');
+
+Route::post('/test-verify-otp', function (\Illuminate\Http\Request $request) {
+    $data = $request->validate([
+        'telegram_chat_id' => 'required',
+        'otp_code' => 'required|digits:6',
+    ]);
+
+    $otp = TelegramOtp::where('telegram_chat_id', $data['telegram_chat_id'])
+        ->where('otp_code', $data['otp_code'])
+        ->whereNull('verified_at')
+        ->latest()
+        ->first();
+
+    if (! $otp) {
+        return back()
+            ->withInput()
+            ->with('error', 'Mã OTP không đúng hoặc đã được sử dụng.');
+    }
+
+    if ($otp->expires_at->isPast()) {
+        return back()
+            ->withInput()
+            ->with('error', 'Mã OTP đã hết hạn. Vui lòng yêu cầu gửi mã mới.');
+    }
+
+    $otp->update([
+        'verified_at' => now(),
+    ]);
+
+    return redirect()
+        ->route('telegram.otp.verify.form')
+        ->with('success', 'Xác thực OTP thành công!');
+})->name('telegram.otp.verify');
+
 /*
 // Code test Telegram chatbot. Tuyệt đối ko xóa
 
