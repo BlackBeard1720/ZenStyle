@@ -13,6 +13,13 @@ class TelegramBotController extends Controller
     {
         $token = config('services.telegram.bot_token');
 
+        if (! $token) {
+            return [
+                'ok' => false,
+                'message' => 'Chua cau hinh Telegram bot token.',
+            ];
+        }
+
         // Lay update_id cuoi cung da xu ly
         $lastUpdateId = Cache::get('telegram_last_update_id');
 
@@ -24,21 +31,30 @@ class TelegramBotController extends Controller
         }
 
         $response = Http::get("https://api.telegram.org/bot{$token}/getUpdates", $params);
+
+        if (! $response->successful() || $response->json('ok') !== true) {
+            return [
+                'ok' => false,
+                'message' => 'Khong lay duoc update tu Telegram.',
+                'telegram_response' => $response->json(),
+            ];
+        }
+
         $updates = $response->json('result', []);
         $processedUpdates = [];
 
         foreach ($updates as $update) {
             $updateId = $update['update_id'] ?? null;
 
-            if ($updateId) {
-                // Luu update_id moi nhat
-                Cache::put('telegram_last_update_id', $updateId);
-            }
-
             $result = $telegramBotUpdateService->process($update);
 
             if ($result) {
                 $processedUpdates[] = $result;
+            }
+
+            if ($updateId) {
+                // Luu update_id da xu ly
+                Cache::put('telegram_last_update_id', $updateId);
             }
         }
 

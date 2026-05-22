@@ -29,7 +29,7 @@ class TelegramBotUpdateService
         if ($text === '/start') {
             $this->telegramService->sendMessage(
                 $chatId,
-                'Vui long gui so dien thoai ban da dung de dat lich tren ZenStyle. Vi du: 0326477859'
+                'Vui long bam nut Lien ket Telegram tren trang dat lich ZenStyle hoac gui so dien thoai cua ban.'
             );
 
             return [
@@ -64,14 +64,31 @@ class TelegramBotUpdateService
         $username = $message['from']['username'] ?? null;
         $firstName = $message['from']['first_name'] ?? null;
 
-        // Luu thong tin lien ket Telegram
-        TelegramUser::updateOrCreate(
-            ['telegram_chat_id' => $chatId],
-            [
+        $existing = TelegramUser::query()
+            ->where('phone', $phone)
+            ->where('telegram_chat_id', $chatId)
+            ->first();
+
+        if ($existing) {
+            return [
+                'action' => 'already_linked',
                 'phone' => $phone,
+                'telegram_chat_id' => $chatId,
+            ];
+        }
+
+        TelegramUser::query()->updateOrCreate(
+            ['phone' => $phone],
+            [
+                'telegram_chat_id' => $chatId,
                 'telegram_username' => $username,
                 'first_name' => $firstName,
             ]
+        );
+
+        $this->telegramService->sendMessage(
+            $chatId,
+            "ZenStyle da lien ket Telegram thanh cong voi so {$phone}. Bay gio ban co the quay lai trang dat lich va bam Gui OTP."
         );
 
         return [

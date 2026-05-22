@@ -377,7 +377,7 @@
             </button>
 
             <p class="mt-2 text-xs text-zen-muted">
-              Sau khi mo bot, hay bam Start va gui so dien thoai: {{ $otpPhone }}
+              Sau khi mo bot, hay bam Start hoac gui /start. Sau do gui so dien thoai: {{ $otpPhone }}
             </p>
           @endif
         </div>
@@ -435,13 +435,8 @@
 
           // Mo app Telegram, fallback sang web
           const botUsername = @json(config('services.telegram.bot_username'));
-          const appUrl = `tg://resolve?domain=${botUsername}`;
-          const webUrl = `https://t.me/${botUsername}`;
-
-          window.location.href = appUrl;
-          setTimeout(function () {
-            window.open(webUrl, '_blank');
-          }, 800);
+          const telegramUrl = `https://t.me/${botUsername}`;
+          window.open(telegramUrl, '_blank');
         });
       }
 

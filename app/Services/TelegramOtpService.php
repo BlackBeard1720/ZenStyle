@@ -15,7 +15,7 @@ class TelegramOtpService
 
     public function sendOtp(string $phone): array
     {
-        $telegramUser = TelegramUser::where('phone', $phone)->first();
+        $telegramUser = TelegramUser::query()->where('phone', $phone)->first();
 
         if (! $telegramUser) {
             return [
@@ -50,7 +50,7 @@ class TelegramOtpService
 
     public function verifyOtp(string $phone, string $otpCode): array
     {
-        $otp = TelegramOtp::where('phone', $phone)
+        $otp = TelegramOtp::query()->where('phone', $phone)
             ->where('otp_code', $otpCode)
             ->whereNull('verified_at')
             ->latest()
