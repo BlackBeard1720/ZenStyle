@@ -291,6 +291,47 @@ Route::get('/test-link-telegram-user', function () {
     ];
 });
 
+Route::get('/test-send-otp-by-phone', function () {
+    return view('telegram-otp.send');
+})->name('telegram.otp.send.form');
+
+Route::post('/test-send-otp-by-phone', function (Request $request, TelegramService $telegramService) {
+    $data = $request->validate([
+        'phone' => 'required|string',
+    ]);
+
+    $telegramUser = TelegramUser::where('phone', $data['phone'])->first();
+
+    if (! $telegramUser) {
+        return back()
+            ->withInput()
+            ->with('error', 'Số điện thoại này chưa liên kết Telegram. Vui lòng bấm Start bot trước.');
+    }
+
+    $otpCode = (string) random_int(100000, 999999);
+
+    TelegramOtp::create([
+        'phone' => $data['phone'],
+        'telegram_chat_id' => $telegramUser->telegram_chat_id,
+        'otp_code' => $otpCode,
+        'expires_at' => Carbon::now()->addMinutes(5),
+    ]);
+
+    $message = "Mã OTP ZenStyle của bạn là: {$otpCode}\nMã có hiệu lực trong 5 phút.";
+
+    $ok = $telegramService->sendMessage($telegramUser->telegram_chat_id, $message);
+
+    if (! $ok) {
+        return back()
+            ->withInput()
+            ->with('error', 'Không gửi được OTP qua Telegram. Vui lòng thử lại.');
+    }
+
+    return redirect()
+        ->route('telegram.otp.send.form')
+        ->with('success', 'Đã gửi OTP qua Telegram thành công!');
+})->name('telegram.otp.send');
+
 /*
 // Code test Telegram chatbot. Tuyệt đối ko xóa
 
