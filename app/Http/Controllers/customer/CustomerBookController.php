@@ -254,7 +254,8 @@ class CustomerBookController extends Controller
             return collect();
         }
 
-        return Service::whereIn('id', $ids)
+        return Service::query()
+            ->whereIn('id', $ids)
             ->where('status', 'active')
             ->get();
     }
@@ -265,7 +266,7 @@ class CustomerBookController extends Controller
             return null;
         }
 
-        return Staff::find((int) $staffId);
+        return Staff::query()->find((int) $staffId);
     }
 
     private function hasStaffConflict(array $data, ?int $staffId = null): bool
@@ -280,7 +281,6 @@ class CustomerBookController extends Controller
             ->where('status', '!=', 'cancelled')
             ->whereHas('appointmentServices', function ($query) use ($staffId) {
                 $query->where('staff_id', $staffId);
-            })
-            ->exists();
+            })->exists();
     }
 }
