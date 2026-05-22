@@ -228,17 +228,8 @@ class CustomerBookController extends Controller
             'appointmentServices.staff',
         ]);
 
-        try {
-            $clientEmail = $appointment->client?->email;
-            if (! empty($clientEmail)) {
-                Mail::to($clientEmail)->queue(new BookingConfirmedMail($appointment));
-            }
-        } catch (\Throwable $e) {
-            Log::error('Send booking confirmation mail failed', [
-                'appointment_id' => $appointment->id,
-                'client_email' => $appointment->client?->email,
-                'error' => $e->getMessage(),
-            ]);
+        if ($appointment->client?->email) {
+            Mail::to($appointment->client->email)->queue(new BookingConfirmedMail($appointment));
         }
 
         User::query()
