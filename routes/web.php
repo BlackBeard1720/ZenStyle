@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\TelegramService;
 use App\Http\Controllers\Staff\FcmTokenController;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
@@ -197,6 +198,21 @@ Route::prefix('staff')->name('staff.')
         });
     });
 
+Route::get('/test-telegram-send-service', function (TelegramService $telegramService) {
+    $chatId = '5493671447';
+
+    $ok = $telegramService->sendMessage(
+        $chatId,
+        'ZenStyle TelegramService đã hoạt động'
+    );
+
+    return [
+        'ok' => $ok,
+    ];
+});
+
+
+/*
 // Code test Telegram chatbot. Tuyệt đối ko xóa
 
 // route test lấy thông tin bot
@@ -232,3 +248,4 @@ Route::get('/test-telegram-send', function () {
 
     return $response->json();
 });
+*/
