@@ -202,106 +202,140 @@ Route::prefix('staff')->name('staff.')
         });
     });
 
-Route::get('/test-telegram-send-service', function (TelegramService $telegramService) {
-    $chatId = '5493671447';
+if (app()->environment('local')) {
 
-    $ok = $telegramService->sendMessage(
-        $chatId,
-        'ZenStyle TelegramService đã hoạt động'
-    );
+    Route::get('/test-telegram-bot', function () {
+        $token = config('services.telegram.bot_token');
 
-    return [
-        'ok' => $ok,
-    ];
-});
+        $response = Http::get("https://api.telegram.org/bot{$token}/getMe");
 
-Route::get('/test-send-otp', function (TelegramService $telegramService) {
-    $chatId = '5493671447';
+        return $response->json();
+    });
 
-    $otpCode = (string) random_int(100000, 999999);
+    Route::get('/test-telegram-updates', function () {
+        $token = config('services.telegram.bot_token');
 
-    TelegramOtp::create([
-        'phone' => '0900000000',
-        'telegram_chat_id' => $chatId,
-        'otp_code' => $otpCode,
-        'expires_at' => Carbon::now()->addMinutes(5),
-    ]);
+        $response = Http::get("https://api.telegram.org/bot{$token}/getUpdates");
 
-    $message = "Mã OTP ZenStyle của bạn là: {$otpCode}\nMã có hiệu lực trong 5 phút.";
+        return $response->json();
+    });
 
-    $ok = $telegramService->sendMessage($chatId, $message);
+    Route::get('/test-telegram-send', function () {
+        $token = config('services.telegram.bot_token');
 
-    return [
-        'ok' => $ok,
-        'message' => $ok ? 'OTP sent successfully' : 'Failed to send OTP',
-    ];
-});
+        $chatId = '5493671447';
 
-Route::get('/test-verify-otp', function () {
-    return view('telegram-otp.verify');
-})->name('telegram.otp.verify.form');
+        $message = "Xin chào từ ZenStyle Laravel Bot";
 
-Route::post('/test-verify-otp', function (Request $request, TelegramOtpService $telegramOtpService) {
-    $data = $request->validate([
-        'phone' => 'required|string',
-        'otp_code' => 'required|digits:6',
-    ]);
+        $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+            'chat_id' => $chatId,
+            'text' => $message,
+        ]);
 
-    $result = $telegramOtpService->verifyOtp(
-        $data['phone'],
-        $data['otp_code']
-    );
+        return $response->json();
+    });
 
-    if (! $result['ok']) {
-        return back()
-            ->withInput()
-            ->with('error', $result['message']);
-    }
+    Route::get('/test-telegram-send-service', function (TelegramService $telegramService) {
+        $chatId = '5493671447';
 
-    return redirect()
-        ->route('telegram.otp.verify.form')
-        ->with('success', $result['message']);
-})->name('telegram.otp.verify');
+        $ok = $telegramService->sendMessage(
+            $chatId,
+            'ZenStyle TelegramService đã hoạt động'
+        );
 
-Route::get('/test-link-telegram-user', function () {
-    TelegramUser::updateOrCreate(
-        [
+        return [
+            'ok' => $ok,
+        ];
+    });
+
+    Route::get('/test-send-otp', function (TelegramService $telegramService) {
+        $chatId = '5493671447';
+
+        $otpCode = (string) random_int(100000, 999999);
+
+        TelegramOtp::create([
             'phone' => '0900000000',
-        ],
-        [
-            'telegram_chat_id' => '5493671447',
-            'telegram_username' => 'zenstyle_minh_t2512e_bot',
-            'first_name' => 'Minh',
-        ]
-    );
+            'telegram_chat_id' => $chatId,
+            'otp_code' => $otpCode,
+            'expires_at' => Carbon::now()->addMinutes(5),
+        ]);
 
-    return [
-        'ok' => true,
-        'message' => 'Linked phone with telegram_chat_id successfully',
-    ];
-});
+        $message = "Mã OTP ZenStyle của bạn là: {$otpCode}\nMã có hiệu lực trong 5 phút.";
 
-Route::get('/test-send-otp-by-phone', function () {
-    return view('telegram-otp.send');
-})->name('telegram.otp.send.form');
+        $ok = $telegramService->sendMessage($chatId, $message);
 
-Route::post('/test-send-otp-by-phone', function (Request $request, TelegramOtpService $telegramOtpService) {
-    $data = $request->validate([
-        'phone' => 'required|string',
-    ]);
+        return [
+            'ok' => $ok,
+            'message' => $ok ? 'OTP sent successfully' : 'Failed to send OTP',
+        ];
+    });
 
-    $result = $telegramOtpService->sendOtp($data['phone']);
+    Route::get('/test-link-telegram-user', function () {
+        TelegramUser::updateOrCreate(
+            [
+                'phone' => '0900000000',
+            ],
+            [
+                'telegram_chat_id' => '5493671447',
+                'telegram_username' => 'zenstyle_minh_t2512e_bot',
+                'first_name' => 'Minh',
+            ]
+        );
 
-    if (! $result['ok']) {
-        return back()
-            ->withInput()
-            ->with('error', $result['message']);
-    }
+        return [
+            'ok' => true,
+            'message' => 'Linked phone with telegram_chat_id successfully',
+        ];
+    });
 
-    return redirect()
-        ->route('telegram.otp.send.form')
-        ->with('success', $result['message']);
-})->name('telegram.otp.send');
+    Route::get('/test-send-otp-by-phone', function () {
+        return view('telegram-otp.send');
+    })->name('telegram.otp.send.form');
+
+    Route::post('/test-send-otp-by-phone', function (Request $request, TelegramOtpService $telegramOtpService) {
+        $data = $request->validate([
+            'phone' => 'required|string',
+        ]);
+
+        $result = $telegramOtpService->sendOtp($data['phone']);
+
+        if (! $result['ok']) {
+            return back()
+                ->withInput()
+                ->with('error', $result['message']);
+        }
+
+        return redirect()
+            ->route('telegram.otp.send.form')
+            ->with('success', $result['message']);
+    })->name('telegram.otp.send');
+
+    Route::get('/test-verify-otp', function () {
+        return view('telegram-otp.verify');
+    })->name('telegram.otp.verify.form');
+
+    Route::post('/test-verify-otp', function (Request $request, TelegramOtpService $telegramOtpService) {
+        $data = $request->validate([
+            'phone' => 'required|string',
+            'otp_code' => 'required|digits:6',
+        ]);
+
+        $result = $telegramOtpService->verifyOtp(
+            $data['phone'],
+            $data['otp_code']
+        );
+
+        if (! $result['ok']) {
+            return back()
+                ->withInput()
+                ->with('error', $result['message']);
+        }
+
+        return redirect()
+            ->route('telegram.otp.verify.form')
+            ->with('success', $result['message']);
+    })->name('telegram.otp.verify');
+}
 
 /*
 // Code test Telegram chatbot. Tuyệt đối ko xóa
