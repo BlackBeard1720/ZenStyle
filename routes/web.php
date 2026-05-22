@@ -113,6 +113,9 @@ Route::controller(CustomerBookController::class)->group(function () {
     Route::post('/booking', 'store')
         ->name('booking.store');
 
+    Route::post('/booking/send-telegram-otp', 'sendTelegramOtp')
+        ->name('booking.send-telegram-otp');
+
     Route::post('/booking/verify-otp', [CustomerBookController::class, 'verifyOtp'])
         ->name('booking.verify.otp');
 

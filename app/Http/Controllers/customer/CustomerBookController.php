@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\Staff;
 use App\Models\User;
 use App\Services\FcmService;
+use App\Services\TelegramOtpService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -47,20 +48,44 @@ class CustomerBookController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        $otp = rand(100000, 999999);
-
         session([
-            'booking_otp' => $otp,
             'booking_data' => $data,
         ]);
 
         return back()
             ->withInput()
-            ->with('otp_pending', true)
-            ->with('otp_demo', $otp);
+            ->with('otp_pending', true);
     }
 
-    public function verifyOtp(Request $request): RedirectResponse
+    public function sendTelegramOtp(TelegramOtpService $telegramOtpService): RedirectResponse
+    {
+        // Lay du lieu booking dang cho xac thuc
+        $data = session('booking_data');
+
+        if (! $data || empty($data['phone'])) {
+            return redirect()
+                ->route('booking')
+                ->withErrors(['booking' => 'Vui lòng hoàn tất thông tin đặt lịch trước.']);
+        }
+
+        // Gui OTP qua Telegram
+        $result = $telegramOtpService->sendOtp($data['phone']);
+
+        if (! $result['ok']) {
+            return back()
+                ->withInput()
+                ->withErrors(['otp' => $result['message']])
+                ->with('otp_pending', true);
+        }
+
+        return back()
+            ->withInput()
+            ->with('otp_pending', true)
+            ->with('telegram_otp_sent', true)
+            ->with('success', $result['message']);
+    }
+
+    public function verifyOtp(Request $request, TelegramOtpService $telegramOtpService): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
             'otp' => ['required', 'digits:6'],
@@ -73,25 +98,25 @@ class CustomerBookController extends Controller
             return back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('otp_pending', true)
-                ->with('otp_demo', session('booking_otp'));
+                ->with('otp_pending', true);
         }
 
-        $expectedOtp = session('booking_otp');
+        // Xac thuc OTP truoc khi tao lich
         $data = session('booking_data');
 
-        if (! $expectedOtp || ! $data) {
+        if (! $data) {
             return redirect()
                 ->route('booking')
                 ->withErrors(['booking' => 'Vui lòng hoàn tất đặt lịch trước.']);
         }
 
-        if (! hash_equals((string) $expectedOtp, (string) $request->input('otp'))) {
+        $result = $telegramOtpService->verifyOtp($data['phone'], $request->input('otp'));
+
+        if (! $result['ok']) {
             return back()
-                ->withErrors(['otp' => 'OTP không đúng'])
+                ->withErrors(['otp' => $result['message']])
                 ->withInput()
-                ->with('otp_pending', true)
-                ->with('otp_demo', $expectedOtp);
+                ->with('otp_pending', true);
         }
 
         $staff = $this->resolveStaff($data['staff_id'] ?? null);
@@ -158,7 +183,7 @@ class CustomerBookController extends Controller
                 );
             });
 
-        session()->forget(['booking_otp', 'booking_data']);
+        session()->forget(['booking_data']);
         session()->flash('booking_success', [
             'appointment_id' => $appointment->id,
             'full_name' => $data['full_name'],

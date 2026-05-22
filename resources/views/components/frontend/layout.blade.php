@@ -16,5 +16,6 @@
 </main>
 <x-frontend.footer />
 <x-frontend.floating-booking />
+  @stack('scripts')
 </body>
 </html>

@@ -341,10 +341,41 @@
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
       <div class="w-full max-w-md rounded-zen-md bg-white p-6 shadow-zen-md">
         <h2 class="text-xl font-bold text-zen-text">Xác nhận OTP</h2>
+        @php
+          $bookingData = session('booking_data', []);
+          $otpPhone = $bookingData['phone'] ?? old('phone');
+        @endphp
 
-        @if(session('otp_demo'))
-          <p class="mt-3 rounded bg-yellow-100 p-3 text-sm text-zen-text">
-            OTP TEST: <strong>{{ session('otp_demo') }}</strong>
+        <div class="mt-4 rounded-zen-sm border border-zen-border bg-zen-bg-soft p-3">
+          <p class="text-sm text-zen-muted">
+            So dien thoai nhan OTP:
+            <span class="font-semibold text-zen-text">{{ $otpPhone ?: 'Chua co so dien thoai' }}</span>
+          </p>
+
+          <button
+            type="button"
+            id="link-telegram-btn"
+            data-phone="{{ $otpPhone }}"
+            class="mt-3 h-10 w-full rounded-zen-sm border border-zen-primary bg-white px-3 text-sm font-medium text-zen-primary transition hover:bg-zen-accent-soft"
+          >
+            Lien ket Telegram de nhan OTP
+          </button>
+
+          <p class="mt-2 text-xs text-zen-muted">
+            Neu Telegram chi hien /start, hay go thu cong: /start {{ $otpPhone }}
+          </p>
+        </div>
+
+        <form method="POST" action="{{ route('booking.send-telegram-otp') }}" class="mt-3">
+          @csrf
+          <button type="submit" class="h-10 w-full rounded-zen-sm bg-zen-primary px-3 text-sm font-medium text-white transition hover:bg-zen-primary-dark">
+            Gui OTP qua Telegram
+          </button>
+        </form>
+
+        @if(session('success'))
+          <p class="mt-3 rounded bg-green-100 p-3 text-sm text-green-700">
+            {{ session('success') }}
           </p>
         @endif
 
@@ -364,4 +395,27 @@
       </div>
     </div>
   @endif
+  @push('scripts')
+    <script>
+      const linkTelegramBtn = document.getElementById('link-telegram-btn');
+
+      if (linkTelegramBtn) {
+        linkTelegramBtn.addEventListener('click', function () {
+          // Lay phone tu popup OTP
+          const phone = this.dataset.phone;
+
+          if (!phone) {
+            alert('Khong tim thay so dien thoai dat lich.');
+            return;
+          }
+
+          // Mo bot Telegram kem phone
+          const botUsername = @json(config('services.telegram.bot_username'));
+          const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(phone)}`;
+
+          window.open(telegramUrl, '_blank');
+        });
+      }
+    </script>
+  @endpush
 </x-frontend.layout>
