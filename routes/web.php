@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
 use App\Services\TelegramOtpService;
 use App\Models\TelegramOtp;
 use App\Models\TelegramUser;
@@ -8,7 +9,6 @@ use Illuminate\Support\Carbon;
 use App\Http\Controllers\Staff\FcmTokenController;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
-use App\Http\Controllers\customer\TelegramBotController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
@@ -340,43 +340,86 @@ if (app()->environment('local')) {
             ->with('success', $result['message']);
     })->name('telegram.otp.verify');
 
-    Route::get('/test-telegram-link-users', [TelegramBotController::class, 'processUpdates']);
+    Route::get('/test-telegram-link-users', function () {
+        $token = config('services.telegram.bot_token');
+
+        // Lay update_id cuoi cung da xu ly
+        $lastUpdateId = Cache::get('telegram_last_update_id');
+
+        $params = [];
+
+        if ($lastUpdateId) {
+            // Cong 1 de Telegram chi tra update moi hon
+            $params['offset'] = $lastUpdateId + 1;
+        }
+
+        $response = Http::get("https://api.telegram.org/bot{$token}/getUpdates", $params);
+
+        $updates = $response->json('result', []);
+
+        $linkedUsers = [];
+
+        foreach ($updates as $update) {
+            $updateId = $update['update_id'] ?? null;
+
+            if ($updateId) {
+                // Luu update_id moi nhat
+                Cache::put('telegram_last_update_id', $updateId);
+            }
+
+            $message = $update['message'] ?? null;
+
+            if (! $message) {
+                continue;
+            }
+
+            $text = $message['text'] ?? '';
+
+            // Chi xu ly lenh /start co kem phone
+            if (! str_starts_with($text, '/start ')) {
+                continue;
+            }
+
+            // Tach phone tu lenh /start 0326477859
+            $phone = trim(str_replace('/start', '', $text));
+
+            if (! $phone) {
+                continue;
+            }
+
+            $chatId = $message['chat']['id'] ?? null;
+            $username = $message['from']['username'] ?? null;
+            $firstName = $message['from']['first_name'] ?? null;
+
+            if (! $chatId) {
+                continue;
+            }
+
+            TelegramUser::updateOrCreate(
+                [
+                    'telegram_chat_id' => $chatId,
+                ],
+                [
+                    'phone' => $phone,
+                    'telegram_username' => $username,
+                    'first_name' => $firstName,
+                ]
+            );
+
+            $linkedUsers[] = [
+                'phone' => $phone,
+                'telegram_chat_id' => $chatId,
+                'telegram_username' => $username,
+                'first_name' => $firstName,
+            ];
+        }
+
+        return [
+            'ok' => true,
+            'processed_update_count' => count($updates),
+            'linked_count' => count($linkedUsers),
+            'last_update_id' => Cache::get('telegram_last_update_id'),
+            'linked_users' => $linkedUsers,
+        ];
+    });
 }
-
-/*
-// Code test Telegram chatbot. Tuyệt đối ko xóa
-
-// route test lấy thông tin bot
-Route::get('/test-telegram-bot', function () {
-    $token = config('services.telegram.bot_token');
-
-    $response = Http::get("https://api.telegram.org/bot{$token}/getMe");
-
-    return $response->json();
-});
-
-// route xem updates
-Route::get('/test-telegram-updates', function () {
-    $token = config('services.telegram.bot_token');
-
-    $response = Http::get("https://api.telegram.org/bot{$token}/getUpdates");
-
-    return $response->json();
-});
-
-// route gửi tin nhắn
-Route::get('/test-telegram-send', function () {
-    $token = config('services.telegram.bot_token');
-
-    $chatId = '5493671447';
-
-    $message = "Xin chào từ ZenStyle Laravel Bot";
-
-    $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-        'chat_id' => $chatId,
-        'text' => $message,
-    ]);
-
-    return $response->json();
-});
-*/
