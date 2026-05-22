@@ -271,6 +271,21 @@
                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
               >
             </div>
+            <div>
+                <label for="email" class="mb-1.5 block text-sm font-medium text-zen-muted">Email</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ old('email') }}"
+                    placeholder="example@gmail.com"
+                    class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
+                >
+                @error('email')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>   
+
             <div class="sm:col-span-2">
               <label for="note" class="mb-1.5 block text-sm font-medium text-zen-muted">Ghi chú (tuỳ chọn)</label>
               <textarea

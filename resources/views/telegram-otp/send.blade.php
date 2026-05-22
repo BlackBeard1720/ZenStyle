@@ -75,7 +75,7 @@
     // Mo bot Telegram kem phone
     const botUsername = 'zenstyle_minh_t2512e_bot';
     const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(phone)}`;
-
+  
     window.open(telegramUrl, '_blank');
   });
 </script>

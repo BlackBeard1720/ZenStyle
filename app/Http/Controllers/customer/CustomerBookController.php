@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\customer;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BookingConfirmedMail;
 use App\Models\Appointment;
 use App\Models\AppointmentService;
 use App\Models\Client;
@@ -15,6 +16,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -39,6 +42,7 @@ class CustomerBookController extends Controller
         $data = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
+            'email' => ['nullable', 'email', 'max:255'],
             'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['nullable', 'array'],
@@ -176,11 +180,24 @@ class CustomerBookController extends Controller
         $appointment = DB::transaction(function () use ($data, $services, $staff, $totalAmount): Appointment {
             $client = Client::firstOrCreate(
                 ['phone' => $data['phone']],
-                ['full_name' => $data['full_name']]
+                [
+                    'full_name' => $data['full_name'],
+                    'email' => $data['email'] ?? null,
+                ]
             );
 
+            $clientUpdateData = [];
+
             if ($client->full_name !== $data['full_name']) {
-                $client->update(['full_name' => $data['full_name']]);
+                $clientUpdateData['full_name'] = $data['full_name'];
+            }
+
+            if (! empty($data['email']) && $client->email !== $data['email']) {
+                $clientUpdateData['email'] = $data['email'];
+            }
+
+            if (! empty($clientUpdateData)) {
+                $client->update($clientUpdateData);
             }
 
             $appointment = Appointment::create([
@@ -203,6 +220,26 @@ class CustomerBookController extends Controller
 
             return $appointment;
         });
+
+        // Gui mail xac nhan dat lich thanh cong
+        $appointment->load([
+            'client',
+            'appointmentServices.service',
+            'appointmentServices.staff',
+        ]);
+
+        try {
+            $clientEmail = $appointment->client?->email;
+            if (! empty($clientEmail)) {
+                Mail::to($clientEmail)->queue(new BookingConfirmedMail($appointment));
+            }
+        } catch (\Throwable $e) {
+            Log::error('Send booking confirmation mail failed', [
+                'appointment_id' => $appointment->id,
+                'client_email' => $appointment->client?->email,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         User::query()
             ->where('status', 'active')
