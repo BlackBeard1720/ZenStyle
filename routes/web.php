@@ -196,3 +196,39 @@ Route::prefix('staff')->name('staff.')
             ], 404);
         });
     });
+
+// Code test Telegram chatbot. Tuyệt đối ko xóa
+
+// route test lấy thông tin bot
+Route::get('/test-telegram-bot', function () {
+    $token = config('services.telegram.bot_token');
+
+    $response = Http::get("https://api.telegram.org/bot{$token}/getMe");
+
+    return $response->json();
+});
+
+// route xem updates
+Route::get('/test-telegram-updates', function () {
+    $token = config('services.telegram.bot_token');
+
+    $response = Http::get("https://api.telegram.org/bot{$token}/getUpdates");
+
+    return $response->json();
+});
+
+// route gửi tin nhắn
+Route::get('/test-telegram-send', function () {
+    $token = config('services.telegram.bot_token');
+
+    $chatId = '5493671447';
+
+    $message = "Xin chào từ ZenStyle Laravel Bot";
+
+    $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
+        'chat_id' => $chatId,
+        'text' => $message,
+    ]);
+
+    return $response->json();
+});
