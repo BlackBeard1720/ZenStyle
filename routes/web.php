@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\TelegramOtp;
 use App\Services\TelegramService;
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Staff\FcmTokenController;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
@@ -211,6 +213,27 @@ Route::get('/test-telegram-send-service', function (TelegramService $telegramSer
     ];
 });
 
+Route::get('/test-send-otp', function (TelegramService $telegramService) {
+    $chatId = '5493671447';
+
+    $otpCode = (string) random_int(100000, 999999);
+
+    TelegramOtp::create([
+        'phone' => '0900000000',
+        'telegram_chat_id' => $chatId,
+        'otp_code' => $otpCode,
+        'expires_at' => Carbon::now()->addMinutes(5),
+    ]);
+
+    $message = "Mã OTP ZenStyle của bạn là: {$otpCode}\nMã có hiệu lực trong 5 phút.";
+
+    $ok = $telegramService->sendMessage($chatId, $message);
+
+    return [
+        'ok' => $ok,
+        'message' => $ok ? 'OTP sent successfully' : 'Failed to send OTP',
+    ];
+});
 
 /*
 // Code test Telegram chatbot. Tuyệt đối ko xóa
