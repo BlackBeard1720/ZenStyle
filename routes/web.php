@@ -240,13 +240,13 @@ Route::get('/test-verify-otp', function () {
     return view('telegram-otp.verify');
 })->name('telegram.otp.verify.form');
 
-Route::post('/test-verify-otp', function (\Illuminate\Http\Request $request) {
+Route::post('/test-verify-otp', function (Request $request) {
     $data = $request->validate([
-        'telegram_chat_id' => 'required',
+        'phone' => 'required|string',
         'otp_code' => 'required|digits:6',
     ]);
 
-    $otp = TelegramOtp::where('telegram_chat_id', $data['telegram_chat_id'])
+    $otp = TelegramOtp::where('phone', $data['phone'])
         ->where('otp_code', $data['otp_code'])
         ->whereNull('verified_at')
         ->latest()
