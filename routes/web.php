@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
 use App\Services\TelegramOtpService;
 use App\Models\TelegramOtp;
