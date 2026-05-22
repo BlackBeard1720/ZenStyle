@@ -344,6 +344,7 @@
         @php
           $bookingData = session('booking_data', []);
           $otpPhone = $bookingData['phone'] ?? old('phone');
+          $telegramLinked = $otpPhone ? \App\Models\TelegramUser::where('phone', $otpPhone)->exists() : false;
         @endphp
 
         <div class="mt-4 rounded-zen-sm border border-zen-border bg-zen-bg-soft p-3">
@@ -352,18 +353,24 @@
             <span class="font-semibold text-zen-text">{{ $otpPhone ?: 'Chua co so dien thoai' }}</span>
           </p>
 
-          <button
-            type="button"
-            id="link-telegram-btn"
-            data-phone="{{ $otpPhone }}"
-            class="mt-3 h-10 w-full rounded-zen-sm border border-zen-primary bg-white px-3 text-sm font-medium text-zen-primary transition hover:bg-zen-accent-soft"
-          >
-            Lien ket Telegram de nhan OTP
-          </button>
+          @if($telegramLinked)
+            <p class="mt-3 rounded bg-green-100 p-3 text-sm text-green-700">
+              Telegram da duoc lien ket voi so dien thoai nay.
+            </p>
+          @else
+            <button
+              type="button"
+              id="link-telegram-btn"
+              data-phone="{{ $otpPhone }}"
+              class="mt-3 h-10 w-full rounded-zen-sm border border-zen-primary bg-white px-3 text-sm font-medium text-zen-primary transition hover:bg-zen-accent-soft"
+            >
+              Lien ket Telegram de nhan OTP
+            </button>
 
-          <p class="mt-2 text-xs text-zen-muted">
-            Neu Telegram chi hien /start, hay go thu cong: /start {{ $otpPhone }}
-          </p>
+            <p class="mt-2 text-xs text-zen-muted">
+              Sau khi mo bot, hay bam Start va gui so dien thoai: {{ $otpPhone }}
+            </p>
+          @endif
         </div>
 
         <form method="POST" action="{{ route('booking.send-telegram-otp') }}" class="mt-3">
@@ -409,9 +416,9 @@
             return;
           }
 
-          // Mo bot Telegram kem phone
+          // Mo bot Telegram de khach bam Start
           const botUsername = @json(config('services.telegram.bot_username'));
-          const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(phone)}`;
+          const telegramUrl = `https://t.me/${botUsername}`;
 
           window.open(telegramUrl, '_blank');
         });
