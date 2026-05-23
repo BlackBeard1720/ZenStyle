@@ -97,12 +97,15 @@
                 </p>
               </div>
 
-              <div>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Method</p>
-                <p class="font-medium text-gray-800 dark:text-white/90">
-                  {{ $paidPayment?->payment_method ?? '-' }}
-                </p>
-              </div>
+              @if($isPaid)
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Method</p>
+                  <p class="font-medium text-gray-800 dark:text-white/90">
+                    {{ $paidPayment?->payment_method ?? '-' }}
+                  </p>
+                </div>
+              @endif
+
             </div>
           </div>
         </div>

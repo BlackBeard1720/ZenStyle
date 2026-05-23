@@ -31,36 +31,36 @@ class AppointmentCheckoutController extends Controller
         return view('staff.appointments.checkout', compact('appointment'));
     }
 
-    public function store(Request $request, Appointment $appointment) {
-        $appointment->load('payments');
+        public function store(Request $request, Appointment $appointment) {
+            $appointment->load('payments');
 
-        if ($appointment->status !== 'completed') {
-            return to_route('staff.appointments.show', $appointment)
-                ->with('error', 'Only completed appointments can be checked out.');
-        }
+            if ($appointment->status !== 'completed') {
+                return to_route('staff.appointments.show', $appointment)
+                    ->with('error', 'Only completed appointments can be checked out.');
+            }
 
-        if ($appointment->isPaid()) {
-            return to_route('staff.appointments.show', $appointment)
-                ->with('error', 'This appointment has already been paid.');
-        }
+            if ($appointment->isPaid()) {
+                return to_route('staff.appointments.show', $appointment)
+                    ->with('error', 'This appointment has already been paid.');
+            }
 
-        $data = $request->validate([
-            'payment_method' => ['required', 'in:cash'],
-            'note' => ['nullable', 'string', 'max:1000'],
-        ]);
-
-        DB::transaction(function () use ($appointment, $data) {
-            Payment::create([
-                'appointment_id' => $appointment->id,
-                'amount' => $appointment->total_amount,
-                'payment_method' => $data['payment_method'],
-                'status' => 'paid',
-                'note' => $data['note'] ?? null,
-                'paid_at' => now(),
+            $data = $request->validate([
+                'payment_method' => ['required', 'in:cash'],
+                'note' => ['nullable', 'string', 'max:1000'],
             ]);
-        });
 
-        return to_route('staff.appointments.show', $appointment)
-            ->with('success', 'Payment completed successfully.');
+            DB::transaction(function () use ($appointment, $data) {
+                Payment::create([
+                    'appointment_id' => $appointment->id,
+                    'amount' => $appointment->total_amount,
+                    'payment_method' => $data['payment_method'],
+                    'status' => 'paid',
+                    'note' => $data['note'] ?? null,
+                    'paid_at' => now(),
+                ]);
+            });
+
+            return to_route('staff.appointments.show', $appointment)
+                ->with('success', 'Payment completed successfully.');
+        }
     }
-}
