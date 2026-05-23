@@ -1,0 +1,9 @@
+Patch log created by assistant on 2026-05-23
+Changes applied:
+- routes/web.php: added dashboard data route
+- app/Http/Controllers/Staff/DashboardController.php: replaced with data endpoint and getRevenueData
+- resources/views/staff/dashboard/index.blade.php: injected window.revenueChartData script
+- resources/views/components/staff/partials/chart/chart-03.blade.php: replaced control block
+- resources/js/staff/index.js: added fetchDashboardData and handlers
+- resources/js/staff/components/charts/chart-03.js: expose revenueChart
+- resources/js/staff/components/charts/chart-01.js: expose appointmentChart

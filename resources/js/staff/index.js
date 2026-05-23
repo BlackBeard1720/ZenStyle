@@ -79,6 +79,104 @@ document.addEventListener("DOMContentLoaded", () => {
     chart02();
     chart03();
     map01();
+
+    // Attach dashboard dynamic fetch handlers
+    const dateInput = document.querySelector('.datepicker');
+    const groupSelect = document.getElementById('dashboard-group');
+    const quick7 = document.getElementById('quick-7');
+    const quick30 = document.getElementById('quick-30');
+    const quickMonth = document.getElementById('quick-month');
+    const quickYear = document.getElementById('quick-year');
+
+    async function fetchDashboardData(from, to, group) {
+        const params = new URLSearchParams();
+        if (from) params.set('from_date', from);
+        if (to) params.set('to_date', to);
+        if (group) params.set('group', group);
+
+        const res = await fetch('/staff/dashboard/data?' + params.toString(), {
+            credentials: 'same-origin',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        });
+
+        if (!res.ok) throw new Error('Failed to fetch dashboard data');
+
+        return res.json();
+    }
+
+    function updateCharts(payload) {
+        if (!payload) return;
+        const revenue = payload.revenue;
+        const appointments = payload.appointments;
+
+        // Update global object
+        window.revenueChartData = revenue;
+
+        if (window.charts && window.charts.revenueChart) {
+            window.charts.revenueChart.updateOptions({ xaxis: { categories: revenue.labels } });
+            window.charts.revenueChart.updateSeries([{ data: revenue.values }]);
+        }
+
+        if (window.charts && window.charts.appointmentChart) {
+            window.charts.appointmentChart.updateOptions({ xaxis: { categories: appointments.labels } });
+            window.charts.appointmentChart.updateSeries([{ data: appointments.values }]);
+        }
+    }
+
+    if (dateInput) {
+        dateInput.addEventListener('change', async (e) => {
+            const val = e.target.value;
+            if (!val) return;
+            const parts = val.split(' - ');
+            if (parts.length === 2) {
+                try {
+                    const payload = await fetchDashboardData(parts[0], parts[1], 'day');
+                    updateCharts(payload);
+                } catch (err) {
+                    // eslint-disable-next-line no-console
+                    console.error(err);
+                }
+            }
+        });
+    }
+
+    if (groupSelect) {
+        groupSelect.addEventListener('change', async (e) => {
+            const group = e.target.value;
+            try {
+                const payload = await fetchDashboardData(null, null, group);
+                updateCharts(payload);
+            } catch (err) {
+                // eslint-disable-next-line no-console
+                console.error(err);
+            }
+        });
+    }
+
+    const attachQuick = (el, days, group) => {
+        if (!el) return;
+        el.addEventListener('click', async () => {
+            const to = new Date();
+            const from = new Date();
+            from.setDate(to.getDate() - days + 1);
+            const f = from.toISOString().slice(0,10);
+            const t = to.toISOString().slice(0,10);
+            try {
+                const payload = await fetchDashboardData(f, t, group || 'day');
+                // update date input value shown
+                if (dateInput) dateInput.value = f + ' - ' + t;
+                updateCharts(payload);
+            } catch (err) {
+                // eslint-disable-next-line no-console
+                console.error(err);
+            }
+        });
+    };
+
+    attachQuick(quick7, 7, 'day');
+    attachQuick(quick30, 30, 'day');
+    attachQuick(quickMonth, 30, 'month');
+    attachQuick(quickYear, 365, 'year');
 });
 
 // Get the current year

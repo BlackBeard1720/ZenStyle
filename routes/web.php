@@ -18,9 +18,11 @@ use App\Http\Controllers\Staff\CategoryController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
 use App\Http\Controllers\Staff\ServiceController;
+use App\Http\Controllers\Staff\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
+
 
 Route::get('/firebase-messaging-sw.js', function () {
     $firebaseConfig = [
@@ -168,9 +170,9 @@ Route::prefix('staff')->name('staff.')
 
         Route::delete('/logout', [SessionController::class, 'destroy'])->name('logout');
 
-        Route::get('/', function () {
-            return view('staff.dashboard.index');
-        })->name('dashboard');
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/dashboard/data', [DashboardController::class, 'data'])->name('staff.dashboard.data');
 
         Route::get('/profile', function (Request $request) {
             $user = $request->user()->loadMissing(['role', 'staff', 'client']);

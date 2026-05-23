@@ -1,7 +1,8 @@
 @props([
   'title' => 'TailAdmin',
   'pageName' => 'ecommerce',
-  'showHeaderSide' => true
+  'showHeaderSide' => true,
+  'revenueData' => null
  ])
 
 <!doctype html>
@@ -14,6 +15,11 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>{{ $title }}</title>
+    @if($revenueData !== null)
+    <script>
+        window.revenueChartData = {!! json_encode($revenueData) !!};
+    </script>
+    @endif
     @vite(['resources/css/staff.css', 'resources/js/staff/index.js'])
 </head>
 <body
