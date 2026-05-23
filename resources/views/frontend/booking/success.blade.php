@@ -30,7 +30,7 @@
                 </div>
 
                 <p class="mt-5 text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Booking confirmed</p>
-                <h1 class="mt-2 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                <h1 class="mt-2 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                     Đặt lịch thành công!
                 </h1>
                 <p class="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-zen-muted sm:text-base">

@@ -122,7 +122,7 @@
     <section class="scroll-mt-24 bg-stone-50 px-4 py-12 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle Salon</p>
-            <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+            <h2 class="mt-3 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
                 Một không gian để bạn thư giãn và làm mới diện mạo
             </h2>
             <p class="mt-4 max-w-2xl text-sm leading-7 text-zen-muted sm:text-base">
@@ -144,7 +144,7 @@
         <div class="mx-auto max-w-6xl">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Dịch vụ</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                <h2 class="mt-3 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
                     Khám phá dịch vụ tại ZenStyle
                 </h2>
                 <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
@@ -188,7 +188,7 @@
         <div class="mx-auto max-w-6xl">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Không gian</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                <h2 class="mt-3 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
                     Không gian chăm sóc nhẹ nhàng
                 </h2>
                 <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
@@ -218,7 +218,7 @@
             <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                 <div class="max-w-2xl">
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Cảm hứng</p>
-                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                    <h2 class="mt-3 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
                         Cảm hứng kiểu tóc
                     </h2>
                     <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
@@ -302,7 +302,7 @@
         <div class="mx-auto max-w-6xl">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Quy trình</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                <h2 class="mt-3 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
                     Một buổi hẹn tại ZenStyle diễn ra thế nào?
                 </h2>
             </div>
@@ -324,7 +324,7 @@
         <div class="mx-auto max-w-6xl rounded-zen-lg border border-zen-border/50 bg-zen-bg-soft p-6 shadow-sm sm:p-8">
             <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                 <div>
-                    <h2 class="font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                    <h2 class="font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                         Khi bạn đã sẵn sàng, ZenStyle luôn sẵn lịch hẹn
                     </h2>
                     <p class="mt-3 max-w-2xl text-sm leading-7 text-zen-muted sm:text-base">
