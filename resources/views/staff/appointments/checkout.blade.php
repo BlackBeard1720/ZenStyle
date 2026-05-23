@@ -120,15 +120,6 @@
                 <span class="text-gray-700 dark:text-gray-300">Cash</span>
               </label>
 
-              <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700">
-                <input type="radio"
-                       name="payment_method"
-                       value="bank_transfer"
-                       @checked(old('payment_method') === 'bank_transfer')
-                       class="h-4 w-4">
-                <span class="text-gray-700 dark:text-gray-300">Bank transfer</span>
-              </label>
-
               <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700 opacity-60">
                 <input type="radio"
                        name="payment_method"

@@ -119,11 +119,20 @@
 
     <div class="flex flex-wrap items-center justify-end gap-3">
       <a href="{{ route('staff.appointments.index') }}" class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">Back</a>
+
+      @if($appointment->status === 'completed' && ! $isPaid)
+        <a href="{{ route('staff.appointments.checkout.show', $appointment) }}"
+           class="inline-flex items-center justify-center rounded-lg bg-success-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-success-600">
+          Payment
+        </a>
+      @endif
+
       @can('manage-appointments')
         @if($appointment->canBeEdited())
           <a href="{{ route('staff.appointments.edit', $appointment) }}" class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600">Edit</a>
         @endif
       @endcan
+
       @can('cancel-appointments')
         @if($appointment->canBeCancelled())
           <form method="POST" action="{{ route('staff.appointments.cancel', $appointment) }}" onsubmit="return confirm('Cancel this appointment?')">
