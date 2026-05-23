@@ -38,7 +38,7 @@
                 <div class="space-y-5">
                     <!-- Email -->
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label for="email" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                           Email<span class="text-error-500">*</span>
                         </label>
                         <input
@@ -54,7 +54,7 @@
 
                     <!-- Password -->
                     <div>
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label for="password" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             Password<span class="text-error-500">*</span>
                         </label>
                         <div x-data="{ showPassword: false }" class="relative">

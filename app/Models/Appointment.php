@@ -49,9 +49,9 @@ class Appointment extends Model
             ->withPivot(['id', 'staff_id', 'price_at_booking']);
     }
 
-    public function isCancelled(): bool
+    public function payments(): HasMany
     {
-        return $this->status === 'cancelled';
+        return $this->hasMany(Payment::class);
     }
 
     public function canBeCancelled(): bool
