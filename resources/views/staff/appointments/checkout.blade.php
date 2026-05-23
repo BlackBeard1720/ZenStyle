@@ -1,20 +1,180 @@
 <x-staff.layout title="Checkout" page-name="Appointments">
-  <div class="p-6">
-    <h1 class="text-xl font-semibold text-gray-800 dark:text-white">
-      Checkout Appointment #{{ $appointment->id }}
-    </h1>
+  <div x-data="{ pageName: `Checkout Appointment #{{ $appointment->id }}` }">
+    <x-staff.partials.breadcrumb />
+  </div>
 
-    <p class="mt-4 text-gray-600 dark:text-gray-300">
-      Client: {{ $appointment->client?->full_name ?? '-' }}
-    </p>
+  <div class="space-y-6">
+    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+      <div class="border-b border-gray-100 px-5 py-4 dark:border-gray-800 sm:px-6 sm:py-5">
+        <h3 class="text-base font-medium text-gray-800 dark:text-white/90">
+          Checkout Appointment #{{ $appointment->id }}
+        </h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          Review appointment information and choose a payment method.
+        </p>
+      </div>
 
-    <p class="mt-2 text-gray-600 dark:text-gray-300">
-      Total: {{ number_format($appointment->total_amount) }} VND
-    </p>
+      <div class="grid grid-cols-1 gap-6 p-5 sm:p-6 lg:grid-cols-3">
+        <div class="lg:col-span-2">
+          <h4 class="mb-3 text-sm font-semibold text-gray-800 dark:text-white/90">
+            Appointment Summary
+          </h4>
 
-    <a href="{{ route('staff.appointments.show', $appointment) }}"
-       class="mt-6 inline-flex rounded-lg border px-4 py-2 text-sm">
-      Back to appointment
-    </a>
+          <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
+            <table class="min-w-full">
+              <thead>
+              <tr class="border-b border-gray-100 dark:border-gray-800">
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
+                  Service
+                </th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
+                  Staff
+                </th>
+                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400">
+                  Price
+                </th>
+              </tr>
+              </thead>
+
+              <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+              @foreach($appointment->appointmentServices as $appointmentService)
+                <tr>
+                  <td class="px-4 py-3 text-sm font-medium text-gray-800 dark:text-white/90">
+                    {{ $appointmentService->service?->name ?? '-' }}
+                  </td>
+
+                  <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                    {{ $appointmentService->staff?->full_name ?? 'Unassigned' }}
+                  </td>
+
+                  <td class="px-4 py-3 text-right text-sm text-gray-500 dark:text-gray-400">
+                    {{ number_format($appointmentService->price_at_booking) }} VND
+                  </td>
+                </tr>
+              @endforeach
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-6 rounded-xl border border-gray-200 p-4 dark:border-gray-800">
+            <h4 class="mb-3 text-sm font-semibold text-gray-800 dark:text-white/90">
+              Client Information
+            </h4>
+
+            <dl class="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
+              <div>
+                <dt class="text-gray-500 dark:text-gray-400">Name</dt>
+                <dd class="font-medium text-gray-800 dark:text-white/90">
+                  {{ $appointment->client?->full_name ?? '-' }}
+                </dd>
+              </div>
+
+              <div>
+                <dt class="text-gray-500 dark:text-gray-400">Phone</dt>
+                <dd class="font-medium text-gray-800 dark:text-white/90">
+                  {{ $appointment->client?->phone ?? '-' }}
+                </dd>
+              </div>
+
+              <div>
+                <dt class="text-gray-500 dark:text-gray-400">Email</dt>
+                <dd class="font-medium text-gray-800 dark:text-white/90">
+                  {{ $appointment->client?->email ?: '-' }}
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <div>
+          <form method="POST"
+                action="{{ route('staff.appointments.checkout.store', $appointment) }}"
+                class="rounded-xl border border-gray-200 p-4 dark:border-gray-800">
+            @csrf
+
+            <h4 class="mb-4 text-sm font-semibold text-gray-800 dark:text-white/90">
+              Payment
+            </h4>
+
+            <div class="mb-5 rounded-lg bg-gray-50 p-4 dark:bg-gray-800/50">
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                Total amount
+              </p>
+
+              <p class="mt-1 text-2xl font-semibold text-gray-800 dark:text-white/90">
+                {{ number_format($appointment->total_amount) }} VND
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Payment method
+              </p>
+
+              <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700">
+                <input type="radio"
+                       name="payment_method"
+                       value="cash"
+                       @checked(old('payment_method', 'cash') === 'cash')
+                       class="h-4 w-4">
+                <span class="text-gray-700 dark:text-gray-300">Cash</span>
+              </label>
+
+              <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700">
+                <input type="radio"
+                       name="payment_method"
+                       value="bank_transfer"
+                       @checked(old('payment_method') === 'bank_transfer')
+                       class="h-4 w-4">
+                <span class="text-gray-700 dark:text-gray-300">Bank transfer</span>
+              </label>
+
+              <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-200 p-3 text-sm dark:border-gray-700 opacity-60">
+                <input type="radio"
+                       name="payment_method"
+                       value="paypal"
+                       disabled
+                       class="h-4 w-4">
+                <span class="text-gray-700 dark:text-gray-300">
+                                    PayPal
+                                    <span class="text-xs text-gray-400">(coming soon)</span>
+                                </span>
+              </label>
+
+              @error('payment_method')
+              <p class="text-sm text-error-500">{{ $message }}</p>
+              @enderror
+            </div>
+
+            <div class="mt-5">
+              <label for="note" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                Note
+              </label>
+
+              <textarea id="note"
+                        name="note"
+                        rows="3"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">{{ old('note') }}</textarea>
+
+              @error('note')
+              <p class="mt-1 text-sm text-error-500">{{ $message }}</p>
+              @enderror
+            </div>
+
+            <div class="mt-6 flex flex-col gap-3">
+              <button type="submit"
+                      class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600">
+                Confirm Payment
+              </button>
+
+              <a href="{{ route('staff.appointments.show', $appointment) }}"
+                 class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">
+                Back to appointment
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </x-staff.layout>
