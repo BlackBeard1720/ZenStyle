@@ -153,7 +153,7 @@
         <div class="mx-auto flex min-h-[260px] max-w-6xl items-center sm:min-h-[300px] lg:min-h-[340px]">
             <div class="max-w-3xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.22em] text-zen-primary">ZenStyle Picks</p>
-                <h1 class="mt-3 font-['Playfair_Display',serif] text-4xl font-semibold leading-tight text-zen-text sm:text-5xl">
+                <h1 class="mt-3 font-heading text-4xl font-semibold leading-tight text-zen-text sm:text-5xl">
                     Hot Trend Tóc
                 </h1>
                 <p class="mt-4 max-w-2xl text-sm leading-7 text-zen-muted sm:text-base">
@@ -176,7 +176,7 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Trend gallery</p>
-                    <h2 class="mt-2 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                    <h2 class="mt-2 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                         Kiểu tóc đang được quan tâm
                     </h2>
                 </div>
@@ -292,7 +292,7 @@
 
                 <div class="flex flex-col p-5 sm:p-6">
                     <div class="flex flex-wrap gap-2" data-hot-trend-modal-tags></div>
-                    <h2 class="mt-4 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text" data-hot-trend-modal-title></h2>
+                    <h2 class="mt-4 font-heading text-3xl font-semibold leading-tight text-zen-text" data-hot-trend-modal-title></h2>
                     <p class="mt-3 text-sm leading-7 text-zen-muted" data-hot-trend-modal-description></p>
 
                     <div class="mt-6 rounded-zen-md border border-zen-border bg-zen-bg p-4">
@@ -323,7 +323,7 @@
             <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-accent-soft">ZenStyle booking</p>
-                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-white sm:text-4xl">
+                    <h2 class="mt-3 font-heading text-3xl font-semibold text-white sm:text-4xl">
                         Lưu kiểu tóc yêu thích và đặt lịch ngay
                     </h2>
                     <p class="mt-3 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">

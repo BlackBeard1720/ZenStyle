@@ -10,6 +10,9 @@
       'completed' => 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
       default => 'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-500',
     };
+
+    $paidPayment = $appointment->payments->where('status', 'paid')->first();
+    $isPaid = ! is_null($paidPayment);
   @endphp
 
   <div class="space-y-6">
@@ -69,19 +72,70 @@
         </div>
 
         <div class="lg:col-span-2">
+          <h4 class="mb-3 text-sm font-semibold text-gray-800 dark:text-white/90">Payment</h4>
+
+          <div class="rounded-xl border border-gray-200 p-4 dark:border-gray-800">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Status</p>
+
+                @if($isPaid)
+                  <span class="inline-flex rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+            Paid
+          </span>
+                @else
+                  <span class="inline-flex rounded-full bg-warning-50 px-2.5 py-0.5 text-xs font-medium text-warning-600 dark:bg-warning-500/15 dark:text-warning-500">
+            Unpaid
+          </span>
+                @endif
+              </div>
+
+              <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Amount</p>
+                <p class="font-medium text-gray-800 dark:text-white/90">
+                  {{ number_format($appointment->total_amount) }} VND
+                </p>
+              </div>
+
+              @if($isPaid)
+                <div>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Method</p>
+                  <p class="font-medium text-gray-800 dark:text-white/90">
+                    {{ $paidPayment?->payment_method ?? '-' }}
+                  </p>
+                </div>
+              @endif
+
+            </div>
+          </div>
+        </div>
+
+        @if($appointment->notes)
+        <div class="lg:col-span-2">
           <h4 class="mb-3 text-sm font-semibold text-gray-800 dark:text-white/90">Notes</h4>
           <p class="rounded-lg border border-gray-200 p-4 text-sm text-gray-600 dark:border-gray-800 dark:text-gray-300">{{ $appointment->notes ?: '-' }}</p>
         </div>
+        @endif
+
       </div>
     </div>
 
     <div class="flex flex-wrap items-center justify-end gap-3">
       <a href="{{ route('staff.appointments.index') }}" class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">Back</a>
+
+      @if($appointment->status === 'completed' && ! $isPaid)
+        <a href="{{ route('staff.appointments.checkout.show', $appointment) }}"
+           class="inline-flex items-center justify-center rounded-lg bg-success-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-success-600">
+          Payment
+        </a>
+      @endif
+
       @can('manage-appointments')
         @if($appointment->canBeEdited())
           <a href="{{ route('staff.appointments.edit', $appointment) }}" class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600">Edit</a>
         @endif
       @endcan
+
       @can('cancel-appointments')
         @if($appointment->canBeCancelled())
           <form method="POST" action="{{ route('staff.appointments.cancel', $appointment) }}" onsubmit="return confirm('Cancel this appointment?')">

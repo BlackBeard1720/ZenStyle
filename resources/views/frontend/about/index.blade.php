@@ -119,7 +119,7 @@
         <div class="relative mx-auto flex min-h-[520px] max-w-6xl items-center px-4 pb-14 pt-28 sm:min-h-[560px] sm:px-6 sm:pt-32 lg:min-h-[620px] lg:pb-16">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.22em] text-zen-primary">Câu chuyện ZenStyle</p>
-                <h1 class="mt-4 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl lg:text-5xl">
+                <h1 class="mt-4 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl lg:text-5xl">
                     Từ một studio nhỏ đến điểm hẹn làm đẹp tại FPT Aptech
                 </h1>
                 <p class="mt-4 max-w-xl text-base leading-7 text-zen-text/80">
@@ -141,7 +141,7 @@
         <div class="mx-auto max-w-5xl">
             <div class="max-w-3xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Về chúng tôi</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                     ZenStyle là gì?
                 </h2>
                 <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
@@ -155,7 +155,7 @@
             <div class="mt-7 grid gap-4 sm:grid-cols-3">
                 @foreach ($stats as $stat)
                     <div class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-sm">
-                        <p class="font-['Playfair_Display',serif] text-4xl font-semibold leading-none text-zen-primary">{{ $stat['value'] }}</p>
+                        <p class="font-heading text-4xl font-semibold leading-none text-zen-primary">{{ $stat['value'] }}</p>
                         <p class="mt-3 text-sm font-medium leading-snug text-zen-text">
                             {{ $stat['label'] }}
                         </p>
@@ -169,7 +169,7 @@
         <div class="mx-auto max-w-6xl">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Giá trị cốt lõi</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                     Giá trị ZenStyle theo đuổi
                 </h2>
             </div>
@@ -196,7 +196,7 @@
         <div class="mx-auto max-w-6xl">
             <div class="mx-auto max-w-2xl text-center">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Hành trình</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                     Hành trình ZenStyle
                 </h2>
                 <p class="mt-3 text-sm leading-relaxed text-zen-muted">
@@ -228,7 +228,7 @@
         <div class="mx-auto max-w-6xl">
             <div class="max-w-3xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Đội ngũ</p>
-                <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                     Gặp gỡ các stylist của ZenStyle
                 </h2>
                 <p class="mt-3 text-sm leading-relaxed text-zen-muted sm:text-base">
@@ -270,7 +270,7 @@
             <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Vì sao chọn ZenStyle?</p>
-                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                    <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                         Một trải nghiệm làm đẹp dễ hiểu từ đầu đến cuối.
                     </h2>
                 </div>
@@ -291,7 +291,7 @@
             <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-accent-soft">ZenStyle booking</p>
-                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-white sm:text-4xl">
+                    <h2 class="mt-3 font-heading text-3xl font-semibold text-white sm:text-4xl">
                         Sẵn sàng làm mới diện mạo của bạn?
                     </h2>
                     <p class="mt-3 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">

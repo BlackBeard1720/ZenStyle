@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Staff\AppointmentCheckoutController;
 use Illuminate\Support\Facades\Http;
 use App\Services\TelegramOtpService;
 use App\Models\TelegramOtp;
@@ -193,6 +193,15 @@ Route::prefix('staff')->name('staff.')
         })->middleware('can:manage-staff-users')->name('client-accounts.index');
 
         Route::resource('appointments', AppointmentController::class);
+
+        // route for checkout
+        Route::get('appointments/{appointment}/checkout', [AppointmentCheckoutController::class, 'show'])
+            ->name('appointments.checkout.show');
+
+        Route::post('appointments/{appointment}/checkout', [AppointmentCheckoutController::class, 'store'])
+            ->name('appointments.checkout.store');
+
+        // cancel appointment (soft delete -> change status)
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
             ->name('appointments.cancel');
 

@@ -59,7 +59,7 @@
                     {{ $categoryLabel }}
                 </span>
 
-                <h1 class="mt-4 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                <h1 class="mt-4 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
                     {{ $service['title'] }}
                 </h1>
                 <p class="mt-4 text-sm leading-relaxed text-zen-muted sm:text-base">
@@ -114,7 +114,7 @@
             <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.18em] text-zen-primary">Quy trình</p>
-                    <h2 class="mt-2 font-['Playfair_Display',serif] text-2xl font-semibold text-zen-text sm:text-3xl">
+                    <h2 class="mt-2 font-heading text-2xl font-semibold text-zen-text sm:text-3xl">
                         Quy trình thực hiện
                     </h2>
                 </div>
@@ -179,7 +179,7 @@
         </section>
 
         <section class="mt-6 rounded-zen-lg border border-zen-border bg-white p-5 shadow-zen sm:p-6">
-            <h2 class="font-['Playfair_Display',serif] text-2xl font-semibold text-zen-text">Lưu ý trước/sau khi làm</h2>
+            <h2 class="font-heading text-2xl font-semibold text-zen-text">Lưu ý trước/sau khi làm</h2>
             <ul class="mt-4 grid gap-3 text-sm leading-relaxed text-zen-text sm:grid-cols-2">
                 @foreach ($service['notes'] as $note)
                     <li class="flex gap-3 rounded-zen-sm bg-zen-bg px-4 py-3">
@@ -193,7 +193,7 @@
         <section class="mt-12 border-t border-zen-border pt-8">
             <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h2 class="font-['Playfair_Display',serif] text-2xl font-semibold text-zen-text">Dịch vụ liên quan</h2>
+                    <h2 class="font-heading text-2xl font-semibold text-zen-text">Dịch vụ liên quan</h2>
                     <p class="mt-2 text-sm leading-relaxed text-zen-muted">
                         Bạn có thể tham khảo thêm các dịch vụ phù hợp khác tại ZenStyle.
                     </p>

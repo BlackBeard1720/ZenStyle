@@ -8,7 +8,7 @@
         <div class="mx-auto flex max-w-6xl flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Contact form</p>
-                <h1 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                <h1 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                     Biểu mẫu liên hệ
                 </h1>
                 <p class="mt-4 text-sm leading-relaxed text-zen-muted sm:text-base">
