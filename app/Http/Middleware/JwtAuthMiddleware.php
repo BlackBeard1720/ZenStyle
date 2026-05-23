@@ -29,10 +29,7 @@ class JwtAuthMiddleware
         if (!$decoded || empty($decoded->uid)) {
             return redirect()
                 ->route('staff.login')
-                ->withoutCookie('access_token')
-                ->withErrors([
-                    'email' => 'Vui lòng đăng nhập lại.',
-                ]);
+                ->withoutCookie('access_token');
         }
 
         // Luôn query lại user thật trong database để cập nhật trạng thái mới nhất.
