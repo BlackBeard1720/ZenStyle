@@ -54,6 +54,13 @@ class Appointment extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function isPaid(): bool
+    {
+        return $this->payments()
+            ->where('status', 'paid')
+            ->exists();
+    }
+
     public function canBeCancelled(): bool
     {
         return in_array($this->status, ['pending', 'confirmed'], true);
