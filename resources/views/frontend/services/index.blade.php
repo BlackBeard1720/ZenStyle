@@ -16,7 +16,7 @@
         <div class="relative mx-auto flex min-h-[78vh] max-w-6xl items-center px-4 pb-20 pt-32 sm:px-6 lg:pb-24">
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.22em] text-zen-accent-soft">Dịch vụ ZenStyle</p>
-                <h1 class="mt-4 font-['Playfair_Display',serif] text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+                <h1 class="mt-4 font-heading text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
                     Dịch vụ ZenStyle
                 </h1>
                 <p class="mt-5 max-w-xl text-sm leading-relaxed text-white/85 sm:text-base">
@@ -46,7 +46,7 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-8">
                 <div class="max-w-2xl">
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Bảng dịch vụ</p>
-                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
+                    <h2 class="mt-3 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
                         Dịch vụ cung cấp
                     </h2>
                 </div>
@@ -271,7 +271,7 @@
                                             </svg>
                                         </div>
                                         <div class="-mt-1 px-4 pb-2 pt-5 text-center">
-                                            <h3 class="mx-auto flex min-h-[3.5rem] max-w-xs items-center justify-center font-['Playfair_Display',serif] text-xl font-semibold uppercase leading-tight text-zen-text">
+                                            <h3 class="mx-auto flex min-h-[3.5rem] max-w-xs items-center justify-center font-heading text-xl font-semibold uppercase leading-tight text-zen-text">
                                                 {{ $service['title'] }}
                                             </h3>
                                             <p class="mx-auto mt-3 min-h-[4rem] max-w-xs text-sm leading-relaxed text-zen-muted">
@@ -321,7 +321,7 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div class="max-w-2xl">
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Đội ngũ</p>
-                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                    <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                         Người đồng hành trong buổi hẹn của bạn.
                     </h2>
                 </div>
@@ -355,7 +355,7 @@
             <div class="grid gap-10 lg:grid-cols-12 lg:items-start">
                 <div class="lg:col-span-4">
                     <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Cảm nhận khách hàng</p>
-                    <h2 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+                    <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                         Những phản hồi sau buổi hẹn.
                     </h2>
                 </div>

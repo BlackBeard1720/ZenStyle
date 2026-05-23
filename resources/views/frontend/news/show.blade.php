@@ -8,7 +8,7 @@
         >
             {{ $post['tag'] }}
         </span>
-        <h1 itemprop="headline" class="mt-4 font-['Playfair_Display',serif] text-2xl font-semibold leading-snug text-zen-text sm:text-3xl lg:text-4xl">
+        <h1 itemprop="headline" class="mt-4 font-heading text-2xl font-semibold leading-snug text-zen-text sm:text-3xl lg:text-4xl">
             {{ $post['title'] }}
         </h1>
         <time
@@ -49,7 +49,7 @@
         <!-- Navigation between posts -->
         <nav class="mt-12 grid gap-4 sm:grid-cols-2 border-t border-zen-border pt-8">
             @if ($prevPost)
-                <a 
+                <a
                     href="{{ route('news.show', $prevPost['slug']) }}"
                     class="group flex flex-col gap-2 rounded-zen-md border border-zen-border bg-white p-4 transition hover:border-zen-border-dark hover:shadow-zen-md"
                 >
@@ -62,7 +62,7 @@
             @endif
 
             @if ($nextPost)
-                <a 
+                <a
                     href="{{ route('news.show', $nextPost['slug']) }}"
                     class="group flex flex-col gap-2 rounded-zen-md border border-zen-border bg-white p-4 transition hover:border-zen-border-dark hover:shadow-zen-md sm:text-right"
                 >

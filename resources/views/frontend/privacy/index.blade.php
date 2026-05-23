@@ -2,7 +2,7 @@
     <section class="border-b border-zen-border bg-white px-4 py-12 sm:px-6 sm:py-14">
         <div class="mx-auto max-w-4xl">
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Privacy policy</p>
-            <h1 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-zen-text sm:text-4xl">
+            <h1 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                 Chính sách bảo mật
             </h1>
             <p class="mt-4 text-sm leading-relaxed text-zen-muted sm:text-base">

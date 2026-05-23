@@ -7,7 +7,7 @@
     <div class="mx-auto max-w-6xl lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-12">
       <div class="flex flex-col justify-center">
         <p class="text-zen-primary-dark text-xs font-semibold uppercase tracking-[0.2em]">Liên hệ</p>
-        <h2 class="text-zen-text mt-3 font-['Playfair_Display',serif] text-3xl font-semibold leading-tight sm:text-4xl">
+        <h2 class="text-zen-text mt-3 font-heading text-3xl font-semibold leading-tight sm:text-4xl">
           Ghé thăm ZenStyle
         </h2>
         <p class="text-zen-muted mt-4 max-w-md text-sm leading-relaxed">

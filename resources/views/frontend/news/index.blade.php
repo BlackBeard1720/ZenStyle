@@ -3,7 +3,7 @@
         <div class="absolute inset-0 bg-black/30"></div>
         <div class="relative mx-auto max-w-6xl px-4 py-20 sm:py-28">
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-accent-soft">Blog &amp; ưu đãi</p>
-            <h1 class="mt-3 font-['Playfair_Display',serif] text-3xl font-semibold text-white sm:text-4xl">Tin tức &amp; ưu đãi</h1>
+            <h1 class="mt-3 font-heading text-3xl font-semibold text-white sm:text-4xl">Tin tức &amp; ưu đãi</h1>
             <p class="mt-3 max-w-2xl text-sm text-white/85">
                 Cập nhật khuyến mãi, xu hướng làm đẹp và hoạt động tại ZenStyle FPT Aptech.
             </p>
@@ -25,8 +25,8 @@
                         <label for="category" class="block text-sm font-semibold text-zen-text mb-2">
                             Danh mục
                         </label>
-                        <select 
-                            name="category" 
+                        <select
+                            name="category"
                             id="category"
                             class="w-full rounded-zen-sm border border-zen-border-dark bg-white px-4 py-2.5 text-zen-text transition focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20 focus:outline-none"
                         >
@@ -38,15 +38,15 @@
                             @endforeach
                         </select>
                     </div>
-                    
+
                     <div class="flex gap-2 sm:gap-3">
-                        <a 
+                        <a
                             href="{{ route('news') }}"
                             class="inline-flex items-center rounded-zen-sm border border-zen-border-dark bg-white px-5 py-2.5 font-medium text-zen-text transition hover:bg-zen-bg-soft hover:border-zen-border-dark active:bg-zen-bg-soft focus:outline-none focus:ring-2 focus:ring-zen-muted/20"
                         >
                             Reset
                         </a>
-                        <button 
+                        <button
                             type="submit"
                             class="inline-flex items-center rounded-zen-sm bg-zen-primary px-5 py-2.5 font-medium text-white transition hover:bg-zen-primary-dark active:bg-zen-primary-dark focus:outline-none focus:ring-2 focus:ring-zen-primary/50"
                         >
@@ -54,7 +54,7 @@
                         </button>
                     </div>
                 </form>
-                
+
                 <!-- Result Count -->
                 <div class="mt-4 text-sm text-zen-muted">
                     <span class="font-medium text-zen-text">{{ $resultCount }}</span> kết quả
@@ -82,7 +82,7 @@
                             <time class="text-xs font-medium uppercase tracking-wide text-zen-muted" datetime="{{ $post['date'] }}">
                                 {{ $post['date_label'] }}
                             </time>
-                            <h2 id="news-title-{{ $post['slug'] }}" class="mt-2 font-['Playfair_Display',serif] text-xl font-semibold leading-snug text-zen-text">
+                            <h2 id="news-title-{{ $post['slug'] }}" class="mt-2 font-heading text-xl font-semibold leading-snug text-zen-text">
                                 {{ $post['title'] }}
                             </h2>
                             <span
