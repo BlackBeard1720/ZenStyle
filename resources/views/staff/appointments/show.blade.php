@@ -138,10 +138,10 @@
       @elseif($appointment->status === 'completed' && ! $isPaid)
         <a href="{{ route('staff.appointments.checkout.show', $appointment) }}"
            class="inline-flex items-center justify-center rounded-lg bg-success-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-success-600">
-          Thanh toán
+          Checkout
         </a>
       @elseif($isPaid)
-        <span class="inline-flex rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">Đã thanh toán</span>
+        <span class="inline-flex rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">Paid</span>
       @endif
 
       @can('manage-appointments')
