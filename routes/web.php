@@ -14,7 +14,9 @@ use App\Http\Controllers\customer\TelegramBotController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
+use App\Http\Controllers\Staff\AttendanceController;
 use App\Http\Controllers\Staff\CategoryController;
+use App\Http\Controllers\Staff\PayrollController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
 use App\Http\Controllers\Staff\ServiceController;
@@ -114,6 +116,9 @@ Route::controller(CustomerBookController::class)->group(function () {
     Route::get('/booking', 'create')
         ->name('booking');
 
+    Route::get('/booking/available-staff', 'availableStaff')
+        ->name('booking.available-staff');
+
     Route::post('/booking', 'store')
         ->name('booking.store');
 
@@ -193,6 +198,41 @@ Route::prefix('staff')->name('staff.')
         })->middleware('can:manage-staff-users')->name('client-accounts.index');
 
         Route::resource('appointments', AppointmentController::class);
+
+        Route::middleware('can:view-attendance')->group(function () {
+            Route::get('attendance', [AttendanceController::class, 'index'])
+                ->name('attendance.calendar');
+
+            Route::get('attendance/events', [AttendanceController::class, 'events'])
+                ->name('attendance.events');
+        });
+
+        Route::middleware('can:manage-attendance')->group(function () {
+            Route::post('attendance', [AttendanceController::class, 'store'])
+                ->name('attendance.store');
+
+            Route::patch('attendance/{attendance}', [AttendanceController::class, 'update'])
+                ->name('attendance.update');
+        });
+
+        Route::middleware('can:view-payroll')->group(function () {
+            Route::get('payroll', [PayrollController::class, 'index'])
+                ->name('payroll.index');
+        });
+
+        Route::middleware('can:manage-payroll')->group(function () {
+            Route::post('payroll/generate', [PayrollController::class, 'generate'])
+                ->name('payroll.generate');
+
+            Route::patch('payroll/{payroll}', [PayrollController::class, 'update'])
+                ->name('payroll.update');
+
+            Route::patch('payroll/{payroll}/confirm', [PayrollController::class, 'confirm'])
+                ->name('payroll.confirm');
+
+            Route::patch('payroll/{payroll}/paid', [PayrollController::class, 'markAsPaid'])
+                ->name('payroll.paid');
+        });
 
         // route for checkout
         Route::get('appointments/{appointment}/checkout', [AppointmentCheckoutController::class, 'show'])
