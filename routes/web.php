@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Staff\PaypalController;
 use App\Http\Controllers\Staff\AppointmentCheckoutController;
 use Illuminate\Support\Facades\Http;
 use App\Services\TelegramOtpService;
@@ -247,6 +248,13 @@ Route::prefix('staff')->name('staff.')
         Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])
             ->name('appointments.complete');
 
+        // route for appointment paypal payment
+        Route::post('appointments/{appointment}/paypal/create-order', [AppointmentCheckoutController::class, 'createPayPalOrder'])
+            ->name('appointments.paypal.create-order');
+
+        Route::post('appointments/{appointment}/paypal/capture-order', [AppointmentCheckoutController::class, 'capturePayPalOrder'])
+            ->name('appointments.paypal.capture-order');
+
         // cancel appointment (soft delete -> change status)
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
             ->name('appointments.cancel');
@@ -428,6 +436,9 @@ if (app()->environment('local')) {
     })->name('telegram.otp.verify');
 
     Route::get('/test-telegram-link-users', [TelegramBotController::class, 'processUpdates']);
+
+    Route::get('/test-paypal-connection', [PayPalController::class, 'testConnection'])
+        ->name('paypal.test');
 }
 
 
