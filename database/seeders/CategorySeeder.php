@@ -10,10 +10,10 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'Hair Services', 'description' => 'Hair cutting, styling, coloring, and treatment services.'],
-            ['name' => 'Nail Services', 'description' => 'Manicure, pedicure, polish, and nail care services.'],
-            ['name' => 'Spa & Massage', 'description' => 'Relaxing massage, skincare, and body care services.'],
-            ['name' => 'Combo Packages', 'description' => 'Bundled services offered as normal services in this category.'],
+            ['name' => 'Hair Services'],
+            ['name' => 'Nail Services'],
+            ['name' => 'Spa & Massage'],
+            ['name' => 'Combo Packages'],
         ];
 
         foreach ($categories as $category) {
