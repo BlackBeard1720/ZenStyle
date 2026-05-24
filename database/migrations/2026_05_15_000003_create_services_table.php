@@ -8,16 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('category_id')->constrained('categories');
-            $table->string('name', 100);
-            $table->text('description')->nullable();
-            $table->decimal('price', 10, 2)->default(0);
-            $table->unsignedInteger('duration')->default(60);
-            $table->string('status', 20)->default('active');
-            $table->timestamps();
-        });
+        if (! Schema::hasTable('services')) {
+            Schema::create('services', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+                $table->string('name', 100);
+                $table->string('thumbnail')->nullable();
+                $table->text('description')->nullable();
+                $table->decimal('price', 10, 2)->default(0);
+                $table->unsignedInteger('duration')->default(60);
+                $table->string('status', 20)->default('active');
+                $table->timestamps();
+            });
+        }
     }
 
     public function down(): void

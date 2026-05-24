@@ -13,6 +13,8 @@ class Payment extends Model
         'payment_method',
         'status',
         'transaction_code',
+        'paypal_order_id',
+        'paypal_capture_id',
         'note',
         'paid_at',
     ];

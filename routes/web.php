@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Staff\PaypalController;
 use App\Http\Controllers\Staff\AppointmentCheckoutController;
 use Illuminate\Support\Facades\Http;
 use App\Services\TelegramOtpService;
@@ -14,7 +15,9 @@ use App\Http\Controllers\customer\TelegramBotController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
+use App\Http\Controllers\Staff\AttendanceController;
 use App\Http\Controllers\Staff\CategoryController;
+use App\Http\Controllers\Staff\PayrollController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
 use App\Http\Controllers\Staff\ServiceController;
@@ -22,6 +25,8 @@ use App\Http\Controllers\Staff\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
+use App\Http\Controllers\Staff\InventoryController;
+use App\Http\Controllers\Staff\InventoryReportController;
 
 
 Route::get('/firebase-messaging-sw.js', function () {
@@ -114,6 +119,9 @@ Route::controller(CustomerBookController::class)->group(function () {
     Route::get('/booking', 'create')
         ->name('booking');
 
+    Route::get('/booking/available-staff', 'availableStaff')
+        ->name('booking.available-staff');
+
     Route::post('/booking', 'store')
         ->name('booking.store');
 
@@ -194,12 +202,60 @@ Route::prefix('staff')->name('staff.')
 
         Route::resource('appointments', AppointmentController::class);
 
+        Route::middleware('can:view-attendance')->group(function () {
+            Route::get('attendance', [AttendanceController::class, 'index'])
+                ->name('attendance.calendar');
+
+            Route::get('attendance/events', [AttendanceController::class, 'events'])
+                ->name('attendance.events');
+        });
+
+        Route::middleware('can:manage-attendance')->group(function () {
+            Route::post('attendance', [AttendanceController::class, 'store'])
+                ->name('attendance.store');
+
+            Route::patch('attendance/{attendance}', [AttendanceController::class, 'update'])
+                ->name('attendance.update');
+        });
+
+        Route::middleware('can:view-payroll')->group(function () {
+            Route::get('payroll', [PayrollController::class, 'index'])
+                ->name('payroll.index');
+        });
+
+        Route::middleware('can:manage-payroll')->group(function () {
+            Route::post('payroll/generate', [PayrollController::class, 'generate'])
+                ->name('payroll.generate');
+
+            Route::patch('payroll/{payroll}', [PayrollController::class, 'update'])
+                ->name('payroll.update');
+
+            Route::patch('payroll/{payroll}/confirm', [PayrollController::class, 'confirm'])
+                ->name('payroll.confirm');
+
+            Route::patch('payroll/{payroll}/paid', [PayrollController::class, 'markAsPaid'])
+                ->name('payroll.paid');
+        });
+
         // route for checkout
         Route::get('appointments/{appointment}/checkout', [AppointmentCheckoutController::class, 'show'])
             ->name('appointments.checkout.show');
 
         Route::post('appointments/{appointment}/checkout', [AppointmentCheckoutController::class, 'store'])
             ->name('appointments.checkout.store');
+
+        Route::patch('appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])
+            ->name('appointments.confirm');
+
+        Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])
+            ->name('appointments.complete');
+
+        // route for appointment paypal payment
+        Route::post('appointments/{appointment}/paypal/create-order', [AppointmentCheckoutController::class, 'createPayPalOrder'])
+            ->name('appointments.paypal.create-order');
+
+        Route::post('appointments/{appointment}/paypal/capture-order', [AppointmentCheckoutController::class, 'capturePayPalOrder'])
+            ->name('appointments.paypal.capture-order');
 
         // cancel appointment (soft delete -> change status)
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
@@ -220,6 +276,31 @@ Route::prefix('staff')->name('staff.')
                 'message' => 'We can’t seem to find the page you are looking for!',
             ], 404);
         });
+
+        //quản lý kho hàng
+        Route::get('/inventory', [InventoryController::class, 'index'])
+            ->name('inventory.index');
+
+        Route::post('/inventory/supplier', [InventoryController::class, 'storeSupplier'])
+            ->name('inventory.supplier.store');
+
+        Route::post('/inventory/product', [InventoryController::class, 'storeProduct'])
+            ->name('inventory.product.store');
+
+        Route::put('/inventory/product/{product}', [InventoryController::class, 'updateProduct'])
+            ->name('inventory.product.update');
+
+        Route::delete('/inventory/product/{product}', [InventoryController::class, 'destroyProduct'])
+            ->name('inventory.product.destroy');
+
+        Route::post('/inventory/purchase-order', [InventoryController::class, 'storePurchaseOrder'])
+            ->name('inventory.purchase-order.store');
+
+        Route::post('/inventory/{product}/use', [InventoryController::class, 'useProduct'])
+            ->name('inventory.use');
+
+        Route::post('/inventory/{product}/waste', [InventoryController::class, 'wasteProduct'])
+            ->name('inventory.waste');
     });
 
 if (app()->environment('local')) {
@@ -357,4 +438,11 @@ if (app()->environment('local')) {
     })->name('telegram.otp.verify');
 
     Route::get('/test-telegram-link-users', [TelegramBotController::class, 'processUpdates']);
+
+    Route::get('/test-paypal-connection', [PayPalController::class, 'testConnection'])
+        ->name('paypal.test');
 }
+
+
+
+

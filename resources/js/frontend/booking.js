@@ -112,6 +112,76 @@ function setAvailability(el, disabled, map) {
     toggleClasses(el, el.getAttribute('aria-pressed') === 'true', map);
 }
 
+function createStaffCard(staff, checked = false) {
+    const label = document.createElement('label');
+    label.dataset.bookingStylistCard = '';
+    label.dataset.bookingStylistAvailable = 'true';
+    label.setAttribute('role', 'radio');
+    label.setAttribute('aria-disabled', 'false');
+    label.className =
+        'group relative flex min-w-0 cursor-pointer flex-col overflow-hidden rounded-zen-md border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-zen-primary/50 hover:shadow-zen has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft has-[:checked]:shadow-zen-md has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40';
+
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'staff_id';
+    input.value = String(staff.id);
+    input.dataset.bookingStylistRadio = '';
+    input.dataset.stylistName = staff.name ?? '';
+    input.dataset.stylistAvailable = 'true';
+    input.className = 'peer sr-only';
+    input.checked = checked;
+
+    const body = document.createElement('span');
+    body.className = 'flex min-w-0 items-start gap-3';
+
+    const image = document.createElement('img');
+    image.src = staff.image ?? '';
+    image.alt = `Anh \u0111\u1ea1i di\u1ec7n ${staff.name ?? ''}`;
+    image.className = 'size-14 shrink-0 rounded-full border-2 border-white object-cover shadow-sm ring-1 ring-zen-border';
+    image.loading = 'lazy';
+
+    const content = document.createElement('span');
+    content.className = 'min-w-0 flex-1';
+
+    const name = document.createElement('span');
+    name.dataset.stylistLabel = '';
+    name.className = 'block break-words text-sm font-semibold text-zen-text';
+    name.textContent = staff.name ?? '';
+
+    const role = document.createElement('span');
+    role.className = 'mt-1 block break-words text-xs font-medium text-zen-primary';
+    role.textContent = staff.role ?? 'Nh\u00e2n vi\u00ean';
+
+    const status = document.createElement('span');
+    status.className = 'mt-2 inline-flex max-w-full rounded-full bg-zen-accent-soft px-2.5 py-1 text-xs font-medium text-zen-primary ring-1 ring-zen-primary/20';
+    status.textContent = 'C\u00f3 th\u1ec3 \u0111\u1eb7t l\u1ecbch';
+
+    content.append(name, role, status);
+    body.append(image, content);
+    label.append(input, body);
+
+    if (staff.experience) {
+        const experience = document.createElement('span');
+        experience.className = 'mt-4 grid gap-2 text-xs text-zen-muted';
+
+        const row = document.createElement('span');
+        row.className = 'grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3';
+
+        const labelText = document.createElement('span');
+        labelText.textContent = 'Kinh nghi\u1ec7m';
+
+        const value = document.createElement('span');
+        value.className = 'text-right font-semibold text-zen-text';
+        value.textContent = staff.experience;
+
+        row.append(labelText, value);
+        experience.append(row);
+        label.append(experience);
+    }
+
+    return label;
+}
+
 function initBookingPage(root) {
     const form = root.querySelector(SEL.form);
     const summaryBranch = root.querySelector('#booking-summary-branch');
@@ -129,6 +199,9 @@ function initBookingPage(root) {
     const promoHint = root.querySelector(SEL.promoHint);
     const staffNameInput = root.querySelector(SEL.staffNameInput);
     const timeInput = root.querySelector(SEL.timeInput);
+    const staffEmpty = root.querySelector('[data-booking-staff-empty]');
+    const staffList = staffEmpty?.previousElementSibling ?? root.querySelector('[data-booking-stylist-card]')?.parentElement;
+    let staffRequestController = null;
 
     function selectedSlot() {
         return slotButtons.find((b) => b.getAttribute('aria-pressed') === 'true');
@@ -140,6 +213,12 @@ function initBookingPage(root) {
 
     function selectedDateIso() {
         return selectedDay()?.dataset.date ?? dateInput?.value ?? '';
+    }
+
+    function selectedServiceIds() {
+        return [...root.querySelectorAll(SEL.serviceCheckbox)]
+            .filter((cb) => cb.checked)
+            .map((cb) => cb.value);
     }
 
     function hasBookableSlotOnDate(isoDate) {
@@ -259,11 +338,6 @@ function initBookingPage(root) {
             picked = null;
         }
 
-        if (!picked) {
-            picked = radios.find(isStylistAvailable) ?? null;
-            if (picked) picked.checked = true;
-        }
-
         const labelEl = picked?.closest('label')?.querySelector('[data-stylist-label]');
         const stylistName = picked
             ? picked.dataset.stylistName ?? labelEl?.textContent?.trim() ?? '—'
@@ -284,6 +358,46 @@ function initBookingPage(root) {
 
         if (summaryStylist) summaryStylist.textContent = stylistName;
         if (staffNameInput) staffNameInput.value = stylistName;
+    }
+
+    async function reloadAvailableStaff() {
+        if (!root.dataset.availableStaffUrl || !staffList) return;
+
+        const selectedStaffId = root.dataset.selectedStylistId ?? '';
+        const params = new URLSearchParams();
+        const dateIso = selectedDateIso();
+        const time = timeInput?.value ?? selectedSlot()?.dataset.slot ?? '';
+
+        if (dateIso) params.set('appointment_date', dateIso);
+        if (time) params.set('appointment_time', time);
+        selectedServiceIds().forEach((serviceId) => params.append('service_ids[]', serviceId));
+
+        staffRequestController?.abort();
+        staffRequestController = new AbortController();
+
+        try {
+            const response = await fetch(`${root.dataset.availableStaffUrl}?${params.toString()}`, {
+                headers: { Accept: 'application/json' },
+                signal: staffRequestController.signal,
+            });
+
+            if (!response.ok) return;
+
+            const data = await response.json();
+            const staff = Array.isArray(data.staff) ? data.staff : [];
+
+            staffList.innerHTML = '';
+            staff.forEach((staffMember) => {
+                staffList.appendChild(createStaffCard(staffMember, String(staffMember.id) === selectedStaffId));
+            });
+
+            if (staffEmpty) staffEmpty.hidden = staff.length > 0;
+            syncStylistSummary();
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                console.error('Unable to load available staff.', error);
+            }
+        }
     }
 
     function syncServicesAndTotal() {
@@ -348,6 +462,7 @@ function initBookingPage(root) {
             }
             syncSlotAvailability();
             updateDateTimeSummary();
+            reloadAvailableStaff();
         });
     });
 
@@ -357,6 +472,7 @@ function initBookingPage(root) {
 
             selectSlotButton(btn);
             updateDateTimeSummary();
+            reloadAvailableStaff();
         });
     });
 
@@ -369,27 +485,32 @@ function initBookingPage(root) {
         syncDayAvailability();
         syncSlotAvailability();
         updateDateTimeSummary();
+        reloadAvailableStaff();
     });
 
     root.querySelectorAll(SEL.serviceCheckbox).forEach((cb) =>
-        cb.addEventListener('change', syncServicesAndTotal),
-    );
-
-    root.querySelectorAll('[data-booking-stylist-card]').forEach((card) => {
-        card.addEventListener('click', (event) => {
-            if (isStylistAvailable(card.querySelector(SEL.stylistRadios))) return;
-
-            event.preventDefault();
-            syncStylistSummary();
-        });
-    });
-
-    root.querySelectorAll(SEL.stylistRadios).forEach((radio) =>
-        radio.addEventListener('change', () => {
-            if (!isStylistAvailable(radio)) radio.checked = false;
-            syncStylistSummary();
+        cb.addEventListener('change', () => {
+            syncServicesAndTotal();
+            reloadAvailableStaff();
         }),
     );
+
+    staffList?.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target : null;
+        const card = target?.closest('[data-booking-stylist-card]');
+        if (!card || isStylistAvailable(card.querySelector(SEL.stylistRadios))) return;
+
+        event.preventDefault();
+        syncStylistSummary();
+    });
+
+    staffList?.addEventListener('change', (event) => {
+        const radio = event.target instanceof Element ? event.target : null;
+        if (!radio.matches?.(SEL.stylistRadios)) return;
+
+        if (!isStylistAvailable(radio)) radio.checked = false;
+        syncStylistSummary();
+    });
 
     promoBtn?.addEventListener('click', () => {
         const raw = promoInput?.value.trim() ?? '';
@@ -434,12 +555,14 @@ function initBookingPage(root) {
 
             clearPromoHint();
             syncAllSummaries();
+            reloadAvailableStaff();
         });
     });
 
     ensureDateInputIsFutureSafe();
     if (summaryBranch) summaryBranch.textContent = 'ZenStyle FPT Aptech';
     syncAllSummaries();
+    reloadAvailableStaff();
 }
 
 export function initBookingIfPresent() {

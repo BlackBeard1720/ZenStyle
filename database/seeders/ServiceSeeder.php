@@ -13,32 +13,116 @@ class ServiceSeeder extends Seeder
         $categories = Category::pluck('id', 'name');
 
         $services = [
-            ['category' => 'Hair Services', 'name' => 'Hair Cut', 'description' => 'Basic salon haircut.', 'price' => 150000, 'duration' => 45],
-            ['category' => 'Hair Services', 'name' => 'Hair Wash', 'description' => 'Wash and scalp massage.', 'price' => 120000, 'duration' => 30],
-            ['category' => 'Hair Services', 'name' => 'Hair Coloring', 'description' => 'Basic coloring service.', 'price' => 650000, 'duration' => 120],
-            ['category' => 'Hair Services', 'name' => 'Hair Treatment', 'description' => 'Recovery treatment.', 'price' => 320000, 'duration' => 60],
-            ['category' => 'Nail Services', 'name' => 'Nail Care', 'description' => 'Basic nail cleaning and care.', 'price' => 220000, 'duration' => 60],
-            ['category' => 'Nail Services', 'name' => 'Manicure', 'description' => 'Basic hand nail care and polish.', 'price' => 180000, 'duration' => 45],
-            ['category' => 'Nail Services', 'name' => 'Pedicure', 'description' => 'Basic foot nail care and polish.', 'price' => 200000, 'duration' => 45],
-            ['category' => 'Spa & Massage', 'name' => 'Relaxing Massage', 'description' => 'Full body relaxing massage to reduce stress and muscle tension.', 'price' => 450000, 'duration' => 90],
-            ['category' => 'Spa & Massage', 'name' => 'Foot Massage', 'description' => 'Relaxing foot massage to improve blood circulation.', 'price' => 250000, 'duration' => 45],
-            ['category' => 'Spa & Massage', 'name' => 'Head Massage', 'description' => 'Relaxing head and shoulder massage.', 'price' => 200000, 'duration' => 30],
-            ['category' => 'Spa & Massage', 'name' => 'Aromatherapy Massage', 'description' => 'Relaxing massage using essential oils.', 'price' => 550000, 'duration' => 90],
-            ['category' => 'Spa & Massage', 'name' => 'Hot Stone Massage', 'description' => 'Massage therapy using warm stones for deep relaxation.', 'price' => 600000, 'duration' => 90],
-            ['category' => 'Spa & Massage', 'name' => 'Facial Treatment', 'description' => 'Basic facial cleansing and skin treatment.', 'price' => 350000, 'duration' => 60],
-            ['category' => 'Spa & Massage', 'name' => 'Body Scrub', 'description' => 'Body exfoliation treatment for smoother skin.', 'price' => 480000, 'duration' => 75],
-            ['category' => 'Combo Packages', 'name' => 'Weekend Relax Combo', 'description' => 'Hair wash, head massage, and facial treatment combo.', 'price' => 790000, 'duration' => 120],
-            ['category' => 'Combo Packages', 'name' => 'Hair Refresh Combo', 'description' => 'Hair cut, wash, and treatment package.', 'price' => 520000, 'duration' => 105],
+            [
+                'category' => 'Hair Services',
+                'name' => 'Hair Cut',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604455/HairCut_i02zgw.png',
+                'description' => 'Basic haircut and styling.',
+                'price' => 15, 'duration' => 45
+            ],
+            [
+                'category' => 'Hair Services',
+                'name' => 'Hair Wash',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604455/HairWash_yrs6v2.png',
+                'description' => 'Hair wash with scalp massage.',
+                'price' => 10, 'duration' => 30
+            ],
+            [
+                'category' => 'Hair Services',
+                'name' => 'Hair Coloring',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604455/HairColoring_kbzl0g.png',
+                'description' => 'Basic hair coloring service.',
+                'price' => 35, 'duration' => 120
+            ],
+            [
+                'category' => 'Hair Services',
+                'name' => 'Hair Treatment',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604455/HairTreatment_f5vab9.png',
+                'description' => 'Hair recovery treatment.',
+                'price' => 25, 'duration' => 60
+            ],
+
+            [
+                'category' => 'Nail Services',
+                'name' => 'Manicure',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604454/Manicure_bq9g3h.png',
+                'description' => 'Hand nail care and polish.',
+                'price' => 15, 'duration' => 45
+            ],
+            [
+                'category' => 'Nail Services',
+                'name' => 'Pedicure',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604454/Pedicure_zwk5qs.png',
+                'description' => 'Foot nail care and polish.',
+                'price' => 18, 'duration' => 45
+            ],
+
+            [
+                'category' => 'Spa & Massage',
+                'name' => 'Relaxing Massage',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604459/massage01_eadxlg.png',
+                'description' => 'Full body relaxing massage.',
+                'price' => 55, 'duration' => 90
+            ],
+            [
+                'category' => 'Spa & Massage',
+                'name' => 'Foot Massage',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604460/massage02_cddjhh.png',
+                'description' => 'Relaxing foot massage.',
+                'price' => 40, 'duration' => 45
+            ],
+            [
+                'category' => 'Spa & Massage',
+                'name' => 'Head Massage',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604458/massage03_goxvly.png',
+                'description' => 'Head and shoulder massage.',
+                'price' => 35, 'duration' => 30
+            ],
+            [
+                'category' => 'Spa & Massage',
+                'name' => 'Aromatherapy Massage',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604460/massage04_syzjmx.png',
+                'description' => 'Massage using essential oils.',
+                'price' => 75, 'duration' => 90
+            ],
+            [
+                'category' => 'Spa & Massage',
+                'name' => 'Hot Stone Massage',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604459/massage05_asohrk.png',
+                'description' => 'Warm stone massage therapy.',
+                'price' => 90, 'duration' => 90
+            ],
+            [
+                'category' => 'Spa & Massage',
+                'name' => 'Facial Treatment',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779604460/massage06_iegivw.png',
+                'description' => 'Basic facial cleansing and skin care.',
+                'price' => 50, 'duration' => 60
+            ],
+
+            [
+                'category' => 'Combo Packages',
+                'name' => 'Weekend Relax Combo',
+                'thumbnail' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779605690/combozenstyle_e6pfwl.png',
+                'description' => 'Hair cut, wash and treatment, head massage, and facial treatment.',
+                'price' => 120, 'duration' => 120
+            ],
         ];
 
         foreach ($services as $service) {
             $categoryName = $service['category'];
             unset($service['category']);
 
-            Service::create($service + [
-                'category_id' => $categories[$categoryName],
-                'status' => 'active',
-            ]);
+            Service::updateOrCreate(
+                [
+                    'name' => $service['name'],
+                    'category_id' => $categories[$categoryName],
+                ],
+                $service + [
+                    'category_id' => $categories[$categoryName],
+                    'status' => 'active',
+                ]
+            );
         }
     }
 }
