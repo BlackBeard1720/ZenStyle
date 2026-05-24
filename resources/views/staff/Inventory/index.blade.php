@@ -336,7 +336,6 @@
       </div>
     </div>
   </div>
-
   <script>
     function toggleForm(id) {
       const element = document.getElementById(id);
