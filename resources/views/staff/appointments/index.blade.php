@@ -85,6 +85,9 @@
               <th class="w-32 px-4 pb-3 pt-4 text-left sm:px-6">
                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>
               </th>
+              <th class="w-40 px-4 pb-3 pt-4 text-left sm:px-6">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Quick Action</p>
+              </th>
               <th class="w-28 px-4 pb-3 pt-4 text-right sm:px-6">
                 <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Actions</p>
               </th>
@@ -131,7 +134,30 @@
                 <td class="px-4 py-4 sm:px-6"><p class="whitespace-nowrap text-theme-sm text-gray-500 dark:text-gray-400">{{ number_format($appointment->total_amount) }} VND</p></td>
                 <td class="px-4 py-4 sm:px-6"><span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium {{ $badgeClass }}">{{ ucfirst($appointment->status) }}</span></td>
                 <td class="px-4 py-4 sm:px-6">
-                  <div class="flex items-center justify-end gap-2">
+                  <div class="flex items-center gap-2">
+                    @if($appointment->status === 'pending')
+                      <form method="POST" action="{{ route('staff.appointments.confirm', $appointment) }}" onsubmit="return confirm('Confirm this appointment?')">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-success-500 px-3 py-1.5 text-xs font-medium text-white shadow-theme-xs hover:bg-success-600">Confirm</button>
+                      </form>
+                    @elseif($appointment->status === 'confirmed')
+                      <form method="POST" action="{{ route('staff.appointments.complete', $appointment) }}" onsubmit="return confirm('Complete this appointment?')">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-3 py-1.5 text-xs font-medium text-white shadow-theme-xs hover:bg-brand-600">Complete</button>
+                      </form>
+                    @elseif($appointment->status === 'completed' && ! $appointment->isPaid())
+                      <a href="{{ route('staff.appointments.checkout.show', $appointment) }}" class="inline-flex items-center justify-center rounded-lg bg-warning-500 px-3 py-1.5 text-xs font-medium text-white shadow-theme-xs hover:bg-warning-600">Checkout</a>
+                    @elseif($appointment->isPaid())
+                      <span class="inline-flex rounded-full bg-success-50 px-2.5 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">Paid</span>
+                    @else
+                      <span class="text-theme-xs text-gray-400 dark:text-gray-500">-</span>
+                    @endif
+                  </div>
+                </td>
+                <td class="px-4 py-4 sm:px-6">
+                  <div class="flex items-center justify-end gap-3">
                     <a href="{{ route('staff.appointments.show', $appointment) }}" title="View appointment" class="text-gray-500 hover:text-brand-600 dark:text-gray-400">
                       <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
                     </a>
@@ -165,7 +191,7 @@
               </tr>
             @empty
               <tr>
-                <td colspan="7" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No appointments found.</td>
+                <td colspan="8" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">No appointments found.</td>
               </tr>
             @endforelse
             </tbody>
