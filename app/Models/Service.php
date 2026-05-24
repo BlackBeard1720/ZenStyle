@@ -12,9 +12,11 @@ class Service extends Model
 {
     use HasFactory;
 
+    // Cho phep mass assignment cho cac truong duoc seed/tao tu form
     protected $fillable = [
         'category_id',
         'name',
+        'thumbnail',
         'description',
         'price',
         'duration',
