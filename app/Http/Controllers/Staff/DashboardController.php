@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\Client;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -22,8 +24,10 @@ class DashboardController extends Controller
         }
 
         $revenueData = $this->getRevenueData($from, $to, $group);
+        $categoryUsageData = $this->getCategoryUsageData();
+        $customerMetrics = $this->getCustomerMetrics($from, $to);
 
-        return view('staff.dashboard.index', compact('revenueData', 'from', 'to', 'group'));
+        return view('staff.dashboard.index', compact('revenueData', 'categoryUsageData', 'customerMetrics', 'from', 'to', 'group'));
     }
 
     public function data(Request $request)
@@ -98,13 +102,59 @@ class DashboardController extends Controller
             }
         }
 
+        $customerMetrics = $this->getCustomerMetrics($from, $to);
+
         return response()->json([
             'revenue' => $revenue,
             'appointments' => [
                 'labels' => $labels,
                 'values' => $counts,
             ],
+            'customerMetrics' => $customerMetrics,
         ]);
+    }
+
+    private function getCustomerMetrics(?string $from, ?string $to): array
+    {
+        $dateFilter = function ($query) use ($from, $to) {
+            if ($from && $to) {
+                $query->whereBetween('appointment_date', [$from, $to]);
+            } else {
+                $query->whereYear('appointment_date', now()->year);
+            }
+        };
+
+        $completedVisitsCount = Appointment::query()
+            ->whereIn('status', ['completed', 'checked-in'])
+            ->where($dateFilter)
+            ->count();
+
+        $paidReceiptsCount = Payment::query()
+            ->where('status', 'paid')
+            ->whereHas('appointment', $dateFilter)
+            ->distinct('appointment_id')
+            ->count('appointment_id');
+
+        return [
+            'completed_visits' => [
+                'key' => 'completed_visits',
+                'label' => 'Completed & Checked-in',
+                'value' => $completedVisitsCount,
+                'description' => 'Visits from appointments',
+            ],
+            'paid_receipts' => [
+                'key' => 'paid_receipts',
+                'label' => 'Paid Receipts',
+                'value' => $paidReceiptsCount,
+                'description' => 'Successfully paid sales records',
+            ],
+            'registered_clients' => [
+                'key' => 'registered_clients',
+                'label' => 'Registered Clients',
+                'value' => Client::count(),
+                'description' => 'Total customer profiles registered',
+            ],
+        ];
     }
 
     private function getRevenueData(?string $from, ?string $to, string $group)
@@ -177,6 +227,48 @@ class DashboardController extends Controller
             'group' => $group,
             'from_date' => $from,
             'to_date' => $to,
+        ];
+    }
+
+    private function getCategoryUsageData()
+    {
+        // Get category usage from completed appointments
+        // Query: appointments -> appointment_service -> services -> categories
+        $categoryUsage = Appointment::query()
+            ->where('status', 'completed')
+            ->with(['appointmentServices' => function ($query) {
+                $query->with(['service' => function ($q) {
+                    $q->with('category');
+                }]);
+            }])
+            ->get()
+            ->flatMap(function ($appointment) {
+                return $appointment->appointmentServices->map(function ($appointmentService) {
+                    return $appointmentService->service->category;
+                });
+            })
+            ->groupBy('id')
+            ->map(function ($items) {
+                return [
+                    'name' => $items->first()->name,
+                    'count' => $items->count(),
+                ];
+            })
+            ->values()
+            ->sortByDesc('count')
+            ->values();
+
+        // Calculate total
+        $totalCount = $categoryUsage->sum('count');
+
+        // Format for chart
+        $labels = $categoryUsage->pluck('name')->toArray();
+        $values = $categoryUsage->pluck('count')->toArray();
+
+        return [
+            'labels' => $labels,
+            'values' => $values,
+            'total' => $totalCount,
         ];
     }
 }

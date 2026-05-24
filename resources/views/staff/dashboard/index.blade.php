@@ -1,6 +1,7 @@
 <x-staff.layout title="Dashboard" page-name="dashboard">
     <script>
         window.revenueChartData = {!! json_encode($revenueData) !!};
+        window.categoryUsageData = {!! json_encode($categoryUsageData) !!};
         window.dashboardFilter = {
             from_date: {!! json_encode($from) !!},
             to_date: {!! json_encode($to) !!},
@@ -10,19 +11,15 @@
 
     <div class="grid grid-cols-12 gap-4 md:gap-6">
         <div class="col-span-12 space-y-6 xl:col-span-7">
-            <x-staff.partials.metric-group.metric-group-01 />
+            <x-staff.partials.metric-group.metric-group-01 :customerMetrics="$customerMetrics" />
             <x-staff.partials.chart.chart-01 />
         </div>
         <div class="col-span-12 xl:col-span-5">
-            <x-staff.partials.chart.chart-02 />
+            <x-staff.partials.chart.chart-pie-category />
         </div>
 
         <div class="col-span-12">
             <x-staff.partials.chart.chart-03 />
-        </div>
-
-        <div class="col-span-12 xl:col-span-5">
-            <x-staff.partials.map-01 />
         </div>
 
         <div class="col-span-12 xl:col-span-7">

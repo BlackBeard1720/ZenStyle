@@ -11,6 +11,7 @@ import Dropzone from "dropzone";
 import chart01 from "./components/charts/chart-01";
 import chart02 from "./components/charts/chart-02";
 import chart03 from "./components/charts/chart-03";
+import { initializePieCategoryChart } from "./components/charts/chart-pie-category";
 import map01 from "./components/map-01";
 import "./components/calendar-init.js";
 import "./components/image-resize";
@@ -78,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     chart01();
     chart02();
     chart03();
+    setTimeout(() => initializePieCategoryChart(), 50);
     map01();
 
     // Attach dashboard dynamic fetch handlers
@@ -121,6 +123,21 @@ document.addEventListener("DOMContentLoaded", () => {
             window.charts.appointmentChart.updateOptions({ xaxis: { categories: appointments.labels } });
             window.charts.appointmentChart.updateSeries([{ data: appointments.values }]);
         }
+
+        updateMetrics(payload);
+    }
+
+    function updateMetrics(payload) {
+        if (!payload?.customerMetrics) return;
+        Object.entries(payload.customerMetrics).forEach(([key, metric]) => {
+            const container = document.querySelector(`[data-dashboard-metric="${key}"]`);
+            if (!container) return;
+
+            const valueEl = container.querySelector('[data-dashboard-metric-value]');
+            if (valueEl) {
+                valueEl.textContent = new Intl.NumberFormat('en-US').format(metric.value ?? 0);
+            }
+        });
     }
 
     if (dateInput) {
@@ -214,13 +231,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("search-input");
     const searchButton = document.getElementById("search-button");
 
-    // Function to focus the search input
-    function focusSearchInput() {
-        searchInput.focus();
-    }
+    // Only attach event listeners if elements exist
+    if (searchButton && searchInput) {
+        // Function to focus the search input
+        function focusSearchInput() {
+            searchInput.focus();
+        }
 
-    // Add click event listener to the search button
-    searchButton.addEventListener("click", focusSearchInput);
+        // Add click event listener to the search button
+        searchButton.addEventListener("click", focusSearchInput);
+    }
 
     // Add keyboard event listener for Cmd+K (Mac) or Ctrl+K (Windows/Linux)
     document.addEventListener("keydown", function (event) {
