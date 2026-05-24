@@ -26,7 +26,8 @@ return new class extends Migration
             // pending, paid, failed, refunded
 
             $table->string('transaction_code')->nullable();
-
+            $table->string('paypal_order_id')->nullable();
+            $table->string('paypal_capture_id')->nullable();
             $table->text('note')->nullable();
 
             $table->timestamp('paid_at')->nullable();

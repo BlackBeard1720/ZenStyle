@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Staff\PaypalController;
 use App\Http\Controllers\Staff\AppointmentCheckoutController;
 use Illuminate\Support\Facades\Http;
 use App\Services\TelegramOtpService;
@@ -247,6 +248,19 @@ Route::prefix('staff')->name('staff.')
         Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])
             ->name('appointments.complete');
 
+        // route for appointment paypal payment
+        // Hien tai ZenStyle chi thanh toan PayPal cho lich hen dich vu.
+        // Neu sau nay mo rong thanh toan cho ban san pham / nhap xuat kho,
+        // nen tao route rieng cho Order/Invoice thay vi tron vao appointment payment.
+        Route::post('appointments/{appointment}/paypal', [PaypalController::class, 'createPayment'])
+            ->name('appointments.paypal.create');
+
+        Route::get('appointments/{appointment}/paypal/success', [PaypalController::class, 'paymentSuccess'])
+            ->name('appointments.paypal.success');
+
+        Route::get('appointments/{appointment}/paypal/cancel', [PaypalController::class, 'paymentCancel'])
+            ->name('appointments.paypal.cancel');
+
         // cancel appointment (soft delete -> change status)
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
             ->name('appointments.cancel');
@@ -428,6 +442,9 @@ if (app()->environment('local')) {
     })->name('telegram.otp.verify');
 
     Route::get('/test-telegram-link-users', [TelegramBotController::class, 'processUpdates']);
+
+    Route::get('/test-paypal-connection', [PayPalController::class, 'testConnection'])
+        ->name('paypal.test');
 }
 
 

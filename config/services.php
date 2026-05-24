@@ -50,6 +50,18 @@ return [
         'upload_preset' => env('CLOUDINARY_UPLOAD_PRESET'),
     ],
 
+    'paypal' => [
+        'mode' => env('PAYPAL_MODE', 'sandbox'),
+
+        'client_id' => env('PAYPAL_CLIENT_ID'),
+
+        'secret' => env('PAYPAL_SECRET'),
+
+        'base_url' => env('PAYPAL_MODE') === 'live'
+            ? 'https://api-m.paypal.com'
+            : 'https://api-m.sandbox.paypal.com',
+    ],
+
     'telegram' => [
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'bot_username' => env('TELEGRAM_BOT_USERNAME'),
