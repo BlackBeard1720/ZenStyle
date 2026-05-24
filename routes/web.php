@@ -21,6 +21,8 @@ use App\Http\Controllers\Staff\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
+use App\Http\Controllers\Staff\InventoryController;
+use App\Http\Controllers\Staff\InventoryReportController;
 
 Route::get('/firebase-messaging-sw.js', function () {
     $firebaseConfig = [
@@ -209,6 +211,31 @@ Route::prefix('staff')->name('staff.')
                 'message' => 'We can’t seem to find the page you are looking for!',
             ], 404);
         });
+
+        //quản lý kho hàng
+        Route::get('/inventory', [InventoryController::class, 'index'])
+            ->name('inventory.index');
+
+        Route::post('/inventory/supplier', [InventoryController::class, 'storeSupplier'])
+            ->name('inventory.supplier.store');
+
+        Route::post('/inventory/product', [InventoryController::class, 'storeProduct'])
+            ->name('inventory.product.store');
+
+        Route::put('/inventory/product/{product}', [InventoryController::class, 'updateProduct'])
+            ->name('inventory.product.update');
+
+        Route::delete('/inventory/product/{product}', [InventoryController::class, 'destroyProduct'])
+            ->name('inventory.product.destroy');
+
+        Route::post('/inventory/purchase-order', [InventoryController::class, 'storePurchaseOrder'])
+            ->name('inventory.purchase-order.store');
+
+        Route::post('/inventory/{product}/use', [InventoryController::class, 'useProduct'])
+            ->name('inventory.use');
+
+        Route::post('/inventory/{product}/waste', [InventoryController::class, 'wasteProduct'])
+            ->name('inventory.waste');
     });
 
 if (app()->environment('local')) {
@@ -347,3 +374,7 @@ if (app()->environment('local')) {
 
     Route::get('/test-telegram-link-users', [TelegramBotController::class, 'processUpdates']);
 }
+
+
+
+
