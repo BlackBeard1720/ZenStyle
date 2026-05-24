@@ -52,12 +52,11 @@ return [
 
     'paypal' => [
         'mode' => env('PAYPAL_MODE', 'sandbox'),
-
         'client_id' => env('PAYPAL_CLIENT_ID'),
-
-        'secret' => env('PAYPAL_SECRET'),
-
-        'base_url' => env('PAYPAL_MODE') === 'live'
+        'client_secret' => env('PAYPAL_SECRET'),
+        'currency' => env('PAYPAL_CURRENCY', 'USD'),
+        // Tu dong chon API endpoint theo sandbox/live
+        'base_url' => env('PAYPAL_MODE', 'sandbox') === 'live'
             ? 'https://api-m.paypal.com'
             : 'https://api-m.sandbox.paypal.com',
     ],

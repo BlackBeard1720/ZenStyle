@@ -18,13 +18,8 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->decimal('amount', 10, 2);
-
             $table->string('payment_method', 50);
-            // cash, bank_transfer, paypal
-
             $table->string('status', 30)->default('pending');
-            // pending, paid, failed, refunded
-
             $table->string('transaction_code')->nullable();
             $table->string('paypal_order_id')->nullable();
             $table->string('paypal_capture_id')->nullable();

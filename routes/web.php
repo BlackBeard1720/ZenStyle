@@ -249,17 +249,11 @@ Route::prefix('staff')->name('staff.')
             ->name('appointments.complete');
 
         // route for appointment paypal payment
-        // Hien tai ZenStyle chi thanh toan PayPal cho lich hen dich vu.
-        // Neu sau nay mo rong thanh toan cho ban san pham / nhap xuat kho,
-        // nen tao route rieng cho Order/Invoice thay vi tron vao appointment payment.
-        Route::post('appointments/{appointment}/paypal', [PaypalController::class, 'createPayment'])
-            ->name('appointments.paypal.create');
+        Route::post('appointments/{appointment}/paypal/create-order', [AppointmentCheckoutController::class, 'createPayPalOrder'])
+            ->name('appointments.paypal.create-order');
 
-        Route::get('appointments/{appointment}/paypal/success', [PaypalController::class, 'paymentSuccess'])
-            ->name('appointments.paypal.success');
-
-        Route::get('appointments/{appointment}/paypal/cancel', [PaypalController::class, 'paymentCancel'])
-            ->name('appointments.paypal.cancel');
+        Route::post('appointments/{appointment}/paypal/capture-order', [AppointmentCheckoutController::class, 'capturePayPalOrder'])
+            ->name('appointments.paypal.capture-order');
 
         // cancel appointment (soft delete -> change status)
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])

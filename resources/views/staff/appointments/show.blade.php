@@ -43,7 +43,7 @@
           <dl class="space-y-2 text-sm">
             <div><dt class="text-gray-500 dark:text-gray-400">Date</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ $appointment->appointment_date?->format('d/m/Y') }}</dd></div>
             <div><dt class="text-gray-500 dark:text-gray-400">Time</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('H:i') }}</dd></div>
-            <div><dt class="text-gray-500 dark:text-gray-400">Total amount</dt><dd class="font-medium text-gray-800 dark:text-white/90">{{ number_format($appointment->total_amount) }} VND</dd></div>
+            <div><dt class="text-gray-500 dark:text-gray-400">Total amount</dt><dd class="font-medium text-gray-800 dark:text-white/90">${{ number_format($appointment->total_amount, 2) }}</dd></div>
           </dl>
         </div>
 
@@ -63,7 +63,7 @@
                 <tr>
                   <td class="px-4 py-3 text-sm font-medium text-gray-800 dark:text-white/90">{{ $appointmentService->service?->name ?? '-' }}</td>
                   <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $appointmentService->staff?->full_name ?? 'Unassigned' }}</td>
-                  <td class="px-4 py-3 text-right text-sm text-gray-500 dark:text-gray-400">{{ number_format($appointmentService->price_at_booking) }} VND</td>
+                  <td class="px-4 py-3 text-right text-sm text-gray-500 dark:text-gray-400">${{ number_format($appointmentService->price_at_booking, 2) }}</td>
                 </tr>
               @endforeach
               </tbody>
@@ -93,7 +93,7 @@
               <div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Amount</p>
                 <p class="font-medium text-gray-800 dark:text-white/90">
-                  {{ number_format($appointment->total_amount) }} VND
+                  ${{ number_format($appointment->total_amount, 2) }}
                 </p>
               </div>
 
@@ -101,9 +101,17 @@
                 <div>
                   <p class="text-sm text-gray-500 dark:text-gray-400">Method</p>
                   <p class="font-medium text-gray-800 dark:text-white/90">
-                    {{ $paidPayment?->payment_method ?? '-' }}
+                    {{ strtoupper($paidPayment?->payment_method ?? '-') }}
                   </p>
                 </div>
+                @if($isPaid && $paidPayment?->transaction_code)
+                  <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Transaction</p>
+                    <p class="font-medium text-gray-800 dark:text-white/90">
+                      {{ $paidPayment->transaction_code }}
+                    </p>
+                  </div>
+                @endif
               @endif
 
             </div>
