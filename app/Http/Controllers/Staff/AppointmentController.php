@@ -20,7 +20,7 @@ class AppointmentController extends Controller
         $staffId = $user->staff?->id;
 
         $appointments = Appointment::query()
-            ->with(['client', 'appointmentServices.service', 'appointmentServices.staff'])
+            ->with(['client', 'appointmentServices.service', 'appointmentServices.staff', 'payments'])
             ->when($user->hasRole('stylist'), function ($query) use ($staffId) {
                 if (! $staffId) {
                     return $query->whereRaw('1 = 0');
@@ -204,6 +204,37 @@ class AppointmentController extends Controller
 
         return to_route('staff.appointments.show', $appointment)
             ->with('success', 'Appointment updated successfully.');
+    }
+
+
+    public function confirm(Appointment $appointment)
+    {
+        if ($appointment->status !== 'pending') {
+            return to_route('staff.appointments.index')
+                ->with('error', 'Only pending appointments can be confirmed.');
+        }
+
+        $appointment->update([
+            'status' => 'confirmed',
+        ]);
+
+        return to_route('staff.appointments.index')
+            ->with('success', 'Appointment confirmed successfully.');
+    }
+
+    public function complete(Appointment $appointment)
+    {
+        if ($appointment->status !== 'confirmed') {
+            return to_route('staff.appointments.index')
+                ->with('error', 'Only confirmed appointments can be completed.');
+        }
+
+        $appointment->update([
+            'status' => 'completed',
+        ]);
+
+        return to_route('staff.appointments.index')
+            ->with('success', 'Appointment completed successfully.');
     }
 
     public function cancel(Appointment $appointment)

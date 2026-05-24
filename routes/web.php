@@ -241,6 +241,12 @@ Route::prefix('staff')->name('staff.')
         Route::post('appointments/{appointment}/checkout', [AppointmentCheckoutController::class, 'store'])
             ->name('appointments.checkout.store');
 
+        Route::patch('appointments/{appointment}/confirm', [AppointmentController::class, 'confirm'])
+            ->name('appointments.confirm');
+
+        Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])
+            ->name('appointments.complete');
+
         // cancel appointment (soft delete -> change status)
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
             ->name('appointments.cancel');
