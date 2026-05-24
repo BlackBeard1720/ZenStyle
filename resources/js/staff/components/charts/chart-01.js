@@ -2,11 +2,29 @@ import ApexCharts from "apexcharts";
 
 // ===== chartOne
 const chart01 = () => {
+  const revenueData = window.revenueChartData || {
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    values: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
+  };
+
   const chartOneOptions = {
     series: [
       {
-        name: "Sales",
-        data: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
+        name: "Revenue",
+        data: revenueData.values,
       },
     ],
     colors: ["#465fff"],
@@ -35,20 +53,7 @@ const chart01 = () => {
       colors: ["transparent"],
     },
     xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: revenueData.labels,
       axisBorder: {
         show: false,
       },
@@ -99,8 +104,8 @@ const chart01 = () => {
       document.querySelector("#chartOne"),
       chartOneOptions,
     );
-    chartFour.render();
-  }
+    chartFour.render();    window.charts = window.charts || {};
+    window.charts.appointmentChart = chartFour;  }
 };
 
 export default chart01;

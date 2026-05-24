@@ -1,16 +1,26 @@
 import ApexCharts from "apexcharts";
 
-// ===== chartThree
+
+// ===== chartThree - Revenue Chart
 const chart03 = () => {
+  // Lấy dữ liệu từ window object (được set từ Blade view)
+  
+  const data = window.revenueChartData || {
+    
+    labels: [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ],
+    values: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+    totalRevenue: 1000000,
+    year: 2026,
+  };
+
   const chartThreeOptions = {
     series: [
       {
-        name: "Sales",
-        data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235],
-      },
-      {
         name: "Revenue",
-        data: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+        data: data.values,
       },
     ],
     legend: {
@@ -18,7 +28,7 @@ const chart03 = () => {
       position: "top",
       horizontalAlign: "left",
     },
-    colors: ["#465FFF", "#9CB9FF"],
+    colors: ["#465FFF"],
     chart: {
       fontFamily: "Outfit, sans-serif",
       height: 310,
@@ -36,9 +46,8 @@ const chart03 = () => {
     },
     stroke: {
       curve: "straight",
-      width: ["2", "2"],
+      width: 2,
     },
-
     markers: {
       size: 0,
     },
@@ -63,25 +72,24 @@ const chart03 = () => {
     },
     tooltip: {
       x: {
-        format: "dd MMM yyyy",
+        format: "MMM",
+      },
+      y: {
+        formatter: function (value) {
+          return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            maximumFractionDigits: 0,
+          }).format(value);
+        },
+        title: {
+          formatter: () => "Revenue",
+        }
       },
     },
     xaxis: {
       type: "category",
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: data.labels,
       axisBorder: {
         show: false,
       },
@@ -106,8 +114,8 @@ const chart03 = () => {
       document.querySelector("#chartThree"),
       chartThreeOptions,
     );
-    chartThree.render();
-  }
+    chartThree.render();    window.charts = window.charts || {};
+    window.charts.revenueChart = chartThree;  }
 };
 
 export default chart03;
