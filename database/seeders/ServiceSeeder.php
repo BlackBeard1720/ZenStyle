@@ -10,6 +10,7 @@ class ServiceSeeder extends Seeder
 {
     public function run(): void
     {
+        // Lay map category name -> id de gan dung category_id cho tung service
         $categories = Category::pluck('id', 'name');
 
         $services = [
@@ -113,10 +114,17 @@ class ServiceSeeder extends Seeder
             $categoryName = $service['category'];
             unset($service['category']);
 
-            Service::create($service + [
+            // Dung updateOrCreate de seed nhieu lan khong tao ban ghi trung
+            Service::updateOrCreate(
+                [
+                    'name' => $service['name'],
+                    'category_id' => $categories[$categoryName],
+                ],
+                $service + [
                     'category_id' => $categories[$categoryName],
                     'status' => 'active',
-                ]);
+                ]
+            );
         }
     }
 }
