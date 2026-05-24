@@ -213,7 +213,7 @@
     </section>
 
     {{-- ===== SECTION 4: HOT TREND / INSPIRATION (preview) ===== --}}
-    <section class="bg-white px-4 py-12 sm:px-6 lg:py-16">
+    <section class="bg-white px-4 py-12 sm:px-6 lg:py-16" data-hot-trend-page>
         <div class="mx-auto max-w-6xl">
             <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                 <div class="max-w-2xl">
@@ -226,7 +226,7 @@
                     </p>
                 </div>
                 <a href="{{ route('hot-trend.index') }}" class="hidden text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark sm:inline-flex">
-                    Xem Hot Trend →
+                    Xem Thêm Hot Trend →
                 </a>
             </div>
 
@@ -234,25 +234,73 @@
                 $homeTrends = [
                     [
                         'title' => 'Spike texture',
+                        'slug' => 'spike-texture',
+                        'categories' => ['nam', 'ca-tinh'],
                         'image' => asset('images/frontend/hottrend/hottrend-01.png'),
+                        'images' => [
+                            asset('images/frontend/hottrend/hottrend-01.png'),
+                            asset('images/frontend/hottrend/hottrend-03.png'),
+                            asset('images/frontend/hottrend/hottrend-06.png'),
+                            asset('images/frontend/services/featured-toc.png'),
+                        ],
+                        'alt' => 'Kiểu tóc spike texture',
+                        'longDescription' => 'Spike texture phù hợp với khách muốn kiểu tóc có độ phồng và texture rõ nhưng vẫn dễ chăm sóc hằng ngày.',
+                        'suitableFor' => 'Khuôn mặt góc cạnh, tóc trung bình đến dày, phong cách năng động.',
+                        'stylingTips' => ['Sấy nâng chân tóc trước khi dùng sáp.', 'Dùng lượng sáp nhỏ và vuốt theo từng lọn tóc.', 'Cắt dặm sau 3-4 tuần để giữ form.'],
                         'tags' => ['Tóc nam','Cá tính'],
                         'shortDescription' => 'Form dựng nhẹ, nhiều texture và tạo cảm giác năng động.',
                     ],
                     [
                         'title' => 'Textured crop',
+                        'slug' => 'textured-crop',
+                        'categories' => ['nam', 'de-cham-soc'],
                         'image' => asset('images/frontend/hottrend/hottrend-03.png'),
+                        'images' => [
+                            asset('images/frontend/hottrend/hottrend-03.png'),
+                            asset('images/frontend/hottrend/hottrend-01.png'),
+                            asset('images/frontend/hottrend/hottrend-06.png'),
+                            asset('images/frontend/services/featured-toc.png'),
+                        ],
+                        'alt' => 'Kiểu tóc textured crop',
+                        'longDescription' => 'Textured crop là lựa chọn gọn gàng, dễ giữ nếp và vẫn có điểm nhấn ở phần mái.',
+                        'suitableFor' => 'Tóc dày, khuôn mặt tròn hoặc vuông nhẹ, khách muốn kiểu tóc gọn hằng ngày.',
+                        'stylingTips' => ['Sấy khô theo hướng tự nhiên của mái.', 'Dùng clay nhẹ nếu muốn tăng texture.', 'Không cần vuốt quá bóng.'],
                         'tags' => ['Tóc nam','Dễ chăm sóc'],
                         'shortDescription' => 'Kiểu tóc gọn, phần mái xử lý texture để giữ form tự nhiên.',
                     ],
                     [
                         'title' => 'Wolf cut / Mullet',
+                        'slug' => 'wolf-cut-mullet',
+                        'categories' => ['nam', 'ca-tinh'],
                         'image' => asset('images/frontend/hottrend/hottrend-04.png'),
+                        'images' => [
+                            asset('images/frontend/hottrend/hottrend-04.png'),
+                            asset('images/frontend/hottrend/hottrend-07.png'),
+                            asset('images/frontend/hottrend/hottrend-01.png'),
+                            asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png'),
+                        ],
+                        'alt' => 'Kiểu tóc wolf cut mullet',
+                        'longDescription' => 'Wolf cut / Mullet tạo điểm nhấn bằng layer phần gáy và hai bên, phù hợp khi muốn phong cách nổi bật hơn.',
+                        'suitableFor' => 'Khách thích phong cách cá tính, tóc có độ phồng tự nhiên và sẵn sàng chăm styling.',
+                        'stylingTips' => ['Dùng pre-styling để giữ độ phồng.', 'Sấy phần gáy theo hướng layer.', 'Nên tỉa lại sau 4-5 tuần.'],
                         'tags' => ['Tóc nam','Cá tính'],
                         'shortDescription' => 'Layer rõ ở phần gáy và hai bên, tạo chất riêng cho tổng thể.',
                     ],
                     [
                         'title' => 'Undercut hard part',
+                        'slug' => 'undercut-hard-part',
+                        'categories' => ['nam', 'cong-so'],
                         'image' => asset('images/frontend/hottrend/hottrend-06.png'),
+                        'images' => [
+                            asset('images/frontend/hottrend/hottrend-06.png'),
+                            asset('images/frontend/hottrend/hottrend-03.png'),
+                            asset('images/frontend/services/featured-toc.png'),
+                            asset('images/frontend/hottrend/hottrend-01.png'),
+                        ],
+                        'alt' => 'Kiểu tóc undercut hard part',
+                        'longDescription' => 'Undercut hard part giúp tổng thể gọn gàng, lịch sự với đường ngôi rõ và phần hai bên được cắt sát gọn.',
+                        'suitableFor' => 'Khách cần kiểu tóc gọn, lịch sự, dễ phối với sơ mi hoặc môi trường công sở.',
+                        'stylingTips' => ['Dùng pomade hoặc wax độ giữ nếp vừa.', 'Chải theo đường ngôi khi tóc còn hơi ẩm.', 'Dặm fade định kỳ để giữ độ sắc nét.'],
                         'tags' => ['Tóc nam','Công sở'],
                         'shortDescription' => 'Đường ngôi rõ, hai bên gọn và phần đỉnh dễ tạo kiểu lịch sự.',
                     ],
@@ -261,37 +309,113 @@
 
             <div class="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 @foreach ($homeTrends as $trend)
-                    <a href="{{ route('hot-trend.index') }}" class="group overflow-hidden rounded-3xl border border-zen-border/70 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
-                        <div class="overflow-hidden bg-zen-bg-soft">
-                            <div class="h-[260px] sm:h-[260px] lg:h-[300px] w-full overflow-hidden">
+                    <article
+                        class="group overflow-hidden rounded-3xl border border-zen-border/70 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+                        data-hot-trend-card
+                        data-trend-slug="{{ $trend['slug'] }}"
+                        data-categories="{{ implode(' ', $trend['categories']) }}"
+                    >
+                        <button type="button" class="flex h-full w-full flex-col text-left" data-hot-trend-open="{{ $trend['slug'] }}">
+                            <div class="overflow-hidden bg-zen-bg-soft">
+                                <div class="h-[260px] sm:h-[260px] lg:h-[300px] w-full overflow-hidden">
+                                    <img
+                                        src="{{ $trend['image'] }}"
+                                        alt="{{ $trend['title'] }}"
+                                        class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+                                </div>
+                            </div>
+                            <div class="flex flex-1 flex-col p-5">
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach ($trend['tags'] as $tag)
+                                        <span class="inline-block rounded-full bg-[#f3e4cf] px-3 py-1 text-xs font-semibold text-zen-text">{{ $tag }}</span>
+                                    @endforeach
+                                </div>
+                                <h3 class="mt-3 text-lg font-semibold text-zen-text">{{ $trend['title'] }}</h3>
+                                <p class="mt-2 text-sm leading-6 text-zen-muted line-clamp-2">{{ $trend['shortDescription'] }}</p>
+                                <div class="mt-auto pt-4">
+                                    <span class="inline-flex items-center gap-2 text-sm font-semibold text-zen-primary">Xem thêm ảnh <span aria-hidden="true">→</span></span>
+                                </div>
+                            </div>
+                        </button>
+                    </article>
+                @endforeach
+            </div>
+
+            <script type="application/json" data-hot-trend-data>
+                {!! json_encode($homeTrends, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}
+            </script>
+
+            <div
+                class="fixed inset-0 z-[90] hidden items-center justify-center px-4 py-6"
+                data-hot-trend-modal
+                role="dialog"
+                aria-modal="true"
+                aria-hidden="true"
+            >
+                <button
+                    type="button"
+                    class="absolute inset-0 bg-zen-bg-dark/55 backdrop-blur-sm"
+                    data-hot-trend-close
+                    aria-label="Đóng chi tiết kiểu tóc"
+                ></button>
+
+                <div class="relative z-10 max-h-[calc(100vh-2rem)] w-full max-w-5xl overflow-y-auto rounded-zen-lg border border-zen-border bg-white shadow-2xl">
+                    <button
+                        type="button"
+                        class="absolute right-4 top-4 z-20 grid size-10 place-items-center rounded-full bg-white/90 text-xl font-semibold text-zen-text shadow-sm ring-1 ring-zen-border transition hover:bg-zen-accent-soft"
+                        data-hot-trend-close
+                        aria-label="Đóng"
+                    >
+                        &times;
+                    </button>
+
+                    <div class="grid gap-0 lg:grid-cols-[minmax(0,1fr)_24rem]">
+                        <div class="bg-zen-bg-soft p-4 sm:p-5">
+                            <div class="overflow-hidden rounded-zen-md bg-white shadow-sm">
                                 <img
-                                    src="{{ $trend['image'] }}"
-                                    alt="{{ $trend['title'] }}"
-                                    class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]"
-                                    loading="lazy"
-                                    decoding="async"
+                                    src=""
+                                    alt=""
+                                    class="aspect-[4/5] w-full object-cover sm:aspect-[5/4] lg:aspect-[4/5]"
+                                    data-hot-trend-modal-main
                                 >
                             </div>
+                            <div class="mt-3 grid grid-cols-4 gap-2" data-hot-trend-modal-thumbs></div>
                         </div>
-                        <div class="p-5">
-                            <div class="flex flex-wrap gap-2">
-                                @foreach ($trend['tags'] as $tag)
-                                    <span class="inline-block rounded-full bg-[#f3e4cf] px-3 py-1 text-xs font-semibold text-zen-text">{{ $tag }}</span>
-                                @endforeach
+
+                        <div class="flex flex-col p-5 sm:p-6">
+                            <div class="flex flex-wrap gap-2" data-hot-trend-modal-tags></div>
+                            <h2 class="mt-4 font-heading text-3xl font-semibold leading-tight text-zen-text" data-hot-trend-modal-title></h2>
+                            <p class="mt-3 text-sm leading-7 text-zen-muted" data-hot-trend-modal-description></p>
+
+                            <div class="mt-6 rounded-zen-md border border-zen-border bg-zen-bg p-4">
+                                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-zen-primary">Phù hợp với ai?</p>
+                                <p class="mt-2 text-sm leading-6 text-zen-muted" data-hot-trend-modal-suitable></p>
                             </div>
-                            <h3 class="mt-3 text-lg font-semibold text-zen-text">{{ $trend['title'] }}</h3>
-                            <p class="mt-2 text-sm leading-6 text-zen-muted line-clamp-2">{{ $trend['shortDescription'] }}</p>
-                            <div class="mt-4">
-                                <span class="inline-flex items-center gap-2 text-sm font-semibold text-zen-primary">Xem thêm ảnh <span aria-hidden="true">→</span></span>
+
+                            <div class="mt-5">
+                                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-zen-primary">Gợi ý chăm sóc/styling</p>
+                                <ul class="mt-3 space-y-2 text-sm leading-6 text-zen-muted" data-hot-trend-modal-tips></ul>
+                            </div>
+
+                            <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                                <a href="{{ route('booking') }}" class="inline-flex items-center justify-center rounded-full bg-zen-primary px-6 py-3 text-sm font-semibold text-white shadow-zen transition hover:bg-zen-primary-dark" data-hot-trend-modal-booking>
+                                    Đặt lịch tư vấn
+                                </a>
+                                <button type="button" class="inline-flex items-center justify-center rounded-full border border-zen-primary px-6 py-3 text-sm font-semibold text-zen-primary transition hover:bg-zen-accent-soft" data-hot-trend-close>
+                                    Đóng
+                                </button>
                             </div>
                         </div>
-                    </a>
-                @endforeach
+                    </div>
+                </div>
             </div>
 
             <div class="mt-6 text-center sm:hidden">
                 <a href="{{ route('hot-trend.index') }}" class="inline-flex text-sm font-semibold text-zen-primary transition hover:text-zen-primary-dark">
-                    Xem Hot Trend →
+                    Xem Thêm Hot Trend →
                 </a>
             </div>
         </div>

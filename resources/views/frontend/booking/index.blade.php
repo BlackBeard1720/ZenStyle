@@ -20,7 +20,7 @@
     });
 
     $bookingStylists = $staff->map(function ($s, $index) {
-        $isActive = $s->status === 'active';
+        $isActive = true;
         $years = $s->hire_date
             ? max(0, (int) \Carbon\Carbon::parse($s->hire_date)->diffInYears(now()))
             : null;
@@ -44,7 +44,11 @@
     })->all();
   @endphp
 
-  <div id="booking-page" class="pb-12 pt-6 sm:pt-8">
+  <div
+    id="booking-page"
+    class="pb-12 pt-6 sm:pt-8"
+    data-available-staff-url="{{ route('booking.available-staff') }}"
+  >
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
       <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -181,6 +185,13 @@
               </label>
             @endforeach
           </div>
+          <p
+            class="mt-4 rounded-zen-sm border border-zen-border bg-zen-bg-soft p-4 text-sm font-medium text-zen-muted"
+            data-booking-staff-empty
+            @if(count($bookingStylists) > 0) hidden @endif
+          >
+            Không có nhân viên khả dụng trong khung giờ này. Vui lòng chọn thời gian khác.
+          </p>
         </section>
 
         {{-- Dịch vụ --}}

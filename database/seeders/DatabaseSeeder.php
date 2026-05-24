@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ClientSeeder::class,
             StaffSeeder::class,
+            TrimStaffSeeder::class,
+            AttendanceSeeder::class,
             CategorySeeder::class,
             ServiceSeeder::class,
             AppointmentSeeder::class,
