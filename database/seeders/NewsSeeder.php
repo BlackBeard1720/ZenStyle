@@ -2,132 +2,198 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\News;
-use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
 
 class NewsSeeder extends Seeder
 {
     public function run(): void
     {
-        $posts = [
-            [
-                'title' => 'Cach chon kieu toc phu hop voi khuon mat',
-                'summary' => 'Mot kieu toc dep nen bat dau tu ti le khuon mat, chat toc va thoi quen cham soc hang ngay.',
-                'image' => '/images/frontend/hottrend/hottrend-06.png',
-                'body' => [
-                    'Truoc khi cat toc, stylist thuong quan sat khuon mat, tran, xuong ham va do day cua toc de de xuat form phu hop. Kieu toc dung se giup tong the gon hon thay vi chi chay theo xu huong.',
-                    'Neu khuon mat tron, ban co the uu tien phan mai co do phong va hai ben gon vua phai. Neu khuon mat dai, nen can bang bang do dai phan dinh dau va tranh tao qua nhieu chieu cao.',
-                    'Dieu quan trong la kieu toc phai hop voi lich sinh hoat. Mot form toc can 20 phut moi ngay de tao kieu se khong phu hop voi nguoi thich su nhanh gon.',
-                ],
-            ],
-            [
-                'title' => 'Nhung dau hieu cho thay toc can treatment phuc hoi',
-                'summary' => 'Toc kho, roi, mat do bong hoac de dut gay la luc ban nen nghi den phuc hoi chuyen sau.',
-                'image' => '/images/frontend/services/featured-spa.png',
-                'body' => [
-                    'Sau nhieu lan uon, nhuom hoac dung nhiet, lop bieu bi cua soi toc co the bi mo ra lam toc mat nuoc va thieu do bong. Luc nay dau xa thong thuong chi giup mem tam thoi.',
-                    'Treatment phuc hoi giup bo sung duong chat, lam be mat toc muot hon va giam tinh trang roi khi chai. Hieu qua se ro hon neu ket hop voi cach goi va say dung.',
-                    'Neu toc da yeu, ban nen tam dung tay/nhuom manh va dat lich tu van de stylist danh gia muc do hu ton truoc khi lam dich vu moi.',
-                ],
-            ],
-            [
-                'title' => 'Goi dau duong sinh khac gi voi goi dau thong thuong',
-                'summary' => 'Goi duong sinh khong chi lam sach toc ma con tap trung vao massage da dau, co vai gay va cam giac thu gian.',
-                'image' => '/images/frontend/services/featured-goi.png',
-                'body' => [
-                    'Goi dau thong thuong tap trung lam sach bui ban va dau thua. Goi duong sinh co them cac dong tac massage theo nhip cham de giam cang vung da dau, co va vai.',
-                    'Dich vu nay phu hop voi nguoi thuong doi mu bao hiem, lam viec voi may tinh hoac cam thay nang dau sau mot ngay dai.',
-                    'De buoi goi thoai mai hon, ban nen bao truoc neu da dau nhay cam, khong thich luc massage manh hoac dang co vung dau bi dau.',
-                ],
-            ],
-            [
-                'title' => 'Luu y truoc khi nhuom toc lan dau',
-                'summary' => 'Nhuom toc lan dau nen bat dau bang tu van nen toc, muc do sang mong muon va kha nang cham soc sau dich vu.',
-                'image' => '/images/frontend/banner/Gemini_Generated_Image_7sr4oq7sr4oq7sr4.png',
-                'body' => [
-                    'Mau toc tren anh tham khao co the khac voi ket qua thuc te vi phu thuoc vao nen toc hien tai. Toc den tu nhien, toc da nhuom den va toc da tay se cho ket qua khac nhau.',
-                    'Neu ban moi nhuom lan dau, cac tone nau, nau lanh hoac mau tram de cham soc hon cac mau sang can tay manh.',
-                    'Sau khi nhuom, nen dung dau goi giu mau, han che nuoc qua nong va dat lich duong toc dinh ky neu toc co dau hieu kho.',
-                ],
-            ],
-            [
-                'title' => 'Bao lau nen cat lai form toc',
-                'summary' => 'Thoi diem cat lai tuy vao toc moc nhanh hay cham, nhung da so form toc gon can duoc chinh sau 3 den 6 tuan.',
-                'image' => '/images/frontend/services/featured-toc.png',
-                'body' => [
-                    'Voi cac kieu toc ngan, phan vien va hai ben se mat form nhanh hon phan dinh dau. Sau khoang 3 den 4 tuan, tong the co the bat dau kem gon.',
-                    'Voi toc layer, mullet hoac toc dai hon, ban co the chinh form sau 5 den 8 tuan de giu do roi va ti le.',
-                    'Neu dang nuoi toc, cat lai khong co nghia la cat ngan. Stylist co the tia phan hu ton va giu khung dang de toc moc dep hon.',
-                ],
-            ],
-            [
-                'title' => 'Cach giu nep toc sau khi uon texture',
-                'summary' => 'Uon texture dep hon khi ban biet cach goi, say va dung san pham tao kieu nhe moi ngay.',
-                'image' => '/images/frontend/banner/Gemini_Generated_Image_7w6kln7w6kln7w6k.png',
-                'body' => [
-                    'Trong 24 den 48 gio dau sau uon, nen han che goi dau de nep toc on dinh hon. Sau do, hay dung dau goi diu nhe va xa duong vua du.',
-                    'Khi say, dung tay nang chan toc va bop nhe theo huong texture. Khong nen chai manh khi toc con uot vi de lam roi nep.',
-                    'Mot luong nho sap hoac cream tao kieu se giup toc vao form ma khong bi nang. Neu toc kho, uu tien san pham co do duong nhe.',
-                ],
-            ],
-            [
-                'title' => 'Cham soc da co ban cho nguoi moi bat dau',
-                'summary' => 'Lam sach, duong am va chong nang la ba buoc nen on dinh truoc khi them nhieu san pham treatment.',
-                'image' => '/images/frontend/banner/Gemini_Generated_Image_kt0965kt0965kt09.png',
-                'body' => [
-                    'Mot chu trinh cham soc da co ban khong can qua phuc tap. Lam sach dung cach giup giam dau thua va bui ban sau mot ngay dai.',
-                    'Duong am giup da can bang hon, ke ca voi da dau. Khi da thieu am, be mat da co the tiet dau nhieu hon.',
-                    'Ban ngay, chong nang la buoc quan trong de bao ve da va giu hieu qua cua cac dich vu cham soc da tai salon.',
-                ],
-            ],
-            [
-                'title' => 'Vao salon can noi gi voi stylist',
-                'summary' => 'Noi ro mong muon, lich su hoa chat va thoi quen tao kieu giup stylist dua ra tu van chinh xac hon.',
-                'image' => '/images/frontend/hottrend/hottrend-03.png',
-                'body' => [
-                    'Anh tham khao rat huu ich, nhung ban cung nen noi diem minh thich trong anh: do dai, mau sac, do phong hay cam giac tong the.',
-                    'Lich su uon, nhuom, tay va phuc hoi trong vai thang gan day la thong tin quan trong. No giup stylist tranh xu ly qua suc chiu cua toc.',
-                    'Hay noi thang ve thoi gian ban co the danh cho viec tao kieu moi ngay. Mot kieu toc dep tai salon van can phu hop khi ban tu cham soc o nha.',
-                ],
-            ],
-            [
-                'title' => 'Dat lich cuoi tuan nen chuan bi nhu the nao',
-                'summary' => 'Dat lich som, den dung gio va chon dich vu phu hop giup buoi hen cuoi tuan nhe nhang hon.',
-                'image' => '/images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png',
-                'body' => [
-                    'Cuoi tuan thuong la thoi diem salon dong khach. Dat lich truoc giup ban co khung gio dep va co them thoi gian tu van neu lam dich vu dai.',
-                    'Neu ban lam mau, uon hoac combo thu gian, nen de trong lich them mot khoang dem vi thoi gian co the thay doi theo tinh trang toc.',
-                    'Mang theo anh tham khao va ghi chu cac dieu minh khong thich se giup buoi tu van nhanh va dung trong tam hon.',
-                ],
-            ],
-            [
-                'title' => 'Nhung thoi quen nho giup toc khoe hon',
-                'summary' => 'Goi dung tan suat, han che nhiet cao va cat tia phan hu ton la nen tang cho mai toc khoe.',
-                'image' => '/images/frontend/banner/Gemini_Generated_Image_ympfunympfunympf.png',
-                'body' => [
-                    'Khong phai ai cung can goi dau moi ngay. Tan suat phu hop phu thuoc vao da dau, moi truong lam viec va san pham tao kieu dang dung.',
-                    'Nhiet cao tu may say, kep va uon co the lam toc kho nhanh hon. Neu can tao kieu bang nhiet, nen dung muc nhiet vua va san pham bao ve toc.',
-                    'Cat tia dinh ky giup loai bo phan ngon toc xau, nhat la voi toc dai, toc nhuom hoac toc da qua xu ly hoa chat.',
-                ],
-            ],
-        ];
+        $now = now();
 
-        foreach ($posts as $index => $post) {
-            $slug = Str::slug($post['title']);
-
-            News::updateOrCreate(
-                ['slug' => $slug],
+        News::insert(
+            [
                 [
-                    'title' => $post['title'],
-                    'summary' => $post['summary'],
-                    'body' => collect($post['body'])->map(fn ($paragraph) => '<p>' . e($paragraph) . '</p>')->implode(''),
-                    'image' => $post['image'],
+                    'title' => "These Are Vietnam's Best Hotels, Pools, Spas and More in 2025",
+                    'summary' => 'A curated guide to the most relaxing and trusted spa and wellness places in Hanoi for customers who want premium beauty services.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716082/luxury-awards-2025_vietnam-intercontinental-danang-1024x672-1_kenpz3.jpg',
+                    'external_url' => 'https://www.travelandleisureasia.com/th/hotels/luxuryawards/these-are-vietnam-best-hotels-pools-spas-and-more-in-2025/',
                     'status' => 'active',
-                    'created_at' => now()->subDays($index),
-                    'updated_at' => now()->subDays($index),
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ],
+                [
+                    'title' => 'How to Choose the Right Bangs for Your Face Shape',
+                    'summary' => 'A simple guide to choosing hairstyles based on face shape, hair texture, and daily styling habits.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716148/6dd24801b7d49551ffd77772d4889bd25be61d7e-1000x667_btyj4j.png',
+                    'external_url' => 'https://www.newbeauty.com/view/bangs-for-your-face-shape',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(1),
+                    'updated_at' => $now->copy()->subDays(1),
+                ],
+                [
+                    'title' => 'Dry Hair: Symptoms, Causes, and Treatments',
+                    'summary' => 'Dryness, frizz, dullness, and breakage are common signs that your hair may need deeper recovery care.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716183/recommended_radiancebeauty_1_zpqys7.webp',
+                    'external_url' => 'https://www.webmd.com/beauty/dry-hair-causes',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(2),
+                    'updated_at' => $now->copy()->subDays(2),
+                ],
+                [
+                    'title' => 'Can Scalp Massagers Help With Hair Growth? Experts Explain',
+                    'summary' => 'Discover how herbal head washes and scalp massages focus not only on cleansing but also on relaxation and stress relief.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716270/250311-scalp-massager-vl-main-317cfb_cnn1ew.avif',
+                    'external_url' => 'https://www.today.com/shop/scalp-massagers-hair-growth-rcna195829',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(3),
+                    'updated_at' => $now->copy()->subDays(3),
+                ],
+                [
+                    'title' => 'How Do I Know What Hair Color Suits Me Based on My Skin Tone',
+                    'summary' => 'our natural hair color and skin color are the same tone. Put simply, warm skin tones look best with warm hair colors and cool skin tones look best with cool hair colors.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716309/Clairol_Retail-Natural_Instincts_Bold-TOOLKIT_FY23_12_07_22_Day1_002_Trio_-image_ikvjwy.jpg',
+                    'external_url' => 'https://www.clairol.com/en-US/blog/hair-coloring/choosing-a-hair-color-to-complement-your-skin-tone',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(4),
+                    'updated_at' => $now->copy()->subDays(4),
+                ],
+                [
+                    'title' => '15 Easy Hairstyles for Short Hair',
+                    'summary' => 'Looking for a quick styling routine? Check out these beautiful and practical short hairstyles for everyday wear.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716363/Screen-Shot-2016-07-14-at-20732-PM-24967684-cbc3-460e-99ba-6895e5e98625_qrtdmn.jpg',
+                    'external_url' => 'https://www.romper.com/p/15-easy-hairstyles-for-short-hair-14342',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(5),
+                    'updated_at' => $now->copy()->subDays(5),
+                ],
+                [
+                    'title' => 'How to Care for Fine Hair, According to Stylists',
+                    'summary' => 'Professional advice on restoring shine and strength to chemically treated or heat-damaged hair.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716416/dry-damaged-hair-realsimple-GettyImages-483149491-961e71178a344142a9afa0682122108b_stpah2.webp',
+                    'external_url' => 'https://www.realsimple.com/beauty-fashion/hair/hair-care/fine-hair-care',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(6),
+                    'updated_at' => $now->copy()->subDays(6),
+                ],
+                [
+                    'title' => 'Is Rosemary Oil Really Effective for Hair Growth or Just Hype? Experts Weigh In',
+                    'summary' => 'Learn which essential oils can help improve scalp health and promote thicker, healthier hair growth.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716454/a5db100c-49a0-488d-af83-3732268c6b6d.jpeg_kzwctm.jpg',
+                    'external_url' => 'https://www.elle.com/beauty/hair/a38603963/rosemary-oil-for-hair/',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(7),
+                    'updated_at' => $now->copy()->subDays(7),
+                ],
+                [
+                    'title' => 'What Is Balayage? Everything You Need to Know',
+                    'summary' => 'The complete guide to the popular balayage highlighting technique, maintenance, and why salons love it.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716489/Blog_5_w5m7iu.webp',
+                    'external_url' => 'https://www.kellieandcompany.com/blog/what-is-balayage-everything-you-need-to-know/',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(8),
+                    'updated_at' => $now->copy()->subDays(8),
+                ],
+                [
+                    'title' => '10 Home Remedies for Dandruff and Itchy Scalp That Work',
+                    'summary' => 'Combat flaky scalps with these natural treatments, perfectly paired with a professional head spa routine.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716609/10_Home_Remedies_for_Dandruff_and_Itchy_Scalp_That_Work_rdq2vi.png',
+                    'external_url' => 'https://www.fortishealthcare.com/blogs/10-home-remedies-dandruff-and-itchy-scalp-work',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(9),
+                    'updated_at' => $now->copy()->subDays(9),
+                ],
+                [
+                    'title' => 'Japanese Head Spas: A Viral Trend Living Up To The Hype',
+                    'summary' => 'Discover why intense scalp cleansing and massage treatments are becoming the top requested service in salons globally.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716641/Headspa2-1158x1536_noqivf.jpg',
+                    'external_url' => 'https://unwind.com.au/japanese-head-spas-a-viral-trend-living-up-to-the-hype/',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(10),
+                    'updated_at' => $now->copy()->subDays(10),
+                ],
+                [
+                    'title' => '11 Best Hair Masks to Make Strands Smoother and Stronger in Minutes',
+                    'summary' => 'Deep conditioning treatments and masks that will instantly revive dull locks and protect them from future damage.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716680/Allure_BestofBeauty_Clean07_i7xydy.jpg',
+                    'external_url' => 'https://www.allure.com/gallery/best-hair-masks-for-damaged-hair',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(11),
+                    'updated_at' => $now->copy()->subDays(11),
+                ],
+                [
+                    'title' => 'How Often Should You Wash Your Hair?',
+                    'summary' => 'Experts break down the optimal hair-washing schedule based on your hair type, lifestyle, and scalp conditions.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716914/washing-long-hair-182177857_refij2.jpg',
+                    'external_url' => 'https://health.clevelandclinic.org/the-dirty-truth-about-washing-your-hair',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(12),
+                    'updated_at' => $now->copy()->subDays(12),
+                ],
+                [
+                    'title' => 'Pros and Cons of Keratin Treatments',
+                    'summary' => 'Everything you need to consider before booking a smoothing keratin treatment at your local hair salon.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716970/keratin-treatment-732x549-thumbnail-732x549_mk2pbw.jpg',
+                    'external_url' => 'https://www.healthline.com/health/keratin-treatment-pros-and-cons',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(13),
+                    'updated_at' => $now->copy()->subDays(13),
+                ],
+                [
+                    'title' => 'All about hair porosity and why it matters',
+                    'summary' => 'Understanding how well your hair absorbs and retains moisture can completely change your haircare routine.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779716996/Hair_porosity-1_1400x_kdwxw1.jpg',
+                    'external_url' => 'https://www.luxyhair.com/blogs/hair-blog/hair-porosity?srsltid=AfmBOopjD2-hA5xF1382ymwiCtoaMIY7Ds_d2mLA997THdRBoPeVYg69',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(14),
+                    'updated_at' => $now->copy()->subDays(14),
+                ],
+                [
+                    'title' => 'Silk Pillowcases: Are They Worth It?',
+                    'summary' => 'How sleeping on silk can reduce hair breakage, minimize frizz, and extend the life of your salon blowout.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779717023/Silk-Pillowcase-0345_y9stwu.jpg',
+                    'external_url' => 'https://livinginyellow.com/2020/03/silk-pillowcases-are-they-worth-it.html',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(15),
+                    'updated_at' => $now->copy()->subDays(15),
+                ],
+                [
+                    'title' => 'Beautiful, Healthy Hair: Top 14 Foods for Hair Growth',
+                    'summary' => 'A balanced diet rich in specific vitamins and minerals can promote stronger, healthier hair from the inside out.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779717045/z5546121833383_91a03f169f5e8eca84e538e5af365342_41894269e87b4116a9d54f22f7651d3c_1024x1024_gaichw.jpg',
+                    'external_url' => 'https://heebeevietnam.vn/blogs/green-living/beautiful-healthy-hair-top-14-foods-for-hair-growth',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(16),
+                    'updated_at' => $now->copy()->subDays(16),
+                ],
+                [
+                    'title' => 'How to Protect Your Hair From Sun Damage',
+                    'summary' => 'UV rays can cause color fading and dry out your strands. Here are the best ways to protect your hair in the summer.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779717066/applying-hair-oil-protection-2198580555_zfecta.jpg',
+                    'external_url' => 'https://health.clevelandclinic.org/best-ways-to-protect-your-hair-from-sun-damage',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(17),
+                    'updated_at' => $now->copy()->subDays(17),
+                ],
+                [
+                    'title' => 'These Haircuts Are Going To Be Huge For Spring 2026',
+                    'summary' => 'From textured bobs to curtain bangs, explore the most requested salon haircuts dominating the trends right now.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779717087/hair-summer-3bcbbb12b7ae465d9f8ae7423234c6d5_aop1uf.webp',
+                    'external_url' => 'https://www.southernliving.com/fashion-beauty/hairstyles/popular-hairstyles',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(18),
+                    'updated_at' => $now->copy()->subDays(18),
+                ],
+                [
+                    'title' => 'Why You Need a Heat Protectant Spray',
+                    'summary' => 'If you use blow dryers, straighteners, or curling irons, a heat protectant is the non-negotiable step in your routine.',
+                    'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1779717106/gettyimages-1215552570-681cf6da3adb8.jpg_fsvcsh.jpg',
+                    'external_url' => 'https://www.womenshealthmag.com/beauty/a64643659/benefits-of-heat-protectants-for-hair/',
+                    'status' => 'active',
+                    'created_at' => $now->copy()->subDays(19),
+                    'updated_at' => $now->copy()->subDays(19),
                 ]
-            );
-        }
+            ]
+        );
     }
 }

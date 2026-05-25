@@ -39,6 +39,21 @@
   </div>
 
   <div class="lg:col-span-2">
+    <label for="external_url" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+      Article URL <span class="text-error-500">*</span>
+    </label>
+    <input
+      id="external_url"
+      type="url"
+      name="external_url"
+      value="{{ old('external_url', $news->external_url ?? '') }}"
+      placeholder="https://example.com/news-article"
+      class="{{ $inputClass }}"
+    />
+    <x-staff.form.error name="external_url" />
+  </div>
+
+  <div class="lg:col-span-2">
     <label for="summary" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Summary</label>
     <textarea id="summary" name="summary" rows="3" maxlength="500" class="{{ $textareaClass }}">{{ old('summary', $news->summary ?? '') }}</textarea>
     <x-staff.form.error name="summary" />
@@ -71,22 +86,12 @@
     </div>
     <x-staff.form.error name="image" />
   </div>
-
-  <div class="lg:col-span-2">
-    <label for="body-editor" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-      Body <span class="text-error-500">*</span>
-    </label>
-    <textarea id="body-editor" name="body" rows="10" class="{{ $textareaClass }}">{{ old('body', $news->body ?? '') }}</textarea>
-    <x-staff.form.error name="body" />
-  </div>
 </div>
 
 @push('scripts')
   <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.20.0/ckeditor.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const form = document.querySelector('.news-form');
       const imageInput = document.getElementById('image');
       const imagePreview = document.getElementById('image-preview');
       const uploadButton = document.getElementById('upload-news-image');
@@ -94,22 +99,6 @@
       const defaultImage = {{ \Illuminate\Support\Js::from(asset('images/default-news.jpg')) }};
       const cloudName = {{ \Illuminate\Support\Js::from(config('services.cloudinary.cloud_name')) }};
       const uploadPreset = {{ \Illuminate\Support\Js::from(config('services.cloudinary.upload_preset')) }};
-
-      if (window.CKEDITOR && document.getElementById('body-editor')) {
-        CKEDITOR.replace('body-editor');
-      }
-
-      if (form) {
-        form.addEventListener('submit', function () {
-          if (!window.CKEDITOR) {
-            return;
-          }
-
-          for (const instance in CKEDITOR.instances) {
-            CKEDITOR.instances[instance].updateElement();
-          }
-        });
-      }
 
       function updatePreview(url) {
         if (imagePreview) {
