@@ -50,15 +50,6 @@ class NewsController extends Controller
         return view('staff.news.create');
     }
 
-    public function show(News $news)
-    {
-        if ($news->status !== 'active') {
-            return redirect()->route('staff.news.edit', $news);
-        }
-
-        return redirect()->away($news->external_url);
-    }
-
     public function store(Request $request)
     {
         $data = $request->validate([

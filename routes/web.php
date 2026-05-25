@@ -265,7 +265,7 @@ Route::prefix('staff')->name('staff.')
 
         Route::resource('clients', ClientController::class);
 
-        Route::resource('news', NewsController::class);
+        Route::resource('news', NewsController::class)->except(['show']);
 
         Route::fallback(function () {
             return response()->view('staff.errors.404', [

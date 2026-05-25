@@ -10,7 +10,7 @@
     @php
         $isHomeRoute = request()->routeIs('home');
         $isAboutRoute = request()->routeIs('about');
-        $isNewsRoute = request()->routeIs('news') || request()->routeIs('news.show');
+        $isNewsRoute = request()->routeIs('news');
         $isServicesRoute = request()->routeIs('services');
         $isContactRoute = request()->routeIs('contact');
     @endphp
