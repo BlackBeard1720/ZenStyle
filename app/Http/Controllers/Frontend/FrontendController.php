@@ -108,12 +108,20 @@ class FrontendController extends Controller
 
     public function services(): View
     {
-        // Lay du lieu filter tu query string
-        $keyword = trim((string) request('keyword', ''));
-        $selectedCategory = (string) request('category', 'all');
+        // Lay danh sach category dang duoc chon tu query string
+        $selectedCategories = request()->input('categories', []);
+
+        if (! is_array($selectedCategories)) {
+            $selectedCategories = [];
+        }
+
+        // Ep ve string de so sanh voi id ngoai view cho on dinh
+        $selectedCategories = array_map('strval', $selectedCategories);
+
+        // Lay kieu sap xep tu query string
         $selectedSort = (string) request('sort', '');
 
-        // Lay danh muc active de hien thi sidebar filter
+        // Lay danh muc active de hien thi filter ngang
         $categories = Category::query()
             ->where('status', 'active')
             ->orderBy('name')
@@ -127,14 +135,9 @@ class FrontendController extends Controller
                 $query->where('status', 'active');
             });
 
-        // Loc theo ten dich vu
-        $servicesQuery->when($keyword !== '', function ($query) use ($keyword) {
-            $query->where('name', 'like', '%' . $keyword . '%');
-        });
-
-        // Loc theo category
-        $servicesQuery->when($selectedCategory !== '' && $selectedCategory !== 'all', function ($query) use ($selectedCategory) {
-            $query->where('category_id', $selectedCategory);
+        // Loc theo nhieu category khi nguoi dung tick checkbox
+        $servicesQuery->when(! empty($selectedCategories), function ($query) use ($selectedCategories) {
+            $query->whereIn('category_id', $selectedCategories);
         });
 
         // Sap xep theo gia
@@ -149,8 +152,7 @@ class FrontendController extends Controller
         return view('frontend.services.index', [
             'services' => $services,
             'categories' => $categories,
-            'keyword' => $keyword,
-            'selectedCategory' => $selectedCategory,
+            'selectedCategories' => $selectedCategories,
             'selectedSort' => $selectedSort,
         ]);
     }
