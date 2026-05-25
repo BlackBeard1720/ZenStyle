@@ -6,7 +6,7 @@
   <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
     <div class="border-b border-gray-100 px-5 py-4 dark:border-gray-800 sm:px-6 sm:py-5">
       <h3 class="text-base font-medium text-gray-800 dark:text-white/90">Edit News #{{ $news->id }}</h3>
-      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Update article content, visibility status, and cover image.</p>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Update news title, source link, visibility status, and cover image.</p>
     </div>
 
     <form method="POST" action="{{ route('staff.news.update', $news) }}" class="news-form space-y-6 p-5 sm:p-6" novalidate>

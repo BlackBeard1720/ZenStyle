@@ -16,15 +16,11 @@
     class="bg-linear-to-b from-zen-accent-soft/45 via-zen-bg-soft to-white px-4 py-14 sm:px-6 md:py-16 lg:pb-20">
     <div class="mx-auto max-w-6xl">
       <!-- Posts Grid -->
-      @if (count($posts) > 0)
+      @if ($posts->count() > 0)
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           @foreach ($posts as $post)
-            <article class="bg-transparent">
-              <a
-                href="{{ route('news.show', $post['slug']) }}"
-                class="block overflow-hidden"
-                aria-labelledby="news-title-{{ $post['slug'] }}"
-              >
+            <article class="flex h-full flex-col bg-transparent">
+              <a href="{{ $post['external_url'] }}" target="_blank" rel="noopener noreferrer">
                 <img
                   src="{{ $post['image'] }}"
                   alt="{{ $post['title'] }}"
@@ -33,32 +29,31 @@
                 >
               </a>
 
-              <div class="pt-4">
-                <h2
-                  id="news-title-{{ $post['slug'] }}"
-                  class="font-heading text-xl font-semibold leading-snug text-zen-text"
-                >
-                  <a href="{{ route('news.show', $post['slug']) }}">
+              <div class="flex flex-1 flex-col pt-4">
+                <h2 class="font-heading text-xl font-semibold leading-snug text-zen-text">
+                  <a href="{{ $post['external_url'] }}" target="_blank" rel="noopener noreferrer">
                     {{ $post['title'] }}
                   </a>
                 </h2>
 
-                <time
-                  class="mt-2 block text-sm text-zen-muted"
-                  datetime="{{ $post['date'] }}"
-                >
+                <time class="mt-2 block text-sm text-zen-muted" datetime="{{ $post['date'] }}">
                   {{ $post['date_label'] }}
                 </time>
 
                 <a
-                  href="{{ route('news.show', $post['slug']) }}"
-                  class="mt-3 inline-flex text-sm font-semibold text-zen-accent-dark transition hover:text-zen-primary"
+                  href="{{ $post['external_url'] }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-auto pt-4 inline-flex text-sm font-semibold text-zen-accent-dark transition hover:text-zen-primary"
                 >
                   Read more &gt;&gt;&gt;
                 </a>
               </div>
             </article>
           @endforeach
+        </div>
+        <div class="mt-10">
+          {{ $posts->links() }}
         </div>
       @else
         <div class="text-center py-12">

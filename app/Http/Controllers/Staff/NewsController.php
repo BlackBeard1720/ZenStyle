@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
@@ -15,7 +14,8 @@ class NewsController extends Controller
             ->when($request->keyword, function ($query, $keyword) {
                 $query->where(function ($query) use ($keyword) {
                     $query->where('id', $keyword)
-                        ->orWhere('title', 'like', '%' . $keyword . '%');
+                        ->orWhere('title', 'like', '%' . $keyword . '%')
+                        ->orWhere('external_url', 'like', '%' . $keyword . '%');
                 });
             })
             ->when($request->created_range, function ($query, $range) {
@@ -56,7 +56,7 @@ class NewsController extends Controller
             return redirect()->route('staff.news.edit', $news);
         }
 
-        return redirect()->route('news.show', $news->slug);
+        return redirect()->away($news->external_url);
     }
 
     public function store(Request $request)
@@ -64,16 +64,14 @@ class NewsController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'summary' => 'nullable|string|max:500',
-            'body' => 'required|string',
+            'external_url' => 'required|url|max:2048',
             'image' => 'nullable|url',
             'status' => 'required|in:active,inactive',
         ]);
 
-        $data['slug'] = $this->makeUniqueSlug($data['title']);
-
         News::create($data);
 
-        return redirect()->route('staff.news.index')->with('success', 'Tin tức đã được tạo.');
+        return redirect()->route('staff.news.index')->with('success', 'News has been created.');
     }
 
     public function edit(News $news)
@@ -86,43 +84,20 @@ class NewsController extends Controller
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'summary' => 'nullable|string|max:500',
-            'body' => 'required|string',
+            'external_url' => 'required|url|max:2048',
             'image' => 'nullable|url',
             'status' => 'required|in:active,inactive',
         ]);
 
-        if ($data['title'] !== $news->title) {
-            $data['slug'] = $this->makeUniqueSlug($data['title'], $news);
-        }
-
         $news->update($data);
 
-        return redirect()->route('staff.news.index')->with('success', 'Tin tức đã được cập nhật.');
+        return redirect()->route('staff.news.index')->with('success', 'News has been updated.');
     }
 
     public function destroy(News $news)
     {
         $news->update(['status' => 'inactive']);
 
-        return back()->with('success', 'Tin tức đã được ẩn.');
-    }
-
-    private function makeUniqueSlug(string $title, ?News $ignoreNews = null): string
-    {
-        $baseSlug = Str::slug($title) ?: 'news';
-        $slug = $baseSlug;
-        $counter = 2;
-
-        while (
-            News::query()
-                ->where('slug', $slug)
-                ->when($ignoreNews, fn ($query) => $query->whereKeyNot($ignoreNews->getKey()))
-                ->exists()
-        ) {
-            $slug = $baseSlug . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
+        return back()->with('success', 'News has been hidden.');
     }
 }

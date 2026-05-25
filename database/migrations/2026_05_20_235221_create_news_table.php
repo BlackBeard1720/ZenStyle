@@ -11,9 +11,9 @@ class CreateNewsTable extends Migration
         Schema::create('news', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('slug')->unique();
             $table->string('summary', 500)->nullable();
-            $table->longText('body');
+            // Luu link bai viet that de nut Read more mo sang trang nguon
+            $table->string('external_url');
             $table->text('image')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
