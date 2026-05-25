@@ -108,21 +108,50 @@ class FrontendController extends Controller
 
     public function services(): View
     {
-        // Lay category active kem danh sach service active de hien thi ngoai trang dich vu
-        // Dung eager loading de tranh loi N+1 query
+        // Lay du lieu filter tu query string
+        $keyword = trim((string) request('keyword', ''));
+        $selectedCategory = (string) request('category', 'all');
+        $selectedSort = (string) request('sort', '');
+
+        // Lay danh muc active de hien thi sidebar filter
         $categories = Category::query()
             ->where('status', 'active')
-            ->with(['services' => function ($query) {
-                $query->where('status', 'active')->orderBy('name');
-            }])
             ->orderBy('name')
             ->get();
 
+        // Query service active tu DB, kem category de tranh N+1
+        $servicesQuery = Service::query()
+            ->with('category')
+            ->where('status', 'active')
+            ->whereHas('category', function ($query) {
+                $query->where('status', 'active');
+            });
+
+        // Loc theo ten dich vu
+        $servicesQuery->when($keyword !== '', function ($query) use ($keyword) {
+            $query->where('name', 'like', '%' . $keyword . '%');
+        });
+
+        // Loc theo category
+        $servicesQuery->when($selectedCategory !== '' && $selectedCategory !== 'all', function ($query) use ($selectedCategory) {
+            $query->where('category_id', $selectedCategory);
+        });
+
+        // Sap xep theo gia
+        match ($selectedSort) {
+            'price_asc' => $servicesQuery->orderBy('price', 'asc'),
+            'price_desc' => $servicesQuery->orderBy('price', 'desc'),
+            default => $servicesQuery->orderBy('name'),
+        };
+
+        $services = $servicesQuery->paginate(6)->withQueryString();
+
         return view('frontend.services.index', [
-            'heroImage' => FrontendServiceCatalog::heroImage(),
+            'services' => $services,
             'categories' => $categories,
-            'staff' => FrontendServiceCatalog::staff(),
-            'testimonials' => FrontendServiceCatalog::testimonials(),
+            'keyword' => $keyword,
+            'selectedCategory' => $selectedCategory,
+            'selectedSort' => $selectedSort,
         ]);
     }
 
