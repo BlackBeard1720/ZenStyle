@@ -26,10 +26,10 @@ class TelegramBotUpdateService
             return null;
         }
 
-        if ($text === '/start') {
+        if ($text === '/start' || $text === '/start booking') {
             $this->telegramService->sendMessage(
                 $chatId,
-                "Xin chao! Day la bot xac thuc lich hen cua ZenStyle.\n\nVui long nhap so dien thoai ban da dung tren form dat lich.\n\nVi du: 0900000000"
+                "Welcome to ZenStyle Telegram verification bot.\n\nPlease send the phone number you entered on the booking form.\n\nExample:\n0900000000\n\nAfter linking successfully, return to the booking page and click \"Send OTP via Telegram\"."
             );
 
             return [
@@ -48,7 +48,7 @@ class TelegramBotUpdateService
 
         $this->telegramService->sendMessage(
             $chatId,
-            "ZenStyle chua nhan dien duoc so dien thoai.\n\nVui long nhap so dien thoai theo dang 0xxxxxxxxx.\nVi du: 0900000000"
+            "ZenStyle could not recognize your phone number.\n\nPlease enter your phone number in this format:\n0900000000"
         );
 
         return [
@@ -88,7 +88,7 @@ class TelegramBotUpdateService
 
         $this->telegramService->sendMessage(
             $chatId,
-            "ZenStyle da lien ket Telegram thanh cong voi so {$phone}.\n\nBay gio ban hay quay lai trang dat lich va bam \"Gui OTP\" de nhan ma xac thuc."
+            "ZenStyle has successfully linked Telegram with phone number {$phone}.\n\nPlease return to the booking page and click \"Send OTP via Telegram\" to receive your verification code."
         );
 
         return [
