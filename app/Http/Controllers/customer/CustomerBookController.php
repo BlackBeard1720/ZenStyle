@@ -5,7 +5,6 @@ namespace App\Http\Controllers\customer;
 use App\Models\TelegramUser;
 use App\Http\Controllers\Controller;
 use App\Mail\BookingConfirmedMail;
-use App\Models\Attendance;
 use App\Models\Appointment;
 use App\Models\AppointmentService;
 use App\Models\Client;
@@ -14,9 +13,7 @@ use App\Models\Staff;
 use App\Models\User;
 use App\Services\FcmService;
 use App\Services\TelegramOtpService;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +28,7 @@ class CustomerBookController extends Controller
     {
         return view('frontend.booking.index', [
             'staff' => Staff::query()
-                ->where('status', 'active')
+                ->orderByRaw("status = 'active' desc")
                 ->orderBy('full_name')
                 ->get(),
             'services' => Service::query()
@@ -39,26 +36,6 @@ class CustomerBookController extends Controller
                 ->where('status', 'active')
                 ->orderBy('name')
                 ->get(),
-        ]);
-    }
-
-    public function availableStaff(Request $request): JsonResponse
-    {
-        $data = $request->validate([
-            'appointment_date' => ['nullable', 'date'],
-            'appointment_time' => ['nullable', 'date_format:H:i'],
-            'service_ids' => ['nullable', 'array'],
-            'service_ids.*' => ['integer', Rule::exists('services', 'id')->where(fn ($query) => $query->where('status', 'active'))],
-        ]);
-
-        $staff = $this->availableStaffFor(
-            $data['appointment_date'] ?? null,
-            $data['appointment_time'] ?? null,
-            $data['service_ids'] ?? []
-        );
-
-        return response()->json([
-            'staff' => $staff->values()->map(fn (Staff $staffMember, int $index) => $this->staffOptionPayload($staffMember, $index)),
         ]);
     }
 
@@ -72,18 +49,18 @@ class CustomerBookController extends Controller
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['nullable', 'array'],
             'service_ids.*' => ['integer', Rule::exists('services', 'id')->where(fn ($query) => $query->where('status', 'active'))],
-            'staff_id' => ['nullable', 'integer', Rule::exists('staff', 'id')->where(fn ($query) => $query->where('status', 'active'))],
+            'staff_id' => ['nullable', 'integer', 'exists:staff,id'],
             'coupon_code' => ['nullable', 'string', 'max:50'],
             'notes' => ['nullable', 'string'],
         ]);
 
         $staff = $this->resolveStaff($data['staff_id'] ?? null);
 
-        if ($this->isStaffUnavailable($data, $staff)) {
+        if ($this->hasStaffConflict($data, $staff?->id)) {
             return back()
                 ->withInput()
                 ->withErrors([
-                    'appointment_time' => 'Nhân viên này đã có lịch trong khung giờ đã chọn. Vui lòng chọn nhân viên hoặc thời gian khác.',
+                    'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
                 ]);
         }
 
@@ -185,12 +162,12 @@ class CustomerBookController extends Controller
 
         // check trùng lịch trước
         $staff = $this->resolveStaff($data['staff_id'] ?? null);
-        if ($this->isStaffUnavailable($data, $staff)) {
+        if ($this->hasStaffConflict($data, $staff?->id)) {
             return redirect()
                 ->route('booking')
                 ->withInput($data)
                 ->withErrors([
-                    'appointment_time' => 'Nhân viên này đã có lịch trong khung giờ đã chọn. Vui lòng chọn nhân viên hoặc thời gian khác.',
+                    'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
                 ]);
         }
 
@@ -367,125 +344,21 @@ class CustomerBookController extends Controller
             return null;
         }
 
-        return Staff::query()
-            ->where('status', 'active')
-            ->find((int) $staffId);
+        return Staff::query()->find((int) $staffId);
     }
 
-    private function isStaffUnavailable(array $data, ?Staff $staff = null): bool
+    private function hasStaffConflict(array $data, ?int $staffId = null): bool
     {
-        if (! $staff || empty($data['appointment_date']) || empty($data['appointment_time'])) {
+        if (! $staffId || empty($data['appointment_date']) || empty($data['appointment_time'])) {
             return false;
         }
 
-        return ! $this->availableStaffFor(
-            $data['appointment_date'],
-            $data['appointment_time'],
-            $data['service_ids'] ?? []
-        )->contains('id', $staff->id);
-    }
-
-    private function availableStaffFor(?string $date, ?string $time, array $serviceIds)
-    {
-        $staff = Staff::query()
-            ->where('status', 'active')
-            ->orderBy('full_name')
-            ->get();
-
-        if (! $date || ! $time) {
-            return $staff;
-        }
-
-        $unavailableIds = $this->attendanceUnavailableStaffIds($date)
-            ->merge($this->busyStaffIds($date, $time, $serviceIds))
-            ->unique();
-
-        return $staff
-            ->reject(fn (Staff $staffMember) => $unavailableIds->contains($staffMember->id))
-            ->values();
-    }
-
-    private function attendanceUnavailableStaffIds(string $date)
-    {
-        return Attendance::query()
-            ->whereDate('work_date', $date)
-            ->whereIn('status', [
-                Attendance::STATUS_ABSENT,
-                Attendance::STATUS_LEAVE,
-            ])
-            ->pluck('staff_id');
-    }
-
-    private function busyStaffIds(string $date, string $time, array $serviceIds)
-    {
-        [$requestedStart, $requestedEnd] = $this->appointmentPeriod($date, $time, $serviceIds);
-
         return Appointment::query()
-            ->with('appointmentServices.service')
-            ->whereDate('appointment_date', $date)
-            ->whereIn('status', $this->holdingAppointmentStatuses())
-            ->whereHas('appointmentServices', fn ($query) => $query->whereNotNull('staff_id'))
-            ->get()
-            ->filter(function (Appointment $appointment) use ($requestedStart, $requestedEnd) {
-                $existingStart = Carbon::parse($appointment->appointment_date->toDateString() . ' ' . Carbon::parse($appointment->appointment_time)->format('H:i'));
-                $existingDuration = max(1, (int) $appointment->appointmentServices->sum(
-                    fn (AppointmentService $appointmentService) => (int) ($appointmentService->service?->duration ?? 60)
-                ));
-                $existingEnd = $existingStart->copy()->addMinutes($existingDuration);
-
-                return $existingStart->lt($requestedEnd) && $existingEnd->gt($requestedStart);
-            })
-            ->flatMap(fn (Appointment $appointment) => $appointment->appointmentServices->pluck('staff_id'))
-            ->filter()
-            ->unique()
-            ->values();
-    }
-
-    private function appointmentPeriod(string $date, string $time, array $serviceIds): array
-    {
-        $duration = $this->requestedDuration($serviceIds);
-        $start = Carbon::parse($date . ' ' . $time);
-
-        return [$start, $start->copy()->addMinutes($duration)];
-    }
-
-    private function requestedDuration(array $serviceIds): int
-    {
-        $ids = collect($serviceIds)
-            ->filter()
-            ->map(fn ($serviceId) => (int) $serviceId)
-            ->unique()
-            ->values();
-
-        if ($ids->isEmpty()) {
-            return 60;
-        }
-
-        return max(1, (int) Service::query()
-            ->whereIn('id', $ids)
-            ->where('status', 'active')
-            ->sum('duration'));
-    }
-
-    private function holdingAppointmentStatuses(): array
-    {
-        return ['pending', 'confirmed', 'booked', 'scheduled'];
-    }
-
-    private function staffOptionPayload(Staff $staff, int $index): array
-    {
-        $years = $staff->hire_date
-            ? max(0, (int) Carbon::parse($staff->hire_date)->diffInYears(now()))
-            : null;
-
-        return [
-            'id' => $staff->id,
-            'name' => $staff->full_name,
-            'role' => $staff->specialization ?? 'Nhân viên',
-            'experience' => $years !== null
-                ? ($years >= 1 ? $years . ' năm kinh nghiệm' : 'Dưới 1 năm kinh nghiệm')
-                : null,
-            'image' => asset('images/tailadmin/user/user-0' . (($index % 3) + 1) . '.jpg'),
-        ];
+            ->whereDate('appointment_date', $data['appointment_date'])
+            ->whereTime('appointment_time', $data['appointment_time'])
+            ->where('status', '!=', 'cancelled')
+            ->whereHas('appointmentServices', function ($query) use ($staffId) {
+                $query->where('staff_id', $staffId);
+            })->exists();
     }
 }

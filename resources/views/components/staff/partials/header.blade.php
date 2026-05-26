@@ -67,8 +67,13 @@
       </button>
       <!-- Hamburger Toggle BTN -->
 
-      <a href="{{ route('staff.dashboard') }}" class="text-base font-semibold tracking-normal text-gray-900 dark:text-white lg:hidden">
-        ZenStyle Admin
+      <a href="index.html" class="lg:hidden">
+        <img class="dark:hidden" src="{{ asset('images/tailadmin/logo/logo.svg') }}" alt="Logo" />
+        <img
+          class="hidden dark:block"
+          src="{{ asset('images/tailadmin/logo/logo-dark.svg') }}"
+          alt="Logo"
+        />
       </a>
 
       <!-- Application nav menu button -->
