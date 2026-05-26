@@ -2,12 +2,6 @@
 
 use App\Http\Controllers\Staff\PaypalController;
 use App\Http\Controllers\Staff\AppointmentCheckoutController;
-use Illuminate\Support\Facades\Http;
-use App\Services\TelegramOtpService;
-use App\Models\TelegramOtp;
-use App\Models\TelegramUser;
-use App\Services\TelegramService;
-use Illuminate\Support\Carbon;
 use App\Http\Controllers\Staff\FcmTokenController;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
@@ -139,6 +133,9 @@ Route::controller(CustomerBookController::class)->group(function () {
     Route::get('/booking/success/{appointment}', 'success')
         ->name('customer.booking.success');
 });
+
+Route::post('/telegram/webhook', [TelegramBotController::class, 'webhook'])
+    ->name('telegram.webhook');
 
 // Auth staff: không dùng middleware guest vì guest dựa trên Laravel session auth.
 // Staff login hiện tạo JWT và lưu vào cookie access_token.
@@ -302,145 +299,6 @@ Route::prefix('staff')->name('staff.')
             ->name('inventory.waste');
     });
 
-if (app()->environment('local')) {
-
-    Route::get('/test-telegram-bot', function () {
-        $token = config('services.telegram.bot_token');
-
-        $response = Http::get("https://api.telegram.org/bot{$token}/getMe");
-
-        return $response->json();
-    });
-
-    Route::get('/test-telegram-updates', function () {
-        $token = config('services.telegram.bot_token');
-
-        $response = Http::get("https://api.telegram.org/bot{$token}/getUpdates");
-
-        return $response->json();
-    });
-
-    Route::get('/test-telegram-send', function () {
-        $token = config('services.telegram.bot_token');
-
-        $chatId = '5493671447';
-
-        $message = "Xin chào từ ZenStyle Laravel Bot";
-
-        $response = Http::post("https://api.telegram.org/bot{$token}/sendMessage", [
-            'chat_id' => $chatId,
-            'text' => $message,
-        ]);
-
-        return $response->json();
-    });
-
-    Route::get('/test-telegram-send-service', function (TelegramService $telegramService) {
-        $chatId = '5493671447';
-
-        $ok = $telegramService->sendMessage(
-            $chatId,
-            'ZenStyle TelegramService đã hoạt động'
-        );
-
-        return [
-            'ok' => $ok,
-        ];
-    });
-
-    Route::get('/test-send-otp', function (TelegramService $telegramService) {
-        $chatId = '5493671447';
-
-        $otpCode = (string) random_int(100000, 999999);
-
-        TelegramOtp::create([
-            'phone' => '0900000000',
-            'telegram_chat_id' => $chatId,
-            'otp_code' => $otpCode,
-            'expires_at' => Carbon::now()->addMinutes(5),
-        ]);
-
-        $message = "Mã OTP ZenStyle của bạn là: {$otpCode}\nMã có hiệu lực trong 5 phút.";
-
-        $ok = $telegramService->sendMessage($chatId, $message);
-
-        return [
-            'ok' => $ok,
-            'message' => $ok ? 'OTP sent successfully' : 'Failed to send OTP',
-        ];
-    });
-
-    Route::get('/test-link-telegram-user', function () {
-        TelegramUser::updateOrCreate(
-            [
-                'phone' => '0900000000',
-            ],
-            [
-                'telegram_chat_id' => '5493671447',
-                'telegram_username' => 'zenstyle_minh_t2512e_bot',
-                'first_name' => 'Minh',
-            ]
-        );
-
-        return [
-            'ok' => true,
-            'message' => 'Linked phone with telegram_chat_id successfully',
-        ];
-    });
-
-    Route::get('/test-send-otp-by-phone', function () {
-        return view('telegram-otp.send');
-    })->name('telegram.otp.send.form');
-
-    Route::post('/test-send-otp-by-phone', function (Request $request, TelegramOtpService $telegramOtpService) {
-        $data = $request->validate([
-            'phone' => 'required|string',
-        ]);
-
-        $result = $telegramOtpService->sendOtp($data['phone']);
-
-        if (! $result['ok']) {
-            return back()
-                ->withInput()
-                ->with('error', $result['message']);
-        }
-
-        return redirect()
-            ->route('telegram.otp.send.form')
-            ->with('success', $result['message']);
-    })->name('telegram.otp.send');
-
-    Route::get('/test-verify-otp', function () {
-        return view('telegram-otp.verify');
-    })->name('telegram.otp.verify.form');
-
-    Route::post('/test-verify-otp', function (Request $request, TelegramOtpService $telegramOtpService) {
-        $data = $request->validate([
-            'phone' => 'required|string',
-            'otp_code' => 'required|digits:6',
-        ]);
-
-        $result = $telegramOtpService->verifyOtp(
-            $data['phone'],
-            $data['otp_code']
-        );
-
-        if (! $result['ok']) {
-            return back()
-                ->withInput()
-                ->with('error', $result['message']);
-        }
-
-        return redirect()
-            ->route('telegram.otp.verify.form')
-            ->with('success', $result['message']);
-    })->name('telegram.otp.verify');
-
-    Route::get('/test-telegram-link-users', [TelegramBotController::class, 'processUpdates']);
-
-    Route::get('/test-paypal-connection', [PayPalController::class, 'testConnection'])
-        ->name('paypal.test');
-}
 
 
 

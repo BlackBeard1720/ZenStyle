@@ -30,7 +30,9 @@
                     </div>
                     <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-center gap-4 rounded-zen-sm bg-zen-accent-soft px-4 py-3">
                         <dt class="text-xs font-semibold uppercase tracking-wide text-zen-primary-dark">Price</dt>
-                        <dd class="text-right text-lg font-semibold text-zen-primary">{{ number_format((float) $service->price, 0) }} VND</dd>
+                        <dd class="text-right text-lg font-semibold text-zen-primary">
+                          ${{ number_format((float) $service->price, 0) }}
+                        </dd>
                     </div>
                 </dl>
 
