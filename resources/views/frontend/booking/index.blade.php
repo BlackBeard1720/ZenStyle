@@ -63,7 +63,8 @@
           <p class="text-xs font-medium uppercase tracking-wide text-zen-muted">Booking online</p>
           <h1 class="mt-1 text-xl font-semibold text-zen-text sm:text-2xl">Book Appointment</h1>
         </div>
-        <p class="max-w-xl text-sm text-zen-muted sm:text-right">Complete the steps below to reserve your slot at the salon.</p>
+        <p class="max-w-xl text-sm text-zen-muted sm:text-right">Complete the steps below to reserve your slot at the
+          salon.</p>
       </div>
     </div>
 
@@ -102,7 +103,8 @@
           </div>
 
           <p class="mb-2 mt-6 text-sm font-medium text-zen-muted">This Week</p>
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-7" role="radiogroup" aria-label="Choose a day of the week">
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-7" role="radiogroup"
+               aria-label="Choose a day of the week">
             @foreach ($bookingDays as $day)
               <button
                 type="button"
@@ -137,9 +139,11 @@
         {{-- Staff --}}
         <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
           <h2 class="text-base font-semibold text-zen-text">Select Staff</h2>
-          <p class="mt-1 text-sm text-zen-muted">Let the salon arrange your appointment or choose your preferred stylist.</p>
+          <p class="mt-1 text-sm text-zen-muted">Let the salon arrange your appointment or choose your preferred
+            stylist.</p>
 
-          <div class="mt-4 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3" role="radiogroup" aria-label="Select staff member in charge">
+          <div class="mt-4 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3" role="radiogroup"
+               aria-label="Select staff member in charge">
             @foreach ($bookingStylists as $stylist)
               @php
                 $stylistAvailable = $stylist['is_available'] ?? true;
@@ -176,9 +180,12 @@
                     loading="lazy"
                   >
                   <span class="min-w-0 flex-1">
-                    <span data-stylist-label class="block break-words text-sm font-semibold text-zen-text">{{ $stylist['name'] }}</span>
-                    <span class="mt-1 block break-words text-xs font-medium text-zen-primary">{{ $stylist['role'] }}</span>
-                    <span class="mt-2 inline-flex max-w-full rounded-full px-2.5 py-1 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
+                    <span data-stylist-label
+                          class="block break-words text-sm font-semibold text-zen-text">{{ $stylist['name'] }}</span>
+                    <span
+                      class="mt-1 block break-words text-xs font-medium text-zen-primary">{{ $stylist['role'] }}</span>
+                    <span
+                      class="mt-2 inline-flex max-w-full rounded-full px-2.5 py-1 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
                       {{ $stylist['status'] }}
                     </span>
                   </span>
@@ -239,7 +246,8 @@
                 </select>
               </div>
 
-              <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-zen-muted" aria-label="Filter services by type">
+              <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-zen-muted"
+                   aria-label="Filter services by type">
                 <label class="inline-flex cursor-pointer items-center gap-2">
                   <input
                     type="checkbox"
@@ -312,7 +320,8 @@
             @endforelse
           </ul>
 
-          <p class="mt-3 rounded-zen-sm border border-zen-border bg-zen-bg-soft p-3 text-sm text-zen-muted" data-service-filter-empty hidden>
+          <p class="mt-3 rounded-zen-sm border border-zen-border bg-zen-bg-soft p-3 text-sm text-zen-muted"
+             data-service-filter-empty hidden>
             No services match your filter.
           </p>
         </section>
@@ -401,13 +410,15 @@
 
       {{-- Summary sidebar --}}
       <aside class="min-w-0 lg:sticky lg:top-24">
-        <div id="booking-summary-card" class="scroll-mt-24 rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
+        <div id="booking-summary-card"
+             class="scroll-mt-24 rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
           <h2 class="text-base font-semibold text-zen-text">Booking Summary</h2>
 
           <dl class="mt-4 space-y-3 text-sm">
             <div class="grid grid-cols-[6rem_minmax(0,1fr)] gap-3 border-b border-dashed border-zen-border pb-3">
               <dt class="text-zen-muted">Salon</dt>
-              <dd id="booking-summary-branch" class="min-w-0 text-right font-medium text-zen-text">ZenStyle FPT Aptech</dd>
+              <dd id="booking-summary-branch" class="min-w-0 text-right font-medium text-zen-text">ZenStyle FPT Aptech
+              </dd>
             </div>
 
             <div class="grid grid-cols-[6rem_minmax(0,1fr)] gap-3 border-b border-dashed border-zen-border pb-3">
@@ -422,12 +433,15 @@
 
             <div class="grid grid-cols-[6rem_minmax(0,1fr)] gap-3 border-b border-dashed border-zen-border pb-3">
               <dt class="text-zen-muted">Staff</dt>
-              <dd id="booking-summary-stylist" class="min-w-0 break-words text-right font-medium text-zen-text">Any staff member</dd>
+              <dd id="booking-summary-stylist" class="min-w-0 break-words text-right font-medium text-zen-text">Any
+                staff member
+              </dd>
             </div>
 
             <div>
               <dt class="text-zen-muted">Services</dt>
-              <dd id="booking-summary-services" class="mt-2 min-w-0 space-y-1 break-words text-right font-medium text-zen-text">
+              <dd id="booking-summary-services"
+                  class="mt-2 min-w-0 space-y-1 break-words text-right font-medium text-zen-text">
                 <p class="text-xs font-normal text-zen-muted">No services selected</p>
               </dd>
             </div>
@@ -471,7 +485,8 @@
 
         <form method="POST" action="{{ route('booking.cancel-otp') }}" class="absolute right-4 top-4">
           @csrf
-          <button type="submit" class="text-2xl leading-none text-zen-muted transition hover:text-zen-text" aria-label="Close OTP popup">
+          <button type="submit" class="text-2xl leading-none text-zen-muted transition hover:text-zen-text"
+                  aria-label="Close OTP popup">
             &times;
           </button>
         </form>
@@ -482,16 +497,28 @@
             <span class="font-semibold text-zen-text">{{ $otpPhone ?: 'No phone number provided' }}</span>
           </p>
 
-          @if($telegramLinked)
-            <p class="mt-3 rounded bg-green-100 p-3 text-sm text-green-700">
-              Telegram is already linked to this phone number. You can send the OTP now.
-            </p>
-          @else
+          <div
+            id="telegram-linked-box"
+            @class([
+              'mt-3 rounded bg-green-100 p-3 text-sm text-green-700',
+              'hidden' => ! $telegramLinked,
+            ])
+          >
+            Telegram is already linked to this phone number. You can send the OTP now.
+          </div>
+
+          <div
+            id="telegram-link-box"
+            @class([
+              'mt-3',
+              'hidden' => $telegramLinked,
+            ])
+          >
             <button
               type="button"
               id="link-telegram-btn"
               data-phone="{{ $otpPhone }}"
-              class="mt-3 h-10 w-full rounded-zen-sm border border-zen-primary bg-white px-3 text-sm font-medium text-zen-primary transition hover:bg-zen-accent-soft"
+              class="h-10 w-full rounded-zen-sm border border-zen-primary bg-white px-3 text-sm font-medium text-zen-primary transition hover:bg-zen-accent-soft"
             >
               Link Telegram to Receive OTP
             </button>
@@ -500,21 +527,26 @@
               After opening the bot, tap Start and send the booking phone number:
               <span class="font-semibold text-zen-text">{{ $otpPhone }}</span>
             </p>
-          @endif
+
+            <p id="telegram-link-waiting" class="mt-2 hidden text-xs font-medium text-zen-primary">
+              Waiting for Telegram linking... Return to this page after sending your phone number to the bot.
+            </p>
+          </div>
         </div>
 
-        @if($telegramLinked)
-          <form method="POST" action="{{ route('booking.send-telegram-otp') }}" class="mt-3">
-            @csrf
-            <button type="submit" class="h-10 w-full rounded-zen-sm bg-zen-primary px-3 text-sm font-medium text-white transition hover:bg-zen-primary-dark">
-              Send OTP via Telegram
-            </button>
-          </form>
-        @else
-          <div class="mt-3 rounded bg-yellow-50 p-3 text-sm text-yellow-800">
-            Please link Telegram first, then return to this page and refresh it to send the OTP.
-          </div>
-        @endif
+        <form
+          id="telegram-send-otp-form"
+          method="POST"
+          action="{{ route('booking.send-telegram-otp') }}"
+          class="mt-3"
+          @if(! $telegramLinked) hidden @endif
+        >
+          @csrf
+          <button type="submit"
+                  class="h-10 w-full rounded-zen-sm bg-zen-primary px-3 text-sm font-medium text-white transition hover:bg-zen-primary-dark">
+            Send OTP via Telegram
+          </button>
+        </form>
 
         @if(session('success'))
           <p class="mt-3 rounded bg-green-100 p-3 text-sm text-green-700">
@@ -560,6 +592,55 @@
   @push('scripts')
     <script>
       const linkTelegramBtn = document.getElementById('link-telegram-btn');
+      const telegramLinkBox = document.getElementById('telegram-link-box');
+      const telegramLinkedBox = document.getElementById('telegram-linked-box');
+      const telegramSendOtpForm = document.getElementById('telegram-send-otp-form');
+      const telegramLinkWaiting = document.getElementById('telegram-link-waiting');
+      const telegramCheckUrl = @json(route('booking.check-telegram-link'));
+
+      let telegramCheckTimer = null;
+
+      async function checkTelegramLinked() {
+        const phone = linkTelegramBtn?.dataset.phone;
+
+        if (!phone) {
+          return false;
+        }
+
+        try {
+          const url = `${telegramCheckUrl}?phone=${encodeURIComponent(phone)}`;
+
+          const response = await fetch(url, {
+            headers: {
+              'Accept': 'application/json',
+            },
+          });
+
+          if (!response.ok) {
+            return false;
+          }
+
+          const data = await response.json();
+
+          if (data.linked) {
+            telegramLinkBox?.classList.add('hidden');
+            telegramLinkedBox?.classList.remove('hidden');
+            telegramSendOtpForm?.removeAttribute('hidden');
+            telegramLinkWaiting?.classList.add('hidden');
+
+            if (telegramCheckTimer) {
+              clearInterval(telegramCheckTimer);
+              telegramCheckTimer = null;
+            }
+
+            return true;
+          }
+        } catch (error) {
+          console.error('Could not check Telegram link status.', error);
+        }
+
+        return false;
+      }
 
       if (linkTelegramBtn) {
         linkTelegramBtn.addEventListener('click', function () {
@@ -577,9 +658,26 @@
             return;
           }
 
-          const telegramUrl = `https://t.me/${botUsername}`;
+          telegramLinkWaiting?.classList.remove('hidden');
+
+          const telegramUrl = `https://t.me/${botUsername}?start=booking`;
           window.open(telegramUrl, '_blank');
+
+          if (telegramCheckTimer) {
+            clearInterval(telegramCheckTimer);
+          }
+
+          telegramCheckTimer = setInterval(checkTelegramLinked, 2000);
+
+          setTimeout(function () {
+            if (telegramCheckTimer) {
+              clearInterval(telegramCheckTimer);
+              telegramCheckTimer = null;
+            }
+          }, 60000);
         });
+
+        window.addEventListener('focus', checkTelegramLinked);
       }
 
       const serviceSearchInput = document.getElementById('service-search');

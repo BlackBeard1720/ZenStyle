@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\customer;
 
+use App\Models\TelegramUser;
 use App\Http\Controllers\Controller;
 use App\Mail\BookingConfirmedMail;
 use App\Models\Attendance;
@@ -131,6 +132,21 @@ class CustomerBookController extends Controller
             ->with('otp_pending', true)
             ->with('telegram_otp_sent', true)
             ->with('success', $result['message']);
+    }
+
+    public function checkTelegramLink(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'phone' => ['required', 'string', 'max:20'],
+        ]);
+
+        $linked = TelegramUser::query()
+            ->where('phone', $data['phone'])
+            ->exists();
+
+        return response()->json([
+            'linked' => $linked,
+        ]);
     }
 
     public function verifyOtp(Request $request, TelegramOtpService $telegramOtpService): RedirectResponse

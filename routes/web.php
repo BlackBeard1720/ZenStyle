@@ -132,6 +132,9 @@ Route::controller(CustomerBookController::class)->group(function () {
 
     Route::get('/booking/success/{appointment}', 'success')
         ->name('customer.booking.success');
+
+    Route::get('/booking/check-telegram-link', 'checkTelegramLink')
+        ->name('booking.check-telegram-link');
 });
 
 Route::post('/telegram/webhook', [TelegramBotController::class, 'webhook'])
