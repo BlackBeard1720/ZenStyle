@@ -54,7 +54,7 @@ class InventoryController extends Controller
 
         Supplier::create($data);
 
-        return back()->with('success', 'Đã thêm nhà cung cấp.');
+        return back()->with('success', 'supplier added successfully.');
     }
 
     public function storeProduct(Request $request)
@@ -72,7 +72,7 @@ class InventoryController extends Controller
 
         Product::create($data);
 
-        return back()->with('success', 'Đã thêm sản phẩm/vật tư.');
+        return back()->with('success', 'product added successfully.');
     }
 
     public function updateProduct(Request $request, Product $product)
@@ -90,7 +90,7 @@ class InventoryController extends Controller
 
         $product->update($data);
 
-        return back()->with('success', 'Đã cập nhật sản phẩm.');
+        return back()->with('success', 'product updated successfully.');
     }
 
     public function destroyProduct(Product $product)
@@ -99,7 +99,7 @@ class InventoryController extends Controller
             'status' => 'inactive',
         ]);
 
-        return back()->with('success', 'Đã ngừng hoạt động sản phẩm.');
+        return back()->with('success', 'product disabled successfully.');
     }
 
     public function storePurchaseOrder(Request $request)
@@ -130,7 +130,7 @@ class InventoryController extends Controller
                 ->increment('stock_quantity', $data['quantity']);
         });
 
-        return back()->with('success', 'Đã tạo đơn nhập hàng và cập nhật tồn kho.');
+        return back()->with('success', 'purchase order created and stock updated successfully.');
     }
 
     public function useProduct(Request $request, Product $product)
@@ -141,7 +141,7 @@ class InventoryController extends Controller
         ]);
 
         if ($data['quantity'] > $product->stock_quantity) {
-            return back()->with('error', 'Số lượng sử dụng vượt quá tồn kho.');
+            return back()->with('error', 'quantity used exceeds stock');
         }
 
         DB::transaction(function () use ($product, $data) {
@@ -151,12 +151,12 @@ class InventoryController extends Controller
                 'product_id' => $product->id,
                 'type' => 'used',
                 'quantity' => $data['quantity'],
-                'note' => $data['note'] ?? 'Sử dụng vật tư salon',
+                'note' => $data['note'] ?? 'product used',
                 'transaction_date' => now()->toDateString(),
             ]);
         });
 
-        return back()->with('success', 'Đã ghi nhận sử dụng vật tư.');
+        return back()->with('success', 'product used successfully.');
     }
 
     public function wasteProduct(Request $request, Product $product)
@@ -167,7 +167,7 @@ class InventoryController extends Controller
         ]);
 
         if ($data['quantity'] > $product->stock_quantity) {
-            return back()->with('error', 'Số lượng hao hụt vượt quá tồn kho.');
+            return back()->with('error', 'quantity waste exceeds stock');
         }
 
         DB::transaction(function () use ($product, $data) {
@@ -182,6 +182,6 @@ class InventoryController extends Controller
             ]);
         });
 
-        return back()->with('success', 'Đã ghi nhận hao hụt.');
+        return back()->with('success', 'product waste successfully.');
     }
 }
