@@ -56,19 +56,23 @@
       @else
         <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           @foreach ($services as $service)
-            <article class="overflow-hidden rounded-zen-lg border border-zen-border bg-white shadow-zen">
-              <a
-                href="{{ route('services.show', ['slug' => \Illuminate\Support\Str::slug($service->name)]) }}"
-                class="block aspect-[4/3] overflow-hidden bg-zen-bg-soft"
-              >
+            @php
+              $serviceUrl = route('services.show', ['slug' => \Illuminate\Support\Str::slug($service->name)]);
+            @endphp
+
+            <a
+              href="{{ $serviceUrl }}"
+              class="block overflow-hidden border border-zen-border bg-white shadow-zen"
+            >
+              <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
                 <img
                   src="{{ $service->thumbnail ?: $placeholderImage }}"
                   alt="{{ $service->name }}"
-                  class="h-full w-full object-cover transition duration-300 hover:scale-[1.03]"
+                  class="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
                 >
-              </a>
+              </div>
 
               <div class="p-4">
                 <p class="text-xs font-medium uppercase tracking-wide text-zen-accent-dark">
@@ -83,32 +87,17 @@
                   {{ $service->description }}
                 </p>
 
-                <div class="mt-4 space-y-1 border-t border-zen-border pt-3 text-sm">
+                <div class="mt-4 flex items-center justify-between border-t border-zen-border pt-3 text-sm">
                   <p class="font-semibold text-zen-text">
-                    {{ number_format((float) $service->price, 0) }} VND
+                    ${{ number_format((float) $service->price, 0) }}
                   </p>
-                  <p class="text-zen-muted">
-                    {{ (int) $service->duration }} minutes
-                  </p>
-                </div>
 
-                <div class="mt-4 grid grid-cols-2 gap-2">
-                  <a
-                    href="{{ route('booking') }}"
-                    class="inline-flex items-center justify-center rounded-lg bg-zen-primary px-3 py-2 text-sm font-semibold text-white transition hover:bg-zen-primary-dark"
-                  >
-                    Book Now
-                  </a>
-
-                  <a
-                    href="{{ route('services.show', ['slug' => \Illuminate\Support\Str::slug($service->name)]) }}"
-                    class="inline-flex items-center justify-center rounded-lg border border-zen-border px-3 py-2 text-sm font-semibold text-zen-text transition hover:border-zen-accent hover:text-zen-accent-dark"
-                  >
-                    View Detail
-                  </a>
+                  <span class="font-semibold text-zen-accent-dark">
+          View detail &gt;&gt;&gt;
+        </span>
                 </div>
               </div>
-            </article>
+            </a>
           @endforeach
         </div>
 

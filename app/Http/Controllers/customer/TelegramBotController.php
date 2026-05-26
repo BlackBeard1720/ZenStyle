@@ -4,11 +4,45 @@ namespace App\Http\Controllers\customer;
 
 use App\Http\Controllers\Controller;
 use App\Services\TelegramBotUpdateService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class TelegramBotController extends Controller
 {
+    public function webhook(Request $request, TelegramBotUpdateService $telegramBotUpdateService)
+    {
+        $secret = config('services.telegram.webhook_secret');
+
+        if ($secret) {
+            $telegramSecret = $request->header('X-Telegram-Bot-Api-Secret-Token');
+
+            if (! hash_equals($secret, (string) $telegramSecret)) {
+                Log::warning('Telegram webhook rejected because secret token is invalid.');
+
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Invalid webhook secret.',
+                ], 403);
+            }
+        }
+
+        $update = $request->all();
+
+        Log::info('Telegram webhook received', [
+            'update_id' => $update['update_id'] ?? null,
+        ]);
+
+        $result = $telegramBotUpdateService->process($update);
+
+        return response()->json([
+            'ok' => true,
+            'handled' => $result !== null,
+            'result' => $result,
+        ]);
+    }
+
     public function processUpdates(TelegramBotUpdateService $telegramBotUpdateService): array
     {
         $token = config('services.telegram.bot_token');
@@ -20,13 +54,11 @@ class TelegramBotController extends Controller
             ];
         }
 
-        // Lay update_id cuoi cung da xu ly
         $lastUpdateId = Cache::get('telegram_last_update_id');
 
         $params = [];
 
         if ($lastUpdateId) {
-            // Chi lay update moi hon
             $params['offset'] = $lastUpdateId + 1;
         }
 
@@ -53,7 +85,6 @@ class TelegramBotController extends Controller
             }
 
             if ($updateId) {
-                // Luu update_id da xu ly
                 Cache::put('telegram_last_update_id', $updateId);
             }
         }
