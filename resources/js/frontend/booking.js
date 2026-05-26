@@ -25,8 +25,11 @@ const slotClasses = {
     disabled: ['cursor-not-allowed', 'border-zen-border', 'bg-zen-bg-soft', 'text-zen-muted/60', 'opacity-60'],
 };
 
-function formatVnd(n) {
-    return `${Number(n).toLocaleString('vi-VN')}đ`;
+function formatUsd(n) {
+    return `$${Number(n).toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    })}`;
 }
 
 function formatDateVi(isoDate) {
@@ -341,7 +344,7 @@ function initBookingPage(root) {
         const labelEl = picked?.closest('label')?.querySelector('[data-stylist-label]');
         const stylistName = picked
             ? picked.dataset.stylistName ?? labelEl?.textContent?.trim() ?? '—'
-            : 'Bất kỳ nhân viên';
+            : 'Any staff member';
 
         root.dataset.selectedStylistId = picked?.value ?? '';
         root.dataset.selectedStylistName = stylistName;
@@ -413,12 +416,12 @@ function initBookingPage(root) {
         if (lis.length === 0) {
             const p = document.createElement('p');
             p.className = 'text-xs font-normal text-zen-muted';
-            p.textContent = 'Chưa chọn dịch vụ';
+            p.textContent = 'No services selected';
             summaryServicesEl.appendChild(p);
         } else {
             lis.forEach((li) => {
                 const name = li.dataset.serviceName ?? '';
-                const price = parseInt(li.dataset.servicePrice ?? '0', 10) || 0;
+                const price = parseFloat(li.dataset.servicePrice ?? '0') || 0;
                 total += price;
 
                 const p = document.createElement('p');
@@ -427,12 +430,12 @@ function initBookingPage(root) {
 
                 const sub = document.createElement('p');
                 sub.className = 'mt-0.5 text-xs font-normal text-zen-muted';
-                sub.textContent = formatVnd(price);
+                sub.textContent = formatUsd(price);
                 summaryServicesEl.appendChild(sub);
             });
         }
 
-        summaryTotalEl.textContent = formatVnd(total);
+        summaryTotalEl.textContent = formatUsd(total);
     }
 
     function clearPromoHint() {
@@ -516,7 +519,7 @@ function initBookingPage(root) {
         const raw = promoInput?.value.trim() ?? '';
         if (!promoHint || !promoInput) return;
         if (!raw) {
-            promoHint.textContent = 'Vui lòng nhập mã.';
+            promoHint.textContent = 'Please enter a promotion code.';
             promoHint.hidden = false;
             promoHint.classList.remove('text-zen-success');
             promoHint.classList.add('text-zen-muted');
@@ -525,18 +528,18 @@ function initBookingPage(root) {
         promoHint.hidden = false;
         promoHint.classList.remove('text-zen-muted');
         promoHint.classList.add('text-zen-success');
-        promoHint.textContent = `Đã ghi nhận mã “${raw}” (demo, chưa trừ tiền).`;
+        promoHint.textContent = `Promotion code “${raw}” has been recorded (demo only, no discount applied).`;
     });
 
     form?.addEventListener('submit', (e) => {
         if (!timeInput?.value) {
             e.preventDefault();
-            const slotGroup = root.querySelector('[aria-label="Giờ bắt đầu"]');
+            const slotGroup = root.querySelector('[aria-label="Start time"]');err.textContent = 'Please select a time slot before booking.';
             if (slotGroup && !root.querySelector('#booking-slot-error')) {
                 const err = document.createElement('p');
                 err.id = 'booking-slot-error';
                 err.className = 'mt-2 text-xs font-medium text-red-600';
-                err.textContent = 'Vui lòng chọn khung giờ trước khi đặt lịch.';
+                err.textContent = 'Please select a time slot before booking.';
                 slotGroup.after(err);
             }
             root.querySelector('#booking-slot-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });

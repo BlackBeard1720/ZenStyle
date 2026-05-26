@@ -298,8 +298,3 @@ Route::prefix('staff')->name('staff.')
         Route::post('/inventory/{product}/waste', [InventoryController::class, 'wasteProduct'])
             ->name('inventory.waste');
     });
-
-
-
-
-

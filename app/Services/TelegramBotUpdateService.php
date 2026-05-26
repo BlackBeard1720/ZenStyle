@@ -29,7 +29,7 @@ class TelegramBotUpdateService
         if ($text === '/start') {
             $this->telegramService->sendMessage(
                 $chatId,
-                'Vui long bam nut Lien ket Telegram tren trang dat lich ZenStyle hoac gui so dien thoai cua ban.'
+                "Xin chao! Day la bot xac thuc lich hen cua ZenStyle.\n\nVui long nhap so dien thoai ban da dung tren form dat lich.\n\nVi du: 0900000000"
             );
 
             return [
@@ -48,7 +48,7 @@ class TelegramBotUpdateService
 
         $this->telegramService->sendMessage(
             $chatId,
-            'ZenStyle khong nhan dien duoc so dien thoai. Vui long gui so dien thoai dang 0xxxxxxxxx.'
+            "ZenStyle chua nhan dien duoc so dien thoai.\n\nVui long nhap so dien thoai theo dang 0xxxxxxxxx.\nVi du: 0900000000"
         );
 
         return [
@@ -88,7 +88,7 @@ class TelegramBotUpdateService
 
         $this->telegramService->sendMessage(
             $chatId,
-            "ZenStyle da lien ket Telegram thanh cong voi so {$phone}. Bay gio ban co the quay lai trang dat lich va bam Gui OTP."
+            "ZenStyle da lien ket Telegram thanh cong voi so {$phone}.\n\nBay gio ban hay quay lai trang dat lich va bam \"Gui OTP\" de nhan ma xac thuc."
         );
 
         return [
