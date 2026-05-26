@@ -1,5 +1,5 @@
 @props([
-  'title' => 'ZenStyle Admin',
+  'title' => 'TailAdmin',
   'pageName' => 'ecommerce',
   'showHeaderSide' => true,
   'revenueData' => null

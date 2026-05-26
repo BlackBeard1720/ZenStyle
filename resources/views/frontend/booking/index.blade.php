@@ -21,8 +21,8 @@
     });
 
     $bookingStylists = $staff->map(function ($s, $index) {
-        $isActive = true;
 
+        $isActive = $s->status === 'active';
         $years = $s->hire_date
             ? max(0, (int) \Carbon\Carbon::parse($s->hire_date)->diffInYears(now()))
             : null;
@@ -52,11 +52,7 @@
         ->values();
   @endphp
 
-  <div
-    id="booking-page"
-    class="pb-12 pt-6 sm:pt-8"
-    data-available-staff-url="{{ route('booking.available-staff') }}"
-  >
+  <div id="booking-page" class="pb-12 pt-6 sm:pt-8">
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
       <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -202,14 +198,6 @@
               </label>
             @endforeach
           </div>
-
-          <p
-            class="mt-4 rounded-zen-sm border border-zen-border bg-zen-bg-soft p-4 text-sm font-medium text-zen-muted"
-            data-booking-staff-empty
-            @if(count($bookingStylists) > 0) hidden @endif
-          >
-            No staff members are available for this time slot. Please choose another time.
-          </p>
         </section>
 
         {{-- Services --}}

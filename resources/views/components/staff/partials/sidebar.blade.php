@@ -4,25 +4,25 @@
 >
   <!-- SIDEBAR HEADER -->
   <div
-    :class="sidebarToggle ? 'lg:justify-center' : 'justify-between'"
+    :class="sidebarToggle ? 'justify-center' : 'justify-between'"
     class="flex items-center gap-2 pt-8 sidebar-header pb-7"
   >
-    <a
-      href="{{ route('staff.dashboard') }}"
-      class="flex min-w-0 items-center gap-2"
-      :class="sidebarToggle ? 'lg:w-full lg:justify-center' : ''"
-    >
-      <img
-        class="h-8 w-8 shrink-0"
-        src="{{ asset('images/tailadmin/logo/logo-icon.svg') }}"
-        alt="ZenStyle Admin"
-      />
-      <span
-        class="whitespace-nowrap text-xl font-semibold tracking-normal text-gray-900 dark:text-white"
-        :class="sidebarToggle ? 'lg:hidden' : ''"
-      >
-        ZenStyle Admin
+    <a href="{{ route('staff.dashboard') }}">
+      <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
+        <img class="dark:hidden" src="{{ asset('images/tailadmin/logo/logo.svg') }}" alt="Logo" />
+        <img
+          class="hidden dark:block"
+          src="{{ asset('images/tailadmin/logo/logo-dark.svg') }}"
+          alt="Logo"
+        />
       </span>
+
+      <img
+        class="logo-icon"
+        :class="sidebarToggle ? 'lg:block' : 'hidden'"
+        src="{{ asset('images/tailadmin/logo/logo-icon.svg') }}"
+        alt="Logo"
+      />
     </a>
   </div>
   <!-- SIDEBAR HEADER -->
@@ -129,76 +129,6 @@
           </li>
           @endcan
           <!-- Menu Item Appointments -->
-
-          <!-- Menu Item Attendance -->
-          @can('view-attendance')
-          <li>
-            <a
-              href="{{ route('staff.attendance.calendar') }}"
-              class="menu-item group"
-              :class="page === 'AttendanceCalendar' ? 'menu-item-active' : 'menu-item-inactive'"
-            >
-              <svg
-                :class="page === 'AttendanceCalendar' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM4.75 9.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75H4.75ZM11.5795 16.1477L15.5028 12.2244C15.7957 11.9315 16.2706 11.9315 16.5635 12.2244C16.8564 12.5173 16.8564 12.9922 16.5635 13.285L12.1098 17.7388C11.8169 18.0317 11.342 18.0317 11.0491 17.7388L8.19012 14.8798C7.89723 14.5869 7.89723 14.1121 8.19012 13.8192C8.48302 13.5263 8.95789 13.5263 9.25078 13.8192L11.5795 16.1477Z"
-                  fill=""
-                />
-              </svg>
-
-              <span
-                class="menu-item-text"
-                :class="sidebarToggle ? 'lg:hidden' : ''"
-              >
-                Attendance
-              </span>
-            </a>
-          </li>
-          @endcan
-          <!-- Menu Item Attendance -->
-
-          <!-- Menu Item Payroll -->
-          @can('view-payroll')
-          <li>
-            <a
-              href="{{ route('staff.payroll.index') }}"
-              class="menu-item group"
-              :class="page === 'PayrollManagement' ? 'menu-item-active' : 'menu-item-inactive'"
-            >
-              <svg
-                :class="page === 'PayrollManagement' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M6.5 3.25C5.25736 3.25 4.25 4.25736 4.25 5.5V18.5C4.25 19.7426 5.25736 20.75 6.5 20.75H17.5C18.7426 20.75 19.75 19.7426 19.75 18.5V5.5C19.75 4.25736 18.7426 3.25 17.5 3.25H6.5ZM5.75 5.5C5.75 5.08579 6.08579 4.75 6.5 4.75H17.5C17.9142 4.75 18.25 5.08579 18.25 5.5V18.5C18.25 18.9142 17.9142 19.25 17.5 19.25H6.5C6.08579 19.25 5.75 18.9142 5.75 18.5V5.5ZM8.25 8C8.25 7.58579 8.58579 7.25 9 7.25H15C15.4142 7.25 15.75 7.58579 15.75 8C15.75 8.41421 15.4142 8.75 15 8.75H9C8.58579 8.75 8.25 8.41421 8.25 8ZM8.25 12C8.25 11.5858 8.58579 11.25 9 11.25H9.01C9.42421 11.25 9.76 11.5858 9.76 12C9.76 12.4142 9.42421 12.75 9.01 12.75H9C8.58579 12.75 8.25 12.4142 8.25 12ZM11.25 12C11.25 11.5858 11.5858 11.25 12 11.25H12.01C12.4242 11.25 12.76 11.5858 12.76 12C12.76 12.4142 12.4242 12.75 12.01 12.75H12C11.5858 12.75 11.25 12.4142 11.25 12ZM14.25 12C14.25 11.5858 14.5858 11.25 15 11.25H15.01C15.4242 11.25 15.76 11.5858 15.76 12C15.76 12.4142 15.4242 12.75 15.01 12.75H15C14.5858 12.75 14.25 12.4142 14.25 12ZM8.25 15.5C8.25 15.0858 8.58579 14.75 9 14.75H9.01C9.42421 14.75 9.76 15.0858 9.76 15.5C9.76 15.9142 9.42421 16.25 9.01 16.25H9C8.58579 16.25 8.25 15.9142 8.25 15.5ZM11.25 15.5C11.25 15.0858 11.5858 14.75 12 14.75H12.01C12.4242 14.75 12.76 15.0858 12.76 15.5C12.76 15.9142 12.4242 16.25 12.01 16.25H12C11.5858 16.25 11.25 15.9142 11.25 15.5ZM14.25 15.5C14.25 15.0858 14.5858 14.75 15 14.75H15.01C15.4242 14.75 15.76 15.0858 15.76 15.5C15.76 15.9142 15.4242 16.25 15.01 16.25H15C14.5858 16.25 14.25 15.9142 14.25 15.5Z"
-                  fill=""
-                />
-              </svg>
-
-              <span
-                class="menu-item-text"
-                :class="sidebarToggle ? 'lg:hidden' : ''"
-              >
-                Payroll
-              </span>
-            </a>
-          </li>
-          @endcan
-          <!-- Menu Item Payroll -->
 
           <!-- Menu Item Service Management -->
           @canany(['view-categories', 'view-services'])
