@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Staff\PaypalController;
 use App\Http\Controllers\Staff\AppointmentCheckoutController;
 use App\Http\Controllers\Staff\FcmTokenController;
 use App\Http\Controllers\Staff\ClientController;
@@ -10,6 +9,9 @@ use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\CategoryController;
+use App\Http\Controllers\Staff\AttendanceController;
+use App\Http\Controllers\Staff\PayrollController;
+use App\Http\Controllers\Staff\StaffScheduleController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
 use App\Http\Controllers\Staff\ServiceController;
@@ -18,7 +20,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
 use App\Http\Controllers\Staff\InventoryController;
-use App\Http\Controllers\Staff\InventoryReportController;
 
 
 Route::get('/firebase-messaging-sw.js', function () {
@@ -191,6 +192,31 @@ Route::prefix('staff')->name('staff.')
 
         Route::resource('appointments', AppointmentController::class);
 
+        // Quan ly lich lam viec nhan vien
+        Route::resource('schedules', StaffScheduleController::class)
+            ->parameters(['schedules' => 'staffSchedule'])
+            ->except(['show', 'create', 'edit']);
+
+        // Quan ly cham cong check in / check out
+        Route::resource('attendance', AttendanceController::class)
+            ->except(['show', 'create', 'edit']);
+
+        // Quan ly tinh luong
+        Route::get('/payrolls', [PayrollController::class, 'index'])
+            ->name('payrolls.index');
+
+        Route::post('/payrolls/generate', [PayrollController::class, 'generate'])
+            ->name('payrolls.generate');
+
+        Route::patch('/payrolls/{payroll}/confirm', [PayrollController::class, 'confirm'])
+            ->name('payrolls.confirm');
+
+        Route::patch('/payrolls/{payroll}/paid', [PayrollController::class, 'markAsPaid'])
+            ->name('payrolls.paid');
+
+        Route::delete('/payrolls/{payroll}', [PayrollController::class, 'destroy'])
+            ->name('payrolls.destroy');
+
         // route for checkout
         Route::get('appointments/{appointment}/checkout', [AppointmentCheckoutController::class, 'show'])
             ->name('appointments.checkout.show');
@@ -204,7 +230,7 @@ Route::prefix('staff')->name('staff.')
         Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])
             ->name('appointments.complete');
 
-        // route for appointment paypal payment
+        // route for appointment PayPal payment
         Route::post('appointments/{appointment}/paypal/create-order', [AppointmentCheckoutController::class, 'createPayPalOrder'])
             ->name('appointments.paypal.create-order');
 
@@ -231,7 +257,7 @@ Route::prefix('staff')->name('staff.')
             ], 404);
         });
 
-        //quản lý kho hàng
+        // Quan ly kho hang
         Route::get('/inventory', [InventoryController::class, 'index'])
             ->name('inventory.index');
 
