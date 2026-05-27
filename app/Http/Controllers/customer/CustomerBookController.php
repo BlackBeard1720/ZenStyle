@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\customer;
 
+use Illuminate\Http\JsonResponse;
 use App\Models\TelegramUser;
 use App\Http\Controllers\Controller;
 use App\Mail\BookingConfirmedMail;
@@ -64,6 +65,8 @@ class CustomerBookController extends Controller
                 ]);
         }
 
+        $data['phone'] = $this->normalizePhone($data['phone']) ?? $data['phone'];
+
         session(['booking_data' => $data]);
         session()->forget(['booking_otp_failed_attempts', 'booking_otp_locked_until']);
 
@@ -83,25 +86,55 @@ class CustomerBookController extends Controller
         return redirect()->route('booking');
     }
 
-    public function sendTelegramOtp(TelegramOtpService $telegramOtpService): RedirectResponse
+    public function sendTelegramOtp(Request $request, TelegramOtpService $telegramOtpService): RedirectResponse|JsonResponse
     {
         // Lay du lieu booking dang cho xac thuc
         $data = session('booking_data');
 
         if (! $data || empty($data['phone'])) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Please complete the booking information first.',
+                ], 422);
+            }
+
             return redirect()
                 ->route('booking')
-                ->withErrors(['booking' => 'Vui lòng hoàn tất thông tin đặt lịch trước.']);
+                ->withErrors(['booking' => 'Please complete the booking information first.']);
         }
 
         // Gui OTP qua Telegram
-        $result = $telegramOtpService->sendOtp($data['phone']);
+        $normalizedPhone = $this->normalizePhone($data['phone'] ?? '');
+
+        if (! $normalizedPhone) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Invalid phone number format.',
+            ], 422);
+        }
+
+        $result = $telegramOtpService->sendOtp($normalizedPhone);
 
         if (! $result['ok']) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => $result['message'],
+                ], 422);
+            }
+
             return back()
                 ->withInput()
                 ->withErrors(['otp' => $result['message']])
                 ->with('otp_pending', true);
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'ok' => true,
+                'message' => $result['message'],
+            ]);
         }
 
         return back()
@@ -111,18 +144,30 @@ class CustomerBookController extends Controller
             ->with('success', $result['message']);
     }
 
-    public function checkTelegramLink(Request $request): JsonResponse
+    public function checkTelegramLink(Request $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->validate([
             'phone' => ['required', 'string', 'max:20'],
         ]);
 
+        $normalizedPhone = $this->normalizePhone($data['phone']);
+
+        if (! $normalizedPhone) {
+            return response()->json([
+                'linked' => false,
+                'phone' => null,
+                'message' => 'Invalid phone number format.',
+            ], 422);
+        }
+
         $linked = TelegramUser::query()
-            ->where('phone', $data['phone'])
+            ->where('phone', $normalizedPhone)
             ->exists();
 
         return response()->json([
             'linked' => $linked,
+            'phone' => $normalizedPhone,
+            'message' => $linked ? 'Telegram is linked.' : 'Telegram is not linked yet.',
         ]);
     }
 
@@ -172,7 +217,16 @@ class CustomerBookController extends Controller
         }
 
         // sau đó mới verify OTP
-        $result = $telegramOtpService->verifyOtp($data['phone'], $request->input('otp'));
+        $normalizedPhone = $this->normalizePhone($data['phone'] ?? '');
+
+        if (! $normalizedPhone) {
+            return back()
+                ->withErrors(['otp' => 'Invalid phone number format.'])
+                ->withInput()
+                ->with('otp_pending', true);
+        }
+
+        $result = $telegramOtpService->verifyOtp($normalizedPhone, $request->input('otp'));
         if (! $result['ok']) {
             // Khoa OTP neu sai 2 lan
             $failedAttempts = (int) session('booking_otp_failed_attempts', 0) + 1;
@@ -360,5 +414,16 @@ class CustomerBookController extends Controller
             ->whereHas('appointmentServices', function ($query) use ($staffId) {
                 $query->where('staff_id', $staffId);
             })->exists();
+    }
+
+    private function normalizePhone(string $phone): ?string
+    {
+        $normalized = preg_replace('/[\s.\-]+/', '', trim($phone));
+
+        if (! is_string($normalized) || ! preg_match('/^0\d{9,10}$/', $normalized)) {
+            return null;
+        }
+
+        return $normalized;
     }
 }

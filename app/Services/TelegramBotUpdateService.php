@@ -7,7 +7,8 @@ use App\Models\TelegramUser;
 class TelegramBotUpdateService
 {
     public function __construct(
-        protected TelegramService $telegramService
+        protected TelegramService $telegramService,
+        protected TelegramOtpService $telegramOtpService
     ) {
     }
 
@@ -15,12 +16,12 @@ class TelegramBotUpdateService
     {
         $message = $update['message'] ?? null;
 
-        if (! $message) {
+        if (! is_array($message)) {
             return null;
         }
 
         $chatId = $message['chat']['id'] ?? null;
-        $text = trim($message['text'] ?? '');
+        $text = trim((string) ($message['text'] ?? ''));
 
         if (! $chatId || $text === '') {
             return null;
@@ -29,7 +30,7 @@ class TelegramBotUpdateService
         if ($text === '/start' || $text === '/start booking') {
             $this->telegramService->sendMessage(
                 $chatId,
-                "Welcome to ZenStyle Telegram verification bot.\n\nPlease send the phone number you entered on the booking form.\n\nExample:\n0900000000\n\nAfter linking successfully, return to the booking page and click \"Send OTP via Telegram\"."
+                "Welcome to ZenStyle Telegram verification bot.\n\nPlease send your phone number in this format:\n0900000000"
             );
 
             return [
@@ -38,12 +39,17 @@ class TelegramBotUpdateService
             ];
         }
 
-        if (preg_match('/^\/start\s+(0[0-9]{9,10})$/', $text, $matches)) {
-            return $this->linkTelegramUser($message, $matches[1]);
+        if (preg_match('/^\/start\s+(.+)$/', $text, $matches)) {
+            $payload = trim($matches[1]);
+            $phoneFromPayload = $this->extractPhoneFromStartPayload($payload);
+
+            if ($phoneFromPayload) {
+                return $this->linkTelegramUser($message, $phoneFromPayload, true);
+            }
         }
 
-        if (preg_match('/^0[0-9]{9,10}$/', $text)) {
-            return $this->linkTelegramUser($message, $text);
+        if ($this->normalizePhone($text)) {
+            return $this->linkTelegramUser($message, $text, false);
         }
 
         $this->telegramService->sendMessage(
@@ -58,27 +64,30 @@ class TelegramBotUpdateService
         ];
     }
 
-    private function linkTelegramUser(array $message, string $phone): array
+    private function linkTelegramUser(array $message, string $phone, bool $fromDeepLink): array
     {
-        $chatId = $message['chat']['id'];
+        $chatId = (string) $message['chat']['id'];
         $username = $message['from']['username'] ?? null;
         $firstName = $message['from']['first_name'] ?? null;
 
-        $existing = TelegramUser::query()
-            ->where('phone', $phone)
-            ->where('telegram_chat_id', $chatId)
-            ->first();
+        $normalizedPhone = $this->normalizePhone($phone);
 
-        if ($existing) {
+        if (! $normalizedPhone) {
+            $this->telegramService->sendMessage(
+                $chatId,
+                "Invalid phone number format. Please use this format:\n0900000000"
+            );
+
             return [
-                'action' => 'already_linked',
-                'phone' => $phone,
+                'action' => 'invalid_phone',
                 'telegram_chat_id' => $chatId,
             ];
         }
 
+        $existing = TelegramUser::query()->where('phone', $normalizedPhone)->first();
+
         TelegramUser::query()->updateOrCreate(
-            ['phone' => $phone],
+            ['phone' => $normalizedPhone],
             [
                 'telegram_chat_id' => $chatId,
                 'telegram_username' => $username,
@@ -86,17 +95,55 @@ class TelegramBotUpdateService
             ]
         );
 
-        $this->telegramService->sendMessage(
-            $chatId,
-            "ZenStyle has successfully linked Telegram with phone number {$phone}.\n\nPlease return to the booking page and click \"Send OTP via Telegram\" to receive your verification code."
-        );
+        if ($existing && (string) $existing->telegram_chat_id === $chatId) {
+            $this->telegramService->sendMessage(
+                $chatId,
+                "Your phone number {$normalizedPhone} is already linked to this Telegram account. Sending a new OTP now."
+            );
+        } else {
+            $this->telegramService->sendMessage(
+                $chatId,
+                "ZenStyle has successfully linked phone number {$normalizedPhone} to this Telegram account. Sending your OTP now."
+            );
+        }
+
+        $otpResult = $this->telegramOtpService->generateAndSendOtp($normalizedPhone, $chatId);
+
+        if (! $otpResult['ok']) {
+            $this->telegramService->sendMessage(
+                $chatId,
+                $otpResult['message']
+            );
+        }
 
         return [
-            'action' => 'linked_user',
-            'phone' => $phone,
+            'action' => $existing ? 'updated_or_relinked_user' : 'linked_user',
+            'source' => $fromDeepLink ? 'start_payload' : 'manual_message',
+            'phone' => $normalizedPhone,
             'telegram_chat_id' => $chatId,
             'telegram_username' => $username,
             'first_name' => $firstName,
+            'otp_sent' => $otpResult['ok'],
         ];
+    }
+
+    private function extractPhoneFromStartPayload(string $payload): ?string
+    {
+        if (str_starts_with($payload, 'link_')) {
+            $payload = substr($payload, 5);
+        }
+
+        return $this->normalizePhone(urldecode($payload));
+    }
+
+    private function normalizePhone(string $phone): ?string
+    {
+        $normalized = preg_replace('/[\s.\-]+/', '', trim($phone));
+
+        if (! is_string($normalized) || ! preg_match('/^0\d{9,10}$/', $normalized)) {
+            return null;
+        }
+
+        return $normalized;
     }
 }

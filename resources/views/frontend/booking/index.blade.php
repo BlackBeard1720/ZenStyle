@@ -487,20 +487,14 @@
 
           <div
             id="telegram-linked-box"
-            @class([
-              'mt-3 rounded bg-green-100 p-3 text-sm text-green-700',
-              'hidden' => ! $telegramLinked,
-            ])
+            class="mt-3 rounded bg-green-100 p-3 text-sm text-green-700 {{ $telegramLinked ? '' : 'hidden' }}"
           >
-            Telegram is already linked to this phone number. You can send the OTP now.
+            Telegram is linked to this phone number. You can send the OTP now.
           </div>
 
           <div
             id="telegram-link-box"
-            @class([
-              'mt-3',
-              'hidden' => $telegramLinked,
-            ])
+            class="mt-3 {{ $telegramLinked ? 'hidden' : '' }}"
           >
             <button
               type="button"
@@ -508,16 +502,15 @@
               data-phone="{{ $otpPhone }}"
               class="h-10 w-full rounded-zen-sm border border-zen-primary bg-white px-3 text-sm font-medium text-zen-primary transition hover:bg-zen-accent-soft"
             >
-              Link Telegram to Receive OTP
+              Link Telegram and Send OTP
             </button>
 
             <p class="mt-2 text-xs text-zen-muted">
-              After opening the bot, tap Start and send the booking phone number:
-              <span class="font-semibold text-zen-text">{{ $otpPhone }}</span>
+              Telegram will link your phone and send the OTP automatically.
             </p>
 
             <p id="telegram-link-waiting" class="mt-2 hidden text-xs font-medium text-zen-primary">
-              Waiting for Telegram linking... Return to this page after sending your phone number to the bot.
+              Waiting for Telegram linking...
             </p>
           </div>
         </div>
@@ -530,8 +523,7 @@
           @if(! $telegramLinked) hidden @endif
         >
           @csrf
-          <button type="submit"
-                  class="h-10 w-full rounded-zen-sm bg-zen-primary px-3 text-sm font-medium text-white transition hover:bg-zen-primary-dark">
+          <button type="submit" class="h-10 w-full rounded-zen-sm bg-zen-primary px-3 text-sm font-medium text-white transition hover:bg-zen-primary-dark">
             Send OTP via Telegram
           </button>
         </form>
@@ -541,6 +533,8 @@
             {{ session('success') }}
           </p>
         @endif
+
+        <p id="telegram-otp-ajax-message" class="mt-3 hidden rounded bg-green-100 p-3 text-sm text-green-700"></p>
 
         @if($otpLockSeconds > 0)
           <p id="otp-lock-message" class="mt-3 rounded bg-yellow-100 p-3 text-sm text-yellow-800">
@@ -554,10 +548,12 @@
           @csrf
 
           <input
+            id="otp-input"
             name="otp"
             maxlength="6"
+            placeholder="Enter 6-digit OTP"
             @disabled($otpLockSeconds > 0)
-            class="h-11 w-full rounded border border-zen-border px-3 text-zen-text outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20 disabled:cursor-not-allowed disabled:bg-gray-100"
+            class="h-11 w-full rounded border border-zen-border px-3 text-center text-lg font-semibold tracking-widest text-zen-text outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20 disabled:cursor-not-allowed disabled:bg-gray-100"
           >
 
           @error('otp')
@@ -596,9 +592,7 @@
         }
 
         try {
-          const url = `${telegramCheckUrl}?phone=${encodeURIComponent(phone)}`;
-
-          const response = await fetch(url, {
+          const response = await fetch(`${telegramCheckUrl}?phone=${encodeURIComponent(phone)}`, {
             headers: {
               'Accept': 'application/json',
             },
@@ -621,6 +615,7 @@
               telegramCheckTimer = null;
             }
 
+
             return true;
           }
         } catch (error) {
@@ -632,13 +627,6 @@
 
       if (linkTelegramBtn) {
         linkTelegramBtn.addEventListener('click', function () {
-          const phone = this.dataset.phone;
-
-          if (!phone) {
-            alert('Could not find the booking phone number.');
-            return;
-          }
-
           const botUsername = @json(config('services.telegram.bot_username'));
 
           if (!botUsername) {
@@ -648,8 +636,9 @@
 
           telegramLinkWaiting?.classList.remove('hidden');
 
-          const telegramUrl = `https://t.me/${botUsername}?start=booking`;
-          window.open(telegramUrl, '_blank');
+          const phone = linkTelegramBtn.dataset.phone || '';
+          const deepLinkPayload = `link_${encodeURIComponent(phone)}`;
+          window.open(`https://t.me/${botUsername}?start=${deepLinkPayload}`, '_blank');
 
           if (telegramCheckTimer) {
             clearInterval(telegramCheckTimer);
@@ -765,7 +754,7 @@
       const otpCountdown = document.getElementById('otp-countdown');
       const otpLockMessage = document.getElementById('otp-lock-message');
       const verifyOtpBtn = document.getElementById('verify-otp-btn');
-      const otpInput = document.querySelector('input[name="otp"]');
+      const otpInput = document.getElementById('otp-input');
 
       if (otpCountdown) {
         let seconds = Number(otpCountdown.dataset.seconds);
