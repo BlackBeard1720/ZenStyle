@@ -3,90 +3,72 @@
 namespace Database\Seeders;
 
 use App\Models\Attendance;
-use App\Models\Staff;
+use App\Models\StaffSchedule;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceSeeder extends Seeder
 {
     public function run(): void
     {
-        $staffMembers = Staff::query()
-            ->where('status', 'active')
-            ->orderBy('id')
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Attendance::truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $schedules = StaffSchedule::where('work_date', '<=', now()->toDateString())
             ->get();
 
-        if ($staffMembers->isEmpty()) {
-            $this->command?->warn('AttendanceSeeder skipped: no active staff found. Run StaffSeeder first.');
+        foreach ($schedules as $schedule) {
+            if ($schedule->status === 'off' || $schedule->status === 'leave') {
+                Attendance::create([
+                    'staff_id' => $schedule->staff_id,
+                    'work_date' => $schedule->work_date->toDateString(),
+                    'check_in' => null,
+                    'check_out' => null,
+                    'status' => 'leave',
+                ]);
 
-            return;
-        }
-
-        $templates = [
-            [
-                'status' => Attendance::STATUS_PRESENT,
-                'check_in' => '08:00',
-                'check_out' => '17:00',
-                'working_hours' => 8,
-                'note' => 'On time',
-            ],
-            [
-                'status' => Attendance::STATUS_LATE,
-                'check_in' => '09:00',
-                'check_out' => '17:00',
-                'working_hours' => 7,
-                'note' => 'Late arrival',
-            ],
-            [
-                'status' => Attendance::STATUS_ABSENT,
-                'check_in' => null,
-                'check_out' => null,
-                'working_hours' => 0,
-                'note' => 'Absent',
-            ],
-            [
-                'status' => Attendance::STATUS_LEAVE,
-                'check_in' => null,
-                'check_out' => null,
-                'working_hours' => 0,
-                'note' => 'Approved leave',
-            ],
-        ];
-
-        $monthStart = now()->startOfMonth();
-        $daysInMonth = $monthStart->daysInMonth;
-        $created = 0;
-        $updated = 0;
-
-        $staffMembers->each(function (Staff $staff, int $staffIndex) use ($templates, $monthStart, $daysInMonth, &$created, &$updated) {
-            for ($i = 0; $i < 8; $i++) {
-                $template = $templates[$i % count($templates)];
-                $workDate = $monthStart->copy()
-                    ->addDays(($staffIndex * 2 + $i * 3) % $daysInMonth)
-                    ->toDateString();
-
-                $attendance = Attendance::updateOrCreate(
-                    [
-                        'staff_id' => $staff->id,
-                        'work_date' => $workDate,
-                    ],
-                    [
-                        'check_in' => $template['check_in'],
-                        'check_out' => $template['check_out'],
-                        'working_hours' => $template['working_hours'],
-                        'overtime_hours' => $template['status'] === Attendance::STATUS_PRESENT && ($staffIndex + $i) % 3 === 0 ? 1 : 0,
-                        'status' => $template['status'],
-                        'note' => $template['note'],
-                    ]
-                );
-
-                if ($attendance->wasRecentlyCreated) {
-                    $created++;
-                } else {
-                    $updated++;
-                }
+                continue;
             }
-        });
 
-        $this->command?->info("AttendanceSeeder completed: {$created} created, {$updated} updated.");
+            $random = rand(1, 100);
+
+            // 10% vắng
+            if ($random <= 10) {
+                Attendance::create([
+                    'staff_id' => $schedule->staff_id,
+                    'work_date' => $schedule->work_date->toDateString(),
+                    'check_in' => null,
+                    'check_out' => null,
+                    'status' => 'absent',
+                ]);
+
+                continue;
+            }
+
+            $workDate = Carbon::parse($schedule->work_date);
+            $start = Carbon::parse($workDate->format('Y-m-d') . ' ' . $schedule->start_time);
+            $end = Carbon::parse($workDate->format('Y-m-d') . ' ' . $schedule->end_time);
+
+            // 25% đi muộn
+            if ($random <= 35) {
+                $checkIn = $start->copy()->addMinutes(rand(10, 45));
+                $status = 'late';
+            } else {
+                $checkIn = $start->copy()->addMinutes(rand(0, 5));
+                $status = 'present';
+            }
+
+            $checkOut = $end->copy()->subMinutes(rand(0, 10));
+
+            Attendance::create([
+                'staff_id' => $schedule->staff_id,
+                'work_date' => $workDate->toDateString(),
+                'check_in' => $checkIn,
+                'check_out' => $checkOut,
+                'status' => $status,
+            ]);
+        }
     }
 }

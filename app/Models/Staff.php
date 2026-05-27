@@ -34,9 +34,17 @@ class Staff extends Model
         return $this->hasMany(AppointmentService::class);
     }
 
-    public function attendances(): HasMany
+
+
+    public function schedules()
     {
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(StaffSchedule::class);
+    }
+
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'staff_id', 'id');
     }
 
     public function payrolls(): HasMany

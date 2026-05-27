@@ -166,10 +166,10 @@
           <!-- Menu Item Attendance -->
 
           <!-- Menu Item Payroll -->
-          @can('view-payroll')
+          @can('view-payrolls')
           <li>
             <a
-              href="{{ route('staff.payroll.index') }}"
+              href="{{ route('staff.payrolls.index') }}"
               class="menu-item group"
               :class="page === 'PayrollManagement' ? 'menu-item-active' : 'menu-item-inactive'"
             >

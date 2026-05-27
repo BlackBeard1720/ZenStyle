@@ -4,16 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Payroll extends Model
+class StaffSchedule extends Model
 {
     protected $fillable = [
         'staff_id',
-        'month',
-        'year',
-        'base_salary',
-        'commission',
-        'total_salary',
+        'work_date',
+        'start_time',
+        'end_time',
         'status',
+        'note',
+    ];
+
+    protected $casts = [
+        'work_date' => 'date',
     ];
 
     public function staff()

@@ -3,183 +3,101 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
-use App\Models\Attendance;
+use App\Models\AppointmentService;
 use App\Models\Payroll;
 use App\Models\Staff;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Validation\Rule;
 
 class PayrollController extends Controller
 {
-    private const DEFAULT_STANDARD_WORK_DAYS = 26;
+    private float $commissionRate = 0.10; // 10%
 
     public function index(Request $request)
     {
-        Gate::authorize('view-payroll');
+        $month = $request->month ?? now()->month;
+        $year = $request->year ?? now()->year;
 
-        $filters = $this->monthYear($request);
-        $month = $filters['month'];
-        $year = $filters['year'];
-
-        $payrolls = Payroll::query()
-            ->with('staff')
-            ->whereHas('staff', fn ($query) => $query->where('status', 'active'))
+        $payrolls = Payroll::with('staff')
             ->where('month', $month)
             ->where('year', $year)
-            ->orderBy('staff_id')
-            ->paginate(15)
+            ->latest()
+            ->paginate(10)
             ->withQueryString();
 
-        return view('staff.payroll.index', [
-            'payrolls' => $payrolls,
-            'month' => $month,
-            'year' => $year,
-        ]);
+        return view('staff.payrolls.index', compact(
+            'payrolls',
+            'month',
+            'year'
+        ));
     }
 
     public function generate(Request $request)
     {
-        Gate::authorize('manage-payroll');
+        $data = $request->validate([
+            'month' => ['required', 'integer', 'between:1,12'],
+            'year' => ['required', 'integer', 'min:2020'],
+        ]);
 
-        $filters = $this->monthYear($request, required: true);
-        $month = $filters['month'];
-        $year = $filters['year'];
+        $staffList = Staff::where('status', 'active')->get();
 
-        $staffMembers = Staff::query()
-            ->where('status', 'active')
-            ->orderBy('full_name')
-            ->get();
+        foreach ($staffList as $staff) {
+            $baseSalary = $staff->salary ?? 0;
 
-        if ($staffMembers->isEmpty()) {
-            return to_route('staff.payroll.index', compact('month', 'year'))
-                ->withErrors(['staff' => 'No active staff found to generate payroll.']);
-        }
-
-        $count = 0;
-
-        foreach ($staffMembers as $staff) {
-            $existingPayroll = Payroll::query()
+            // Tổng tiền dịch vụ mà nhân viên đã làm trong tháng
+            // Chỉ tính appointment đã completed
+            $serviceRevenue = AppointmentService::query()
                 ->where('staff_id', $staff->id)
-                ->where('month', $month)
-                ->where('year', $year)
-                ->first();
+                ->whereHas('appointment', function ($query) use ($data) {
+                    $query->whereMonth('appointment_date', $data['month'])
+                        ->whereYear('appointment_date', $data['year'])
+                        ->where('status', 'completed');
+                })
+                ->sum('price_at_booking');
 
-            $standardWorkDays = max(1, (int) ($existingPayroll?->standard_work_days ?: self::DEFAULT_STANDARD_WORK_DAYS));
-            $actualWorkDays = $this->actualWorkDays($staff, $month, $year);
-            $baseSalary = (float) ($staff->salary ?? 0);
-            $bonus = (float) ($existingPayroll?->bonus ?? 0);
-            $deduction = (float) ($existingPayroll?->deduction ?? 0);
+            $commission = round($serviceRevenue * $this->commissionRate, 2);
+
+            $totalSalary = $baseSalary + $commission;
 
             Payroll::updateOrCreate(
                 [
                     'staff_id' => $staff->id,
-                    'month' => $month,
-                    'year' => $year,
+                    'month' => $data['month'],
+                    'year' => $data['year'],
                 ],
                 [
-                    'standard_work_days' => $standardWorkDays,
-                    'actual_work_days' => $actualWorkDays,
                     'base_salary' => $baseSalary,
-                    'bonus' => $bonus,
-                    'deduction' => $deduction,
-                    'net_salary' => $this->netSalary($baseSalary, $standardWorkDays, $actualWorkDays, $bonus, $deduction),
-                    'status' => $existingPayroll?->status ?? Payroll::STATUS_DRAFT,
+                    'commission' => $commission,
+                    'total_salary' => $totalSalary,
+                    'status' => 'draft',
                 ]
             );
-
-            $count++;
         }
 
-        return to_route('staff.payroll.index', compact('month', 'year'))
-            ->with('success', "Payroll generated for {$count} active staff.");
-    }
-
-    public function update(Request $request, Payroll $payroll)
-    {
-        Gate::authorize('manage-payroll');
-
-        $data = $request->validate([
-            'standard_work_days' => ['required', 'integer', 'min:1'],
-            'bonus' => ['required', 'numeric', 'min:0'],
-            'deduction' => ['required', 'numeric', 'min:0'],
-            'status' => ['sometimes', Rule::in(Payroll::STATUSES)],
-        ]);
-
-        $standardWorkDays = (int) $data['standard_work_days'];
-        $bonus = (float) $data['bonus'];
-        $deduction = (float) $data['deduction'];
-        $baseSalary = (float) $payroll->base_salary;
-        $actualWorkDays = (int) $payroll->actual_work_days;
-
-        $payroll->update([
-            'standard_work_days' => $standardWorkDays,
-            'bonus' => $bonus,
-            'deduction' => $deduction,
-            'net_salary' => $this->netSalary($baseSalary, $standardWorkDays, $actualWorkDays, $bonus, $deduction),
-            'status' => $data['status'] ?? $payroll->status,
-        ]);
-
-        return $this->redirectToPayroll($payroll)
-            ->with('success', 'Payroll updated successfully.');
+        return back()->with('success', 'Payroll generated successfully.');
     }
 
     public function confirm(Payroll $payroll)
     {
-        Gate::authorize('manage-payroll');
+        $payroll->update([
+            'status' => 'confirmed',
+        ]);
 
-        $payroll->update(['status' => Payroll::STATUS_CONFIRMED]);
-
-        return $this->redirectToPayroll($payroll)
-            ->with('success', 'Payroll confirmed successfully.');
+        return back()->with('success', 'Payroll confirmed.');
     }
 
     public function markAsPaid(Payroll $payroll)
     {
-        Gate::authorize('manage-payroll');
-
-        $payroll->update(['status' => Payroll::STATUS_PAID]);
-
-        return $this->redirectToPayroll($payroll)
-            ->with('success', 'Payroll marked as paid successfully.');
-    }
-
-    private function monthYear(Request $request, bool $required = false): array
-    {
-        $data = $request->validate([
-            'month' => [$required ? 'required' : 'nullable', 'integer', 'min:1', 'max:12'],
-            'year' => [$required ? 'required' : 'nullable', 'integer', 'min:2000', 'max:2100'],
+        $payroll->update([
+            'status' => 'paid',
         ]);
 
-        return [
-            'month' => (int) ($data['month'] ?? now()->month),
-            'year' => (int) ($data['year'] ?? now()->year),
-        ];
+        return back()->with('success', 'Payroll marked as paid.');
     }
 
-    private function actualWorkDays(Staff $staff, int $month, int $year): int
+    public function destroy(Payroll $payroll)
     {
-        return Attendance::query()
-            ->where('staff_id', $staff->id)
-            ->whereMonth('work_date', $month)
-            ->whereYear('work_date', $year)
-            ->whereIn('status', [
-                Attendance::STATUS_PRESENT,
-                Attendance::STATUS_LATE,
-            ])
-            ->count();
-    }
+        $payroll->delete();
 
-    private function netSalary(float $baseSalary, int $standardWorkDays, int $actualWorkDays, float $bonus, float $deduction): float
-    {
-        return round(($baseSalary / $standardWorkDays) * $actualWorkDays + $bonus - $deduction, 2);
-    }
-
-    private function redirectToPayroll(Payroll $payroll)
-    {
-        return to_route('staff.payroll.index', [
-            'month' => $payroll->month,
-            'year' => $payroll->year,
-        ]);
+        return back()->with('success', 'Payroll deleted.');
     }
 }

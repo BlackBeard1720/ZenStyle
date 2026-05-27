@@ -6,78 +6,123 @@ use App\Models\Role;
 use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class StaffSeeder extends Seeder
 {
     public function run(): void
     {
-        $roleIds = Role::whereIn('role_name', ['admin', 'receptionist', 'stylist'])
-            ->pluck('id', 'role_name');
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        Staff::truncate();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        $roleIds = Role::whereIn('role_name', [
+            'admin',
+            'receptionist',
+            'stylist',
+        ])->pluck('id', 'role_name');
 
         $staffData = [
+
             'minhpham@gmail.com' => [
                 'full_name' => 'Minh Pham',
                 'specialization' => 'Manager',
-                'salary' => 18000000,
+                'salary' => 1200,
             ],
+
             'linhvn@gmail.com' => [
                 'full_name' => 'Linh Nguyen',
                 'specialization' => 'Receptionist',
-                'salary' => 10000000,
+                'salary' => 700,
             ],
+
             'maipt@gmail.com' => [
                 'full_name' => 'Mai Pham',
                 'specialization' => 'Receptionist',
-                'salary' => 9500000,
+                'salary' => 650,
             ],
+
             'huyphg@gmail.com' => [
                 'full_name' => 'Huy Phan',
-                'specialization' => 'Hair stylist',
-                'salary' => 14000000,
+                'specialization' => 'Hair Stylist',
+                'salary' => 900,
             ],
+
             'thaoha@gmail.com' => [
                 'full_name' => 'Thao Ha',
-                'specialization' => 'Hair coloring',
-                'salary' => 13000000,
+                'specialization' => 'Hair Coloring',
+                'salary' => 850,
             ],
+
             'namle@gmail.com' => [
                 'full_name' => 'Nam Le',
-                'specialization' => 'Hair stylist',
-                'salary' => 12500000,
+                'specialization' => 'Hair Stylist',
+                'salary' => 800,
             ],
+
             'ngocanh@gmail.com' => [
                 'full_name' => 'Ngoc Anh',
-                'specialization' => 'Skin care',
-                'salary' => 12000000,
+                'specialization' => 'Skin Care',
+                'salary' => 780,
             ],
+
             'tuanvo@gmail.com' => [
                 'full_name' => 'Tuan Vo',
-                'specialization' => 'Nail care',
-                'salary' => 11500000,
+                'specialization' => 'Nail Care',
+                'salary' => 750,
             ],
+
             'hanhdo@gmail.com' => [
                 'full_name' => 'Hanh Do',
-                'specialization' => 'Hair stylist',
-                'salary' => 11000000,
+                'specialization' => 'Hair Stylist',
+                'salary' => 720,
             ],
         ];
 
         $users = User::query()
-            ->whereIn('email', array_keys($staffData))
-            ->whereIn('role_id', $roleIds->values())
+
+            ->whereIn(
+                'email',
+                array_keys($staffData)
+            )
+
+            ->whereIn(
+                'role_id',
+                $roleIds->values()
+            )
+
             ->get();
 
         foreach ($users as $user) {
-            Staff::updateOrCreate(
-                ['user_id' => $user->id],
-                [
-                    ...$staffData[$user->email],
-                    'phone' => $user->phone,
-                    'email' => $user->email,
-                    'hire_date' => now()->subMonths(6)->toDateString(),
-                    'status' => 'active',
-                ]
-            );
+
+            Staff::create([
+
+                'user_id' => $user->id,
+
+                'full_name' =>
+                    $staffData[$user->email]['full_name'],
+
+                'specialization' =>
+                    $staffData[$user->email]['specialization'],
+
+                'salary' =>
+                    $staffData[$user->email]['salary'],
+
+                'phone' =>
+                    $user->phone ?? '0123456789',
+
+                'email' =>
+                    $user->email,
+
+                'hire_date' =>
+                    now()
+                        ->subMonths(rand(3, 24))
+                        ->toDateString(),
+
+                'status' => 'active',
+            ]);
         }
     }
 }

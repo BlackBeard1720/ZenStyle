@@ -10,20 +10,27 @@ return new class extends Migration
     {
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('staff_id')->constrained('staff')->cascadeOnDelete();
-            $table->unsignedTinyInteger('month');
-            $table->unsignedSmallInteger('year');
-            $table->unsignedInteger('standard_work_days')->default(26);
-            $table->unsignedInteger('actual_work_days')->default(0);
-            $table->decimal('base_salary', 15, 2)->default(0);
-            $table->decimal('bonus', 15, 2)->default(0);
-            $table->decimal('deduction', 15, 2)->default(0);
-            $table->decimal('net_salary', 15, 2)->default(0);
-            $table->string('status', 20)->default('draft');
+
+            $table->foreignId('staff_id')
+                ->constrained('staff')
+                ->cascadeOnDelete();
+
+            $table->integer('month');
+            $table->integer('year');
+
+            $table->decimal('base_salary', 12, 2)->default(0);
+            $table->decimal('commission', 12, 2)->default(0);
+            $table->decimal('total_salary', 12, 2)->default(0);
+
+            $table->enum('status', [
+                'draft',
+                'confirmed',
+                'paid',
+            ])->default('draft');
+
             $table->timestamps();
 
             $table->unique(['staff_id', 'month', 'year']);
-            $table->index(['month', 'year', 'status']);
         });
     }
 
