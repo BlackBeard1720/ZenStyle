@@ -15,58 +15,100 @@ class TelegramOtpService
 
     public function sendOtp(string $phone): array
     {
-        $telegramUser = TelegramUser::query()->where('phone', $phone)->first();
+        $normalizedPhone = $this->normalizePhone($phone);
+
+        if (! $normalizedPhone) {
+            return [
+                'ok' => false,
+                'message' => 'Invalid phone number format.',
+            ];
+        }
+
+        $telegramUser = TelegramUser::query()->where('phone', $normalizedPhone)->first();
 
         if (! $telegramUser) {
             return [
                 'ok' => false,
-                'message' => 'Số điện thoại này chưa liên kết Telegram.',
+                'message' => 'This phone number is not linked to Telegram yet.',
             ];
         }
+
+        return $this->generateAndSendOtpForTelegramUser($telegramUser);
+    }
+
+    public function generateAndSendOtpForTelegramUser(TelegramUser $telegramUser): array
+    {
+        $normalizedPhone = $this->normalizePhone($telegramUser->phone);
+
+        if (! $normalizedPhone) {
+            return [
+                'ok' => false,
+                'message' => 'Invalid phone number format.',
+            ];
+        }
+
+        return $this->generateAndSendOtp($normalizedPhone, (string) $telegramUser->telegram_chat_id);
+    }
+
+    public function generateAndSendOtp(string $phone, string|int $chatId): array
+    {
+        $normalizedPhone = $this->normalizePhone($phone);
+
+        if (! $normalizedPhone) {
+            return [
+                'ok' => false,
+                'message' => 'Invalid phone number format.',
+            ];
+        }
+
+        TelegramOtp::query()
+            ->where('phone', $normalizedPhone)
+            ->whereNull('verified_at')
+            ->update(['expires_at' => now()]);
 
         $otpCode = (string) random_int(100000, 999999);
 
         TelegramOtp::create([
-            'phone' => $phone,
-            'telegram_chat_id' => $telegramUser->telegram_chat_id,
+            'phone' => $normalizedPhone,
+            'telegram_chat_id' => (string) $chatId,
             'otp_code' => $otpCode,
             'expires_at' => Carbon::now()->addMinutes(5),
         ]);
 
-        $message = "Mã OTP ZenStyle của bạn là: {$otpCode}\nMã có hiệu lực trong 5 phút.";
+        $message = "Your ZenStyle OTP code is: {$otpCode}\nThis code is valid for 5 minutes.";
 
-        $sent = $this->telegramService->sendMessage(
-            $telegramUser->telegram_chat_id,
-            $message
-        );
+        $sent = $this->telegramService->sendMessage($chatId, $message);
 
         return [
             'ok' => $sent,
             'message' => $sent
-                ? 'Đã gửi OTP qua Telegram thành công.'
-                : 'Không gửi được OTP qua Telegram.',
+                ? 'OTP has been sent via Telegram successfully.'
+                : 'Could not send OTP via Telegram.',
         ];
     }
 
     public function verifyOtp(string $phone, string $otpCode): array
     {
-        $otp = TelegramOtp::query()->where('phone', $phone)
+        $normalizedPhone = $this->normalizePhone($phone);
+
+        if (! $normalizedPhone) {
+            return [
+                'ok' => false,
+                'message' => 'Invalid phone number format.',
+            ];
+        }
+
+        $otp = TelegramOtp::query()->where('phone', $normalizedPhone)
             ->where('otp_code', $otpCode)
             ->whereNull('verified_at')
-            ->latest()
+            ->where('expires_at', '>', now())
+            ->latest('id')
             ->first();
 
         if (! $otp) {
             return [
                 'ok' => false,
-                'message' => 'Mã OTP không đúng hoặc đã được sử dụng.',
-            ];
-        }
-
-        if ($otp->expires_at->isPast()) {
-            return [
-                'ok' => false,
-                'message' => 'Mã OTP đã hết hạn. Vui lòng yêu cầu gửi mã mới.',
+                'message' => 'OTP is invalid, expired, or already used.',
             ];
         }
 
@@ -76,7 +118,18 @@ class TelegramOtpService
 
         return [
             'ok' => true,
-            'message' => 'Xác thực OTP thành công.',
+            'message' => 'OTP verification successful.',
         ];
+    }
+
+    private function normalizePhone(string $phone): ?string
+    {
+        $normalized = preg_replace('/[\s.\-]+/', '', trim($phone));
+
+        if (! is_string($normalized) || ! preg_match('/^0\d{9,10}$/', $normalized)) {
+            return null;
+        }
+
+        return $normalized;
     }
 }

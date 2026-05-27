@@ -489,7 +489,7 @@
             id="telegram-linked-box"
             class="mt-3 rounded bg-green-100 p-3 text-sm text-green-700 {{ $telegramLinked ? '' : 'hidden' }}"
           >
-            Telegram is already linked to this phone number. You can send the OTP now.
+            Telegram is linked to this phone number. You can send the OTP now.
           </div>
 
           <div
@@ -502,12 +502,11 @@
               data-phone="{{ $otpPhone }}"
               class="h-10 w-full rounded-zen-sm border border-zen-primary bg-white px-3 text-sm font-medium text-zen-primary transition hover:bg-zen-accent-soft"
             >
-              Link Telegram to Receive OTP
+              Link Telegram and Send OTP
             </button>
 
             <p class="mt-2 text-xs text-zen-muted">
-              After opening the bot, tap Start and send the booking phone number:
-              <span class="font-semibold text-zen-text">{{ $otpPhone }}</span>
+              Telegram will link your phone and send the OTP automatically.
             </p>
 
             <p id="telegram-link-waiting" class="mt-2 hidden text-xs font-medium text-zen-primary">
@@ -616,7 +615,6 @@
               telegramCheckTimer = null;
             }
 
-            await sendTelegramOtpAutomatically();
 
             return true;
           }
@@ -638,7 +636,9 @@
 
           telegramLinkWaiting?.classList.remove('hidden');
 
-          window.open(`https://t.me/${botUsername}?start=booking`, '_blank');
+          const phone = linkTelegramBtn.dataset.phone || '';
+          const deepLinkPayload = `link_${encodeURIComponent(phone)}`;
+          window.open(`https://t.me/${botUsername}?start=${deepLinkPayload}`, '_blank');
 
           if (telegramCheckTimer) {
             clearInterval(telegramCheckTimer);
@@ -755,59 +755,6 @@
       const otpLockMessage = document.getElementById('otp-lock-message');
       const verifyOtpBtn = document.getElementById('verify-otp-btn');
       const otpInput = document.getElementById('otp-input');
-      const telegramOtpAjaxMessage = document.getElementById('telegram-otp-ajax-message');
-      const telegramSendOtpUrl = @json(route('booking.send-telegram-otp'));
-      const csrfToken = @json(csrf_token());
-
-      let otpAutoSent = false;
-
-      async function sendTelegramOtpAutomatically() {
-        if (otpAutoSent) {
-          return;
-        }
-
-        otpAutoSent = true;
-
-        try {
-          const response = await fetch(telegramSendOtpUrl, {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'X-Requested-With': 'XMLHttpRequest',
-              'X-CSRF-TOKEN': csrfToken,
-            },
-          });
-
-          const data = await response.json();
-
-          if (!response.ok || !data.ok) {
-            otpAutoSent = false;
-            alert(data.message || 'Could not send OTP via Telegram.');
-            return;
-          }
-
-          if (telegramOtpAjaxMessage) {
-            telegramOtpAjaxMessage.textContent = data.message || 'OTP has been sent via Telegram.';
-            telegramOtpAjaxMessage.classList.remove('hidden');
-          }
-
-          telegramSendOtpForm?.setAttribute('hidden', 'hidden');
-
-          otpInput?.removeAttribute('disabled');
-          otpInput?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-          });
-
-          setTimeout(() => {
-            otpInput?.focus();
-          }, 300);
-        } catch (error) {
-          otpAutoSent = false;
-          console.error('Could not send Telegram OTP automatically.', error);
-          alert('Could not send OTP via Telegram.');
-        }
-      }
 
       if (otpCountdown) {
         let seconds = Number(otpCountdown.dataset.seconds);
