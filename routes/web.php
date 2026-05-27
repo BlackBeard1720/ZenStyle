@@ -5,7 +5,6 @@ use App\Http\Controllers\Staff\AppointmentCheckoutController;
 use App\Http\Controllers\Staff\FcmTokenController;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
-use App\Http\Controllers\customer\TelegramBotController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
@@ -113,9 +112,6 @@ Route::controller(CustomerBookController::class)->group(function () {
     Route::post('/booking', 'store')
         ->name('booking.store');
 
-    Route::post('/booking/send-telegram-otp', 'sendTelegramOtp')
-        ->name('booking.send-telegram-otp');
-
     Route::post('/booking/cancel-otp', 'cancelOtp')
         ->name('booking.cancel-otp');
 
@@ -127,13 +123,7 @@ Route::controller(CustomerBookController::class)->group(function () {
 
     Route::get('/booking/success/{appointment}', 'success')
         ->name('customer.booking.success');
-
-    Route::get('/booking/check-telegram-link', 'checkTelegramLink')
-        ->name('booking.check-telegram-link');
 });
-
-Route::post('/telegram/webhook', [TelegramBotController::class, 'webhook'])
-    ->name('telegram.webhook');
 
 // Auth staff: không dùng middleware guest vì guest dựa trên Laravel session auth.
 // Staff login hiện tạo JWT và lưu vào cookie access_token.
