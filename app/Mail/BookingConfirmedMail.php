@@ -21,7 +21,7 @@ class BookingConfirmedMail extends Mailable
      */
     public function __construct(Appointment $appointment)
     {
-        $this->appointment = $appointment;
+        $this->appointment = $appointment->loadMissing(['client', 'appointmentServices.service', 'appointmentServices.staff']);
     }
 
     /**
@@ -30,7 +30,7 @@ class BookingConfirmedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'ZenStyle - Xác nhận đặt lịch thành công',
+            subject: 'ZenStyle - Appointment Booking Confirmed',
         );
     }
 
