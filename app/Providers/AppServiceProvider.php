@@ -27,6 +27,22 @@ class AppServiceProvider extends ServiceProvider
             return $user->hasRole('admin');
         });
 
+        Gate::define('view-attendance', function (User $user) {
+            return $user->hasRole('admin');
+        });
+
+        Gate::define('manage-attendance', function (User $user) {
+            return $user->hasRole('admin');
+        });
+
+        Gate::define('view-payrolls', function (User $user) {
+            return $user->hasRole('admin');
+        });
+
+        Gate::define('manage-payrolls', function (User $user) {
+            return $user->hasRole('admin');
+        });
+
         Gate::define('view-appointments', function (User $user) {
             return $user->hasRole('admin')
                 || $user->hasRole('receptionist')
