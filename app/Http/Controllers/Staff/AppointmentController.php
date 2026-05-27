@@ -223,7 +223,7 @@ class AppointmentController extends Controller
         $appointment->loadMissing(['client', 'appointmentServices.service', 'appointmentServices.staff']);
 
         if (! empty($appointment->client?->email)) {
-            Mail::to($appointment->client->email)->send(new AppointmentConfirmedMail($appointment));
+            Mail::to($appointment->client->email)->queue(new AppointmentConfirmedMail($appointment));
         }
 
         return to_route('staff.appointments.index')
