@@ -20,7 +20,6 @@ class Appointment extends Model
         'status',
         'notes',
         'total_amount',
-        'customer_count',
     ];
 
     protected $casts = [

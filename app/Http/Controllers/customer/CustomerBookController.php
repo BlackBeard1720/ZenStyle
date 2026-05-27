@@ -157,7 +157,6 @@ class CustomerBookController extends Controller
                 'status' => 'pending',
                 'notes' => $data['notes'] ?? null,
                 'total_amount' => $totalAmount,
-                'customer_count' => 1,
             ]);
 
             foreach ($services as $service) {
@@ -175,7 +174,7 @@ class CustomerBookController extends Controller
         $appointment->load(['client', 'appointmentServices.staff', 'appointmentServices.service']);
 
         if (! empty($appointment->client?->email)) {
-            Mail::to($appointment->client->email)->send(new BookingConfirmedMail($appointment));
+            Mail::to($appointment->client->email)->queue(new BookingConfirmedMail($appointment));
         }
 
         $notifyUsers = User::query()
