@@ -7,9 +7,11 @@ use App\Models\Appointment;
 use App\Models\AppointmentService;
 use App\Models\Client;
 use App\Models\Service;
+use App\Mail\AppointmentConfirmedMail;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class AppointmentController extends Controller
@@ -217,6 +219,12 @@ class AppointmentController extends Controller
         $appointment->update([
             'status' => 'confirmed',
         ]);
+
+        $appointment->loadMissing(['client', 'appointmentServices.service', 'appointmentServices.staff']);
+
+        if (! empty($appointment->client?->email)) {
+            Mail::to($appointment->client->email)->send(new AppointmentConfirmedMail($appointment));
+        }
 
         return to_route('staff.appointments.index')
             ->with('success', 'Appointment confirmed successfully.');
