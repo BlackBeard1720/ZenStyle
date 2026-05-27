@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\customer;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BookingConfirmedMail;
 use App\Models\Appointment;
+use App\Models\AppointmentService;
+use App\Models\Client;
 use App\Models\Service;
 use App\Models\Staff;
+use App\Models\User;
+use App\Services\EmailOtpService;
+use App\Services\FcmService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -29,12 +37,12 @@ class CustomerBookController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, EmailOtpService $emailOtpService): RedirectResponse
     {
         $data = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
-            'email' => ['nullable', 'email', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
             'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
             'service_ids' => ['nullable', 'array'],
@@ -56,12 +64,17 @@ class CustomerBookController extends Controller
 
         $data['phone'] = $this->normalizePhone($data['phone']) ?? $data['phone'];
 
+        $data['email'] = strtolower(trim((string) $data['email']));
+
         session(['booking_data' => $data]);
         session()->forget(['booking_otp_failed_attempts', 'booking_otp_locked_until']);
 
+        $otpResult = $emailOtpService->sendOtp($data['email']);
+
         return back()
             ->withInput()
-            ->with('otp_pending', true);
+            ->with('otp_pending', true)
+            ->with($otpResult['ok'] ? 'success' : 'error', $otpResult['message']);
     }
 
     public function cancelOtp(): RedirectResponse
@@ -76,7 +89,7 @@ class CustomerBookController extends Controller
     }
 
 
-    public function verifyOtp(Request $request): RedirectResponse
+    public function verifyOtp(Request $request, EmailOtpService $emailOtpService, FcmService $fcmService): RedirectResponse
     {
         $lockedUntil = (int) session('booking_otp_locked_until', 0);
 
@@ -101,26 +114,103 @@ class CustomerBookController extends Controller
                 ->with('otp_pending', true);
         }
 
-        if (! session()->has('booking_data')) {
+        $data = session('booking_data');
+
+        if (! is_array($data) || empty($data['email'])) {
             return redirect()
                 ->route('booking')
                 ->withErrors(['booking' => 'Please complete booking information first.']);
         }
 
-        $failedAttempts = (int) session('booking_otp_failed_attempts', 0) + 1;
-        session(['booking_otp_failed_attempts' => $failedAttempts]);
+        $otpResult = $emailOtpService->verifyOtp($data['email'], (string) $request->input('otp'));
 
-        if ($failedAttempts >= 2) {
-            session([
-                'booking_otp_locked_until' => now()->addSeconds(60)->timestamp,
-                'booking_otp_failed_attempts' => 0,
-            ]);
+        if (! $otpResult['ok']) {
+            $failedAttempts = (int) session('booking_otp_failed_attempts', 0) + 1;
+            session(['booking_otp_failed_attempts' => $failedAttempts]);
+
+            if ($failedAttempts >= 2) {
+                session([
+                    'booking_otp_locked_until' => now()->addSeconds(60)->timestamp,
+                    'booking_otp_failed_attempts' => 0,
+                ]);
+            }
+
+            return back()
+                ->withErrors(['otp' => $otpResult['message']])
+                ->withInput()
+                ->with('otp_pending', true);
         }
 
-        return back()
-            ->withErrors(['otp' => 'OTP verification is temporarily unavailable. Email OTP will be enabled soon.'])
-            ->withInput()
-            ->with('otp_pending', true);
+        $services = $this->resolveSelectedServices($data['service_ids'] ?? [])->values();
+        $totalAmount = $services->sum('price');
+
+        $appointment = DB::transaction(function () use ($data, $services, $totalAmount) {
+            $client = Client::query()->updateOrCreate(
+                ['phone' => $data['phone']],
+                ['full_name' => $data['full_name'], 'email' => $data['email']]
+            );
+
+            $appointment = Appointment::query()->create([
+                'client_id' => $client->id,
+                'appointment_date' => $data['appointment_date'],
+                'appointment_time' => $data['appointment_time'],
+                'status' => 'pending',
+                'notes' => $data['notes'] ?? null,
+                'total_amount' => $totalAmount,
+                'customer_count' => 1,
+            ]);
+
+            foreach ($services as $service) {
+                AppointmentService::query()->create([
+                    'appointment_id' => $appointment->id,
+                    'service_id' => $service->id,
+                    'staff_id' => $data['staff_id'] ?? null,
+                    'price_at_booking' => $service->price,
+                ]);
+            }
+
+            return $appointment;
+        });
+
+        $appointment->load(['client', 'appointmentServices.staff', 'appointmentServices.service']);
+
+        if (! empty($appointment->client?->email)) {
+            Mail::to($appointment->client->email)->send(new BookingConfirmedMail($appointment));
+        }
+
+        $notifyUsers = User::query()
+            ->where('status', 'active')
+            ->whereHas('role', fn ($query) => $query->whereIn('role_name', ['admin', 'receptionist']))
+            ->get();
+
+        foreach ($notifyUsers as $user) {
+            $fcmService->sendToUser(
+                $user,
+                'New Booking Received',
+                'A new appointment has been booked by '.$appointment->client?->full_name.'.',
+                ['type' => 'booking', 'appointment_id' => $appointment->id]
+            );
+        }
+
+        session([
+            'booking_success' => [
+                'appointment_id' => $appointment->id,
+                'full_name' => $appointment->client?->full_name,
+                'phone' => $appointment->client?->phone,
+                'appointment_date' => optional($appointment->appointment_date)->toDateString(),
+                'appointment_time' => $appointment->appointment_time,
+                'staff_name' => $appointment->appointmentServices->first()?->staff?->full_name ?? 'Any staff',
+                'notes' => $appointment->notes,
+            ],
+        ]);
+
+        session()->forget([
+            'booking_data',
+            'booking_otp_failed_attempts',
+            'booking_otp_locked_until',
+        ]);
+
+        return redirect()->route('booking.success');
     }
 
     public function successPage(): View|RedirectResponse
