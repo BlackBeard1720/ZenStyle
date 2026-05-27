@@ -487,20 +487,14 @@
 
           <div
             id="telegram-linked-box"
-            @class([
-              'mt-3 rounded bg-green-100 p-3 text-sm text-green-700',
-              'hidden' => ! $telegramLinked,
-            ])
+            class="mt-3 rounded bg-green-100 p-3 text-sm text-green-700 {{ $telegramLinked ? '' : 'hidden' }}"
           >
             Telegram is already linked to this phone number. You can send the OTP now.
           </div>
 
           <div
             id="telegram-link-box"
-            @class([
-              'mt-3',
-              'hidden' => $telegramLinked,
-            ])
+            class="mt-3 {{ $telegramLinked ? 'hidden' : '' }}"
           >
             <button
               type="button"
@@ -517,7 +511,7 @@
             </p>
 
             <p id="telegram-link-waiting" class="mt-2 hidden text-xs font-medium text-zen-primary">
-              Waiting for Telegram linking... Return to this page after sending your phone number to the bot.
+              Waiting for Telegram linking...
             </p>
           </div>
         </div>
@@ -530,8 +524,7 @@
           @if(! $telegramLinked) hidden @endif
         >
           @csrf
-          <button type="submit"
-                  class="h-10 w-full rounded-zen-sm bg-zen-primary px-3 text-sm font-medium text-white transition hover:bg-zen-primary-dark">
+          <button type="submit" class="h-10 w-full rounded-zen-sm bg-zen-primary px-3 text-sm font-medium text-white transition hover:bg-zen-primary-dark">
             Send OTP via Telegram
           </button>
         </form>
@@ -541,6 +534,8 @@
             {{ session('success') }}
           </p>
         @endif
+
+        <p id="telegram-otp-ajax-message" class="mt-3 hidden rounded bg-green-100 p-3 text-sm text-green-700"></p>
 
         @if($otpLockSeconds > 0)
           <p id="otp-lock-message" class="mt-3 rounded bg-yellow-100 p-3 text-sm text-yellow-800">
@@ -554,10 +549,12 @@
           @csrf
 
           <input
+            id="otp-input"
             name="otp"
             maxlength="6"
+            placeholder="Enter 6-digit OTP"
             @disabled($otpLockSeconds > 0)
-            class="h-11 w-full rounded border border-zen-border px-3 text-zen-text outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20 disabled:cursor-not-allowed disabled:bg-gray-100"
+            class="h-11 w-full rounded border border-zen-border px-3 text-center text-lg font-semibold tracking-widest text-zen-text outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20 disabled:cursor-not-allowed disabled:bg-gray-100"
           >
 
           @error('otp')
@@ -596,9 +593,7 @@
         }
 
         try {
-          const url = `${telegramCheckUrl}?phone=${encodeURIComponent(phone)}`;
-
-          const response = await fetch(url, {
+          const response = await fetch(`${telegramCheckUrl}?phone=${encodeURIComponent(phone)}`, {
             headers: {
               'Accept': 'application/json',
             },
@@ -621,6 +616,8 @@
               telegramCheckTimer = null;
             }
 
+            await sendTelegramOtpAutomatically();
+
             return true;
           }
         } catch (error) {
@@ -632,13 +629,6 @@
 
       if (linkTelegramBtn) {
         linkTelegramBtn.addEventListener('click', function () {
-          const phone = this.dataset.phone;
-
-          if (!phone) {
-            alert('Could not find the booking phone number.');
-            return;
-          }
-
           const botUsername = @json(config('services.telegram.bot_username'));
 
           if (!botUsername) {
@@ -648,8 +638,7 @@
 
           telegramLinkWaiting?.classList.remove('hidden');
 
-          const telegramUrl = `https://t.me/${botUsername}?start=booking`;
-          window.open(telegramUrl, '_blank');
+          window.open(`https://t.me/${botUsername}?start=booking`, '_blank');
 
           if (telegramCheckTimer) {
             clearInterval(telegramCheckTimer);
@@ -765,7 +754,60 @@
       const otpCountdown = document.getElementById('otp-countdown');
       const otpLockMessage = document.getElementById('otp-lock-message');
       const verifyOtpBtn = document.getElementById('verify-otp-btn');
-      const otpInput = document.querySelector('input[name="otp"]');
+      const otpInput = document.getElementById('otp-input');
+      const telegramOtpAjaxMessage = document.getElementById('telegram-otp-ajax-message');
+      const telegramSendOtpUrl = @json(route('booking.send-telegram-otp'));
+      const csrfToken = @json(csrf_token());
+
+      let otpAutoSent = false;
+
+      async function sendTelegramOtpAutomatically() {
+        if (otpAutoSent) {
+          return;
+        }
+
+        otpAutoSent = true;
+
+        try {
+          const response = await fetch(telegramSendOtpUrl, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRF-TOKEN': csrfToken,
+            },
+          });
+
+          const data = await response.json();
+
+          if (!response.ok || !data.ok) {
+            otpAutoSent = false;
+            alert(data.message || 'Could not send OTP via Telegram.');
+            return;
+          }
+
+          if (telegramOtpAjaxMessage) {
+            telegramOtpAjaxMessage.textContent = data.message || 'OTP has been sent via Telegram.';
+            telegramOtpAjaxMessage.classList.remove('hidden');
+          }
+
+          telegramSendOtpForm?.setAttribute('hidden', 'hidden');
+
+          otpInput?.removeAttribute('disabled');
+          otpInput?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          });
+
+          setTimeout(() => {
+            otpInput?.focus();
+          }, 300);
+        } catch (error) {
+          otpAutoSent = false;
+          console.error('Could not send Telegram OTP automatically.', error);
+          alert('Could not send OTP via Telegram.');
+        }
+      }
 
       if (otpCountdown) {
         let seconds = Number(otpCountdown.dataset.seconds);

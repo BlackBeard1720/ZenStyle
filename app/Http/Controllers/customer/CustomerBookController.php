@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\customer;
 
+use Illuminate\Http\JsonResponse;
 use App\Models\TelegramUser;
 use App\Http\Controllers\Controller;
 use App\Mail\BookingConfirmedMail;
@@ -83,25 +84,46 @@ class CustomerBookController extends Controller
         return redirect()->route('booking');
     }
 
-    public function sendTelegramOtp(TelegramOtpService $telegramOtpService): RedirectResponse
+    public function sendTelegramOtp(Request $request, TelegramOtpService $telegramOtpService): RedirectResponse|JsonResponse
     {
         // Lay du lieu booking dang cho xac thuc
         $data = session('booking_data');
 
         if (! $data || empty($data['phone'])) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Please complete the booking information first.',
+                ], 422);
+            }
+
             return redirect()
                 ->route('booking')
-                ->withErrors(['booking' => 'Vui lòng hoàn tất thông tin đặt lịch trước.']);
+                ->withErrors(['booking' => 'Please complete the booking information first.']);
         }
 
         // Gui OTP qua Telegram
         $result = $telegramOtpService->sendOtp($data['phone']);
 
         if (! $result['ok']) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => $result['message'],
+                ], 422);
+            }
+
             return back()
                 ->withInput()
                 ->withErrors(['otp' => $result['message']])
                 ->with('otp_pending', true);
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'ok' => true,
+                'message' => $result['message'],
+            ]);
         }
 
         return back()
@@ -111,7 +133,7 @@ class CustomerBookController extends Controller
             ->with('success', $result['message']);
     }
 
-    public function checkTelegramLink(Request $request): JsonResponse
+    public function checkTelegramLink(Request $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->validate([
             'phone' => ['required', 'string', 'max:20'],
