@@ -16,10 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo('/staff/login');
         $middleware->redirectUsersTo('/staff');
 
-        // Cho phép Telegram gọi webhook mà không cần CSRF token.
-        $middleware->validateCsrfTokens(except: [
-            'telegram/webhook',
-        ]);
 
         // Alias jwt.auth bảo vệ staff area bằng JWT cookie access_token.
         $middleware->alias([

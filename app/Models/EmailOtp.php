@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TelegramOtp extends Model
+class EmailOtp extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'phone',
-        'telegram_chat_id',
+        'email',
         'otp_code',
         'expires_at',
         'verified_at',
