@@ -5,6 +5,7 @@ use App\Http\Controllers\Staff\AppointmentCheckoutController;
 use App\Http\Controllers\Staff\FcmTokenController;
 use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
+use App\Http\Controllers\customer\CustomerBookingOtpController;
 use App\Http\Controllers\Frontend\FrontendController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
@@ -105,6 +106,10 @@ Route::controller(FrontendController::class)->group(function () {
 });
 
 Route::controller(CustomerBookController::class)->group(function () {
+
+
+Route::post('/booking/send-email-otp', [CustomerBookingOtpController::class, 'send'])
+    ->name('booking.send-email-otp');
 
     Route::get('/booking', 'create')
         ->name('booking');
