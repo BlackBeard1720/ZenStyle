@@ -18,12 +18,14 @@ class Appointment extends Model
         'appointment_date',
         'appointment_time',
         'status',
+        'reminder_sent_at',
         'notes',
         'total_amount',
     ];
 
     protected $casts = [
         'appointment_date' => 'date',
+        'reminder_sent_at' => 'datetime',
         'total_amount' => 'decimal:2',
     ];
 
