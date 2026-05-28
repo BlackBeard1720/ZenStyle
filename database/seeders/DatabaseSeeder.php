@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             StaffSeeder::class,
             CategorySeeder::class,
             ServiceSeeder::class,
+            CommentSeeder::class,
             AppointmentSeeder::class,
             PaymentSeeder::class,
             NewsSeeder::class,
