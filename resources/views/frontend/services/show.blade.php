@@ -43,6 +43,44 @@
             </aside>
         </section>
 
+
+        <section class="mt-12 border-t border-zen-border pt-8">
+            <h2 class="font-heading text-2xl font-semibold text-zen-text">Comments</h2>
+
+            @if (session('success'))
+                <p class="mt-4 rounded-zen-sm border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{{ session('success') }}</p>
+            @endif
+
+            <div class="mt-6 space-y-4">
+                @forelse ($approvedComments as $comment)
+                    <article class="rounded-zen-md border border-zen-border bg-white p-4 shadow-zen">
+                        <p class="font-semibold text-zen-text">{{ $comment->name }}</p>
+                        <p class="mt-2 text-sm text-zen-muted">{{ $comment->comment }}</p>
+                    </article>
+                @empty
+                    <p class="text-sm text-zen-muted">No comments yet. Be the first to leave a comment.</p>
+                @endforelse
+            </div>
+
+            <div class="mt-8 rounded-zen-lg border border-zen-border bg-white p-5 shadow-zen-md">
+                <h3 class="font-heading text-xl font-semibold text-zen-text">Leave a Reply</h3>
+                <form action="{{ route('services.comments.store', $service) }}" method="POST" class="mt-4 space-y-4">
+                    @csrf
+                    <div>
+                        <label for="name" class="mb-1 block text-sm font-medium text-zen-text">Name *</label>
+                        <input id="name" name="name" type="text" value="{{ old('name') }}" class="w-full rounded-zen-sm border border-zen-border px-3 py-2">
+                        @error('name')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <div>
+                        <label for="comment" class="mb-1 block text-sm font-medium text-zen-text">Comment</label>
+                        <textarea id="comment" name="comment" rows="5" class="w-full rounded-zen-sm border border-zen-border px-3 py-2">{{ old('comment') }}</textarea>
+                        @error('comment')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+                    <button type="submit" class="inline-flex rounded-full bg-zen-primary px-6 py-3 text-sm font-semibold text-white">Post comment</button>
+                </form>
+            </div>
+        </section>
+
         @if($relatedServices->isNotEmpty())
             <section class="mt-12 border-t border-zen-border pt-8">
                 <h2 class="font-heading text-2xl font-semibold text-zen-text">Related Services</h2>

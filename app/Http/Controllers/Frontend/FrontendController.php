@@ -121,9 +121,16 @@ class FrontendController extends Controller
             ->take(4)
             ->values();
 
+        // Lay danh sach comment da duyet cua dich vu hien tai
+        $approvedComments = $serviceModel->comments()
+            ->where('status', 'approved')
+            ->latest()
+            ->get();
+
         return view('frontend.services.show', [
             'service' => $serviceModel,
             'relatedServices' => $relatedServices,
+            'approvedComments' => $approvedComments,
         ]);
     }
 

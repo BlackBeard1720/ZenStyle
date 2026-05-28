@@ -6,6 +6,7 @@ use App\Http\Controllers\Staff\ClientController;
 use App\Http\Controllers\customer\CustomerBookController;
 use App\Http\Controllers\customer\CustomerBookingOtpController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Frontend\ServiceCommentController;
 use App\Http\Controllers\Staff\AppointmentController;
 use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\CategoryController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
 use App\Http\Controllers\Staff\ServiceController;
 use App\Http\Controllers\Staff\DashboardController;
+use App\Http\Controllers\Staff\CommentController;
 use App\Http\Controllers\Staff\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
@@ -101,6 +103,7 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/hot-trend', 'hotTrend')->name('hot-trend.index');
     Route::get('/dich-vu', 'services')->name('services');
     Route::get('/dich-vu/{slug}', 'serviceShow')->name('services.show');
+    Route::post('/dich-vu/{service}/comments', [ServiceCommentController::class, 'store'])->name('services.comments.store');
     Route::get('/chinh-sach-bao-mat', 'privacyPolicy')->name('privacy-policy');
     Route::get('/dieu-khoan-su-dung', 'termsOfService')->name('terms-of-service');
     Route::get('/faq', 'faq')->name('faq');
@@ -246,6 +249,7 @@ Route::prefix('staff')->name('staff.')
 
         Route::resource('categories', CategoryController::class);
         Route::resource('services', ServiceController::class);
+        Route::resource('comments', CommentController::class)->except(['show', 'create', 'store']);
 
         Route::resource('clients', ClientController::class);
 

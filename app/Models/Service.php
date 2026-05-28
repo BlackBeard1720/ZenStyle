@@ -33,6 +33,11 @@ class Service extends Model
         return $this->hasMany(AppointmentService::class);
     }
 
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function appointments(): BelongsToMany
     {
         return $this->belongsToMany(Appointment::class, 'appointment_service')
