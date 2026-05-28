@@ -305,6 +305,7 @@
                     Services
                   </a>
                 </li>
+                @endcan
 
                 @can('manage-services')
                 <li>
