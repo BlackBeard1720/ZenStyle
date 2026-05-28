@@ -226,10 +226,10 @@
               href="#"
               @click.prevent="selected = (selected === 'ServiceManagement' ? '':'ServiceManagement')"
               class="menu-item group"
-              :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement' || page === 'CommentManagement') ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement' || page === 'CommentManagement') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -253,7 +253,7 @@
 
               <svg
                 class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                :class="[(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                :class="[(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement' || page === 'CommentManagement') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -272,7 +272,7 @@
 
             <div
               class="overflow-hidden transform translate"
-              :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement') ? 'block' :'hidden'"
+              :class="(selected === 'ServiceManagement') || (page === 'CategoryManagement' || page === 'ServiceManagement' || page === 'CommentManagement') ? 'block' :'hidden'"
             >
               <ul
                 :class="sidebarToggle ? 'lg:hidden' : 'flex'"
@@ -303,6 +303,18 @@
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M5.25 4C4.55964 4 4 4.55964 4 5.25V18.75C4 19.4404 4.55964 20 5.25 20H18.75C19.4404 20 20 19.4404 20 18.75V5.25C20 4.55964 19.4404 4 18.75 4H5.25ZM2.5 5.25C2.5 3.73122 3.73122 2.5 5.25 2.5H18.75C20.2688 2.5 21.5 3.73122 21.5 5.25V18.75C21.5 20.2688 20.2688 21.5 18.75 21.5H5.25C3.73122 21.5 2.5 20.2688 2.5 18.75V5.25ZM7.25 7.5C7.25 7.08579 7.58579 6.75 8 6.75H16C16.4142 6.75 16.75 7.08579 16.75 7.5C16.75 7.91421 16.4142 8.25 16 8.25H8C7.58579 8.25 7.25 7.91421 7.25 7.5ZM7.25 12C7.25 11.5858 7.58579 11.25 8 11.25H16C16.4142 11.25 16.75 11.5858 16.75 12C16.75 12.4142 16.4142 12.75 16 12.75H8C7.58579 12.75 7.25 12.4142 7.25 12ZM7.25 16.5C7.25 16.0858 7.58579 15.75 8 15.75H13C13.4142 15.75 13.75 16.0858 13.75 16.5C13.75 16.9142 13.4142 17.25 13 17.25H8C7.58579 17.25 7.25 16.9142 7.25 16.5Z" fill=""/>
                     </svg>
                     Services
+                  </a>
+                </li>
+
+                @can('manage-services')
+                <li>
+                  <a
+                    href="{{ route('staff.comments.index') }}"
+                    class="menu-dropdown-item group flex items-center gap-2"
+                    :class="page === 'CommentManagement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                  >
+                    <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5.75C4 4.7835 4.7835 4 5.75 4H18.25C19.2165 4 20 4.7835 20 5.75V14.25C20 15.2165 19.2165 16 18.25 16H8.914L4.64 19.562C4.151 19.969 3.4 19.621 3.4 18.987V16.75C3.4 16.336 3.736 16 4.15 16H4V5.75Z" fill=""/></svg>
+                    Comments
                   </a>
                 </li>
                 @endcan
