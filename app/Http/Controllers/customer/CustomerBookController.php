@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\customer;
 
 use App\Http\Controllers\Controller;
-use App\Mail\BookingConfirmedMail;
+use App\Mail\BookingRequestReceivedMail;
 use App\Models\Appointment;
 use App\Models\AppointmentService;
 use App\Models\Client;
@@ -174,7 +174,7 @@ class CustomerBookController extends Controller
         $appointment->load(['client', 'appointmentServices.staff', 'appointmentServices.service']);
 
         if (! empty($appointment->client?->email)) {
-            Mail::to($appointment->client->email)->queue(new BookingConfirmedMail($appointment));
+            Mail::to($appointment->client->email)->queue(new BookingRequestReceivedMail($appointment));
         }
 
         $notifyUsers = User::query()
