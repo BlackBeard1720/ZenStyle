@@ -17,7 +17,7 @@ use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
 use App\Http\Controllers\Staff\ServiceController;
 use App\Http\Controllers\Staff\DashboardController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Staff\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Js;
 use App\Http\Controllers\Staff\InventoryController;
@@ -173,11 +173,9 @@ Route::prefix('staff')->name('staff.')
 
         Route::get('/dashboard/data', [DashboardController::class, 'data'])->name('staff.dashboard.data');
 
-        Route::get('/profile', function (Request $request) {
-            $user = $request->user()->loadMissing(['role', 'staff', 'client']);
-
-            return view('staff.profile.show', compact('user'));
-        })->name('profile.show');
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
         Route::resource('users', UserController::class)
             ->middleware('can:manage-staff-users');
