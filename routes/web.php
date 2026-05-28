@@ -11,6 +11,7 @@ use App\Http\Controllers\Staff\Auth\SessionController;
 use App\Http\Controllers\Staff\CategoryController;
 use App\Http\Controllers\Staff\AttendanceController;
 use App\Http\Controllers\Staff\PayrollController;
+use App\Http\Controllers\Staff\PaymentController;
 use App\Http\Controllers\Staff\StaffScheduleController;
 use App\Http\Controllers\Staff\UserController;
 use App\Http\Controllers\Staff\NewsController;
@@ -191,6 +192,10 @@ Route::prefix('staff')->name('staff.')
         })->middleware('can:manage-staff-users')->name('client-accounts.index');
 
         Route::resource('appointments', AppointmentController::class);
+
+        Route::get('payments', [PaymentController::class, 'index'])->name('payments.index');
+        Route::get('payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
+        Route::patch('payments/{payment}/refund', [PaymentController::class, 'markAsRefunded'])->name('payments.refund');
 
         // Quan ly lich lam viec nhan vien
         Route::resource('schedules', StaffScheduleController::class)
