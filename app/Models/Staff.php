@@ -19,6 +19,7 @@ class Staff extends Model
         'phone',
         'email',
         'specialization',
+        'avatar',
         'salary',
         'hire_date',
         'status',
