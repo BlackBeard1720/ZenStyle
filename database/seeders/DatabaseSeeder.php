@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ServiceSeeder::class,
             AppointmentSeeder::class,
+            PaymentSeeder::class,
             NewsSeeder::class,
             StaffScheduleSeeder::class,
         ]);
