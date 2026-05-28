@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Mail\PaymentReceiptMail;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Payment;
 use App\Services\PaypalService;
 use Illuminate\Http\JsonResponse;
@@ -53,8 +55,8 @@ class AppointmentCheckoutController extends Controller
             'note' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        DB::transaction(function () use ($appointment, $data) {
-            Payment::create([
+        $payment = DB::transaction(function () use ($appointment, $data) {
+            return Payment::create([
                 'appointment_id' => $appointment->id,
                 'amount' => $appointment->total_amount,
                 'payment_method' => $data['payment_method'],
@@ -63,7 +65,7 @@ class AppointmentCheckoutController extends Controller
                 'paid_at' => now(),
             ]);
         });
-
+        $this->sendPaymentReceiptMail($payment);
         return to_route('staff.appointments.show', $appointment)
             ->with('success', 'Payment completed successfully.');
     }
@@ -125,8 +127,8 @@ class AppointmentCheckoutController extends Controller
 
         $captureId = data_get($capture, 'purchase_units.0.payments.captures.0.id');
 
-        DB::transaction(function () use ($appointment, $data, $captureId) {
-            Payment::create([
+        $payment = DB::transaction(function () use ($appointment, $data, $captureId) {
+            return Payment::create([
                 'appointment_id' => $appointment->id,
                 'amount' => $appointment->total_amount,
                 'payment_method' => 'paypal',
@@ -139,9 +141,28 @@ class AppointmentCheckoutController extends Controller
             ]);
         });
 
+        $this->sendPaymentReceiptMail($payment);
+
         return response()->json([
             'message' => 'PayPal payment completed successfully.',
             'redirect_url' => route('staff.appointments.show', $appointment),
         ]);
+    }
+
+    private function sendPaymentReceiptMail(Payment $payment): void
+    {
+        $payment->loadMissing([
+            'appointment.client',
+            'appointment.appointmentServices.service',
+            'appointment.appointmentServices.staff',
+        ]);
+
+        $email = $payment->appointment?->client?->email;
+
+        if (empty($email)) {
+            return;
+        }
+
+        Mail::to($email)->send(new PaymentReceiptMail($payment));
     }
 }

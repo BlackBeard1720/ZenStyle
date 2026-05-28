@@ -134,7 +134,7 @@
           @can('view-attendance')
           <li>
             <a
-              href="{{ route('staff.attendance.calendar') }}"
+              href="#"
               class="menu-item group"
               :class="page === 'AttendanceCalendar' ? 'menu-item-active' : 'menu-item-inactive'"
             >

@@ -10,45 +10,34 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BookingConfirmedMail extends Mailable
+class BookingRequestReceivedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public Appointment $appointment;
 
-    /**
-     * Create a new message instance.
-     */
     public function __construct(Appointment $appointment)
     {
-        $this->appointment = $appointment->loadMissing(['client', 'appointmentServices.service', 'appointmentServices.staff']);
+        $this->appointment = $appointment->loadMissing([
+            'client',
+            'appointmentServices.service',
+        ]);
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'ZenStyle - Appointment Booking Confirmed',
+            subject: 'ZenStyle - Appointment Request Received',
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
-            view: 'emails.booking-confirmed',
+            view: 'emails.booking-request-received',
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, Attachment>
-     */
     public function attachments(): array
     {
         return [];

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Mail\BookingConfirmedMail;
+use App\Mail\BookingRequestReceivedMail;
 use App\Models\Appointment;
 use App\Models\Client;
 use Tests\TestCase;
@@ -23,7 +23,7 @@ class BookingConfirmedMailTest extends TestCase
         $appointment->forceFill(['id' => 123]);
         $appointment->setRelation('client', $client);
 
-        $mail = new BookingConfirmedMail($appointment);
+        $mail = new BookingRequestReceivedMail($appointment);
         $html = $mail->render();
 
         $this->assertSame('ZenStyle - Xác nhận đặt lịch thành công', $mail->envelope()->subject);
