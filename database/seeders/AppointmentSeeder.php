@@ -25,7 +25,7 @@ class AppointmentSeeder extends Seeder
             throw new RuntimeException('AppointmentSeeder requires clients, active staff, and active services. Run ClientSeeder, StaffSeeder, and ServiceSeeder first.');
         }
 
-        for ($i = 0; $i < 28; $i++) {
+        for ($i = 0; $i < 200; $i++) {
             Appointment::factory()
                 ->withServices($services, $staff)
                 ->create(['client_id' => $clients->random()->id]);
