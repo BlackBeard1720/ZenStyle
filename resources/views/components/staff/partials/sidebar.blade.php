@@ -130,6 +130,24 @@
           @endcan
           <!-- Menu Item Appointments -->
 
+
+          @can('view-payrolls')
+          <li>
+            <a
+              href="{{ route('staff.payments.index') }}"
+              class="menu-item group"
+              :class="page === 'PaymentManagement' ? 'menu-item-active' : 'menu-item-inactive'"
+            >
+              <svg
+                :class="page === 'PaymentManagement' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.25 6C3.25 4.48122 4.48122 3.25 6 3.25H18C19.5188 3.25 20.75 4.48122 20.75 6V18C20.75 19.5188 19.5188 20.75 18 20.75H6C4.48122 20.75 3.25 19.5188 3.25 18V6ZM6 4.75C5.30964 4.75 4.75 5.30964 4.75 6V18C4.75 18.6904 5.30964 19.25 6 19.25H18C18.6904 19.25 19.25 18.6904 19.25 18V6C19.25 5.30964 18.6904 4.75 18 4.75H6ZM7.25 9C7.25 8.58579 7.58579 8.25 8 8.25H16C16.4142 8.25 16.75 8.58579 16.75 9C16.75 9.41421 16.4142 9.75 16 9.75H8C7.58579 9.75 7.25 9.41421 7.25 9ZM7.25 12.5C7.25 12.0858 7.58579 11.75 8 11.75H13C13.4142 11.75 13.75 12.0858 13.75 12.5C13.75 12.9142 13.4142 13.25 13 13.25H8C7.58579 13.25 7.25 12.9142 7.25 12.5ZM7.25 16C7.25 15.5858 7.58579 15.25 8 15.25H11C11.4142 15.25 11.75 15.5858 11.75 16C11.75 16.4142 11.4142 16.75 11 16.75H8C7.58579 16.75 7.25 16.4142 7.25 16Z" fill=""/>
+              </svg>
+              <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">Payments</span>
+            </a>
+          </li>
+          @endcan
+
           <!-- Menu Item Attendance -->
           @can('view-attendance')
           <li>
@@ -163,6 +181,7 @@
             </a>
           </li>
           @endcan
+
           <!-- Menu Item Attendance -->
 
           <!-- Menu Item Payroll -->
