@@ -6,24 +6,16 @@
   @php
     $heroSlides = [
         [
-            'image' => asset('images/frontend/banner/Gemini_Generated_Image_kt0965kt0965kt09.png'),
+            'image' => asset('images/frontend/banner/banner01.png'),
+            'alt' => 'ZenStyle Spa Service',
+        ],
+        [
+            'image' => asset('images/frontend/banner/banner02.png'),
             'alt' => 'ZenStyle Hair Service',
         ],
         [
-            'image' => asset('images/frontend/banner/Gemini_Generated_Image_7sr4oq7sr4oq7sr4.png'),
-            'alt' => 'ZenStyle Spa Service',
-        ],
-        [
-            'image' => asset('images/frontend/banner/Gemini_Generated_Image_7w6kln7w6kln7w6k.png'),
-            'alt' => 'ZenStyle Spa Service',
-        ],
-        [
-            'image' => asset('images/frontend/banner/Gemini_Generated_Image_os1lsdos1lsdos1l.png'),
-            'alt' => 'ZenStyle Spa Service',
-        ],
-        [
-            'image' => asset('images/frontend/banner/Gemini_Generated_Image_ympfunympfunympf.png'),
-            'alt' => 'ZenStyle Spa Service',
+            'image' => asset('images/frontend/banner/banner03.png'),
+            'alt' => 'ZenStyle Salon Space',
         ],
     ];
 
@@ -55,9 +47,9 @@
 
     $salonImages = [
         asset('images/frontend/banner/Gemini_Generated_Image_6hfrq56hfrq56hfr.png'),
-        asset('images/frontend/banner/Gemini_Generated_Image_7sr4oq7sr4oq7sr4.png'),
-        asset('images/frontend/banner/Gemini_Generated_Image_7w6kln7w6kln7w6k.png'),
-        asset('images/frontend/banner/Gemini_Generated_Image_os1lsdos1lsdos1l.png'),
+        asset('images/frontend/banner/banner01.png'),
+        asset('images/frontend/banner/banner02.png'),
+        asset('images/frontend/banner/banner03.png'),
     ];
 
     $hotTrendImages = [

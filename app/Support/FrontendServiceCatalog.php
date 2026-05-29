@@ -391,12 +391,12 @@ class FrontendServiceCatalog
                 asset('images/frontend/banner/Gemini_Generated_Image_ympfunympfunympf.png'),
             ],
             'mau' => [
-                asset('images/frontend/banner/Gemini_Generated_Image_7sr4oq7sr4oq7sr4.png'),
-                asset('images/frontend/banner/Gemini_Generated_Image_os1lsdos1lsdos1l.png'),
+                asset('images/frontend/banner/banner01.png'),
+                asset('images/frontend/banner/banner03.png'),
                 asset('images/frontend/hottrend/hottrend-04.png'),
             ],
             'uon' => [
-                asset('images/frontend/banner/Gemini_Generated_Image_7w6kln7w6kln7w6k.png'),
+                asset('images/frontend/banner/banner02.png'),
                 asset('images/frontend/hottrend/hottrend-05.png'),
                 asset('images/frontend/services/featured-toc.png'),
             ],
