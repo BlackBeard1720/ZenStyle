@@ -163,6 +163,6 @@ class AppointmentCheckoutController extends Controller
             return;
         }
 
-        Mail::to($email)->send(new PaymentReceiptMail($payment));
+        Mail::to($email)->queue(new PaymentReceiptMail($payment));
     }
 }
