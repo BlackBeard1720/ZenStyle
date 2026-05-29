@@ -306,32 +306,7 @@
           </div>
         </section>
 
-        {{-- 4. Promotion --}}
-        <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
-          <h2 class="text-base font-semibold text-zen-text">Promotion Code</h2>
-          <p class="mt-1 text-sm text-zen-muted">Enter a promotion code if you have one.</p>
-
-          <div class="mt-4 flex flex-col gap-2 sm:flex-row">
-            <input
-              type="text"
-              name="coupon_code"
-              data-booking-promo-input
-              placeholder="E.g. SUMMER2026"
-              class="h-10 flex-1 rounded-zen-sm border border-zen-border px-3 text-sm outline-none placeholder:text-zen-muted/70 focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
-            >
-            <button
-              type="button"
-              data-booking-promo-apply
-              class="h-10 shrink-0 rounded-zen-sm border border-zen-primary bg-zen-bg px-5 text-sm font-medium text-zen-primary transition hover:bg-zen-accent-soft"
-            >
-              Apply
-            </button>
-          </div>
-
-          <p data-booking-promo-hint class="mt-2 text-xs text-zen-muted" hidden></p>
-        </section>
-
-        {{-- 5. Contact Information --}}
+        {{-- 4. Contact Information --}}
         <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
           <h2 class="text-base font-semibold text-zen-text">Contact Information</h2>
           <p class="mt-1 text-sm text-zen-muted">The salon uses this information to confirm your appointment.</p>

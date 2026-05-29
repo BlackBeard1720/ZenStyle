@@ -18,7 +18,6 @@ class AppointmentFactory extends Factory
 
         return [
             'client_id' => null,
-            'coupon_id' => null,
             'appointment_date' => fake()->dateTimeBetween('now', '+20 days')->format('Y-m-d'),
             'appointment_time' => $appointmentTime,
             'status' => fake()->randomElement(['pending', 'confirmed', 'cancelled', 'completed']),
