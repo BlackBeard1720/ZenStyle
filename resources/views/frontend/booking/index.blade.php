@@ -43,7 +43,7 @@
         ->values();
   @endphp
 
-  <div id="booking-page" class="pb-12 pt-6 sm:pt-8">
+  <div id="booking-page" data-booking-busy-staff-url="{{ route('booking.busy-staff') }}" class="pb-12 pt-6 sm:pt-8">
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
       <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -253,6 +253,8 @@
 
               <label
                 data-booking-stylist-card
+                data-staff-id="{{ $stylist['id'] }}"
+                data-staff-base-available="{{ $stylistAvailable ? 'true' : 'false' }}"
                 data-booking-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
                 role="radio"
                 aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
@@ -267,7 +269,9 @@
                   name="staff_id"
                   value="{{ $stylist['id'] }}"
                   data-booking-stylist-radio
+                  data-staff-id="{{ $stylist['id'] }}"
                   data-stylist-name="{{ $stylist['name'] }}"
+                  data-staff-base-available="{{ $stylistAvailable ? 'true' : 'false' }}"
                   data-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
                   class="peer sr-only"
                   @checked($stylist['checked'] && $stylistAvailable)
@@ -285,6 +289,7 @@
                     <span data-stylist-label
                           class="block break-words text-sm font-semibold text-zen-text">{{ $stylist['name'] }}</span>
                     <span
+                      data-stylist-status-label
                       class="mt-2 inline-flex rounded px-2 py-0.5 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
                       {{ $stylist['status'] }}
                     </span>

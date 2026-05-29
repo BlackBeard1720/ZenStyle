@@ -119,6 +119,9 @@ Route::post('/booking/send-email-otp', [CustomerBookingOtpController::class, 'se
     Route::get('/booking', 'create')
         ->name('booking');
 
+    Route::get('/booking/busy-staff', 'busyStaff')
+        ->name('booking.busy-staff');
+
     Route::post('/booking', 'store')
         ->name('booking.store');
 
