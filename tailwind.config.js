@@ -3,32 +3,40 @@ export default {
         extend: {
             colors: {
                 zen: {
-                    primary: '#1F1F1F',
-                    'primary-dark': '#0F0F10',
-                    'primary-light': '#3A3A3D',
+                    // === Màu nhấn vàng champagne / brown-gold (CHỈ dùng làm accent nhỏ) ===
+                    primary:         '#B88945',
+                    'primary-light': '#E7CF9D',
+                    'primary-dark':  '#7A5526',
 
-                    secondary: '#6B7280',
+                    accent:          '#A66A3F',
+                    'accent-dark':   '#6B3F22',
+                    'accent-soft':   '#F1E1CB',
 
-                    accent: '#C9A86A',
-                    'accent-light': '#E0C38B',
-                    'accent-dark': '#8E6D33',
-                    'accent-soft': '#FAF7F2',
+                    // === Nền trắng sạch (black-white luxury) ===
+                    bg:              '#FFFFFF',
+                    'bg-soft':       '#F7F4EF',
 
-                    bg: '#FFFFFF',
-                    'bg-soft': '#F7F7F8',
-                    'bg-dark': '#111111',
+                    // === Bề mặt card / modal ===
+                    surface:         '#FFFFFF',
 
-                    text: '#18181B',
-                    muted: '#71717A',
-                    'text-light': '#FFFFFF',
+                    // === Chữ gần đen ===
+                    text:            '#111111',
+                    muted:           '#6F6A63',
+                    'text-light':    '#FFFFFF',
 
-                    border: '#E5E7EB',
-                    'border-dark': '#A1A1AA',
+                    // === Viền tinh tế ===
+                    border:          '#E7E2DA',
+                    'border-dark':   '#B8AEA1',
 
+                    // === Nền tối luxury (footer, dark sections) ===
+                    dark:            '#050505',
+                    'dark-soft':     '#171717',
+
+                    // === Màu hệ thống (không đổi) ===
                     success: '#15803D',
                     warning: '#B45309',
-                    danger: '#B91C1C',
-                    info: '#0369A1',
+                    danger:  '#B91C1C',
+                    info:    '#0369A1',
                 },
             },
             borderRadius: {
@@ -37,12 +45,13 @@ export default {
                 'zen-lg': '24px',
             },
             boxShadow: {
-                zen: '0 8px 24px rgba(38, 16, 24, 0.06)',
-                'zen-md': '0 16px 40px rgba(38, 16, 24, 0.10)',
+                // Bóng nhẹ, tinh tế — không dùng màu nóng
+                zen:      '0 4px 20px rgba(5, 5, 5, 0.06)',
+                'zen-md': '0 12px 36px rgba(5, 5, 5, 0.10)',
             },
             fontFamily: {
                 heading: ['Sora', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-                body: ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                body:    ['Manrope', 'ui-sans-serif', 'system-ui', 'sans-serif'],
             },
         },
     },

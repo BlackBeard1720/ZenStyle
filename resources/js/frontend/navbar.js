@@ -304,6 +304,36 @@ function initMobilePagesCollapse() {
     });
 }
 
+/*
+ * initFooterObserver:
+ * Theo dõi khi footer tối (#site-footer) vào viewport.
+ * Khi footer xuất hiện → thêm .is-over-footer vào tất cả [data-floating-action]
+ * → CSS sẽ đổi màu nút từ đen sang trắng để dễ đọc trên nền tối.
+ */
+function initFooterObserver() {
+    const footer = document.getElementById('site-footer');
+    if (!footer) return;
+
+    const floatingActions = document.querySelectorAll('[data-floating-action]');
+    if (!floatingActions.length) return;
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                floatingActions.forEach((el) => {
+                    el.classList.toggle('is-over-footer', entry.isIntersecting);
+                });
+            });
+        },
+        {
+            // Trigger khi bất kỳ phần nào của footer bắt đầu hiện trong viewport
+            threshold: 0,
+        }
+    );
+
+    observer.observe(footer);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initNavbarAutoHide();
     initScrollTopButton();
@@ -311,4 +341,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initDesktopDropdown();
     initMobilePagesCollapse();
+    initFooterObserver();
 });

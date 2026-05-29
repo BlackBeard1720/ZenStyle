@@ -81,8 +81,8 @@
     </div>
   </section>
 
-  {{-- ===== SECTION 1: GREETING ===== --}}
-  <section class="scroll-mt-24 bg-stone-50 px-4 py-12 sm:px-6 lg:py-16">
+  {{-- Section 1: bầu không vỡt chào — nền kem ngà ấm (zen-bg) thay vì stone-50 lạnh --}}
+  <section class="scroll-mt-24 bg-zen-bg px-4 py-12 sm:px-6 lg:py-16">
     <div class="mx-auto max-w-6xl">
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle Salon</p>
       <h2 class="mt-3 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
@@ -122,7 +122,7 @@
             @foreach ($featuredServices as $service)
               <article class="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 px-3">
                 <div class="flex h-full flex-col border border-zen-border bg-zen-bg transition hover:shadow-zen duration-300 rounded-none">
-                  <div class="relative overflow-hidden bg-stone-100 shrink-0">
+                  <div class="relative overflow-hidden bg-zen-bg-soft shrink-0">
                     <a href="{{ route('services.show', $service) }}" class="block w-full">
                       <img
                         src="{{ $service->thumbnail ? asset($service->thumbnail) : asset('images/default-news.jpg') }}"
@@ -155,7 +155,7 @@
             @foreach ($featuredServices as $service)
               <article class="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 px-3" aria-hidden="true">
                 <div class="flex h-full flex-col border border-zen-border bg-zen-bg transition hover:shadow-zen duration-300 rounded-none">
-                  <div class="relative overflow-hidden bg-stone-100 shrink-0">
+                  <div class="relative overflow-hidden bg-zen-bg-soft shrink-0">
                     <a href="{{ route('services.show', $service) }}" class="block w-full">
                       <img
                         src="{{ $service->thumbnail ? asset($service->thumbnail) : asset('images/default-news.jpg') }}"
@@ -278,7 +278,7 @@
 
   {{-- ===== SECTION 6: FINAL CTA ===== --}}
   <section class="bg-white px-4 py-14 sm:px-6 lg:py-16">
-    <div class="mx-auto max-w-6xl overflow-hidden rounded-none border border-zen-border bg-zen-accent-soft p-8 sm:p-10 lg:p-12 shadow-none">
+    <div class="mx-auto max-w-6xl overflow-hidden rounded-none border border-zen-border bg-zen-bg-soft p-8 sm:p-10 lg:p-12 shadow-none">
       <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div>
           <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle booking</p>

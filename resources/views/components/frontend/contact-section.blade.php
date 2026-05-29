@@ -26,16 +26,18 @@
       </ul>
 
       <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+        {{-- Nút email: dùng zen-dark thay cho bg-zen-secondary (không tồn tại) --}}
         <a
           href="mailto:testforcode36@gmail.com"
-          class="border-zen-border-dark bg-zen-secondary text-zen-text-light hover:bg-zen-primary-light inline-flex w-fit items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-sm transition"
+          class="border-zen-border-dark bg-zen-dark text-zen-text-light hover:bg-zen-dark-soft inline-flex w-fit items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-sm transition"
         >
           <x-heroicon-o-envelope class="h-4 w-4 text-zen-text-light" />
           hello@zenstyle.vn
         </a>
+        {{-- N\u00fat li\u00ean h\u1ec7: n\u1ec1n \u0111en, ch\u1eef tr\u1eafng \u2014 kh\u1edbp zen-btn-primary black-white luxury --}}
         <a
           href="{{ route('contact') }}"
-          class="bg-zen-accent text-zen-text-light hover:bg-zen-accent-dark inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition"
+          class="bg-zen-dark text-zen-text-light hover:bg-zen-primary hover:text-zen-dark inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition"
         >
           <x-heroicon-o-document-text class="h-4 w-4" />
           Contact Form

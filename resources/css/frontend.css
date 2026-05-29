@@ -114,12 +114,13 @@
         @apply border-transparent bg-transparent shadow-none backdrop-blur-none;
     }
 
+    /* Trên banner: link hover dùng vàng champagne nhạt — dễ đọc trên nền tối */
     #site-header[data-on-banner='true'] .site-nav-link {
-        @apply text-white! hover:text-zen-accent!;
+        @apply text-white! hover:text-zen-primary-light!;
     }
 
     #site-header[data-on-banner='true'] .site-nav-link.is-active {
-        @apply text-zen-accent!;
+        @apply text-zen-primary-light!;
     }
 
     #site-header[data-on-banner='true'] .site-nav-logo {
@@ -234,13 +235,15 @@
     }
 
     [data-service-gallery-thumb].is-active {
-        border-color: rgba(139, 94, 60, 0.82);
-        box-shadow: 0 0 0 2px rgba(139, 94, 60, 0.22);
+        /* Màu viền thumbnail khớp với zen-accent mới (#A66A3F) */
+        border-color: rgba(166, 106, 63, 0.82);
+        box-shadow: 0 0 0 2px rgba(166, 106, 63, 0.22);
         opacity: 1;
     }
 
+    /* Nút cuộn lên — nền gần đen, icon trắng; khi đè footer đổi sang nền trắng (xử lý bằng JS + .is-over-footer) */
     .scroll-top-btn {
-        @apply fixed z-40 flex h-10 w-10 items-center justify-center rounded-full bg-zen-accent text-base font-medium text-white shadow-zen-md transition-all duration-300 ease-out hover:bg-zen-accent-dark hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 cursor-pointer;
+        @apply fixed z-40 flex h-10 w-10 items-center justify-center rounded-full bg-zen-dark text-base font-medium text-zen-text-light shadow-zen-md transition-all duration-300 ease-out hover:bg-zen-dark-soft hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/50 focus-visible:ring-offset-2 cursor-pointer;
         right: max(1rem, env(safe-area-inset-right, 0px));
         bottom: calc(max(1.25rem, env(safe-area-inset-bottom, 0px)) + 3.9rem);
         opacity: 0;
@@ -290,11 +293,22 @@
         }
     }
 
+    /* Nút chính: nền đen gần-black, chữ trắng — hover đổi sang vàng champagne (accent nhỏ) */
     .zen-btn-primary {
-        @apply inline-flex items-center justify-center rounded-full bg-zen-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-zen-accent-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
+        @apply inline-flex items-center justify-center rounded-full bg-zen-dark px-6 py-3 text-sm font-semibold text-zen-text-light transition-all duration-300 ease-out hover:bg-zen-primary hover:text-zen-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/50 focus-visible:ring-offset-2 active:scale-[0.98] cursor-pointer;
     }
 
+    /* Nút phụ: nền trắng, viền đen, chữ đen — hover nền kem nhạt + viền vàng */
     .zen-btn-secondary {
-        @apply inline-flex items-center justify-center rounded-full border border-zen-accent bg-white px-6 py-3 text-sm font-semibold text-zen-accent transition-all duration-300 ease-out hover:bg-zen-accent/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
+        @apply inline-flex items-center justify-center rounded-full border border-zen-text bg-zen-surface px-6 py-3 text-sm font-semibold text-zen-text transition-all duration-300 ease-out hover:bg-zen-bg-soft hover:border-zen-primary hover:text-zen-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40 focus-visible:ring-offset-2 active:scale-[0.98] cursor-pointer;
+    }
+
+    /*
+      Khi nút cố định (floating) đè lên footer tối:
+      Đổi sang nền trắng + viền vàng champagne — đảm bảo luôn thấy rõ trên nền đen.
+      Class này được đặt/xóa bằng IntersectionObserver trong navbar.js.
+    */
+    [data-floating-action].is-over-footer {
+        @apply !bg-zen-surface !text-zen-text !border !border-zen-primary !shadow-zen-md;
     }
 }

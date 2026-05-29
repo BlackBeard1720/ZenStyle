@@ -131,11 +131,11 @@
             Book Now
         </a>
 
-        <!-- Hamburger Button for Mobile -->
+        {{-- Nút hamburger: dùng text-zen-text thay vì text-black để giữ tông espresso ấm --}}
         <button
             id="mobile-menu-toggle"
             type="button"
-            class="relative z-10 ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-zen-border bg-white/95 text-black shadow-sm transition-all duration-300 hover:bg-zen-bg-soft focus:outline-none sm:hidden group-data-[on-banner='true']:border-white/20 group-data-[on-banner='true']:shadow-md"
+            class="relative z-10 ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-zen-border bg-zen-surface/95 text-zen-text shadow-sm transition-all duration-300 hover:bg-zen-bg-soft focus:outline-none sm:hidden group-data-[on-banner='true']:border-white/20 group-data-[on-banner='true']:text-white group-data-[on-banner='true']:shadow-md"
             aria-expanded="false"
             aria-controls="mobile-menu"
             aria-label="Toggle navigation menu"

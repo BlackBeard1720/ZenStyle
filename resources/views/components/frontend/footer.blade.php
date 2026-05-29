@@ -1,8 +1,9 @@
 {{--
     Footer: liên hệ + 4 cột tối + bar cuối.
 --}}
-<footer class="border-t border-zen-border">
-  <div class="bg-zen-bg-dark text-zen-text-light">
+<footer id="site-footer" class="border-t border-zen-border">
+{{-- Phần nền tối của footer: bg-zen-dark thay cho bg-zen-bg-dark (token không tồn tại) --}}
+  <div class="bg-zen-dark text-zen-text-light">
     <div class="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-12">
       
       <!-- Column 1: Brand & Contact -->
@@ -63,10 +64,11 @@
         <h4 class="text-sm font-semibold uppercase tracking-wide text-white">Visit</h4>
         <p class="mt-4 text-sm text-white/70">Ready to plan your visit?</p>
         <p class="mt-2 text-sm text-white/50">Book your appointment online in a few simple steps.</p>
+        {{-- Nút trong footer — dùng secondary (nền trắng) để nổi rõ trên footer tối --}}
         <div class="mt-6">
           <a
             href="{{ route('booking') }}"
-            class="zen-btn-primary inline-flex shadow-sm hover:shadow-zen-md"
+            class="zen-btn-secondary inline-flex shadow-sm hover:shadow-zen-md"
           >
             Book Now
           </a>

@@ -3,7 +3,7 @@
     $placeholderImage = 'https://placehold.co/800x600/ece8df/6f6656?text=ZenStyle+Service';
   @endphp
 
-  <section class="px-4 pb-8 pt-30 sm:px-6 lg:pt-35 bg-zen-accent-soft">
+  <section class="px-4 pb-8 pt-30 sm:px-6 lg:pt-35 bg-zen-bg-soft">
     <div class="mx-auto max-w-4xl text-center">
       <h1 class="font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
         Our Services

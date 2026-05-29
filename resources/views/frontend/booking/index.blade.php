@@ -418,9 +418,10 @@
             <span id="booking-summary-total" class="text-xl font-semibold text-zen-primary">$0.00</span>
           </div>
 
+          {{-- Nút xác nhận — khớp zen-btn-primary: nền đen, chữ trắng, hover vàng champagne --}}
           <button
             type="submit"
-            class="mt-5 flex h-10 w-full items-center justify-center rounded-zen-sm bg-zen-primary text-sm font-medium text-white transition hover:bg-zen-primary-dark"
+            class="mt-5 flex h-10 w-full items-center justify-center rounded-zen-sm bg-zen-dark text-sm font-semibold text-zen-text-light transition hover:bg-zen-primary hover:text-zen-dark active:scale-[0.98]"
           >
             Complete Booking
           </button>
