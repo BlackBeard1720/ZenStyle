@@ -1,6 +1,6 @@
-<x-frontend.layout :title="$service->name.' - Services'" main-class="bg-gradient-to-b from-zen-bg via-zen-bg-soft to-white pt-20">
+<x-frontend.layout :title="$service->name.' - Services'" main-class="bg-gradient-to-b from-zen-bg via-zen-bg-soft to-zen-bg pt-20">
     @php
-        $placeholderImage = 'https://placehold.co/1200x800/ece8df/6f6656?text=ZenStyle+Service';
+        $placeholderImage = 'https://placehold.co/1200x800/F4F7F7/667275?text=ZenStyle+Service';
     @endphp
 
     <article class="mx-auto max-w-6xl px-4 pb-14 sm:px-6 md:pb-20">
@@ -11,11 +11,11 @@
         </nav>
 
         <section class="mt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
-            <div class="overflow-hidden rounded-zen-lg border border-zen-border bg-white shadow-zen-md">
+            <div class="overflow-hidden rounded-zen-lg border border-zen-border bg-zen-surface shadow-zen-md">
                 <img src="{{ $service->thumbnail ?: $placeholderImage }}" alt="{{ $service->name }}" class="aspect-[4/3] w-full object-cover sm:aspect-[16/10]" decoding="async">
             </div>
 
-            <aside class="rounded-zen-lg border border-zen-border bg-white p-5 shadow-zen-md lg:sticky lg:top-24">
+            <aside class="rounded-zen-lg border border-zen-border bg-zen-surface p-5 shadow-zen-md lg:sticky lg:top-24">
                 <span class="inline-flex rounded-full bg-zen-accent-soft px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-zen-primary-dark ring-1 ring-zen-border">
                     {{ $service->category?->name ?? 'Services' }}
                 </span>
@@ -53,7 +53,7 @@
 
             <div class="mt-6 space-y-4">
                 @forelse ($approvedComments as $comment)
-                    <article class="rounded-zen-md border border-zen-border bg-white p-4 shadow-zen">
+                    <article class="rounded-zen-md border border-zen-border bg-zen-surface p-4 shadow-zen">
                         <p class="font-semibold text-zen-text">{{ $comment->name }}</p>
                         <p class="mt-2 text-sm text-zen-muted">{{ $comment->comment }}</p>
                     </article>
@@ -62,7 +62,7 @@
                 @endforelse
             </div>
 
-            <div class="mt-8 rounded-zen-lg border border-zen-border bg-white p-5 shadow-zen-md">
+            <div class="mt-8 rounded-zen-lg border border-zen-border bg-zen-surface p-5 shadow-zen-md">
                 <h3 class="font-heading text-xl font-semibold text-zen-text">Leave a Reply</h3>
                 <form action="{{ route('services.comments.store', $service) }}" method="POST" class="mt-4 space-y-4">
                     @csrf
@@ -86,7 +86,7 @@
                 <h2 class="font-heading text-2xl font-semibold text-zen-text">Related Services</h2>
                 <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($relatedServices as $related)
-                        <article class="group flex h-full flex-col overflow-hidden rounded-zen-md border border-zen-border bg-white shadow-zen transition hover:-translate-y-1 hover:shadow-zen-md">
+                        <article class="group flex h-full flex-col overflow-hidden rounded-zen-md border border-zen-border bg-zen-surface shadow-zen transition hover:-translate-y-1 hover:shadow-zen-md">
                             <a href="{{ route('services.show', $related) }}" class="block overflow-hidden bg-zen-bg-soft">
                                 <img src="{{ $related->thumbnail ?: $placeholderImage }}" alt="{{ $related->name }}" class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-[1.04]" loading="lazy">
                             </a>

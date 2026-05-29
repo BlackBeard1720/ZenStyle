@@ -39,7 +39,7 @@
           <select
             name="sort"
             onchange="this.form.submit()"
-            class="w-full rounded-md border border-zen-border bg-white px-3 py-2 text-sm text-zen-text focus:border-zen-accent focus:outline-none sm:w-56"
+            class="w-full rounded-md border border-zen-border bg-zen-surface px-3 py-2 text-sm text-zen-text focus:border-zen-accent focus:outline-none sm:w-56"
           >
             <option value="" {{ $selectedSort === '' ? 'selected' : '' }}>Sort services</option>
             <option value="price_asc" {{ $selectedSort === 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
@@ -58,7 +58,7 @@
           @foreach ($services as $service)
             <a
               href="{{ route('services.show', $service) }}"
-              class="group block overflow-hidden border border-zen-border bg-white shadow-zen"
+              class="group block overflow-hidden border border-zen-border bg-zen-surface shadow-zen"
             >
               <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
                 <img

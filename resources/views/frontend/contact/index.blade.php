@@ -27,7 +27,7 @@
         </div>
     </section>
 
-    <section class="bg-gradient-to-b from-zen-accent-soft/45 via-zen-bg-soft/70 to-white px-4 py-10 sm:px-6 sm:py-12 lg:pb-20">
+    <section class="bg-gradient-to-b from-zen-accent-soft/45 via-zen-bg-soft/70 to-zen-bg px-4 py-10 sm:px-6 sm:py-12 lg:pb-20">
         <div class="mx-auto max-w-6xl">
             <div class="overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg shadow-zen ring-1 ring-zen-border">
                 <div class="flex flex-col gap-3 border-b border-zen-border bg-zen-bg px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
@@ -45,7 +45,7 @@
                 <iframe
                     title="ZenStyle Contact Form"
                     src="{{ $googleFormUrl }}"
-                    class="h-[760px] w-full border-0 bg-white sm:h-[860px]"
+                    class="h-[760px] w-full border-0 bg-zen-surface sm:h-[860px]"
                     loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"
                 ></iframe>
