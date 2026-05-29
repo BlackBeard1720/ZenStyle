@@ -97,12 +97,12 @@
                   type="text"
                   id="service-search"
                   placeholder="Search service..."
-                  class="h-10 w-full rounded-zen-sm border border-zen-border bg-white px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
+                  class="h-10 w-full rounded-zen-sm border border-zen-border bg-zen-surface px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
                 >
 
                 <select
                   id="service-sort"
-                  class="h-10 w-full rounded-zen-sm border border-zen-border bg-white px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
+                  class="h-10 w-full rounded-zen-sm border border-zen-border bg-zen-surface px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
                 >
                   <option value="default">Default</option>
                   <option value="price-asc">Price Low to High</option>
@@ -205,7 +205,7 @@
               type="date"
               value="{{ $bookingToday->toDateString() }}"
               min="{{ $bookingToday->toDateString() }}"
-              class="h-10 w-full max-w-xs rounded border border-zen-border bg-white px-3 text-sm text-zen-text outline-none ring-zen-primary focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
+              class="h-10 w-full max-w-xs rounded border border-zen-border bg-zen-surface px-3 text-sm text-zen-text outline-none ring-zen-primary focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
             >
           </div>
 
@@ -219,7 +219,7 @@
                 data-date="{{ $day['iso'] }}"
                 data-summary="{{ $day['summary'] }}"
                 aria-pressed="{{ $day['selected'] ? 'true' : 'false' }}"
-                class="rounded border px-3 py-2 text-left text-sm transition-colors border-zen-border bg-white text-zen-muted hover:border-zen-primary/40"
+                class="rounded border px-3 py-2 text-left text-sm transition-colors border-zen-border bg-zen-surface text-zen-muted hover:border-zen-primary/40"
               >
                 <span class="block text-xs text-zen-muted">{{ $day['label'] }}</span>
                 <span class="block tabular-nums">{{ $day['display'] }}</span>
@@ -235,7 +235,7 @@
                 data-booking-slot
                 data-slot="{{ $slot }}"
                 aria-pressed="false"
-                class="rounded border px-2 py-2 text-sm transition-colors border-zen-border bg-white text-zen-muted hover:border-zen-primary/50"
+                class="rounded border px-2 py-2 text-sm transition-colors border-zen-border bg-zen-surface text-zen-muted hover:border-zen-primary/50"
               >
                 {{ $slot }}
               </button>
@@ -265,7 +265,7 @@
                 role="radio"
                 aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
                 @class([
-                  'group relative flex flex-col overflow-hidden rounded border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-150 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
+                  'group relative flex flex-col overflow-hidden rounded border-2 border-zen-border bg-zen-surface p-4 text-left shadow-sm transition duration-150 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
                   'cursor-pointer hover:border-zen-primary/50 hover:bg-zen-accent-soft/30 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft' => $stylistAvailable,
                   'cursor-not-allowed opacity-60 grayscale-[.15]' => ! $stylistAvailable,
                 ])
@@ -418,10 +418,10 @@
             <span id="booking-summary-total" class="text-xl font-semibold text-zen-primary">$0.00</span>
           </div>
 
-          {{-- Nút xác nhận — khớp zen-btn-primary: nền đen, chữ trắng, hover vàng champagne --}}
+          {{-- Nút xác nhận — nền đen, chữ trắng, hover xanh xám theo brand palette. --}}
           <button
             type="submit"
-            class="mt-5 flex h-10 w-full items-center justify-center rounded-zen-sm bg-zen-dark text-sm font-semibold text-zen-text-light transition hover:bg-zen-primary hover:text-zen-dark active:scale-[0.98]"
+            class="mt-5 flex h-10 w-full items-center justify-center rounded-zen-sm bg-zen-dark text-sm font-semibold text-zen-text-light transition hover:bg-zen-accent active:scale-[0.98]"
           >
             Complete Booking
           </button>

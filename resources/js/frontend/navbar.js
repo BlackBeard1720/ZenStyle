@@ -311,7 +311,7 @@ function initMobilePagesCollapse() {
  * → CSS sẽ đổi màu nút từ đen sang trắng để dễ đọc trên nền tối.
  */
 function initFooterObserver() {
-    const footer = document.getElementById('site-footer');
+    const footer = document.getElementById('site-footer') || document.querySelector('[data-site-footer]');
     if (!footer) return;
 
     const floatingActions = document.querySelectorAll('[data-floating-action]');
@@ -326,7 +326,7 @@ function initFooterObserver() {
             });
         },
         {
-            // Trigger khi bất kỳ phần nào của footer bắt đầu hiện trong viewport
+            // Trigger khi footer bắt đầu hiện để đổi màu floating buttons trên nền tối
             threshold: 0,
         }
     );

@@ -3,36 +3,31 @@ export default {
         extend: {
             colors: {
                 zen: {
-                    // === Màu nhấn vàng champagne / brown-gold (CHỈ dùng làm accent nhỏ) ===
-                    primary:         '#B88945',
-                    'primary-light': '#E7CF9D',
-                    'primary-dark':  '#7A5526',
-
-                    accent:          '#A66A3F',
-                    'accent-dark':   '#6B3F22',
-                    'accent-soft':   '#F1E1CB',
-
-                    // === Nền trắng sạch (black-white luxury) ===
+                    // === Brand palette: minimal black-white luxury with slate-teal accent ===
                     bg:              '#FFFFFF',
-                    'bg-soft':       '#F7F4EF',
-
-                    // === Bề mặt card / modal ===
+                    'bg-soft':       '#F4F7F7',
                     surface:         '#FFFFFF',
 
-                    // === Chữ gần đen ===
                     text:            '#111111',
-                    muted:           '#6F6A63',
+                    muted:           '#667275',
                     'text-light':    '#FFFFFF',
 
-                    // === Viền tinh tế ===
-                    border:          '#E7E2DA',
-                    'border-dark':   '#B8AEA1',
+                    primary:         '#111111',
+                    'primary-light': '#2A2A2A',
+                    'primary-dark':  '#050505',
 
-                    // === Nền tối luxury (footer, dark sections) ===
+                    accent:          '#5F777A',
+                    'accent-light':  '#DDE8E8',
+                    'accent-soft':   '#EEF5F5',
+                    'accent-dark':   '#344E52',
+
+                    border:          '#E1E7E7',
+                    'border-dark':   '#A8B6B8',
+
                     dark:            '#050505',
-                    'dark-soft':     '#171717',
+                    'dark-soft':     '#151515',
 
-                    // === Màu hệ thống (không đổi) ===
+                    // === System colors ===
                     success: '#15803D',
                     warning: '#B45309',
                     danger:  '#B91C1C',
@@ -45,7 +40,6 @@ export default {
                 'zen-lg': '24px',
             },
             boxShadow: {
-                // Bóng nhẹ, tinh tế — không dùng màu nóng
                 zen:      '0 4px 20px rgba(5, 5, 5, 0.06)',
                 'zen-md': '0 12px 36px rgba(5, 5, 5, 0.10)',
             },
