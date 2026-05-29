@@ -37,7 +37,7 @@
                 </dl>
 
                 <div class="mt-5 grid gap-3">
-                    <a href="{{ route('booking') }}" class="booking-cta inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold">Book Now</a>
+                    <a href="{{ route('booking', ['service_id' => $service->id]) }}" class="booking-cta inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold">Book Now</a>
                     <a href="{{ route('services') }}" class="inline-flex w-full items-center justify-center rounded-full border border-zen-primary bg-white px-6 py-3 text-sm font-semibold text-zen-primary transition hover:bg-zen-accent-soft">Back to Services</a>
                 </div>
             </aside>

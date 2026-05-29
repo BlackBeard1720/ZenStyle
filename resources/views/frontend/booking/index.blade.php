@@ -41,6 +41,12 @@
         ->map(fn ($service) => $service->category?->name ?? 'Other')
         ->unique()
         ->values();
+
+    $selectedServiceIds = collect(session()->hasOldInput()
+        ? old('service_ids', [])
+        : (request('service_id') ? [request('service_id')] : []))
+        ->map(fn ($id) => (string) $id)
+        ->all();
   @endphp
 
   <div id="booking-page" data-booking-busy-staff-url="{{ route('booking.busy-staff') }}" class="pb-12 pt-6 sm:pt-8">
@@ -154,7 +160,7 @@
                     name="service_ids[]"
                     value="{{ $service->id }}"
                     class="mt-0.5 size-4 shrink-0 rounded border-zen-border-dark text-zen-primary focus:ring-zen-primary/30"
-                    @checked(in_array((string) $service->id, old('service_ids', []), true))
+                    @checked(in_array((string) $service->id, $selectedServiceIds, true))
                   >
                   <span class="min-w-0">
                     <span class="block break-words text-sm font-medium text-zen-text">{{ $service->name }}</span>
