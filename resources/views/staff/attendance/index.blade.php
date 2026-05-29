@@ -1,283 +1,303 @@
-<x-staff.layout>
+<x-staff.layout title="Attendance" page-name="AttendanceManagement">
+  <div x-data="{ pageName: `Attendance` }">
+    <x-staff.partials.breadcrumb />
+  </div>
 
-  <div class="p-6 text-gray-900 dark:text-white">
-    <div class="mb-6 flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-          Attendance
-        </h1>
+  @php
+    $inputClass = 'h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30';
+    $selectClass = 'h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90';
+  @endphp
 
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          Employee attendance management
-        </p>
-      </div>
-    </div>
-
+  <div class="space-y-6">
+    {{-- Success and Error Messages --}}
     @if(session('success'))
-      <div class="mb-4 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-green-600 dark:text-green-300">
+      <div class="rounded-xl border border-success-500/30 bg-success-500/10 px-4 py-3 text-sm text-success-600 dark:text-success-300">
         {{ session('success') }}
       </div>
     @endif
 
     @if($errors->any())
-      <div class="mb-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-600 dark:text-red-300">
+      <div class="rounded-xl border border-error-500/30 bg-error-500/10 px-4 py-3 text-sm text-error-600 dark:text-error-300">
         {{ $errors->first() }}
       </div>
     @endif
 
-    <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-[#151c2c]">
-      <form method="POST" action="{{ route('staff.attendance.store') }}">
+    {{-- Record Attendance Panel --}}
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6 shadow-theme-xs">
+      <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Record Daily Attendance</h3>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Log employee work hours, check-in, check-out times, and attendance states.</p>
+
+      <form method="POST" action="{{ route('staff.attendance.store') }}" class="mt-5">
         @csrf
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-7">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-7 items-end">
           <div>
-            <label class="mb-1 block text-sm text-gray-700 dark:text-gray-300">
-              Staff
-            </label>
-
-            <select
-              name="staff_id"
-              required
-              class="h-12 w-full rounded-lg border border-gray-300 bg-gray-50 px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-            >
-              <option value="">Select staff</option>
-              @foreach($staff as $item)
-                <option value="{{ $item->id }}" @selected(old('staff_id') == $item->id)>
-                  {{ $item->full_name }}
-                </option>
-              @endforeach
-            </select>
+            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Staff Member</label>
+            <div x-data="{ isOptionSelected: old('staff_id') ? true : false }" class="relative z-20 bg-transparent">
+              <select name="staff_id" required class="{{ $selectClass }}" @change="isOptionSelected = true">
+                <option value="" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">Select staff</option>
+                @foreach($staff as $item)
+                  <option value="{{ $item->id }}" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('staff_id') == $item->id)>
+                    {{ $item->full_name }}
+                  </option>
+                @endforeach
+              </select>
+              <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
           </div>
 
           <div>
-            <label class="mb-1 block text-sm text-gray-700 dark:text-gray-300">
-              Work Date
-            </label>
-
+            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Work Date</label>
             <input
               type="date"
               name="work_date"
               required
-              value="{{ old('work_date') }}"
-              class="h-12 w-full rounded-lg border border-gray-300 bg-gray-50 px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-            >
+              value="{{ old('work_date', date('Y-m-d')) }}"
+              class="{{ $inputClass }}"
+            />
           </div>
 
           <div>
-            <label class="mb-1 block text-sm text-gray-700 dark:text-gray-300">
-              Check In
-            </label>
-
+            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Check In</label>
             <input
               type="time"
               name="check_in_time"
-              value="{{ old('check_in_time') }}"
-              class="h-12 w-full rounded-lg border border-gray-300 bg-gray-50 px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-            >
+              value="{{ old('check_in_time', '09:00') }}"
+              class="{{ $inputClass }}"
+            />
           </div>
 
           <div>
-            <label class="mb-1 block text-sm text-gray-700 dark:text-gray-300">
-              Check Out
-            </label>
-
+            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Check Out</label>
             <input
               type="time"
               name="check_out_time"
-              value="{{ old('check_out_time') }}"
-              class="h-12 w-full rounded-lg border border-gray-300 bg-gray-50 px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-            >
+              value="{{ old('check_out_time', '18:00') }}"
+              class="{{ $inputClass }}"
+            />
           </div>
 
           <div>
-            <label class="mb-1 block text-sm text-gray-700 dark:text-gray-300">
-              Status
-            </label>
-
-            <select
-              name="status"
-              class="h-12 w-full rounded-lg border border-gray-300 bg-gray-50 px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-            >
-              <option value="present" @selected(old('status') == 'present')>Present</option>
-              <option value="late" @selected(old('status') == 'late')>Late</option>
-              <option value="absent" @selected(old('status') == 'absent')>Absent</option>
-              <option value="leave" @selected(old('status') == 'leave')>Leave</option>
-            </select>
+            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Status</label>
+            <div x-data="{ isOptionSelected: true }" class="relative z-20 bg-transparent">
+              <select name="status" class="{{ $selectClass }}">
+                <option value="present" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('status') == 'present')>Present</option>
+                <option value="late" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('status') == 'late')>Late</option>
+                <option value="absent" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('status') == 'absent')>Absent</option>
+                <option value="leave" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected(old('status') == 'leave')>Leave</option>
+              </select>
+              <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </div>
           </div>
 
-          <div class="flex items-end md:col-span-2">
+          <div class="sm:col-span-2">
             <button
               type="submit"
-              class="h-12 w-full rounded-lg bg-blue-600 px-4 font-semibold text-white hover:bg-blue-700"
+              class="inline-flex h-11 w-full items-center justify-center rounded-lg bg-brand-500 px-5 text-sm font-medium text-white hover:bg-brand-600 shadow-theme-xs"
             >
-              Save
+              Record Attendance
             </button>
           </div>
         </div>
       </form>
     </div>
 
-    <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-[#151c2c]">
-      <div class="mb-4 flex items-center justify-between">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-          Attendance List
-        </h2>
+    {{-- Attendance List Panel --}}
+    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+      <div class="border-b border-gray-100 px-5 py-4 dark:border-gray-800 sm:px-6 sm:py-5">
+        <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Attendance List</h3>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">View and update employee working timelines.</p>
       </div>
 
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-sm">
-          <thead class="border-b border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400">
-          <tr>
-            <th class="px-4 py-3">Staff</th>
-            <th class="px-4 py-3">Date</th>
-            <th class="px-4 py-3">Check In</th>
-            <th class="px-4 py-3">Check Out</th>
-            <th class="px-4 py-3">Hours</th>
-            <th class="px-4 py-3">Status</th>
-            <th class="px-4 py-3 text-right">Actions</th>
-          </tr>
-          </thead>
+      <div class="p-5 sm:p-6">
+        <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+          <div class="w-full overflow-x-auto">
+            <table class="min-w-full table-fixed">
+              <thead>
+              <tr class="border-b border-gray-100 dark:border-gray-800">
+                <th class="w-52 px-4 pb-3 pt-4 text-left sm:px-6">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Staff Member</p>
+                </th>
+                <th class="w-36 px-4 pb-3 pt-4 text-left sm:px-6">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Date</p>
+                </th>
+                <th class="w-28 px-4 pb-3 pt-4 text-left sm:px-6">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Check In</p>
+                </th>
+                <th class="w-28 px-4 pb-3 pt-4 text-left sm:px-6">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Check Out</p>
+                </th>
+                <th class="w-28 px-4 pb-3 pt-4 text-left sm:px-6">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Hours</p>
+                </th>
+                <th class="w-32 px-4 pb-3 pt-4 text-left sm:px-6">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>
+                </th>
+                <th class="px-4 pb-3 pt-4 text-right sm:px-6">
+                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Actions</p>
+                </th>
+              </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+              @forelse($attendances as $attendance)
+                @php
+                  $badgeClass = match($attendance->status) {
+                    'present' => 'bg-success-50 text-success-600 dark:bg-success-500/15 dark:text-success-500',
+                    'late' => 'bg-warning-50 text-warning-600 dark:bg-warning-500/15 dark:text-warning-500',
+                    'absent' => 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500',
+                    default => 'bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-500', // leave
+                  };
+                @endphp
+                <tr class="align-top hover:bg-gray-50/50 dark:hover:bg-white/[0.01]">
+                  <td class="px-4 py-4 sm:px-6">
+                    <p class="font-medium text-theme-sm text-gray-800 dark:text-white/90">{{ $attendance->staff->full_name ?? 'N/A' }}</p>
+                  </td>
+                  <td class="px-4 py-4 sm:px-6">
+                    <p class="text-theme-sm text-gray-800 dark:text-white/90">{{ $attendance->work_date?->format('d/m/Y') }}</p>
+                  </td>
+                  <td class="px-4 py-4 sm:px-6">
+                    <p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ $attendance->check_in?->format('H:i') ?? '-' }}</p>
+                  </td>
+                  <td class="px-4 py-4 sm:px-6">
+                    <p class="text-theme-sm text-gray-500 dark:text-gray-400">{{ $attendance->check_out?->format('H:i') ?? '-' }}</p>
+                  </td>
+                  <td class="px-4 py-4 sm:px-6">
+                    <p class="text-theme-sm font-semibold text-gray-800 dark:text-white/90">{{ $attendance->working_hours }}h</p>
+                  </td>
+                  <td class="px-4 py-4 sm:px-6">
+                    <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium {{ $badgeClass }}">
+                      {{ ucfirst($attendance->status) }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-4 sm:px-6">
+                    <div class="flex items-center justify-end gap-2 whitespace-nowrap">
+                      <button
+                        type="button"
+                        onclick="toggleEditAttendance({{ $attendance->id }})"
+                        class="inline-flex min-w-[76px] items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-1 text-center text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                      >
+                        Edit
+                      </button>
 
-          <tbody>
-          @forelse($attendances as $attendance)
-            <tr class="border-b border-gray-100 text-gray-800 hover:bg-gray-50 dark:border-gray-800 dark:text-gray-200 dark:hover:bg-[#1b2436]">
-              <td class="px-4 py-4 font-medium">
-                {{ $attendance->staff->full_name ?? 'N/A' }}
-              </td>
+                      <form method="POST" action="{{ route('staff.attendance.destroy', $attendance) }}" class="inline" onsubmit="return confirm('Delete this attendance?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="inline-flex min-w-[76px] items-center justify-center rounded-md bg-error-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-error-600">
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
 
-              <td class="px-4 py-4">
-                {{ $attendance->work_date?->format('d/m/Y') }}
-              </td>
+                {{-- Inline Edit Dropdown Form --}}
+                <tr id="edit-attendance-{{ $attendance->id }}" class="hidden bg-gray-50/50 dark:bg-white/[0.01] border-b border-gray-100 dark:border-gray-800">
+                  <td colspan="7" class="px-4 py-4 sm:px-6">
+                    <form method="POST" action="{{ route('staff.attendance.update', $attendance) }}" class="space-y-4">
+                      @csrf
+                      @method('PUT')
 
-              <td class="px-4 py-4">
-                {{ $attendance->check_in?->format('H:i') ?? '-' }}
-              </td>
+                      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-7 items-end">
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Staff Member</label>
+                          <div x-data="{ isOptionSelected: true }" class="relative z-20 bg-transparent">
+                            <select name="staff_id" required class="{{ $selectClass }}">
+                              @foreach($staff as $item)
+                                <option value="{{ $item->id }}" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected($attendance->staff_id == $item->id)>
+                                  {{ $item->full_name }}
+                                </option>
+                              @endforeach
+                            </select>
+                            <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                              <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
 
-              <td class="px-4 py-4">
-                {{ $attendance->check_out?->format('H:i') ?? '-' }}
-              </td>
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Work Date</label>
+                          <input
+                            type="date"
+                            name="work_date"
+                            required
+                            value="{{ $attendance->work_date?->format('Y-m-d') }}"
+                            class="{{ $inputClass }}"
+                          />
+                        </div>
 
-              <td class="px-4 py-4">
-                {{ $attendance->working_hours }} h
-              </td>
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Check In</label>
+                          <input
+                            type="time"
+                            name="check_in_time"
+                            value="{{ $attendance->check_in?->format('H:i') }}"
+                            class="{{ $inputClass }}"
+                          />
+                        </div>
 
-              <td class="px-4 py-4">
-                  <span class="rounded-full px-3 py-1 text-xs
-                    @if($attendance->status === 'present') bg-green-500/10 text-green-600 dark:bg-green-500/20 dark:text-green-300
-                    @elseif($attendance->status === 'late') bg-yellow-500/10 text-yellow-600 dark:bg-yellow-500/20 dark:text-yellow-300
-                    @elseif($attendance->status === 'absent') bg-red-500/10 text-red-600 dark:bg-red-500/20 dark:text-red-300
-                    @else bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300
-                    @endif">
-                    {{ ucfirst($attendance->status) }}
-                  </span>
-              </td>
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Check Out</label>
+                          <input
+                            type="time"
+                            name="check_out_time"
+                            value="{{ $attendance->check_out?->format('H:i') }}"
+                            class="{{ $inputClass }}"
+                          />
+                        </div>
 
-              <td class="px-4 py-4 text-right">
-                <button
-                  type="button"
-                  onclick="toggleEditAttendance({{ $attendance->id }})"
-                  class="rounded-lg bg-yellow-500/10 px-3 py-1 text-yellow-600 hover:bg-yellow-500/20 dark:bg-yellow-500/20 dark:text-yellow-300 dark:hover:bg-yellow-500/30"
-                >
-                  Edit
-                </button>
+                        <div>
+                          <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Status</label>
+                          <div x-data="{ isOptionSelected: true }" class="relative z-20 bg-transparent">
+                            <select name="status" class="{{ $selectClass }}">
+                              <option value="present" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected($attendance->status === 'present')>Present</option>
+                              <option value="late" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected($attendance->status === 'late')>Late</option>
+                              <option value="absent" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected($attendance->status === 'absent')>Absent</option>
+                              <option value="leave" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400" @selected($attendance->status === 'leave')>Leave</option>
+                            </select>
+                            <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                              <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                              </svg>
+                            </span>
+                          </div>
+                        </div>
 
-                <form
-                  method="POST"
-                  action="{{ route('staff.attendance.destroy', $attendance) }}"
-                  class="inline"
-                >
-                  @csrf
-                  @method('DELETE')
+                        <div class="sm:col-span-2">
+                          <button
+                            type="submit"
+                            class="inline-flex h-11 w-full items-center justify-center rounded-lg bg-brand-500 px-5 text-sm font-medium text-white hover:bg-brand-600 shadow-theme-xs"
+                          >
+                            Update
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </td>
+                </tr>
+              @empty
+                <tr>
+                  <td colspan="7" class="px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+                    No attendance records found.
+                  </td>
+                </tr>
+              @endforelse
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-                  <button
-                    type="submit"
-                    onclick="return confirm('Delete this attendance?')"
-                    class="rounded-lg bg-red-500/10 px-3 py-1 text-red-600 hover:bg-red-500/20 dark:bg-red-500/20 dark:text-red-300 dark:hover:bg-red-500/30"
-                  >
-                    Delete
-                  </button>
-                </form>
-              </td>
-            </tr>
-
-            <tr
-              id="edit-attendance-{{ $attendance->id }}"
-              class="hidden border-b border-gray-100 bg-gray-50 dark:border-gray-800 dark:bg-[#101827]"
-            >
-              <td colspan="7" class="px-4 py-4">
-                <form method="POST" action="{{ route('staff.attendance.update', $attendance) }}">
-                  @csrf
-                  @method('PUT')
-
-                  <div class="grid grid-cols-1 gap-4 md:grid-cols-7">
-                    <select
-                      name="staff_id"
-                      required
-                      class="h-12 rounded-lg border border-gray-300 bg-white px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-                    >
-                      @foreach($staff as $item)
-                        <option value="{{ $item->id }}" @selected($attendance->staff_id == $item->id)>
-                          {{ $item->full_name }}
-                        </option>
-                      @endforeach
-                    </select>
-
-                    <input
-                      type="date"
-                      name="work_date"
-                      required
-                      value="{{ $attendance->work_date?->format('Y-m-d') }}"
-                      class="h-12 rounded-lg border border-gray-300 bg-white px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-                    >
-
-                    <input
-                      type="time"
-                      name="check_in_time"
-                      value="{{ $attendance->check_in?->format('H:i') }}"
-                      class="h-12 rounded-lg border border-gray-300 bg-white px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-                    >
-
-                    <input
-                      type="time"
-                      name="check_out_time"
-                      value="{{ $attendance->check_out?->format('H:i') }}"
-                      class="h-12 rounded-lg border border-gray-300 bg-white px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-                    >
-
-                    <select
-                      name="status"
-                      required
-                      class="h-12 rounded-lg border border-gray-300 bg-white px-3 text-gray-900 outline-none focus:border-blue-500 dark:border-gray-700 dark:bg-[#0f1726] dark:text-white"
-                    >
-                      <option value="present" @selected($attendance->status === 'present')>Present</option>
-                      <option value="late" @selected($attendance->status === 'late')>Late</option>
-                      <option value="absent" @selected($attendance->status === 'absent')>Absent</option>
-                      <option value="leave" @selected($attendance->status === 'leave')>Leave</option>
-                    </select>
-
-                    <button
-                      type="submit"
-                      class="h-12 rounded-lg bg-blue-600 px-4 font-semibold text-white hover:bg-blue-700 md:col-span-2"
-                    >
-                      Update
-                    </button>
-                  </div>
-                </form>
-              </td>
-            </tr>
-          @empty
-            <tr>
-              <td colspan="7" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
-                No attendance records found.
-              </td>
-            </tr>
-          @endforelse
-          </tbody>
-        </table>
-      </div>
-
-      <div class="mt-4">
-        {{ $attendances->links() }}
+        <div class="mt-5">
+          {{ $attendances->links() }}
+        </div>
       </div>
     </div>
   </div>
@@ -285,7 +305,6 @@
   <script>
     function toggleEditAttendance(id) {
       const row = document.getElementById('edit-attendance-' + id);
-
       if (row) {
         row.classList.toggle('hidden');
       }
@@ -312,5 +331,4 @@
       cursor: pointer;
     }
   </style>
-
 </x-staff.layout>

@@ -67,7 +67,7 @@
                 </a>
 
                 <!-- Pages Dropdown -->
-                <div class="pages-dropdown relative" id="desktop-pages-dropdown">
+                <div class="pages-dropdown relative group" id="desktop-pages-dropdown">
                     <button
                         type="button"
                         id="desktop-pages-trigger"
@@ -77,14 +77,14 @@
                         class="site-nav-link flex items-center gap-1 pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-zen-accent after:transition-transform after:duration-200 cursor-pointer {{ $isPagesActive ? 'is-active text-zen-accent after:scale-x-100 group-data-[on-banner=\'true\']:text-white group-data-[on-banner=\'true\']:after:bg-white' : 'text-zen-muted hover:text-zen-accent after:scale-x-0 hover:after:scale-x-100 group-data-[on-banner=\'true\']:text-white/80 group-data-[on-banner=\'true\']:hover:text-white group-data-[on-banner=\'true\']:after:bg-white' }}"
                     >
                         <span>Pages</span>
-                        <svg id="desktop-pages-arrow" class="h-3.5 w-3.5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg id="desktop-pages-arrow" class="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180 [.is-open_&]:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <!-- Dropdown Menu -->
                     <div
                         id="desktop-pages-menu"
-                        class="absolute left-1/2 top-full z-50 mt-2 w-48 -translate-x-1/2 scale-95 opacity-0 pointer-events-none transition-[opacity,transform] duration-200 ease-out origin-top"
+                        class="absolute left-1/2 top-full z-50 pt-2 w-48 -translate-x-1/2 scale-95 opacity-0 pointer-events-none transition-[opacity,transform] duration-200 ease-out origin-top group-hover:scale-100 group-hover:opacity-100 group-hover:pointer-events-auto [.is-open_&]:scale-100 [.is-open_&]:opacity-100 [.is-open_&]:pointer-events-auto"
                     >
                         <div class="rounded-zen-sm border border-zen-border bg-zen-bg py-2 shadow-zen">
                             <a

@@ -2,48 +2,42 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seed tai khoan dang nhap noi bo co dinh.
+     * Stylist se duoc seed trong StaffSeeder vi can co ho so staff rieng.
      */
     public function run(): void
     {
-        // Admin
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        DB::table('users')->truncate();
+        $adminRole = Role::where('role_name', 'admin')->firstOrFail();
+        $receptionistRole = Role::where('role_name', 'receptionist')->firstOrFail();
 
-        User::create([
-            'username' => 'minhpham',
-            'email' => 'minhpham@gmail.com',
-            'password' => Hash::make('minh123456'),
-            'role_id' => 1,
-            'status' => 'active',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'minhpham@gmail.com'],
+            [
+                'username' => 'minhpham',
+                'phone' => '0901000000',
+                'password' => Hash::make('minh123456'),
+                'role_id' => $adminRole->id,
+                'status' => 'active',
+            ]
+        );
 
-        User::create([
-            'username' => 'huyphg',
-            'email' => 'huyphg@gmail.com',
-            'password' => Hash::make('huy123456'),
-            'role_id' => 3,
-            'status' => 'active',
-        ]);
-
-        User::create([
-            'username' => 'linhvn',
-            'email' => 'linhvn@gmail.com',
-            'password' => Hash::make('linh123456'),
-            'role_id' => 2,
-            'status' => 'active',
-        ]);
-
-        User::factory(20)->create();
-
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        User::updateOrCreate(
+            ['email' => 'linhvn@gmail.com'],
+            [
+                'username' => 'linhvn',
+                'phone' => '0901000001',
+                'password' => Hash::make('linh123456'),
+                'role_id' => $receptionistRole->id,
+                'status' => 'active',
+            ]
+        );
     }
 }

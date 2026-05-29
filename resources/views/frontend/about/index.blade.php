@@ -195,10 +195,10 @@
                         <article class="group overflow-hidden rounded-none border border-zen-border bg-zen-surface shadow-sm">
                             <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
                                 <img
-                                    src="{{ $member->avatar ? asset('storage/' . $member->avatar) : asset('images/tailadmin/user/user-01.jpg') }}"
-                                    alt="{{ $member->full_name }}"
-                                    class="h-full w-full object-cover"
-                                    loading="lazy"
+                                  src="{{ $member->avatar ?: asset('images/tailadmin/user/user-01.jpg') }}"
+                                  alt="{{ $member->full_name }}"
+                                  class="h-full w-full object-cover"
+                                  loading="lazy"
                                 >
                             </div>
                             <div class="p-5">

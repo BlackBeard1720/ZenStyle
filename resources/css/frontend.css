@@ -241,17 +241,7 @@
         opacity: 1;
     }
 
-    .pages-dropdown:hover #desktop-pages-menu,
-    .pages-dropdown.is-open #desktop-pages-menu {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateX(-50%) scale(1);
-    }
 
-    .pages-dropdown:hover #desktop-pages-arrow,
-    .pages-dropdown.is-open #desktop-pages-arrow {
-        transform: rotate(180deg);
-    }
 
     /* Nut cuon len: hover chi doi mau de tranh giat lag. */
     .scroll-top-btn {

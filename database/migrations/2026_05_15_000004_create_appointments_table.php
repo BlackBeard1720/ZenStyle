@@ -29,6 +29,7 @@ return new class extends Migration
                 $table->string('status')
                     ->default('pending');
 
+                $table->timestamp('reminder_sent_at')->nullable();
                 $table->text('notes')
                     ->nullable();
 
