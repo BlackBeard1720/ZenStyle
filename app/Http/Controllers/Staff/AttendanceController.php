@@ -25,7 +25,8 @@ class AttendanceController extends Controller
             ->when($request->work_date, function ($query, $date) {
                 $query->whereDate('work_date', $date);
             })
-            ->latest()
+            ->orderByDesc('work_date')
+            ->orderByDesc('id')
             ->paginate(10)
             ->withQueryString();
 
@@ -37,22 +38,39 @@ class AttendanceController extends Controller
         $data = $request->validate([
             'staff_id' => ['required', 'exists:staff,id'],
             'work_date' => ['required', 'date'],
-            'check_in' => ['nullable', 'date_format:Y-m-d\TH:i'],
-            'check_out' => ['nullable', 'date_format:Y-m-d\TH:i', 'after:check_in'],
+            'check_in_time' => ['nullable', 'date_format:H:i'],
+            'check_out_time' => ['nullable', 'date_format:H:i'],
             'status' => ['nullable', Rule::in(['present', 'late', 'absent', 'leave'])],
         ]);
 
-        $data['status'] = $data['status'] ?? $this->detectStatus($data);
+        $checkIn = $this->buildDateTime($data['work_date'], $data['check_in_time'] ?? null);
+        $checkOut = $this->buildDateTime($data['work_date'], $data['check_out_time'] ?? null);
+
+        if ($checkIn && $checkOut && Carbon::parse($checkOut)->lessThanOrEqualTo(Carbon::parse($checkIn))) {
+            return back()
+                ->withInput()
+                ->withErrors(['check_out_time' => 'check in first']);
+        }
+
+        $status = $data['status'] ?? $this->detectStatus([
+            'staff_id' => $data['staff_id'],
+            'work_date' => $data['work_date'],
+            'check_in' => $checkIn,
+        ]);
 
         Attendance::updateOrCreate(
             [
                 'staff_id' => $data['staff_id'],
                 'work_date' => $data['work_date'],
             ],
-            $data
+            [
+                'check_in' => $checkIn,
+                'check_out' => $checkOut,
+                'status' => $status,
+            ]
         );
 
-        return back()->with('success', 'Lưu chấm công thành công.');
+        return back()->with('success', 'successfull saved');
     }
 
     public function update(Request $request, Attendance $attendance)
@@ -60,21 +78,45 @@ class AttendanceController extends Controller
         $data = $request->validate([
             'staff_id' => ['required', 'exists:staff,id'],
             'work_date' => ['required', 'date'],
-            'check_in' => ['nullable', 'date_format:Y-m-d\TH:i'],
-            'check_out' => ['nullable', 'date_format:Y-m-d\TH:i', 'after:check_in'],
+            'check_in_time' => ['nullable', 'date_format:H:i'],
+            'check_out_time' => ['nullable', 'date_format:H:i'],
             'status' => ['required', Rule::in(['present', 'late', 'absent', 'leave'])],
         ]);
 
-        $attendance->update($data);
+        $checkIn = $this->buildDateTime($data['work_date'], $data['check_in_time'] ?? null);
+        $checkOut = $this->buildDateTime($data['work_date'], $data['check_out_time'] ?? null);
 
-        return back()->with('success', 'Cập nhật chấm công thành công.');
+        if ($checkIn && $checkOut && Carbon::parse($checkOut)->lessThanOrEqualTo(Carbon::parse($checkIn))) {
+            return back()
+                ->withInput()
+                ->withErrors(['check_out_time' => 'Check in first.']);
+        }
+
+        $attendance->update([
+            'staff_id' => $data['staff_id'],
+            'work_date' => $data['work_date'],
+            'check_in' => $checkIn,
+            'check_out' => $checkOut,
+            'status' => $data['status'],
+        ]);
+
+        return back()->with('success', 'successfull updated');
     }
 
     public function destroy(Attendance $attendance)
     {
         $attendance->delete();
 
-        return back()->with('success', 'Xóa chấm công thành công.');
+        return back()->with('success', 'successfull deleted');
+    }
+
+    private function buildDateTime(string $date, ?string $time): ?string
+    {
+        if (empty($time)) {
+            return null;
+        }
+
+        return $date . ' ' . $time . ':00';
     }
 
     private function detectStatus(array $data): string

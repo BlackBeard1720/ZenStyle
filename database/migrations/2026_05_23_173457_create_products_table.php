@@ -19,6 +19,8 @@ return new class extends Migration
 
             $table->string('product_name');
 
+            $table->string('image')->nullable();
+
             $table->string('sku', 50)
                 ->nullable()
                 ->unique();

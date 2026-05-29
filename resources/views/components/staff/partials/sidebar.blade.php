@@ -148,44 +148,60 @@
           </li>
           @endcan
 
-          <!-- Menu Item Attendance -->
-          @can('view-attendance')
-          <li>
-            <a
-              href="#"
-              class="menu-item group"
-              :class="page === 'AttendanceCalendar' ? 'menu-item-active' : 'menu-item-inactive'"
-            >
-              <svg
-                :class="page === 'AttendanceCalendar' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM4.75 9.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75H4.75ZM11.5795 16.1477L15.5028 12.2244C15.7957 11.9315 16.2706 11.9315 16.5635 12.2244C16.8564 12.5173 16.8564 12.9922 16.5635 13.285L12.1098 17.7388C11.8169 18.0317 11.342 18.0317 11.0491 17.7388L8.19012 14.8798C7.89723 14.5869 7.89723 14.1121 8.19012 13.8192C8.48302 13.5263 8.95789 13.5263 9.25078 13.8192L11.5795 16.1477Z"
-                  fill=""
-                />
-              </svg>
 
-              <span
-                class="menu-item-text"
-                :class="sidebarToggle ? 'lg:hidden' : ''"
+            <li>
+              <a
+                href="{{ route('staff.schedules.index') }}"
+                class="menu-item group"
+                :class="page === 'StaffScheduleManagement' ? 'menu-item-active' : 'menu-item-inactive'"
               >
-                Attendance
-              </span>
-            </a>
-          </li>
-          @endcan
+                <svg
+                  :class="page === 'StaffScheduleManagement' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                  width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM4.75 9.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75H4.75Z"
+                        fill=""/>
+                </svg>
+
+                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                  Staff Schedule
+                </span>
+              </a>
+            </li>
+
+
+
+          <!-- Menu Item Attendance -->
+
+            <li>
+              <a
+                href="{{ route('staff.attendance.index') }}"
+                class="menu-item group"
+                :class="page === 'AttendanceManagement' ? 'menu-item-active' : 'menu-item-inactive'"
+              >
+                <svg
+                  :class="page === 'AttendanceManagement' ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                  width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8 2C8.41421 2 8.75 2.33579 8.75 2.75V3.75H15.25V2.75C15.25 2.33579 15.5858 2 16 2C16.4142 2 16.75 2.33579 16.75 2.75V3.75H18.5C19.7426 3.75 20.75 4.75736 20.75 6V19C20.75 20.2426 19.7426 21.25 18.5 21.25H5.5C4.25736 21.25 3.25 20.2426 3.25 19V6C3.25 4.75736 4.25736 3.75 5.5 3.75H7.25V2.75C7.25 2.33579 7.58579 2 8 2ZM4.75 9.75V19C4.75 19.4142 5.08579 19.75 5.5 19.75H18.5C18.9142 19.75 19.25 19.4142 19.25 19V9.75H4.75ZM11.5795 16.1477L15.5028 12.2244C15.7957 11.9315 16.2706 11.9315 16.5635 12.2244C16.8564 12.5173 16.8564 12.9922 16.5635 13.285L12.1098 17.7388C11.8169 18.0317 11.342 18.0317 11.0491 17.7388L8.19012 14.8798C7.89723 14.5869 7.89723 14.1121 8.19012 13.8192C8.48302 13.5263 8.95789 13.5263 9.25078 13.8192L11.5795 16.1477Z"
+                        fill=""/>
+                </svg>
+
+                <span class="menu-item-text" :class="sidebarToggle ? 'lg:hidden' : ''">
+                  Attendance
+                </span>
+              </a>
+            </li>
+
 
           <!-- Menu Item Attendance -->
 
           <!-- Menu Item Payroll -->
-          @can('view-payrolls')
+
           <li>
             <a
               href="{{ route('staff.payrolls.index') }}"
@@ -216,7 +232,7 @@
               </span>
             </a>
           </li>
-          @endcan
+
           <!-- Menu Item Payroll -->
 
           <!-- Menu Item Service Management -->
