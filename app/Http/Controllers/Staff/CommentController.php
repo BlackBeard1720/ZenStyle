@@ -12,14 +12,29 @@ use Illuminate\View\View;
 
 class CommentController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         Gate::authorize('manage-services');
 
-        $comments = Comment::query()
-            ->with('service')
-            ->latest()
-            ->paginate(10);
+        $query = Comment::query()->with('service');
+
+        if ($request->filled('keyword')) {
+            $keyword = '%' . $request->input('keyword') . '%';
+            $query->where(function ($q) use ($keyword) {
+                $q->where('id', 'like', $keyword)
+                  ->orWhere('name', 'like', $keyword)
+                  ->orWhere('comment', 'like', $keyword)
+                  ->orWhereHas('service', function ($sq) use ($keyword) {
+                      $sq->where('name', 'like', $keyword);
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+
+        $comments = $query->latest()->paginate(10)->withQueryString();
 
         return view('staff.comments.index', compact('comments'));
     }

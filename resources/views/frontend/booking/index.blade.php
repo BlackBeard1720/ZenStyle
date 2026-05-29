@@ -31,7 +31,7 @@
             'status_class' => $isActive
                 ? 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20'
                 : 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
-            'image'        => asset('images/tailadmin/user/user-0' . (($index % 3) + 1) . '.jpg'),
+            'image'        => $s->avatar ?: ('https://ui-avatars.com/api/?name=' . urlencode($s->full_name) . '&background=465FFF&color=fff'),
             'is_available' => $isActive,
             'checked'      => $index === 0 && $isActive,
         ];
@@ -264,9 +264,10 @@
                 data-booking-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
                 role="radio"
                 aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
+                aria-checked="{{ $stylist['checked'] && $stylistAvailable ? 'true' : 'false' }}"
                 @class([
                   'group relative flex flex-col overflow-hidden rounded border-2 border-zen-border bg-zen-surface p-4 text-left shadow-sm transition duration-150 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
-                  'cursor-pointer hover:border-zen-primary/50 hover:bg-zen-accent-soft/30 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft' => $stylistAvailable,
+                  'cursor-pointer hover:border-zen-primary/50 hover:bg-zen-accent-soft/30 aria-checked:border-zen-primary aria-checked:bg-zen-accent-soft' => $stylistAvailable,
                   'cursor-not-allowed opacity-60 grayscale-[.15]' => ! $stylistAvailable,
                 ])
               >

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('specialization')->nullable();
+            $table->string('avatar')->nullable();
             $table->decimal('salary', 12, 2)->nullable();
             $table->date('hire_date')->nullable();
             $table->string('status')->default('active');

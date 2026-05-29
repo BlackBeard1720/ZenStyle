@@ -25,7 +25,7 @@ const dayClasses = {
 };
 
 const slotClasses = {
-    sel: ['border-zen-primary', 'bg-zen-primary', 'font-medium', 'text-white'],
+    sel: ['border-zen-primary', 'bg-zen-accent-soft', 'font-medium', 'text-zen-primary'],
     idle: ['border-zen-border', 'bg-white', 'text-zen-muted', 'hover:border-zen-primary/50'],
     disabled: ['cursor-not-allowed', 'border-zen-border', 'bg-zen-bg-soft', 'text-zen-muted/60', 'opacity-60'],
 };
@@ -35,8 +35,8 @@ const stylistClasses = {
         'cursor-pointer',
         'hover:border-zen-primary/50',
         'hover:bg-zen-accent-soft/30',
-        'has-[:checked]:border-zen-primary',
-        'has-[:checked]:bg-zen-accent-soft',
+        'aria-checked:border-zen-primary',
+        'aria-checked:bg-zen-accent-soft',
     ],
     disabled: ['cursor-not-allowed', 'opacity-60', 'grayscale-[.15]'],
 };
