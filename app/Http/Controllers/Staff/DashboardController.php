@@ -9,6 +9,7 @@ use App\Models\Payment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
@@ -26,8 +27,9 @@ class DashboardController extends Controller
         $revenueData = $this->getRevenueData($from, $to, $group);
         $categoryUsageData = $this->getCategoryUsageData();
         $customerMetrics = $this->getCustomerMetrics($from, $to);
+        $products = Product::latest()->take(5)->get();
 
-        return view('staff.dashboard.index', compact('revenueData', 'categoryUsageData', 'customerMetrics', 'from', 'to', 'group'));
+        return view('staff.dashboard.index', compact('products','revenueData', 'categoryUsageData', 'customerMetrics', 'from', 'to', 'group'));
     }
 
     public function data(Request $request)
