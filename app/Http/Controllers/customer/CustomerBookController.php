@@ -236,7 +236,7 @@ class CustomerBookController extends Controller
                 'phone' => $appointment->client?->phone,
                 'appointment_date' => optional($appointment->appointment_date)->toDateString(),
                 'appointment_time' => $appointment->appointment_time,
-                'staff_name' => $appointment->appointmentServices->first()?->staff?->full_name ?? 'Any staff',
+                'staff_name' => $appointment->appointmentServices->first()?->staff?->full_name ?? 'Any staff member',
                 'notes' => $appointment->notes,
             ],
         ]);
@@ -257,7 +257,7 @@ class CustomerBookController extends Controller
         if (! $booking) {
             return redirect()
                 ->route('booking')
-                ->withErrors(['booking' => 'Vui lòng hoàn tất đặt lịch trước.']);
+                ->withErrors(['booking' => 'Please complete booking information first.']);
         }
 
         return view('frontend.booking.success', [
@@ -280,7 +280,7 @@ class CustomerBookController extends Controller
                 'phone' => $appointment->client?->phone,
                 'appointment_date' => optional($appointment->appointment_date)->toDateString(),
                 'appointment_time' => $appointment->appointment_time,
-                'staff_name' => $appointment->appointmentServices->first()?->staff?->full_name ?? 'Bất kỳ nhân viên',
+                'staff_name' => $appointment->appointmentServices->first()?->staff?->full_name ?? 'Any staff member',
                 'notes' => $appointment->notes,
             ],
         ]);
