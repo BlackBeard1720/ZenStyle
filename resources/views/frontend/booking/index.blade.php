@@ -23,19 +23,11 @@
     $bookingStylists = $staff->map(function ($s, $index) {
 
         $isActive = $s->status === 'active';
-        $years = $s->hire_date
-            ? max(0, (int) \Carbon\Carbon::parse($s->hire_date)->diffInYears(now()))
-            : null;
-
-        $experience = $years !== null
-            ? ($years >= 1 ? $years . ' years of experience' : 'Less than 1 year of experience')
-            : null;
 
         return [
             'id'           => $s->id,
             'name'         => $s->full_name,
             'role'         => $s->specialization ?? 'Staff',
-            'experience'   => $experience,
             'status'       => $isActive ? 'Available' : 'Busy',
             'status_class' => $isActive
                 ? 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20'
@@ -138,7 +130,8 @@
           <p class="mt-1 text-sm text-zen-muted">Let the salon arrange your appointment or choose your preferred
             stylist.</p>
 
-          <div class="mt-4 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3" role="radiogroup"
+          {{-- Horizontal scroll, moi card co width co dinh de scroll dep tren moi man hinh --}}
+          <div class="mt-4 flex gap-4 overflow-x-auto pb-3" role="radiogroup"
                aria-label="Select staff member in charge">
             @foreach ($bookingStylists as $stylist)
               @php
@@ -151,8 +144,8 @@
                 role="radio"
                 aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
                 @class([
-                  'group relative flex min-w-0 flex-col overflow-hidden rounded-zen-md border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
-                  'cursor-pointer hover:-translate-y-0.5 hover:border-zen-primary/50 hover:shadow-zen has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft has-[:checked]:shadow-zen-md' => $stylistAvailable,
+                  'w-56 shrink-0 group relative flex flex-col overflow-hidden rounded border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-150 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
+                  'cursor-pointer hover:border-zen-primary/50 hover:bg-zen-accent-soft/30 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft' => $stylistAvailable,
                   'cursor-not-allowed opacity-60 grayscale-[.15]' => ! $stylistAvailable,
                 ])
               >
@@ -172,29 +165,20 @@
                   <img
                     src="{{ $stylist['image'] }}"
                     alt="Profile photo of {{ $stylist['name'] }}"
-                    class="size-14 shrink-0 rounded-full border-2 border-white object-cover shadow-sm ring-1 ring-zen-border"
+                    class="size-12 shrink-0 rounded-full border border-zen-border object-cover"
                     loading="lazy"
                   >
                   <span class="min-w-0 flex-1">
                     <span data-stylist-label
                           class="block break-words text-sm font-semibold text-zen-text">{{ $stylist['name'] }}</span>
                     <span
-                      class="mt-1 block break-words text-xs font-medium text-zen-primary">{{ $stylist['role'] }}</span>
+                      class="mt-0.5 block break-words text-xs font-medium text-zen-primary">{{ $stylist['role'] }}</span>
                     <span
-                      class="mt-2 inline-flex max-w-full rounded-full px-2.5 py-1 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
+                      class="mt-2 inline-flex rounded px-2 py-0.5 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
                       {{ $stylist['status'] }}
                     </span>
                   </span>
                 </span>
-
-                @if($stylist['experience'])
-                  <span class="mt-4 grid gap-2 text-xs text-zen-muted">
-                    <span class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                      <span>Experience</span>
-                      <span class="text-right font-semibold text-zen-text">{{ $stylist['experience'] }}</span>
-                    </span>
-                  </span>
-                @endif
               </label>
             @endforeach
           </div>
