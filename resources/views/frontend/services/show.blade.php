@@ -86,12 +86,12 @@
                 <h2 class="font-heading text-2xl font-semibold text-zen-text">Related Services</h2>
                 <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($relatedServices as $related)
-                        <article class="group flex h-full flex-col overflow-hidden rounded-zen-md border border-zen-border bg-zen-surface shadow-zen transition hover:-translate-y-1 hover:shadow-zen-md">
+                        <article class="group flex h-full flex-col overflow-hidden rounded-zen-md border border-zen-border bg-zen-surface shadow-sm transition-colors duration-200 hover:border-zen-accent/40">
                             <a href="{{ route('services.show', $related) }}" class="block overflow-hidden bg-zen-bg-soft">
-                                <img src="{{ $related->thumbnail ?: $placeholderImage }}" alt="{{ $related->name }}" class="aspect-[4/3] w-full object-cover transition duration-500 group-hover:scale-[1.04]" loading="lazy">
+                                <img src="{{ $related->thumbnail ?: $placeholderImage }}" alt="{{ $related->name }}" class="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-[1.01]" loading="lazy">
                             </a>
                             <div class="flex flex-1 flex-col p-4">
-                                <h3 class="font-semibold text-zen-text transition group-hover:text-zen-primary">
+                                <h3 class="font-semibold text-zen-text transition-colors duration-200 group-hover:text-zen-primary">
                                     <a href="{{ route('services.show', $related) }}">{{ $related->name }}</a>
                                 </h3>
                                 <p class="mt-2 text-sm text-zen-muted">{{ $related->description }}</p>

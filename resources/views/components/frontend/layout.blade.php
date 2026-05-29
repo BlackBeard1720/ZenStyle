@@ -4,7 +4,7 @@
 ])
 
 <!doctype html>
-<html lang="vi" class="scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
     <x-frontend.head :title="$title" />
     @vite(['resources/css/frontend.css', 'resources/js/frontend/app.js'])

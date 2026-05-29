@@ -68,7 +68,7 @@
         <div class="mt-6">
           <a
             href="{{ route('booking') }}"
-            class="zen-btn-secondary inline-flex shadow-sm hover:shadow-zen-md"
+            class="zen-btn-secondary inline-flex shadow-sm"
           >
             Book Now
           </a>

@@ -1,11 +1,7 @@
 <header
     id="site-header"
-    @if (request()->is('/') || request()->routeIs('home'))
-        data-on-banner="true"
-    @endif
-    class="group fixed inset-x-0 top-0 z-50 border-b border-zen-border bg-zen-bg backdrop-blur shadow-sm
-        transition-[transform,background-color,border-color,backdrop-filter,box-shadow,color] duration-300 ease-out will-change-transform
-        data-[on-banner='true']:border-transparent data-[on-banner='true']:!border-b-transparent data-[on-banner='true']:!bg-transparent data-[on-banner='true']:!backdrop-blur-none data-[on-banner='true']:shadow-none"
+    class="fixed inset-x-0 top-0 z-50 border-b border-zen-border bg-zen-bg/95 shadow-sm
+        transition-[transform,background-color,border-color,box-shadow,color] duration-200 ease-out will-change-transform"
 >
     @php
         $isHomeRoute = request()->routeIs('home');
@@ -71,24 +67,26 @@
                 </a>
 
                 <!-- Pages Dropdown -->
-                <div class="relative group" id="desktop-pages-dropdown">
+                <div class="pages-dropdown relative" id="desktop-pages-dropdown">
                     <button
                         type="button"
                         id="desktop-pages-trigger"
                         data-nav-key="pages"
+                        aria-expanded="false"
+                        aria-controls="desktop-pages-menu"
                         class="site-nav-link flex items-center gap-1 pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-zen-accent after:transition-transform after:duration-200 cursor-pointer {{ $isPagesActive ? 'is-active text-zen-accent after:scale-x-100 group-data-[on-banner=\'true\']:text-white group-data-[on-banner=\'true\']:after:bg-white' : 'text-zen-muted hover:text-zen-accent after:scale-x-0 hover:after:scale-x-100 group-data-[on-banner=\'true\']:text-white/80 group-data-[on-banner=\'true\']:hover:text-white group-data-[on-banner=\'true\']:after:bg-white' }}"
                     >
                         <span>Pages</span>
-                        <svg class="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <svg id="desktop-pages-arrow" class="h-3.5 w-3.5 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <!-- Dropdown Menu -->
                     <div
                         id="desktop-pages-menu"
-                        class="absolute left-1/2 top-full z-50 mt-2 w-48 -translate-x-1/2 scale-95 opacity-0 pointer-events-none group-hover:scale-100 group-hover:opacity-100 group-hover:pointer-events-auto group-[.is-open]:scale-100 group-[.is-open]:opacity-100 group-[.is-open]:pointer-events-auto transition-all duration-300 ease-out origin-top"
+                        class="absolute left-1/2 top-full z-50 mt-2 w-48 -translate-x-1/2 scale-95 opacity-0 pointer-events-none transition-[opacity,transform] duration-200 ease-out origin-top"
                     >
-                        <div class="rounded-zen-md border border-zen-border bg-zen-bg py-2 shadow-zen-md backdrop-blur-md">
+                        <div class="rounded-zen-sm border border-zen-border bg-zen-bg py-2 shadow-zen">
                             <a
                                 href="{{ route('faq') }}"
                                 data-nav-key="faq"
@@ -135,15 +133,15 @@
         <button
             id="mobile-menu-toggle"
             type="button"
-            class="relative z-10 ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-zen-border bg-zen-surface/95 text-zen-text shadow-sm transition-all duration-300 hover:bg-zen-bg-soft focus:outline-none sm:hidden group-data-[on-banner='true']:border-white/50 group-data-[on-banner='true']:bg-zen-surface/95 group-data-[on-banner='true']:text-zen-text group-data-[on-banner='true']:shadow-md"
+            class="relative z-10 ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-zen-border bg-zen-surface/95 text-zen-text shadow-sm transition-colors duration-150 hover:bg-zen-bg-soft focus:outline-none sm:hidden group-data-[on-banner='true']:border-white/50 group-data-[on-banner='true']:bg-zen-surface/95 group-data-[on-banner='true']:text-zen-text group-data-[on-banner='true']:shadow-md"
             aria-expanded="false"
             aria-controls="mobile-menu"
             aria-label="Toggle navigation menu"
         >
             <svg class="h-5 w-5 fill-none stroke-current stroke-2 transition-transform duration-300" viewBox="0 0 24 24" id="hamburger-icon">
-                <line x1="4" y1="6" x2="20" y2="6" class="origin-center transition-all duration-300" id="hamburger-line-top"></line>
-                <line x1="4" y1="12" x2="20" y2="12" class="origin-center transition-all duration-300" id="hamburger-line-middle"></line>
-                <line x1="4" y1="18" x2="20" y2="18" class="origin-center transition-all duration-300" id="hamburger-line-bottom"></line>
+                <line x1="4" y1="6" x2="20" y2="6" class="origin-center transition-transform duration-200" id="hamburger-line-top"></line>
+                <line x1="4" y1="12" x2="20" y2="12" class="origin-center transition-opacity duration-200" id="hamburger-line-middle"></line>
+                <line x1="4" y1="18" x2="20" y2="18" class="origin-center transition-transform duration-200" id="hamburger-line-bottom"></line>
             </svg>
         </button>
     </div>
@@ -151,7 +149,7 @@
     <!-- Mobile Menu Panel -->
     <div
         id="mobile-menu"
-        class="pointer-events-none absolute inset-x-0 top-full z-40 max-h-[85vh] origin-top scale-y-95 overflow-y-auto border-b border-zen-border bg-zen-bg/95 px-6 py-6 opacity-0 shadow-zen-md backdrop-blur-md transition-all duration-300 ease-out sm:hidden"
+        class="pointer-events-none absolute inset-x-0 top-full z-40 max-h-[85vh] origin-top scale-y-95 overflow-y-auto border-b border-zen-border bg-zen-bg/95 px-6 py-6 opacity-0 shadow-zen backdrop-blur-sm transition-[opacity,transform] duration-200 ease-out sm:hidden"
     >
         <div class="flex flex-col gap-4">
             <a
@@ -213,7 +211,7 @@
                 </button>
                 <div
                     id="mobile-pages-collapse"
-                    class="overflow-hidden transition-all duration-300 {{ $isPagesActive ? 'max-h-40 opacity-100 mt-2' : 'max-h-0 opacity-0' }}"
+                    class="overflow-hidden transition-[max-height,opacity,margin] duration-200 {{ $isPagesActive ? 'max-h-40 opacity-100 mt-2' : 'max-h-0 opacity-0' }}"
                 >
                     <div class="flex flex-col gap-2 pl-4 pb-2">
                         <a
