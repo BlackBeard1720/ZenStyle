@@ -26,6 +26,9 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             NewsSeeder::class,
             StaffScheduleSeeder::class,
+            SupplierSeeder::class,
+            ProductSeeder::class,
+            PurchaseOrderSeeder::class,
         ]);
     }
 }

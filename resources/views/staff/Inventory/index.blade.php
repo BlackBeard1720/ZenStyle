@@ -114,7 +114,10 @@
       <div id="product-form" class="mb-5 hidden rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
         <h4 class="mb-4 text-base font-medium text-gray-800 dark:text-white/90">Create Product / Supply</h4>
 
-        <form method="POST" action="{{ route('staff.inventory.product.store') }}" class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <form method="POST"
+              action="{{ route('staff.inventory.product.store') }}"
+              enctype="multipart/form-data"
+              class="grid grid-cols-1 gap-4 md:grid-cols-3">
           @csrf
 
           <select name="supplier_id" class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
@@ -127,6 +130,12 @@
           <input name="product_name" placeholder="Product name" class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
 
           <input name="sku" placeholder="SKU" class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
 
           <input name="price" type="number" step="0.01" placeholder="Price" class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
 
@@ -256,8 +265,10 @@
                       <div class="h-[50px] w-[50px] overflow-hidden rounded-md bg-gray-100">
 
                         <img
-                          src="{{ asset('images/product-default.png') }}"
-                          alt="Product"
+                          src="{{ $product->image
+                          ? asset('storage/'.$product->image)
+                          : asset('images/product-default.png') }}"
+                          alt="{{ $product->product_name }}"
                           class="h-full w-full object-cover">
 
                       </div>
@@ -367,7 +378,7 @@
                     {{-- use product --}}
                     <form method="POST"
                           action="{{ route('staff.inventory.use', $product) }}"
-                          class="flex items-center gap-2">
+                          class="flex w-full items-center justify-end gap-2">
 
                       @csrf
 
@@ -376,14 +387,12 @@
                         type="number"
                         min="1"
                         placeholder="Use"
-                        class="h-9 w-20 rounded-lg border border-gray-300 bg-transparent px-3 text-xs dark:border-gray-700 dark:text-white/90">
+                        class="h-9 w-18 rounded-lg border border-gray-300 bg-transparent px-3 text-xs dark:border-gray-700 dark:text-white/90">
 
                       <button
                         type="submit"
-                        class="rounded-lg bg-brand-500 px-3 py-2 text-xs font-medium text-white hover:bg-brand-600">
-
+                        class="h-9 w-20 rounded-lg bg-brand-500 text-xs font-medium text-white hover:bg-brand-600">
                         Use
-
                       </button>
 
                     </form>
@@ -391,7 +400,7 @@
                     {{-- waste product --}}
                     <form method="POST"
                           action="{{ route('staff.inventory.waste', $product) }}"
-                          class="flex items-center gap-2">
+                          class="flex w-full items-center justify-end gap-2">
 
                       @csrf
 
@@ -400,14 +409,12 @@
                         type="number"
                         min="1"
                         placeholder="Waste"
-                        class="h-9 w-20 rounded-lg border border-gray-300 bg-transparent px-3 text-xs dark:border-gray-700 dark:text-white/90">
+                        class="h-9 w-18 rounded-lg border border-gray-300 bg-transparent px-3 text-xs dark:border-gray-700 dark:text-white/90">
 
                       <button
                         type="submit"
-                        class="rounded-lg bg-orange-500 px-3 py-2 text-xs font-medium text-white hover:bg-orange-600">
-
+                        class="h-9 w-20 rounded-lg bg-orange-500 text-xs font-medium text-white hover:bg-orange-600">
                         Waste
-
                       </button>
 
                     </form>
@@ -422,6 +429,7 @@
                 <td colspan="6" class="px-4 py-4 sm:px-6">
                   <form method="POST"
                         action="{{ route('staff.inventory.product.update', $product) }}"
+                        enctype="multipart/form-data"
                         class="grid grid-cols-1 gap-4 md:grid-cols-3">
                     @csrf
                     @method('PUT')
@@ -431,6 +439,12 @@
 
                     <input name="sku" value="{{ $product->sku }}"
                            class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:text-white/90">
+
+                    <input
+                      type="file"
+                      name="image"
+                      accept="image/*"
+                      class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
 
                     <input name="price" type="number" step="0.01" value="{{ $product->price }}"
                            class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:text-white/90">
