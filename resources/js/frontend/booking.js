@@ -4,9 +4,6 @@ const SEL = {
     dayBtn: '[data-booking-day]',
     slotBtn: '[data-booking-slot]',
     serviceCheckbox: '[data-booking-service-row] input[type="checkbox"]',
-    promoBtn: '[data-booking-promo-apply]',
-    promoInput: '[data-booking-promo-input]',
-    promoHint: '[data-booking-promo-hint]',
     dateInput: '#booking-date',
     stylistRadios: 'input[data-booking-stylist-radio]',
     stylistCards: '[data-booking-stylist-card]',
@@ -151,9 +148,6 @@ function initBookingPage(root) {
     const dayButtons = [...root.querySelectorAll(SEL.dayBtn)];
     const slotButtons = [...root.querySelectorAll(SEL.slotBtn)];
     const dateInput = root.querySelector(SEL.dateInput);
-    const promoBtn = root.querySelector(SEL.promoBtn);
-    const promoInput = root.querySelector(SEL.promoInput);
-    const promoHint = root.querySelector(SEL.promoHint);
     const staffNameInput = root.querySelector(SEL.staffNameInput);
     const timeInput = root.querySelector(SEL.timeInput);
     const busyStaffUrl = root.dataset.bookingBusyStaffUrl ?? '/booking/busy-staff';
@@ -541,15 +535,6 @@ function initBookingPage(root) {
         summaryTotalEl.textContent = formatUsd(total);
     }
 
-    function clearPromoHint() {
-        if (!promoHint) return;
-
-        promoHint.hidden = true;
-        promoHint.textContent = '';
-        promoHint.classList.remove('text-zen-success');
-        promoHint.classList.add('text-zen-muted');
-    }
-
     function syncAllSummaries() {
         syncDayAvailability();
         syncSlotAvailability();
@@ -613,23 +598,6 @@ function initBookingPage(root) {
             syncStylistSummary();
         }),
     );
-
-    promoBtn?.addEventListener('click', () => {
-        const raw = promoInput?.value.trim() ?? '';
-        if (!promoHint || !promoInput) return;
-        if (!raw) {
-            promoHint.textContent = 'Please enter a promotion code.';
-            promoHint.hidden = false;
-            promoHint.classList.remove('text-zen-success');
-            promoHint.classList.add('text-zen-muted');
-            return;
-        }
-        promoHint.hidden = false;
-        promoHint.classList.remove('text-zen-muted');
-        promoHint.classList.add('text-zen-success');
-        promoHint.textContent = `Promotion code "${raw}" has been recorded (demo only, no discount applied).`;
-    });
-
     form?.addEventListener('submit', (e) => {
         if (!timeInput?.value) {
             e.preventDefault();
@@ -665,7 +633,6 @@ function initBookingPage(root) {
                 btn.setAttribute('aria-pressed', 'false');
             });
 
-            clearPromoHint();
             syncAllSummaries();
             scheduleBusyStaffRefresh();
         });

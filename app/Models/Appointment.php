@@ -14,7 +14,6 @@ class Appointment extends Model
 
     protected $fillable = [
         'client_id',
-        'coupon_id',
         'appointment_date',
         'appointment_time',
         'status',
@@ -32,11 +31,6 @@ class Appointment extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
-    }
-
-    public function coupon(): BelongsTo
-    {
-        return $this->belongsTo(Coupon::class);
     }
 
     public function appointmentServices(): HasMany

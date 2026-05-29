@@ -72,7 +72,6 @@ class CustomerBookController extends Controller
             'service_ids' => ['nullable', 'array'],
             'service_ids.*' => ['integer', Rule::exists('services', 'id')->where(fn ($query) => $query->where('status', 'active'))],
             'staff_id' => ['nullable', 'integer', 'exists:staff,id'],
-            'coupon_code' => ['nullable', 'string', 'max:50'],
             'notes' => ['nullable', 'string'],
         ]);
 
