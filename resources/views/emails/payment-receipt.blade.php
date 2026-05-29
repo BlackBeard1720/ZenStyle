@@ -18,6 +18,7 @@
   };
 
   $receiptNo = 'PAY-' . str_pad((string) $payment->id, 6, '0', STR_PAD_LEFT);
+  $supportEmail = config('mail.from.address');
 @endphp
 
 <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7f6;padding:24px 0;">
@@ -169,6 +170,15 @@
             <p style="margin:24px 0 0;font-size:14px;line-height:1.6;color:#4b5563;">
               Thank you for choosing ZenStyle. We hope to see you again soon.
             </p>
+
+            @if($supportEmail)
+              <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#4b5563;">
+                If you have any questions, please contact us at
+                <a href="mailto:{{ $supportEmail }}" style="color:#0f766e;font-weight:bold;text-decoration:underline;">
+                  {{ $supportEmail }}
+                </a>.
+              </p>
+            @endif
           </td>
         </tr>
 

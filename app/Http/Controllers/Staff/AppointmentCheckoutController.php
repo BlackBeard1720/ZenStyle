@@ -56,11 +56,13 @@ class AppointmentCheckoutController extends Controller
         ]);
 
         $payment = DB::transaction(function () use ($appointment, $data) {
+            $transactionCode = 'CASH-' . now()->format('YmdHis') . '-' . $appointment->id;
             return Payment::create([
                 'appointment_id' => $appointment->id,
                 'amount' => $appointment->total_amount,
                 'payment_method' => $data['payment_method'],
                 'status' => 'paid',
+                'transaction_code' => $transactionCode,
                 'note' => $data['note'] ?? null,
                 'paid_at' => now(),
             ]);
