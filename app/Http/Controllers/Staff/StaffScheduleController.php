@@ -44,7 +44,7 @@ class StaffScheduleController extends Controller
         if ($data['status'] === 'scheduled' && (empty($data['start_time']) || empty($data['end_time']))) {
             return back()
                 ->withInput()
-                ->withErrors(['start_time' => 'Ca làm cần có giờ bắt đầu và giờ kết thúc.']);
+                ->withErrors(['start_time' => ' need to have start time and end time.']);
         }
 
         if (in_array($data['status'], ['off', 'leave'])) {
@@ -60,7 +60,7 @@ class StaffScheduleController extends Controller
             $data
         );
 
-        return back()->with('success', 'Lưu lịch làm việc thành công.');
+        return back()->with('success', ' successfull saved ');
     }
 
     public function update(Request $request, StaffSchedule $staffSchedule)
@@ -77,7 +77,7 @@ class StaffScheduleController extends Controller
         if ($data['status'] === 'scheduled' && (empty($data['start_time']) || empty($data['end_time']))) {
             return back()
                 ->withInput()
-                ->withErrors(['start_time' => 'Ca làm cần có giờ bắt đầu và giờ kết thúc.']);
+                ->withErrors(['start_time' => ' need to have start time and end time.']);
         }
 
         if (in_array($data['status'], ['off', 'leave'])) {
@@ -87,13 +87,13 @@ class StaffScheduleController extends Controller
 
         $staffSchedule->update($data);
 
-        return back()->with('success', 'Cập nhật lịch làm việc thành công.');
+        return back()->with('success', 'successfull updated');
     }
 
     public function destroy(StaffSchedule $staffSchedule)
     {
         $staffSchedule->delete();
 
-        return back()->with('success', 'Xóa lịch làm việc thành công.');
+        return back()->with('success', 'successfull deleted');
     }
 }
