@@ -130,8 +130,8 @@
           <p class="mt-1 text-sm text-zen-muted">Let the salon arrange your appointment or choose your preferred
             stylist.</p>
 
-          {{-- Horizontal scroll, moi card co width co dinh de scroll dep tren moi man hinh --}}
-          <div class="mt-4 flex gap-4 overflow-x-auto pb-3" role="radiogroup"
+          {{-- Vertical scroll dong bo voi service list --}}
+          <div class="mt-4 max-h-80 overflow-y-auto grid grid-cols-2 gap-3" role="radiogroup"
                aria-label="Select staff member in charge">
             @foreach ($bookingStylists as $stylist)
               @php
@@ -144,7 +144,7 @@
                 role="radio"
                 aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
                 @class([
-                  'w-56 shrink-0 group relative flex flex-col overflow-hidden rounded border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-150 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
+                  'group relative flex flex-col overflow-hidden rounded border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-150 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
                   'cursor-pointer hover:border-zen-primary/50 hover:bg-zen-accent-soft/30 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft' => $stylistAvailable,
                   'cursor-not-allowed opacity-60 grayscale-[.15]' => ! $stylistAvailable,
                 ])
@@ -246,7 +246,7 @@
             </div>
           @endif
 
-          <ul class="mt-4 divide-y divide-zen-border rounded border border-zen-border" data-service-list>
+          <ul class="mt-4 max-h-80 overflow-y-auto divide-y divide-zen-border rounded border border-zen-border" data-service-list>
             @forelse ($services as $service)
               @php
                 $serviceCategoryName = $service->category?->name ?? 'Other';
@@ -413,7 +413,7 @@
             <div>
               <dt class="text-zen-muted">Services</dt>
               <dd id="booking-summary-services"
-                  class="mt-2 min-w-0 space-y-1 break-words text-right font-medium text-zen-text">
+                  class="mt-2 max-h-36 overflow-y-auto min-w-0 space-y-1 break-words pr-1 text-right font-medium text-zen-text">
                 <p class="text-xs font-normal text-zen-muted">No services selected</p>
               </dd>
             </div>
