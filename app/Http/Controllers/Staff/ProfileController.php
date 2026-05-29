@@ -19,12 +19,7 @@ class ProfileController extends Controller
         return view('staff.profile.show', compact('user'));
     }
 
-    public function edit(Request $request): View
-    {
-        $user = $request->user()->loadMissing(['role', 'staff']);
 
-        return view('staff.profile.edit', compact('user'));
-    }
 
     public function update(Request $request): RedirectResponse
     {
@@ -48,15 +43,9 @@ class ProfileController extends Controller
             ->where('non_unique', 0)
             ->exists();
 
+        // Profile ca nhan chi cho phep cap nhat avatar va phone. Cac thong tin khac do admin quan ly.
         $rules = [
-            'full_name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
-            'email' => [
-                'nullable',
-                'email',
-                'max:255',
-                Rule::unique('staff', 'email')->ignore($staff->id),
-            ],
             'avatar' => ['nullable', 'url', 'max:2048'],
         ];
 
