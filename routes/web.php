@@ -102,7 +102,7 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/news', 'news')->name('news');
     Route::get('/hot-trend', 'hotTrend')->name('hot-trend.index');
     Route::get('/dich-vu', 'services')->name('services');
-    Route::get('/dich-vu/{slug}', 'serviceShow')->name('services.show');
+    Route::get('/dich-vu/{service}', 'serviceShow')->name('services.show');
     Route::post('/dich-vu/{service}/comments', [ServiceCommentController::class, 'store'])->name('services.comments.store');
     Route::get('/chinh-sach-bao-mat', 'privacyPolicy')->name('privacy-policy');
     Route::get('/dieu-khoan-su-dung', 'termsOfService')->name('terms-of-service');

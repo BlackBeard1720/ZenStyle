@@ -56,12 +56,8 @@
       @else
         <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           @foreach ($services as $service)
-            @php
-              $serviceUrl = route('services.show', ['slug' => \Illuminate\Support\Str::slug($service->name)]);
-            @endphp
-
             <a
-              href="{{ $serviceUrl }}"
+              href="{{ route('services.show', $service) }}"
               class="block overflow-hidden border border-zen-border bg-white shadow-zen"
             >
               <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">

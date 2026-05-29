@@ -219,14 +219,14 @@ class FrontendServiceCatalog
 
         return array_map(fn (array $service) => $service + [
             'bookingUrl' => route('booking', ['service' => $service['slug']]),
-            'showUrl' => route('services.show', $service['slug']),
+            'showUrl' => route('services'),
         ], $services);
     }
 
-    public static function find(string $slug): ?array
+    public static function find(string $serviceKey): ?array
     {
         foreach (static::all() as $service) {
-            if ($service['slug'] === $slug) {
+            if ($service['slug'] === $serviceKey) {
                 return $service;
             }
         }
@@ -245,18 +245,17 @@ class FrontendServiceCatalog
     public static function fromServiceModel(Service $service): array
     {
         $profile = static::serviceProfile($service);
-        $slug = static::serviceSlug($service);
         $rawPrice = (float) $service->price;
-        $rawDuration = (int) $service->duration_minutes;
+        $rawDuration = (int) $service->duration;
 
         return [
-            'slug' => $slug,
-            'title' => $service->service_name,
+            'id' => $service->id,
+            'title' => $service->name,
             'description' => $service->description ?: $profile['description'],
             'longDescription' => $service->description
                 ? $service->description . ' Doi ngu ZenStyle se tu van them dua tren tinh trang thuc te truoc khi thuc hien.'
                 : $profile['longDescription'],
-            'duration' => $service->duration_minutes . ' phut',
+            'duration' => $service->duration . ' phut',
             'price' => number_format($rawPrice, 0, ',', '.') . 'd',
             'raw_price' => $rawPrice,
             'raw_duration' => $rawDuration,
@@ -269,8 +268,8 @@ class FrontendServiceCatalog
             'suitableFor' => $profile['suitableFor'],
             'expectedResults' => $profile['expectedResults'],
             'aftercare' => $profile['aftercare'],
-            'bookingUrl' => route('booking', ['service' => $slug]),
-            'showUrl' => route('services.show', $slug),
+            'bookingUrl' => route('booking', ['service' => $service->id]),
+            'showUrl' => route('services.show', $service),
         ];
     }
 
@@ -305,11 +304,6 @@ class FrontendServiceCatalog
         return 'Khác';
     }
 
-    public static function serviceSlug(Service $service): string
-    {
-        return Str::slug($service->service_name) . '-' . $service->id;
-    }
-
     public static function homeGroupsFromServiceModels(Collection $services): array
     {
         return $services
@@ -318,12 +312,12 @@ class FrontendServiceCatalog
                 $profile = static::serviceProfile($service);
 
                 return [
-                    'title' => $service->service_name,
+                    'title' => $service->name,
                     'description' => $service->description ?: $profile['description'],
                     'image' => $profile['images'][0],
-                    'alt' => 'Dich vu ' . $service->service_name . ' tai ZenStyle',
+                    'alt' => 'Dich vu ' . $service->name . ' tai ZenStyle',
                     'items' => [
-                        $service->duration_minutes . ' phut',
+                        $service->duration . ' phut',
                         number_format((float) $service->price, 0, ',', '.') . 'd',
                         ucfirst($service->status),
                     ],

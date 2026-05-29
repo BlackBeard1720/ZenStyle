@@ -107,6 +107,9 @@
             </table>
 
             <h3 style="margin:24px 0 10px;font-size:16px;color:#111827;">Services</h3>
+            <p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:#4b5563;">
+              Share your experience by reviewing each service you booked.
+            </p>
 
             <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;">
               <tr style="background:#f9fafb;">
@@ -124,6 +127,12 @@
                       <span style="font-size:12px;color:#6b7280;">
                                                 {{ $item->service->duration }} minutes
                                             </span>
+                    @endif
+                    @if($item->service)
+                      <br>
+                      <a href="{{ route('services.show', $item->service) }}#comments" style="display:inline-block;margin-top:8px;padding:7px 12px;border-radius:999px;background:#0f766e;color:#ffffff;font-size:12px;font-weight:bold;text-decoration:none;">
+                        Đánh giá dịch vụ này
+                      </a>
                     @endif
                   </td>
                   <td style="padding:12px 14px;border-bottom:1px solid #f3f4f6;">
