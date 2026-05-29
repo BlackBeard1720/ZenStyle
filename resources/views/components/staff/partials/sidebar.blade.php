@@ -270,16 +270,15 @@
           @endcanany
           <!-- Menu Item Service Management -->
 
-          <!-- Menu Item Client Management Group -->
+          <!-- Menu Item Clients -->
           <li>
             <a
-              href="#"
-              @click.prevent="selected = (selected === 'ClientManagementGroup' ? '':'ClientManagementGroup')"
+              href="{{ route('staff.clients.index') }}"
               class="menu-item group"
-              :class="(selected === 'ClientManagementGroup') || (page === 'ClientManagement' || page === 'ClientAccount') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="(selected === 'Clients' || page === 'ClientManagement') ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="(selected === 'ClientManagementGroup') || (page === 'ClientManagement' || page === 'ClientAccount') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                :class="(selected === 'Clients' || page === 'ClientManagement') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -298,90 +297,11 @@
                 class="menu-item-text"
                 :class="sidebarToggle ? 'lg:hidden' : ''"
               >
-                Client Management
+                Clients
               </span>
-
-              <svg
-                class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                :class="[(selected === 'ClientManagementGroup') || (page === 'ClientManagement' || page === 'ClientAccount') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4.79175 7.39584L10.0001 12.6042L15.2084 7.39585"
-                  stroke=""
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
             </a>
-
-            <div
-              class="overflow-hidden transform translate"
-              :class="(selected === 'ClientManagementGroup') || (page === 'ClientManagement' || page === 'ClientAccount') ? 'block' :'hidden'"
-            >
-              <ul
-                :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
-              >
-                <li>
-                  <a
-                    href="{{ route('staff.clients.index') }}"
-                    class="menu-dropdown-item group flex items-center gap-2"
-                    :class="page === 'ClientManagement' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                  >
-                    <svg
-                      class="fill-current"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M9 11.75C6.79086 11.75 5 9.95914 5 7.75C5 5.54086 6.79086 3.75 9 3.75C11.2091 3.75 13 5.54086 13 7.75C13 9.95914 11.2091 11.75 9 11.75ZM9 5.25C7.61929 5.25 6.5 7.75 6.5 7.75C6.5 7.75 7.61929 10.25 9 10.25C10.3807 10.25 11.5 9.13071 11.5 7.75C11.5 6.36929 10.3807 5.25 9 5.25ZM15 19.25C15 16.6266 12.8734 14.5 10.25 14.5H7.75C5.12665 14.5 3 16.6266 3 19.25C3 19.6642 2.66421 20 2.25 20C1.83579 20 1.5 19.6642 1.5 19.25C1.5 15.7982 4.29822 13 7.75 13H10.25C13.7018 13 16.5 15.7982 16.5 19.25C16.5 19.6642 16.1642 20 15.75 20C15.3358 20 15 19.6642 15 19.25ZM16.25 11.75C14.5931 11.75 13.25 10.4069 13.25 8.75C13.25 7.09315 14.5931 5.75 16.25 5.75C17.9069 5.75 19.25 7.09315 19.25 8.75C19.25 10.4069 17.9069 11.75 16.25 11.75ZM16.25 7.25C15.4216 7.25 14.75 7.92157 14.75 8.75C14.75 9.57843 15.4216 10.25 16.25 10.25C17.0784 10.25 17.75 9.57843 17.75 8.75C17.75 7.92157 17.0784 7.25 16.25 7.25ZM22.5 18.25C22.5 15.4886 20.2614 13.25 17.5 13.25H16.75C16.3358 13.25 16 13.5858 16 14C16 14.4142 16.3358 14.75 16.75 14.75H17.5C19.433 14.75 21 16.317 21 18.25C21 18.6642 21.3358 19 21.75 19C22.1642 19 22.5 18.6642 22.5 18.25Z"
-                        fill=""
-                      />
-                    </svg>
-                    Clients
-                  </a>
-                </li>
-                @can('manage-staff-users')
-                <li>
-                  <a
-                    href="{{ route('staff.client-accounts.index') }}"
-                    class="menu-dropdown-item group flex items-center gap-2"
-                    :class="page === 'ClientAccount' ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
-                  >
-                    <svg
-                      class="fill-current"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M9 4.75C7.20507 4.75 5.75 6.20507 5.75 8C5.75 9.79493 7.20507 11.25 9 11.25C10.7949 11.25 12.25 9.79493 12.25 8C12.25 6.20507 10.7949 4.75 9 4.75ZM4.25 8C4.25 5.37665 6.37665 3.25 9 3.25C11.6234 3.25 13.75 5.37665 13.75 8C13.75 10.6234 11.6234 12.75 9 12.75C6.37665 12.75 4.25 10.6234 4.25 8ZM16 6.75C14.8954 6.75 14 7.64543 14 8.75C14 9.85457 14.8954 10.75 16 10.75C17.1046 10.75 18 9.85457 18 8.75C18 7.64543 17.1046 6.75 16 6.75ZM12.5 8.75C12.5 6.817 14.067 5.25 16 5.25C17.933 5.25 19.5 6.817 19.5 8.75C19.5 10.683 17.933 12.25 16 12.25C14.067 12.25 12.5 10.683 12.5 8.75ZM2.25 20C2.25 16.5482 5.04822 13.75 8.5 13.75H9.5C12.9518 13.75 15.75 16.5482 15.75 20C15.75 20.4142 15.4142 20.75 15 20.75C14.5858 20.75 14.25 20.4142 14.25 20C14.25 17.3766 12.1234 15.25 9.5 15.25H8.5C5.87665 15.25 3.75 17.3766 3.75 20C3.75 20.4142 3.41421 20.75 3 20.75C2.58579 20.75 2.25 20.4142 2.25 20ZM17 14.75C16.5858 14.75 16.25 15.0858 16.25 15.5C16.25 15.9142 16.5858 16.25 17 16.25H17.5C19.0188 16.25 20.25 17.4812 20.25 19C20.25 19.4142 20.5858 19.75 21 19.75C21.4142 19.75 21.75 19.4142 21.75 19C21.75 16.6528 19.8472 14.75 17.5 14.75H17Z"
-                        fill=""
-                      />
-                    </svg>
-                    Client Account
-                  </a>
-                </li>
-                @endcan
-              </ul>
-            </div>
           </li>
-          <!-- Menu Item Client Management Group -->
+          <!-- Menu Item Clients -->
 
           <!-- Menu Item News -->
           <li>
@@ -488,10 +408,10 @@
               href="#"
               @click.prevent="selected = (selected === 'StaffManagement' ? '':'StaffManagement')"
               class="menu-item group"
-              :class="(selected === 'StaffManagement') || (page === 'StaffAccount' || page === 'UserManagement' || page === 'StaffScheduleManagement' || page === 'AttendanceManagement' || page === 'PayrollManagement') ? 'menu-item-active' : 'menu-item-inactive'"
+              :class="(selected === 'StaffManagement') || (page === 'StaffAccount' || page === 'UserManagement' || page === 'StaffProfileManagement' || page === 'StaffScheduleManagement' || page === 'AttendanceManagement' || page === 'PayrollManagement') ? 'menu-item-active' : 'menu-item-inactive'"
             >
               <svg
-                :class="(selected === 'StaffManagement') || (page === 'StaffAccount' || page === 'UserManagement' || page === 'StaffScheduleManagement' || page === 'AttendanceManagement' || page === 'PayrollManagement') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
+                :class="(selected === 'StaffManagement') || (page === 'StaffAccount' || page === 'UserManagement' || page === 'StaffProfileManagement' || page === 'StaffScheduleManagement' || page === 'AttendanceManagement' || page === 'PayrollManagement') ? 'menu-item-icon-active' : 'menu-item-icon-inactive'"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -516,7 +436,7 @@
 
               <svg
                 class="menu-item-arrow absolute right-2.5 top-1/2 -translate-y-1/2 stroke-current"
-                :class="[(selected === 'StaffManagement') || (page === 'StaffAccount' || page === 'UserManagement' || page === 'StaffScheduleManagement' || page === 'AttendanceManagement' || page === 'PayrollManagement') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
+                :class="[(selected === 'StaffManagement') || (page === 'StaffAccount' || page === 'UserManagement' || page === 'StaffProfileManagement' || page === 'StaffScheduleManagement' || page === 'AttendanceManagement' || page === 'PayrollManagement') ? 'menu-item-arrow-active' : 'menu-item-arrow-inactive', sidebarToggle ? 'lg:hidden' : '' ]"
                 width="20"
                 height="20"
                 viewBox="0 0 20 20"
@@ -535,14 +455,14 @@
 
             <div
               class="overflow-hidden transform translate"
-              :class="(selected === 'StaffManagement') || (page === 'StaffAccount' || page === 'UserManagement' || page === 'StaffScheduleManagement' || page === 'AttendanceManagement' || page === 'PayrollManagement') ? 'block' :'hidden'"
+              :class="(selected === 'StaffManagement') || (page === 'StaffAccount' || page === 'UserManagement' || page === 'StaffProfileManagement' || page === 'StaffScheduleManagement' || page === 'AttendanceManagement' || page === 'PayrollManagement') ? 'block' :'hidden'"
             >
               <ul
                 :class="sidebarToggle ? 'lg:hidden' : 'flex'"
                 class="flex flex-col gap-1 mt-2 menu-dropdown pl-9"
               >
                 @can('manage-staff-users')
-                <!-- Staff Profiles (truoc day la Staff Account) -->
+                <!-- Staff Accounts (truoc day la Staff Account) -->
                 <li>
                   <a
                     href="{{ route('staff.users.index') }}"
@@ -563,6 +483,20 @@
                         d="M12 3.75C9.92893 3.75 8.25 5.42893 8.25 7.5C8.25 9.57107 9.92893 11.25 12 11.25C14.0711 11.25 15.75 9.57107 15.75 7.5C15.75 5.42893 14.0711 3.75 12 3.75ZM6.75 7.5C6.75 4.60051 9.10051 2.25 12 2.25C14.8995 2.25 17.25 4.60051 17.25 7.5C17.25 10.3995 14.8995 12.75 12 12.75C9.10051 12.75 6.75 10.3995 6.75 7.5ZM5.25 20.25C5.25 16.5221 8.27208 13.5 12 13.5C15.7279 13.5 18.75 16.5221 18.75 20.25C18.75 20.6642 18.4142 21 18 21C17.5858 21 17.25 20.6642 17.25 20.25C17.25 17.3505 14.8995 15 12 15C9.10051 15 6.75 17.3505 6.75 20.25C6.75 20.6642 6.41421 21 6 21C5.58579 21 5.25 20.6642 5.25 20.25Z"
                         fill=""
                       />
+                    </svg>
+                    Staff Accounts
+                  </a>
+                </li>
+                
+                <!-- Staff Profiles -->
+                <li>
+                  <a
+                    href="{{ route('staff.staff-profiles.index') }}"
+                    class="menu-dropdown-item group flex items-center gap-2"
+                    :class="(page === 'StaffProfileManagement') ? 'menu-dropdown-item-active' : 'menu-dropdown-item-inactive'"
+                  >
+                    <svg class="fill-current" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M11 2C11 1.44772 11.4477 1 12 1C12.5523 1 13 1.44772 13 2V4.00445C17.4332 4.14811 21 7.73176 21 12.1622V20C21 21.6569 19.6569 23 18 23H6C4.34315 23 3 21.6569 3 20V12.1622C3 7.73176 6.56676 4.14811 11 4.00445V2ZM11 5.96102V7C11 7.55228 11.4477 8 12 8C12.5523 8 13 7.55228 13 7V5.96102C16.3263 6.09673 19 8.82885 19 12.1622V20C19 20.5523 18.5523 21 18 21H6C5.44772 21 5 20.5523 5 20V12.1622C5 8.82885 7.67366 6.09673 11 5.96102ZM9.5 13C10.3284 13 11 12.3284 11 11.5C11 10.6716 10.3284 10 9.5 10C8.67157 10 8 10.6716 8 11.5C8 12.3284 8.67157 13 9.5 13ZM13 11.5C13 12.3284 13.6716 13 14.5 13C15.3284 13 16 12.3284 16 11.5C16 10.6716 15.3284 10 14.5 10C13.6716 10 13 10.6716 13 11.5ZM7 16.5C7 15.6716 7.67157 15 8.5 15H15.5C16.3284 15 17 15.6716 17 16.5C17 17.3284 16.3284 18 15.5 18H8.5C7.67157 18 7 17.3284 7 16.5Z" fill=""/>
                     </svg>
                     Staff Profiles
                   </a>

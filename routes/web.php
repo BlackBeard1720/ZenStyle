@@ -15,6 +15,7 @@ use App\Http\Controllers\Staff\PayrollController;
 use App\Http\Controllers\Staff\PaymentController;
 use App\Http\Controllers\Staff\StaffScheduleController;
 use App\Http\Controllers\Staff\UserController;
+use App\Http\Controllers\Staff\StaffProfileController;
 use App\Http\Controllers\Staff\NewsController;
 use App\Http\Controllers\Staff\ServiceController;
 use App\Http\Controllers\Staff\DashboardController;
@@ -179,20 +180,16 @@ Route::prefix('staff')->name('staff.')
         Route::get('/dashboard/data', [DashboardController::class, 'data'])->name('staff.dashboard.data');
 
         Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
         Route::resource('users', UserController::class)
             ->middleware('can:manage-staff-users');
 
-        Route::get('client-accounts', function () {
-            return response()->view('staff.errors.404', [
-                'code' => 404,
-                'title' => 'Client Account',
-                'heading' => 'COMING SOON',
-                'message' => 'Client Account management is not available yet.',
-            ], 404);
-        })->middleware('can:manage-staff-users')->name('client-accounts.index');
+        Route::resource('staff-profiles', StaffProfileController::class)
+            ->parameters(['staff-profiles' => 'staff'])
+            ->middleware('can:manage-staff-users');
+
+
 
         Route::resource('appointments', AppointmentController::class);
 
