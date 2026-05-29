@@ -276,7 +276,7 @@ class AppointmentController extends Controller
         return Appointment::query()
             ->whereDate('appointment_date', $data['appointment_date'])
             ->whereTime('appointment_time', $data['appointment_time'])
-            ->where('status', '!=', 'cancelled')
+            ->whereIn('status', ['pending', 'confirmed'])
             ->when($appointment, fn ($query) => $query->whereKeyNot($appointment->id))
             ->whereHas('appointmentServices', function ($query) use ($staffId) {
                 $query->where('staff_id', $staffId);
