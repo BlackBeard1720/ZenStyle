@@ -1,4 +1,4 @@
-<x-frontend.layout title="ZenStyle — Liên hệ" main-class="bg-zen-bg pt-20">
+<x-frontend.layout title="ZenStyle — Contact Us" main-class="bg-zen-bg pt-20">
     @php
         $googleFormUrl = 'https://forms.gle/CQn7soz85KCEsj1HA';
         $googleFormOpenUrl = 'https://forms.gle/CQn7soz85KCEsj1HA';
@@ -9,10 +9,10 @@
             <div class="max-w-2xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary-dark">Contact form</p>
                 <h1 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-                    Biểu mẫu liên hệ
+                    Contact Form
                 </h1>
                 <p class="mt-4 text-sm leading-relaxed text-zen-muted sm:text-base">
-                    Gửi thông tin tư vấn, đặt lịch hoặc phản hồi cho ZenStyle. Team salon sẽ liên hệ lại qua số điện thoại hoặc email bạn cung cấp.
+                    Submit your consultation request, booking details, or feedback to ZenStyle. Our salon team will contact you back via the phone number or email you provide.
                 </p>
             </div>
 
@@ -22,7 +22,7 @@
                 rel="noopener noreferrer"
                 class="zen-btn-primary"
             >
-                Mở trong Google
+                Open in Google
             </a>
         </div>
     </section>
@@ -38,12 +38,12 @@
                         rel="noopener noreferrer"
                         class="text-sm font-medium text-zen-primary hover:text-zen-primary-dark"
                     >
-                        Mở tab mới
+                        Open in new tab
                     </a>
                 </div>
 
                 <iframe
-                    title="Biểu mẫu liên hệ ZenStyle"
+                    title="ZenStyle Contact Form"
                     src="{{ $googleFormUrl }}"
                     class="h-[760px] w-full border-0 bg-white sm:h-[860px]"
                     loading="lazy"
@@ -52,4 +52,7 @@
             </div>
         </div>
     </section>
+
+    <!-- Visit ZenStyle Section -->
+    <x-frontend.contact-section />
 </x-frontend.layout>

@@ -48,6 +48,12 @@ function initNavbarAutoHide() {
             activeKey = 'contact';
         } else if (path === '/faq') {
             activeKey = 'faq';
+        } else if (path === '/chinh-sach-bao-mat') {
+            activeKey = 'privacy-policy';
+        } else if (path === '/dieu-khoan-su-dung') {
+            activeKey = 'terms-of-service';
+        } else if (path === '/booking') {
+            activeKey = 'booking';
         }
 
         if (!activeKey) {
@@ -64,6 +70,20 @@ function initNavbarAutoHide() {
                 activeLink.classList.add('text-zen-primary');
             }
         });
+
+        // Highlight Pages dropdown trigger if nested page is active
+        if (activeKey === 'faq' || activeKey === 'privacy-policy' || activeKey === 'terms-of-service') {
+            const pageTriggers = header.querySelectorAll(`.site-nav-link[data-nav-key="pages"], .mobile-nav-link[data-nav-key="pages"]`);
+            pageTriggers.forEach((trigger) => {
+                trigger.classList.add('is-active');
+                trigger.classList.remove('text-zen-muted');
+                if (trigger.classList.contains('site-nav-link')) {
+                    trigger.classList.add('text-zen-accent', 'after:scale-x-100');
+                } else {
+                    trigger.classList.add('text-zen-primary');
+                }
+            });
+        }
     }
 
     function updateHeroNavTheme() {
@@ -229,11 +249,59 @@ function initMobileMenu() {
     window.addEventListener('resize', () => {
         if (window.innerWidth >= 640) {
             toggleBtn.setAttribute('aria-expanded', 'false');
-            mobileMenu.classList.remove('pointer-events-auto', 'opacity-100', 'scale-y-100');
+            mobileMenu.classList.remove('pointer-events-auto', 'opacity-100', 'scale-y-95');
             mobileMenu.classList.add('pointer-events-none', 'opacity-0', 'scale-y-95');
             header.classList.remove('mobile-menu-open');
         }
     }, { passive: true });
+}
+
+function initDesktopDropdown() {
+    const dropdown = document.getElementById('desktop-pages-dropdown');
+    const trigger = document.getElementById('desktop-pages-trigger');
+
+    if (!dropdown || !trigger) return;
+
+    trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.contains('is-open');
+        if (isOpen) {
+            dropdown.classList.remove('is-open');
+        } else {
+            dropdown.classList.add('is-open');
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('is-open');
+        }
+    });
+}
+
+function initMobilePagesCollapse() {
+    const toggle = document.getElementById('mobile-pages-toggle');
+    const collapse = document.getElementById('mobile-pages-collapse');
+    const arrow = document.getElementById('mobile-pages-arrow');
+
+    if (!toggle || !collapse || !arrow) return;
+
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+        toggle.setAttribute('aria-expanded', !isOpen);
+
+        if (!isOpen) {
+            collapse.classList.remove('max-h-0', 'opacity-0');
+            collapse.classList.add('max-h-40', 'opacity-100', 'mt-2');
+            arrow.classList.add('rotate-180');
+        } else {
+            collapse.classList.remove('max-h-40', 'opacity-100', 'mt-2');
+            collapse.classList.add('max-h-0', 'opacity-0');
+            arrow.classList.remove('rotate-180');
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -241,4 +309,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollTopButton();
     initFloatingBookingButton();
     initMobileMenu();
+    initDesktopDropdown();
+    initMobilePagesCollapse();
 });
