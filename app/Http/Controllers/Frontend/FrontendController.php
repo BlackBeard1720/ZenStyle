@@ -14,10 +14,16 @@ class FrontendController extends Controller
 {
     public function home(): View
     {
+        $featuredServices = Service::query()
+            ->with('category')
+            ->where('status', 'active')
+            ->whereHas('category', fn ($query) => $query->where('status', 'active'))
+            ->orderBy('name')
+            ->take(6)
+            ->get();
+
         return view('frontend.home.index', [
-            'serviceGroups' => FrontendServiceCatalog::homeGroupsFromServiceModels(
-                $this->activeServices(3)
-            ),
+            'featuredServices' => $featuredServices,
         ]);
     }
 
@@ -45,11 +51,6 @@ class FrontendController extends Controller
         return view('frontend.news.index', [
             'posts' => $posts,
         ]);
-    }
-
-    public function hotTrend(): View
-    {
-        return view('frontend.hot-trend.index');
     }
 
     public function services(): View

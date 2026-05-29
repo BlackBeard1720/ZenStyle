@@ -20,7 +20,7 @@
                 href="{{ $googleFormOpenUrl }}"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex w-fit items-center justify-center rounded-full bg-zen-primary px-5 py-3 text-sm font-semibold text-zen-text-light shadow-zen transition hover:bg-zen-primary-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zen-bg"
+                class="zen-btn-primary"
             >
                 Mở trong Google
             </a>

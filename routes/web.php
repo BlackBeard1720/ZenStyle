@@ -100,7 +100,6 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/about', 'about')->name('about');
     Route::redirect('/gioi-thieu', '/about', 301)->name('about.vi');
     Route::get('/news', 'news')->name('news');
-    Route::get('/hot-trend', 'hotTrend')->name('hot-trend.index');
     Route::get('/dich-vu', 'services')->name('services');
     Route::get('/dich-vu/{service}', 'serviceShow')->name('services.show');
     Route::post('/dich-vu/{service}/comments', [ServiceCommentController::class, 'store'])->name('services.comments.store');

@@ -37,8 +37,8 @@
                 </dl>
 
                 <div class="mt-5 grid gap-3">
-                    <a href="{{ route('booking', ['service_id' => $service->id]) }}" class="booking-cta inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-sm font-semibold">Book Now</a>
-                    <a href="{{ route('services') }}" class="inline-flex w-full items-center justify-center rounded-full border border-zen-primary bg-white px-6 py-3 text-sm font-semibold text-zen-primary transition hover:bg-zen-accent-soft">Back to Services</a>
+                    <a href="{{ route('booking', ['service_id' => $service->id]) }}" class="zen-btn-primary w-full">Book Now</a>
+                    <a href="{{ route('services') }}" class="zen-btn-secondary w-full">Back to Services</a>
                 </div>
             </aside>
         </section>
@@ -76,7 +76,7 @@
                         <textarea id="comment" name="comment" rows="5" class="w-full rounded-zen-sm border border-zen-border px-3 py-2">{{ old('comment') }}</textarea>
                         @error('comment')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                     </div>
-                    <button type="submit" class="inline-flex rounded-full bg-zen-primary px-6 py-3 text-sm font-semibold text-white">Post comment</button>
+                    <button type="submit" class="zen-btn-primary">Post comment</button>
                 </form>
             </div>
         </section>

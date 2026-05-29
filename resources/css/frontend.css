@@ -175,6 +175,26 @@
         transform: translateY(-6px) rotate(-45deg);
     }
 
+    [data-service-track] {
+        display: flex;
+        width: max-content;
+        animation: service-marquee 32s linear infinite;
+        will-change: transform;
+    }
+
+    [data-service-carousel]:hover [data-service-track] {
+        animation-play-state: paused;
+    }
+
+    @keyframes service-marquee {
+        from {
+            transform: translate3d(0, 0, 0);
+        }
+        to {
+            transform: translate3d(-50%, 0, 0);
+        }
+    }
+
     .reveal-up {
         opacity: 0;
         transform: translate3d(0, 24px, 0);
@@ -273,5 +293,13 @@
         .hero-reveal {
             opacity: 1 !important;
         }
+    }
+
+    .zen-btn-primary {
+        @apply inline-flex items-center justify-center rounded-full bg-zen-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-zen-primary-light focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
+    }
+
+    .zen-btn-secondary {
+        @apply inline-flex items-center justify-center rounded-full border border-zen-primary bg-white px-6 py-3 text-sm font-semibold text-zen-primary transition-all duration-300 ease-out hover:bg-zen-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
     }
 }
