@@ -195,59 +195,33 @@
           <table class="min-w-full">
 
             <thead>
-
             <tr class="border-gray-100 border-y dark:border-gray-800">
 
-              <th class="py-3">
-                <div class="flex items-center">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                    Product
-                  </p>
-                </div>
+              <th class="px-6 py-3 text-left">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Product</p>
               </th>
 
-              <th class="py-3">
-                <div class="flex items-center">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                    Supplier
-                  </p>
-                </div>
+              <th class="px-6 py-3 text-left">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Supplier</p>
               </th>
 
-              <th class="py-3">
-                <div class="flex items-center">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                    Price
-                  </p>
-                </div>
+              <th class="px-6 py-3 text-left">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Price</p>
               </th>
 
-              <th class="py-3">
-                <div class="flex items-center">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                    Stock
-                  </p>
-                </div>
+              <th class="px-6 py-3 text-left">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Stock</p>
               </th>
 
-              <th class="py-3">
-                <div class="flex items-center">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                    Status
-                  </p>
-                </div>
+              <th class="px-6 py-3 text-left">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>
               </th>
 
-              <th class="py-3 text-right">
-                <div class="flex items-center justify-end">
-                  <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
-                    Actions
-                  </p>
-                </div>
+              <th class="px-6 py-3 text-right">
+                <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Actions</p>
               </th>
 
             </tr>
-
             </thead>
 
             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -255,131 +229,87 @@
             @forelse($products as $product)
 
               <tr>
-
-                <td class="py-3">
-
-                  <div class="flex items-center">
-
-                    <div class="flex items-center gap-3">
-
-                      <div class="h-[50px] w-[50px] overflow-hidden rounded-md bg-gray-100">
-
-                        <img
-                          src="{{ $product->image
-                          ? asset('storage/'.$product->image)
-                          : asset('images/product-default.png') }}"
-                          alt="{{ $product->product_name }}"
-                          class="h-full w-full object-cover">
-
-                      </div>
-
-                      <div>
-
-                        <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                          {{ $product->product_name }}
-                        </p>
-
-                        <span class="text-gray-500 text-theme-xs dark:text-gray-400">
-                  SKU: {{ $product->sku ?? 'N/A' }}
-                </span>
-
-                      </div>
-
+                <td class="px-6 py-4">
+                  <div class="flex items-center gap-4">
+                    <div class="h-[60px] w-[60px] overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
+                      <img
+                        src="{{ $product->image ? asset('storage/'.$product->image) : asset('images/product-default.png') }}"
+                        alt="{{ $product->product_name }}"
+                        class="h-full w-full object-cover">
                     </div>
 
-                  </div>
+                    <div>
+                      <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                        {{ $product->product_name }}
+                      </p>
 
+                      <span class="text-gray-500 text-theme-xs dark:text-gray-400">
+              SKU: {{ $product->sku ?? 'N/A' }}
+            </span>
+                    </div>
+                  </div>
                 </td>
 
-                <td class="py-3">
-
+                <td class="px-6 py-4">
                   <p class="text-gray-500 text-theme-sm dark:text-gray-400">
                     {{ $product->supplier?->supplier_name ?? 'No supplier' }}
                   </p>
-
                 </td>
 
-                <td class="py-3">
-
+                <td class="px-6 py-4">
                   <p class="text-gray-500 text-theme-sm dark:text-gray-400">
                     ${{ number_format($product->price ?? 0, 2) }}
                   </p>
-
                 </td>
 
-                <td class="py-3">
-
+                <td class="px-6 py-4">
                   @if($product->stock_quantity <= $product->min_threshold)
-
-                    <p class="inline-flex rounded-full bg-error-50 px-2 py-0.5 text-theme-xs font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
+                    <p class="inline-flex rounded-full bg-error-50 px-2.5 py-1 text-theme-xs font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
                       {{ $product->stock_quantity }}
                     </p>
-
                   @else
-
-                    <p class="inline-flex rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+                    <p class="inline-flex rounded-full bg-success-50 px-2.5 py-1 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
                       {{ $product->stock_quantity }}
                     </p>
-
                   @endif
-
                 </td>
 
-                <td class="py-3">
-
+                <td class="px-6 py-4">
                   @if($product->status === 'active')
-
-                    <p class="inline-flex rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+                    <p class="inline-flex rounded-full bg-success-50 px-2.5 py-1 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
                       Active
                     </p>
-
                   @else
-
-                    <p class="inline-flex rounded-full bg-error-50 px-2 py-0.5 text-theme-xs font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
+                    <p class="inline-flex rounded-full bg-error-50 px-2.5 py-1 text-theme-xs font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
                       Inactive
                     </p>
-
                   @endif
-
                 </td>
 
-                <td class="py-3">
-
+                <td class="px-6 py-4">
                   <div class="flex flex-col items-end gap-2">
-
                     <div class="flex items-center gap-2">
-
                       <button
                         onclick="toggleForm('edit-product-{{ $product->id }}')"
                         class="rounded-lg bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700">
-
                         Edit
-
                       </button>
 
-                      <form method="POST"
-                            action="{{ route('staff.inventory.product.destroy', $product) }}">
-
+                      <form method="POST" action="{{ route('staff.inventory.product.destroy', $product) }}">
                         @csrf
                         @method('DELETE')
 
                         <button
                           onclick="return confirm('Delete product?')"
                           class="rounded-lg bg-red-600 px-3 py-2 text-xs font-medium text-white hover:bg-red-700">
-
                           Delete
-
                         </button>
-
                       </form>
-
                     </div>
 
-                    {{-- use product --}}
                     <form method="POST"
                           action="{{ route('staff.inventory.use', $product) }}"
                           class="flex w-full items-center justify-end gap-2">
-
                       @csrf
 
                       <input
@@ -387,21 +317,18 @@
                         type="number"
                         min="1"
                         placeholder="Use"
-                        class="h-9 w-18 rounded-lg border border-gray-300 bg-transparent px-3 text-xs dark:border-gray-700 dark:text-white/90">
+                        class="h-9 w-24 rounded-lg border border-gray-300 bg-transparent px-3 text-xs dark:border-gray-700 dark:text-white/90">
 
                       <button
                         type="submit"
                         class="h-9 w-20 rounded-lg bg-brand-500 text-xs font-medium text-white hover:bg-brand-600">
                         Use
                       </button>
-
                     </form>
 
-                    {{-- waste product --}}
                     <form method="POST"
                           action="{{ route('staff.inventory.waste', $product) }}"
                           class="flex w-full items-center justify-end gap-2">
-
                       @csrf
 
                       <input
@@ -409,24 +336,20 @@
                         type="number"
                         min="1"
                         placeholder="Waste"
-                        class="h-9 w-18 rounded-lg border border-gray-300 bg-transparent px-3 text-xs dark:border-gray-700 dark:text-white/90">
+                        class="h-9 w-24 rounded-lg border border-gray-300 bg-transparent px-3 text-xs dark:border-gray-700 dark:text-white/90">
 
                       <button
                         type="submit"
                         class="h-9 w-20 rounded-lg bg-orange-500 text-xs font-medium text-white hover:bg-orange-600">
                         Waste
                       </button>
-
                     </form>
-
                   </div>
-
                 </td>
-
               </tr>
 
               <tr id="edit-product-{{ $product->id }}" class="hidden bg-gray-50 dark:bg-gray-900">
-                <td colspan="6" class="px-4 py-4 sm:px-6">
+                <td colspan="6" class="px-6 py-4">
                   <form method="POST"
                         action="{{ route('staff.inventory.product.update', $product) }}"
                         enctype="multipart/form-data"
@@ -440,11 +363,8 @@
                     <input name="sku" value="{{ $product->sku }}"
                            class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:text-white/90">
 
-                    <input
-                      type="file"
-                      name="image"
-                      accept="image/*"
-                      class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                    <input type="file" name="image" accept="image/*"
+                           class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
 
                     <input name="price" type="number" step="0.01" value="{{ $product->price }}"
                            class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:text-white/90">
@@ -477,17 +397,14 @@
             @empty
 
               <tr>
-
-                <td colspan="6" class="py-10 text-center text-gray-500">
+                <td colspan="6" class="px-6 py-10 text-center text-gray-500 dark:text-gray-400">
                   No products found.
                 </td>
-
               </tr>
 
             @endforelse
 
             </tbody>
-
           </table>
         </div>
       </div>
