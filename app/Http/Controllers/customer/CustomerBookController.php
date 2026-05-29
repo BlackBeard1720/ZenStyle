@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\EmailOtpService;
 use App\Services\FcmService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,31 @@ class CustomerBookController extends Controller
                 ->where('status', 'active')
                 ->orderBy('name')
                 ->get(),
+        ]);
+    }
+
+
+    public function busyStaff(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'appointment_date' => ['required', 'date'],
+            'appointment_time' => ['required', 'date_format:H:i'],
+        ]);
+
+        $busyStaffIds = AppointmentService::query()
+            ->whereNotNull('staff_id')
+            ->whereHas('appointment', function ($query) use ($data) {
+                $query->whereDate('appointment_date', $data['appointment_date'])
+                    ->whereTime('appointment_time', $data['appointment_time'])
+                    ->where('status', '!=', 'cancelled');
+            })
+            ->distinct()
+            ->pluck('staff_id')
+            ->map(fn ($staffId) => (int) $staffId)
+            ->values();
+
+        return response()->json([
+            'busy_staff_ids' => $busyStaffIds,
         ]);
     }
 
