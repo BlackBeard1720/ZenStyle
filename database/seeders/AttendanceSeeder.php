@@ -18,66 +18,81 @@ class AttendanceSeeder extends Seeder
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $schedules = StaffSchedule::all();
+        $schedules = StaffSchedule::query()
+            ->whereDate('work_date', '<=', now()->toDateString())
+            ->orderBy('work_date')
+            ->get();
 
         foreach ($schedules as $schedule) {
+            $workDate = Carbon::parse($schedule->work_date)->toDateString();
 
-            if ($schedule->status !== 'scheduled') {
-
+            if ($schedule->status === 'off') {
                 Attendance::create([
                     'staff_id' => $schedule->staff_id,
-                    'work_date' => $schedule->work_date,
-                    'status' => 'leave',
+                    'work_date' => $workDate,
+                    'check_in' => null,
+                    'check_out' => null,
+                    'status' => Attendance::STATUS_LEAVE,
                 ]);
 
                 continue;
             }
 
-            $start = Carbon::parse(
-                $schedule->work_date->format('Y-m-d')
-                .' '.$schedule->start_time
-            );
+            if ($schedule->status === 'leave') {
+                Attendance::create([
+                    'staff_id' => $schedule->staff_id,
+                    'work_date' => $workDate,
+                    'check_in' => null,
+                    'check_out' => null,
+                    'status' => Attendance::STATUS_LEAVE,
+                ]);
 
-            $end = Carbon::parse(
-                $schedule->work_date->format('Y-m-d')
-                .' '.$schedule->end_time
-            );
+                continue;
+            }
+
+            if (
+                $schedule->status !== 'scheduled' ||
+                empty($schedule->start_time) ||
+                empty($schedule->end_time)
+            ) {
+                continue;
+            }
+
+            $start = Carbon::parse($workDate . ' ' . $schedule->start_time);
+            $end = Carbon::parse($workDate . ' ' . $schedule->end_time);
 
             $rand = rand(1, 100);
 
-            // absent
             if ($rand <= 10) {
-
                 Attendance::create([
                     'staff_id' => $schedule->staff_id,
-                    'work_date' => $schedule->work_date,
-                    'status' => 'absent',
+                    'work_date' => $workDate,
+                    'check_in' => null,
+                    'check_out' => null,
+                    'status' => Attendance::STATUS_ABSENT,
                 ]);
 
                 continue;
             }
 
-            // late
             if ($rand <= 35) {
-
                 Attendance::create([
                     'staff_id' => $schedule->staff_id,
-                    'work_date' => $schedule->work_date,
+                    'work_date' => $workDate,
                     'check_in' => $start->copy()->addMinutes(rand(10, 45)),
-                    'check_out' => $end,
-                    'status' => 'late',
+                    'check_out' => $end->copy()->subMinutes(rand(0, 10)),
+                    'status' => Attendance::STATUS_LATE,
                 ]);
 
                 continue;
             }
 
-            // present
             Attendance::create([
                 'staff_id' => $schedule->staff_id,
-                'work_date' => $schedule->work_date,
+                'work_date' => $workDate,
                 'check_in' => $start->copy()->addMinutes(rand(0, 5)),
                 'check_out' => $end->copy()->subMinutes(rand(0, 10)),
-                'status' => 'present',
+                'status' => Attendance::STATUS_PRESENT,
             ]);
         }
     }
