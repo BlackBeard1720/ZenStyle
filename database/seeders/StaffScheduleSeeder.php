@@ -16,7 +16,8 @@ class StaffScheduleSeeder extends Seeder
         StaffSchedule::truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        $staffList = Staff::where('status', 'active')->get();
+        // Dung role tu bang users thay vi specialization
+        $staffList = Staff::with('user.role')->where('status', 'active')->get();
 
         if ($staffList->isEmpty()) {
             return;
@@ -39,9 +40,9 @@ class StaffScheduleSeeder extends Seeder
                     continue;
                 }
 
-                $specialization = strtolower($staff->specialization ?? '');
+                $roleName = strtolower($staff->user?->role?->role_name ?? '');
 
-                if (str_contains($specialization, 'receptionist')) {
+                if ($roleName === 'receptionist') {
                     StaffSchedule::create([
                         'staff_id' => $staff->id,
                         'work_date' => $date->toDateString(),
@@ -54,7 +55,7 @@ class StaffScheduleSeeder extends Seeder
                     continue;
                 }
 
-                if (str_contains($specialization, 'manager')) {
+                if ($roleName === 'admin') {
                     StaffSchedule::create([
                         'staff_id' => $staff->id,
                         'work_date' => $date->toDateString(),

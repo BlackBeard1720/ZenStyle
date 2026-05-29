@@ -23,19 +23,10 @@
     $bookingStylists = $staff->map(function ($s, $index) {
 
         $isActive = $s->status === 'active';
-        $years = $s->hire_date
-            ? max(0, (int) \Carbon\Carbon::parse($s->hire_date)->diffInYears(now()))
-            : null;
-
-        $experience = $years !== null
-            ? ($years >= 1 ? $years . ' years of experience' : 'Less than 1 year of experience')
-            : null;
 
         return [
             'id'           => $s->id,
             'name'         => $s->full_name,
-            'role'         => $s->specialization ?? 'Staff',
-            'experience'   => $experience,
             'status'       => $isActive ? 'Available' : 'Busy',
             'status_class' => $isActive
                 ? 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20'
@@ -81,126 +72,7 @@
           </div>
         @endif
 
-        {{-- Date + weekly calendar + time slots --}}
-        <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
-          <h2 class="text-base font-semibold text-zen-text">Select Date &amp; Time</h2>
-          <p class="mt-1 text-sm text-zen-muted">Choose a day of the week and a starting time slot.</p>
-
-          <div class="mt-4">
-            <label for="booking-date" class="mb-2 block text-sm font-medium text-zen-muted">Or choose a date</label>
-            <input
-              id="booking-date"
-              name="appointment_date"
-              type="date"
-              value="{{ $bookingToday->toDateString() }}"
-              min="{{ $bookingToday->toDateString() }}"
-              class="h-10 w-full max-w-xs rounded border border-zen-border bg-white px-3 text-sm text-zen-text outline-none ring-zen-primary focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
-            >
-          </div>
-
-          <p class="mb-2 mt-6 text-sm font-medium text-zen-muted">This Week</p>
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-7" role="radiogroup"
-               aria-label="Choose a day of the week">
-            @foreach ($bookingDays as $day)
-              <button
-                type="button"
-                data-booking-day
-                data-date="{{ $day['iso'] }}"
-                data-summary="{{ $day['summary'] }}"
-                aria-pressed="{{ $day['selected'] ? 'true' : 'false' }}"
-                class="rounded border px-3 py-2 text-left text-sm transition-colors border-zen-border bg-white text-zen-muted hover:border-zen-primary/40"
-              >
-                <span class="block text-xs text-zen-muted">{{ $day['label'] }}</span>
-                <span class="block tabular-nums">{{ $day['display'] }}</span>
-              </button>
-            @endforeach
-          </div>
-
-          <p class="mb-2 mt-6 text-sm font-medium text-zen-muted">Available Time Slots</p>
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6" role="radiogroup" aria-label="Start time">
-            @foreach (['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '17:00'] as $slot)
-              <button
-                type="button"
-                data-booking-slot
-                data-slot="{{ $slot }}"
-                aria-pressed="false"
-                class="rounded border px-2 py-2 text-sm transition-colors border-zen-border bg-white text-zen-muted hover:border-zen-primary/50"
-              >
-                {{ $slot }}
-              </button>
-            @endforeach
-          </div>
-        </section>
-
-        {{-- Staff --}}
-        <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
-          <h2 class="text-base font-semibold text-zen-text">Select Staff</h2>
-          <p class="mt-1 text-sm text-zen-muted">Let the salon arrange your appointment or choose your preferred
-            stylist.</p>
-
-          <div class="mt-4 grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3" role="radiogroup"
-               aria-label="Select staff member in charge">
-            @foreach ($bookingStylists as $stylist)
-              @php
-                $stylistAvailable = $stylist['is_available'] ?? true;
-              @endphp
-
-              <label
-                data-booking-stylist-card
-                data-booking-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
-                role="radio"
-                aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
-                @class([
-                  'group relative flex min-w-0 flex-col overflow-hidden rounded-zen-md border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-200 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
-                  'cursor-pointer hover:-translate-y-0.5 hover:border-zen-primary/50 hover:shadow-zen has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft has-[:checked]:shadow-zen-md' => $stylistAvailable,
-                  'cursor-not-allowed opacity-60 grayscale-[.15]' => ! $stylistAvailable,
-                ])
-              >
-                <input
-                  type="radio"
-                  name="staff_id"
-                  value="{{ $stylist['id'] }}"
-                  data-booking-stylist-radio
-                  data-stylist-name="{{ $stylist['name'] }}"
-                  data-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
-                  class="peer sr-only"
-                  @checked($stylist['checked'] && $stylistAvailable)
-                  @disabled(! $stylistAvailable)
-                >
-
-                <span class="flex min-w-0 items-start gap-3">
-                  <img
-                    src="{{ $stylist['image'] }}"
-                    alt="Profile photo of {{ $stylist['name'] }}"
-                    class="size-14 shrink-0 rounded-full border-2 border-white object-cover shadow-sm ring-1 ring-zen-border"
-                    loading="lazy"
-                  >
-                  <span class="min-w-0 flex-1">
-                    <span data-stylist-label
-                          class="block break-words text-sm font-semibold text-zen-text">{{ $stylist['name'] }}</span>
-                    <span
-                      class="mt-1 block break-words text-xs font-medium text-zen-primary">{{ $stylist['role'] }}</span>
-                    <span
-                      class="mt-2 inline-flex max-w-full rounded-full px-2.5 py-1 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
-                      {{ $stylist['status'] }}
-                    </span>
-                  </span>
-                </span>
-
-                @if($stylist['experience'])
-                  <span class="mt-4 grid gap-2 text-xs text-zen-muted">
-                    <span class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                      <span>Experience</span>
-                      <span class="text-right font-semibold text-zen-text">{{ $stylist['experience'] }}</span>
-                    </span>
-                  </span>
-                @endif
-              </label>
-            @endforeach
-          </div>
-        </section>
-
-        {{-- Services --}}
+        {{-- 1. Select Services --}}
         <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
           <h2 class="text-base font-semibold text-zen-text">Select Services</h2>
           <p class="mt-1 text-sm text-zen-muted">Search, sort, and select one or more services for your appointment.</p>
@@ -262,7 +134,7 @@
             </div>
           @endif
 
-          <ul class="mt-4 divide-y divide-zen-border rounded border border-zen-border" data-service-list>
+          <ul class="mt-4 max-h-80 overflow-y-auto divide-y divide-zen-border rounded border border-zen-border" data-service-list>
             @forelse ($services as $service)
               @php
                 $serviceCategoryName = $service->category?->name ?? 'Other';
@@ -314,7 +186,116 @@
           </p>
         </section>
 
-        {{-- Promotion --}}
+        {{-- 2. Date + weekly calendar + time slots --}}
+        <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
+          <h2 class="text-base font-semibold text-zen-text">Select Date &amp; Time</h2>
+          <p class="mt-1 text-sm text-zen-muted">Choose a day of the week and a starting time slot.</p>
+
+          <div class="mt-4">
+            <label for="booking-date" class="mb-2 block text-sm font-medium text-zen-muted">Or choose a date</label>
+            <input
+              id="booking-date"
+              name="appointment_date"
+              type="date"
+              value="{{ $bookingToday->toDateString() }}"
+              min="{{ $bookingToday->toDateString() }}"
+              class="h-10 w-full max-w-xs rounded border border-zen-border bg-white px-3 text-sm text-zen-text outline-none ring-zen-primary focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
+            >
+          </div>
+
+          <p class="mb-2 mt-6 text-sm font-medium text-zen-muted">This Week</p>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-7" role="radiogroup"
+               aria-label="Choose a day of the week">
+            @foreach ($bookingDays as $day)
+              <button
+                type="button"
+                data-booking-day
+                data-date="{{ $day['iso'] }}"
+                data-summary="{{ $day['summary'] }}"
+                aria-pressed="{{ $day['selected'] ? 'true' : 'false' }}"
+                class="rounded border px-3 py-2 text-left text-sm transition-colors border-zen-border bg-white text-zen-muted hover:border-zen-primary/40"
+              >
+                <span class="block text-xs text-zen-muted">{{ $day['label'] }}</span>
+                <span class="block tabular-nums">{{ $day['display'] }}</span>
+              </button>
+            @endforeach
+          </div>
+
+          <p class="mb-2 mt-6 text-sm font-medium text-zen-muted">Available Time Slots</p>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6" role="radiogroup" aria-label="Start time">
+            @foreach (['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '17:00'] as $slot)
+              <button
+                type="button"
+                data-booking-slot
+                data-slot="{{ $slot }}"
+                aria-pressed="false"
+                class="rounded border px-2 py-2 text-sm transition-colors border-zen-border bg-white text-zen-muted hover:border-zen-primary/50"
+              >
+                {{ $slot }}
+              </button>
+            @endforeach
+          </div>
+        </section>
+
+        {{-- 3. Staff --}}
+        <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
+          <h2 class="text-base font-semibold text-zen-text">Select Staff</h2>
+          <p class="mt-1 text-sm text-zen-muted">Let the salon arrange your appointment or choose your preferred
+            stylist.</p>
+
+          {{-- Vertical scroll dong bo voi service list --}}
+          <div class="mt-4 max-h-80 overflow-y-auto grid grid-cols-2 gap-3" role="radiogroup"
+               aria-label="Select staff member in charge">
+            @foreach ($bookingStylists as $stylist)
+              @php
+                $stylistAvailable = $stylist['is_available'] ?? true;
+              @endphp
+
+              <label
+                data-booking-stylist-card
+                data-booking-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
+                role="radio"
+                aria-disabled="{{ $stylistAvailable ? 'false' : 'true' }}"
+                @class([
+                  'group relative flex flex-col overflow-hidden rounded border-2 border-zen-border bg-white p-4 text-left shadow-sm transition duration-150 has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-zen-primary/40',
+                  'cursor-pointer hover:border-zen-primary/50 hover:bg-zen-accent-soft/30 has-[:checked]:border-zen-primary has-[:checked]:bg-zen-accent-soft' => $stylistAvailable,
+                  'cursor-not-allowed opacity-60 grayscale-[.15]' => ! $stylistAvailable,
+                ])
+              >
+                <input
+                  type="radio"
+                  name="staff_id"
+                  value="{{ $stylist['id'] }}"
+                  data-booking-stylist-radio
+                  data-stylist-name="{{ $stylist['name'] }}"
+                  data-stylist-available="{{ $stylistAvailable ? 'true' : 'false' }}"
+                  class="peer sr-only"
+                  @checked($stylist['checked'] && $stylistAvailable)
+                  @disabled(! $stylistAvailable)
+                >
+
+                <span class="flex min-w-0 items-start gap-3">
+                  <img
+                    src="{{ $stylist['image'] }}"
+                    alt="Profile photo of {{ $stylist['name'] }}"
+                    class="size-12 shrink-0 rounded-full border border-zen-border object-cover"
+                    loading="lazy"
+                  >
+                  <span class="min-w-0 flex-1">
+                    <span data-stylist-label
+                          class="block break-words text-sm font-semibold text-zen-text">{{ $stylist['name'] }}</span>
+                    <span
+                      class="mt-2 inline-flex rounded px-2 py-0.5 text-xs font-medium ring-1 {{ $stylist['status_class'] }}">
+                      {{ $stylist['status'] }}
+                    </span>
+                  </span>
+                </span>
+              </label>
+            @endforeach
+          </div>
+        </section>
+
+        {{-- 4. Promotion --}}
         <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
           <h2 class="text-base font-semibold text-zen-text">Promotion Code</h2>
           <p class="mt-1 text-sm text-zen-muted">Enter a promotion code if you have one.</p>
@@ -339,7 +320,7 @@
           <p data-booking-promo-hint class="mt-2 text-xs text-zen-muted" hidden></p>
         </section>
 
-        {{-- Contact Information --}}
+        {{-- 5. Contact Information --}}
         <section class="rounded-zen-md border border-zen-border bg-zen-bg p-5 shadow-zen sm:p-6">
           <h2 class="text-base font-semibold text-zen-text">Contact Information</h2>
           <p class="mt-1 text-sm text-zen-muted">The salon uses this information to confirm your appointment.</p>
@@ -429,7 +410,7 @@
             <div>
               <dt class="text-zen-muted">Services</dt>
               <dd id="booking-summary-services"
-                  class="mt-2 min-w-0 space-y-1 break-words text-right font-medium text-zen-text">
+                  class="mt-2 max-h-36 overflow-y-auto min-w-0 space-y-1 break-words pr-1 text-right font-medium text-zen-text">
                 <p class="text-xs font-normal text-zen-muted">No services selected</p>
               </dd>
             </div>

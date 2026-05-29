@@ -30,7 +30,6 @@
       <div><label class="mb-1.5 block text-sm font-medium">Full Name *</label><input name="full_name" value="{{ old('full_name', $staff?->full_name ?? $user->username) }}" class="{{ $inputClass }}" /><x-staff.form.error name="full_name" /></div>
       <div><label class="mb-1.5 block text-sm font-medium">Email</label><input type="email" name="email" value="{{ old('email', $staff?->email) }}" class="{{ $inputClass }}" /><x-staff.form.error name="email" /></div>
       <div><label class="mb-1.5 block text-sm font-medium">Phone</label><input name="phone" value="{{ old('phone', $staff?->phone) }}" class="{{ $inputClass }}" /><x-staff.form.error name="phone" /></div>
-      <div><label class="mb-1.5 block text-sm font-medium">Specialization</label><input name="specialization" value="{{ old('specialization', $staff?->specialization) }}" class="{{ $inputClass }}" /><x-staff.form.error name="specialization" /></div>
 
       <div><label class="mb-1.5 block text-sm font-medium">Username</label><input value="{{ $user->username }}" class="{{ $inputClass }}" readonly /></div>
       <div><label class="mb-1.5 block text-sm font-medium">Role</label><input value="{{ ucfirst($user->role?->role_name ?? 'Staff') }}" class="{{ $inputClass }}" readonly /></div>

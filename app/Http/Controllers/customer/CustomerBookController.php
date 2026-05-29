@@ -56,7 +56,7 @@ class CustomerBookController extends Controller
             return back()
                 ->withInput()
                 ->withErrors([
-                    'appointment_time' => 'Nhân viên này đã có lịch hẹn vào khung giờ đã chọn.',
+                    'appointment_time' => 'This staff member already has an appointment at the selected time.',
                 ]);
         }
 
@@ -137,6 +137,24 @@ class CustomerBookController extends Controller
                 ->withErrors(['otp' => $otpResult['message']])
                 ->withInput()
                 ->with('otp_pending', true);
+        }
+
+        // Check trung lich lan 2 sau khi OTP thanh cong, tranh race condition trong luc khach nhap OTP
+        $staff = $this->resolveStaff($data['staff_id'] ?? null);
+
+        if ($this->hasStaffConflict($data, $staff?->id)) {
+            session()->forget([
+                'booking_data',
+                'booking_otp_failed_attempts',
+                'booking_otp_locked_until',
+            ]);
+
+            return redirect()
+                ->route('booking')
+                ->withInput($data)
+                ->withErrors([
+                    'appointment_time' => 'This staff member already has an appointment at the selected time.',
+                ]);
         }
 
         $services = $this->resolveSelectedServices($data['service_ids'] ?? [])->values();
