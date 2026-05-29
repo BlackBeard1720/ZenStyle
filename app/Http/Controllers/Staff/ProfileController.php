@@ -57,7 +57,6 @@ class ProfileController extends Controller
                 'max:255',
                 Rule::unique('staff', 'email')->ignore($staff->id),
             ],
-            'specialization' => ['nullable', 'string', 'max:255'],
             'avatar' => ['nullable', 'url', 'max:2048'],
         ];
 

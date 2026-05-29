@@ -94,10 +94,6 @@
             <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff->email ?? '-' }}</dd>
           </div>
           <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
-            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Specialization</dt>
-            <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff->specialization ?? '-' }}</dd>
-          </div>
-          <div class="flex flex-col gap-1 sm:flex-row sm:justify-between">
             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Hire date</dt>
             <dd class="text-sm text-gray-800 dark:text-white/90">{{ $user->staff->hire_date ?? '-' }}</dd>
           </div>
