@@ -38,10 +38,10 @@
   {{-- ===== HERO / BANNER ===== --}}
   <section
     id="site-banner"
-    class="relative min-h-screen w-full overflow-hidden bg-stone-900"
+    class="relative min-h-screen w-full overflow-hidden bg-zen-dark"
     aria-label="ZenStyle Banner">
     <div
-      class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-stone-900/40 via-stone-900/20 to-stone-900/60"></div>
+      class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-black/45 via-black/20 to-black/60"></div>
 
     <div class="relative h-screen">
       @foreach ($heroSlides as $index => $slide)
@@ -73,7 +73,7 @@
       @endforeach
     </div>
 
-    <div class="pointer-events-none absolute bottom-0 left-0 right-0 text-stone-50" aria-hidden="true">
+    <div class="pointer-events-none absolute bottom-0 left-0 right-0 text-zen-bg" aria-hidden="true">
       <svg class="block h-12 w-full sm:h-16" viewBox="0 0 1440 100" preserveAspectRatio="none"
            xmlns="http://www.w3.org/2000/svg">
         <path fill="currentColor" d="M0,48 C240,95 480,5 720,58 C960,112 1200,18 1440,52 L1440,100 L0,100 Z"/>
@@ -81,8 +81,8 @@
     </div>
   </section>
 
-  {{-- ===== SECTION 1: GREETING ===== --}}
-  <section class="scroll-mt-24 bg-stone-50 px-4 py-12 sm:px-6 lg:py-16">
+  {{-- Section 1: lời chào trên nền trắng sạch theo nhận diện black-white. --}}
+  <section class="scroll-mt-24 bg-zen-bg px-4 py-12 sm:px-6 lg:py-16">
     <div class="mx-auto max-w-6xl">
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle Salon</p>
       <h2 class="mt-3 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl">
@@ -103,7 +103,7 @@
   </section>
 
   {{-- ===== SECTION 2: SERVICE DISCOVERY ===== --}}
-  <section id="dich-vu" class="scroll-mt-24 bg-white px-4 py-12 sm:px-6 lg:py-14">
+  <section id="dich-vu" class="scroll-mt-24 bg-zen-bg px-4 py-12 sm:px-6 lg:py-14">
     <div class="mx-auto max-w-6xl">
       <div class="max-w-2xl">
         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Services</p>
@@ -122,7 +122,7 @@
             @foreach ($featuredServices as $service)
               <article class="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 px-3">
                 <div class="flex h-full flex-col border border-zen-border bg-zen-bg transition hover:shadow-zen duration-300 rounded-none">
-                  <div class="relative overflow-hidden bg-stone-100 shrink-0">
+                  <div class="relative overflow-hidden bg-zen-bg-soft shrink-0">
                     <a href="{{ route('services.show', $service) }}" class="block w-full">
                       <img
                         src="{{ $service->thumbnail ? asset($service->thumbnail) : asset('images/default-news.jpg') }}"
@@ -155,7 +155,7 @@
             @foreach ($featuredServices as $service)
               <article class="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 px-3" aria-hidden="true">
                 <div class="flex h-full flex-col border border-zen-border bg-zen-bg transition hover:shadow-zen duration-300 rounded-none">
-                  <div class="relative overflow-hidden bg-stone-100 shrink-0">
+                  <div class="relative overflow-hidden bg-zen-bg-soft shrink-0">
                     <a href="{{ route('services.show', $service) }}" class="block w-full">
                       <img
                         src="{{ $service->thumbnail ? asset($service->thumbnail) : asset('images/default-news.jpg') }}"
@@ -236,7 +236,7 @@
 
 
   {{-- ===== SECTION 5: EXPERIENCE FLOW (Premium Timeline) ===== --}}
-  <section class="bg-white px-4 py-16 sm:px-6 lg:py-24 border-t border-b border-zen-border/40">
+  <section class="bg-zen-bg px-4 py-16 sm:px-6 lg:py-24 border-t border-b border-zen-border/40">
     <div class="mx-auto max-w-6xl">
       <div class="max-w-2xl mx-auto text-center mb-16">
         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Process</p>
@@ -256,7 +256,7 @@
           @foreach ($experienceSteps as $step)
             <li class="relative pl-16 pb-10 last:pb-0 md:pl-0 md:pb-0 md:text-center group">
               <!-- Number Circle -->
-              <div class="absolute left-0 top-0 md:relative md:left-auto md:top-auto md:mx-auto w-12 h-12 rounded-full border border-zen-border bg-white flex items-center justify-center font-mono font-bold text-sm text-zen-muted transition-all duration-300 z-10 group-hover:border-zen-primary group-hover:text-zen-primary group-hover:bg-zen-bg-soft">
+              <div class="absolute left-0 top-0 md:relative md:left-auto md:top-auto md:mx-auto w-12 h-12 rounded-full border border-zen-border bg-zen-surface flex items-center justify-center font-mono font-bold text-sm text-zen-muted transition-all duration-300 z-10 group-hover:border-zen-primary group-hover:text-zen-primary group-hover:bg-zen-bg-soft">
                 {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
               </div>
               
@@ -277,8 +277,8 @@
   </section>
 
   {{-- ===== SECTION 6: FINAL CTA ===== --}}
-  <section class="bg-white px-4 py-14 sm:px-6 lg:py-16">
-    <div class="mx-auto max-w-6xl overflow-hidden rounded-none border border-zen-border bg-zen-accent-soft p-8 sm:p-10 lg:p-12 shadow-none">
+  <section class="bg-zen-bg px-4 py-14 sm:px-6 lg:py-16">
+    <div class="mx-auto max-w-6xl overflow-hidden rounded-none border border-zen-border bg-zen-bg-soft p-8 sm:p-10 lg:p-12 shadow-none">
       <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div>
           <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle booking</p>

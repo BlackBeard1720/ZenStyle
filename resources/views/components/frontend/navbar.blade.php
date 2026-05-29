@@ -3,8 +3,8 @@
     @if (request()->is('/') || request()->routeIs('home'))
         data-on-banner="true"
     @endif
-    class="group fixed inset-x-0 top-0 z-50 border-b border-zen-border bg-zen-bg backdrop-blur
-        transition-[transform,background-color,border-color,backdrop-filter,text-color] duration-300 ease-out will-change-transform
+    class="group fixed inset-x-0 top-0 z-50 border-b border-zen-border bg-zen-bg backdrop-blur shadow-sm
+        transition-[transform,background-color,border-color,backdrop-filter,box-shadow,color] duration-300 ease-out will-change-transform
         data-[on-banner='true']:border-transparent data-[on-banner='true']:!border-b-transparent data-[on-banner='true']:!bg-transparent data-[on-banner='true']:!backdrop-blur-none data-[on-banner='true']:shadow-none"
 >
     @php
@@ -126,16 +126,16 @@
 
         <a
             href="{{ route('booking') }}"
-            class="zen-btn-primary relative z-10 ml-auto shrink-0 hidden sm:inline-flex"
+            class="zen-btn-primary site-nav-cta relative z-10 ml-auto shrink-0 hidden sm:inline-flex"
         >
             Book Now
         </a>
 
-        <!-- Hamburger Button for Mobile -->
+        {{-- Nút hamburger: nền sáng trên banner để icon không bị chìm trên ảnh mobile. --}}
         <button
             id="mobile-menu-toggle"
             type="button"
-            class="relative z-10 ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-zen-border bg-white/95 text-black shadow-sm transition-all duration-300 hover:bg-zen-bg-soft focus:outline-none sm:hidden group-data-[on-banner='true']:border-white/20 group-data-[on-banner='true']:shadow-md"
+            class="relative z-10 ml-auto flex h-10 w-10 items-center justify-center rounded-full border border-zen-border bg-zen-surface/95 text-zen-text shadow-sm transition-all duration-300 hover:bg-zen-bg-soft focus:outline-none sm:hidden group-data-[on-banner='true']:border-white/50 group-data-[on-banner='true']:bg-zen-surface/95 group-data-[on-banner='true']:text-zen-text group-data-[on-banner='true']:shadow-md"
             aria-expanded="false"
             aria-controls="mobile-menu"
             aria-label="Toggle navigation menu"

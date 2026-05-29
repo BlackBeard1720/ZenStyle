@@ -3,7 +3,7 @@
     $placeholderImage = 'https://placehold.co/800x600/ece8df/6f6656?text=ZenStyle+Service';
   @endphp
 
-  <section class="px-4 pb-8 pt-30 sm:px-6 lg:pt-35 bg-zen-accent-soft">
+  <section class="px-4 pb-8 pt-30 sm:px-6 lg:pt-35 bg-zen-bg-soft">
     <div class="mx-auto max-w-4xl text-center">
       <h1 class="font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
         Our Services
@@ -39,7 +39,7 @@
           <select
             name="sort"
             onchange="this.form.submit()"
-            class="w-full rounded-md border border-zen-border bg-white px-3 py-2 text-sm text-zen-text focus:border-zen-accent focus:outline-none sm:w-56"
+            class="w-full rounded-md border border-zen-border bg-zen-surface px-3 py-2 text-sm text-zen-text focus:border-zen-accent focus:outline-none sm:w-56"
           >
             <option value="" {{ $selectedSort === '' ? 'selected' : '' }}>Sort services</option>
             <option value="price_asc" {{ $selectedSort === 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
@@ -58,7 +58,7 @@
           @foreach ($services as $service)
             <a
               href="{{ route('services.show', $service) }}"
-              class="group block overflow-hidden border border-zen-border bg-white shadow-zen"
+              class="group block overflow-hidden border border-zen-border bg-zen-surface shadow-zen"
             >
               <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
                 <img

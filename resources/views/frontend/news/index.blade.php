@@ -1,6 +1,6 @@
 <x-frontend.layout title="ZenStyle — Tin tức" main-class="pt-0">
 
-  <section class="border-b border-zen-border bg-white px-4 pb-10 pt-30 sm:px-6 lg:pb-12 lg:pt-35">
+  <section class="border-b border-zen-border bg-zen-surface px-4 pb-10 pt-30 sm:px-6 lg:pb-12 lg:pt-35">
     <div class="mx-auto max-w-4xl text-center">
       <h1 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
         News & Beauty Tips
@@ -13,7 +13,7 @@
   </section>
 
   <section
-    class="bg-linear-to-b from-zen-accent-soft/45 via-zen-bg-soft to-white px-4 py-14 sm:px-6 md:py-16 lg:pb-20">
+    class="bg-linear-to-b from-zen-accent-soft/45 via-zen-bg-soft to-zen-bg px-4 py-14 sm:px-6 md:py-16 lg:pb-20">
     <div class="mx-auto max-w-6xl">
       <!-- Posts Grid -->
       @if ($posts->count() > 0)

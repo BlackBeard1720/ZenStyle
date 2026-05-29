@@ -58,7 +58,7 @@
 
     <section
         id="about-hero"
-        class="bg-white px-4 pb-12 pt-28 sm:px-6 sm:pt-32 lg:pb-20 lg:pt-40"
+        class="bg-zen-surface px-4 pb-12 pt-28 sm:px-6 sm:pt-32 lg:pb-20 lg:pt-40"
         aria-label="ZenStyle Story"
     >
         <div class="mx-auto max-w-6xl">
@@ -86,7 +86,7 @@
         </div>
     </section>
 
-    <section class="bg-white px-4 py-12 sm:px-6 lg:py-14">
+    <section class="bg-zen-surface px-4 py-12 sm:px-6 lg:py-14">
         <div class="mx-auto max-w-5xl">
             <div class="max-w-3xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">About Us</p>
@@ -125,7 +125,7 @@
 
             <div class="mt-8 grid gap-4 md:grid-cols-3">
                 @foreach ($values as $value)
-                    <article class="group rounded-zen-lg border border-zen-border bg-white p-5 shadow-zen">
+                    <article class="group rounded-zen-lg border border-zen-border bg-zen-surface p-5 shadow-zen">
                         <div class="flex items-start gap-4">
                             <span class="grid size-9 shrink-0 place-items-center rounded-full bg-zen-accent-soft text-xs font-semibold text-zen-primary ring-1 ring-zen-border">
                                 {{ $value['number'] }}
@@ -141,7 +141,7 @@
         </div>
     </section>
 
-    <section class="bg-white px-4 py-12 sm:px-6 lg:py-16">
+    <section class="bg-zen-surface px-4 py-12 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <div class="mx-auto max-w-2xl text-center">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Journey</p>
@@ -159,7 +159,7 @@
                     <li class="relative">
                         <article class="relative h-full rounded-zen-lg border border-zen-border bg-zen-bg p-5 shadow-zen">
                             <div class="flex items-center gap-3">
-                                <span class="grid size-8 place-items-center rounded-full border border-zen-primary/25 bg-white text-[11px] font-semibold text-zen-primary shadow-sm">
+                                <span class="grid size-8 place-items-center rounded-full border border-zen-primary/25 bg-zen-surface text-[11px] font-semibold text-zen-primary shadow-sm">
                                     {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
                                 </span>
                                 <p class="text-xs font-bold uppercase tracking-[0.2em] text-zen-primary">{{ $item['year'] }}</p>
@@ -173,7 +173,7 @@
         </div>
     </section>
 
-    <section class="bg-gradient-to-b from-zen-bg-soft to-white px-4 py-14 sm:px-6 lg:py-16">
+    <section class="bg-gradient-to-b from-zen-bg-soft to-zen-bg px-4 py-14 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <div class="max-w-3xl">
                 <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Our team</p>
@@ -192,7 +192,7 @@
             @else
                 <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($teamMembers as $member)
-                        <article class="group overflow-hidden rounded-none border border-zen-border bg-white shadow-sm">
+                        <article class="group overflow-hidden rounded-none border border-zen-border bg-zen-surface shadow-sm">
                             <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
                                 <img
                                     src="{{ $member->avatar ? asset('storage/' . $member->avatar) : asset('images/tailadmin/user/user-01.jpg') }}"
@@ -212,7 +212,7 @@
         </div>
     </section>
 
-    <section class="bg-white px-4 py-14 sm:px-6 lg:py-16">
+    <section class="bg-zen-surface px-4 py-14 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
                 <div>

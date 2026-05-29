@@ -114,12 +114,13 @@
         @apply border-transparent bg-transparent shadow-none backdrop-blur-none;
     }
 
+    /* Trên banner: giữ chữ trắng, hover xanh xám nhẹ để đọc rõ trên ảnh tối */
     #site-header[data-on-banner='true'] .site-nav-link {
-        @apply text-white! hover:text-zen-accent!;
+        @apply text-white! hover:text-zen-accent-light!;
     }
 
     #site-header[data-on-banner='true'] .site-nav-link.is-active {
-        @apply text-zen-accent!;
+        @apply text-white!;
     }
 
     #site-header[data-on-banner='true'] .site-nav-logo {
@@ -136,7 +137,7 @@
     }
 
     #site-header[data-on-banner='true'] #mobile-menu-toggle {
-        @apply border-white/20 bg-transparent text-white!;
+        @apply border-white/50 bg-white/95 text-zen-text! shadow-zen-md;
     }
 
     #site-header.mobile-menu-open {
@@ -234,13 +235,15 @@
     }
 
     [data-service-gallery-thumb].is-active {
-        border-color: rgba(139, 94, 60, 0.82);
-        box-shadow: 0 0 0 2px rgba(139, 94, 60, 0.22);
+        /* Màu viền thumbnail khớp với zen-accent mới (#5F777A) */
+        border-color: rgba(95, 119, 122, 0.82);
+        box-shadow: 0 0 0 2px rgba(95, 119, 122, 0.22);
         opacity: 1;
     }
 
+    /* Nút cuộn lên — nền gần đen, icon trắng; khi đè footer đổi sang nền trắng (xử lý bằng JS + .is-over-footer) */
     .scroll-top-btn {
-        @apply fixed z-40 flex h-10 w-10 items-center justify-center rounded-full bg-zen-accent text-base font-medium text-white shadow-zen-md transition-all duration-300 ease-out hover:bg-zen-accent-dark hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 cursor-pointer;
+        @apply fixed z-40 flex h-10 w-10 items-center justify-center rounded-full border border-zen-dark bg-zen-dark text-base font-medium text-zen-text-light shadow-zen-md transition-all duration-300 ease-out hover:bg-zen-accent hover:border-zen-accent hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/50 focus-visible:ring-offset-2 cursor-pointer;
         right: max(1rem, env(safe-area-inset-right, 0px));
         bottom: calc(max(1.25rem, env(safe-area-inset-bottom, 0px)) + 3.9rem);
         opacity: 0;
@@ -290,11 +293,26 @@
         }
     }
 
+    /* Nút chính: nền đen, chữ trắng; hover chuyển xanh xám slate-teal. */
     .zen-btn-primary {
-        @apply inline-flex items-center justify-center rounded-full bg-zen-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-zen-accent-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
+        @apply inline-flex items-center justify-center rounded-full border border-zen-dark bg-zen-dark px-6 py-3 text-sm font-semibold text-zen-text-light transition-all duration-300 ease-out hover:border-zen-accent hover:bg-zen-accent hover:text-zen-text-light focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/50 focus-visible:ring-offset-2 active:scale-[0.98] cursor-pointer;
     }
 
+    /* Nút phụ: nền trắng, viền đen, chữ đen; hover dùng accent xanh xám. */
     .zen-btn-secondary {
-        @apply inline-flex items-center justify-center rounded-full border border-zen-accent bg-white px-6 py-3 text-sm font-semibold text-zen-accent transition-all duration-300 ease-out hover:bg-zen-accent/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
+        @apply inline-flex items-center justify-center rounded-full border border-zen-text bg-zen-surface px-6 py-3 text-sm font-semibold text-zen-text transition-all duration-300 ease-out hover:border-zen-accent hover:bg-zen-accent-soft hover:text-zen-accent-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/40 focus-visible:ring-offset-2 active:scale-[0.98] cursor-pointer;
+    }
+
+    #site-header[data-on-banner='true'] .site-nav-cta {
+        @apply border-white bg-white text-zen-text hover:border-zen-accent-light hover:bg-zen-accent-light hover:text-zen-text!;
+    }
+
+    /*
+      Khi nút cố định (floating) đè lên footer tối:
+      Đổi sang nền trắng + viền xanh xám để luôn rõ trên nền đen.
+      Class này được đặt/xóa bằng IntersectionObserver trong navbar.js.
+    */
+    [data-floating-action].is-over-footer {
+        @apply !bg-zen-surface !text-zen-text !border !border-zen-accent !shadow-zen-md hover:!bg-zen-accent-soft;
     }
 }

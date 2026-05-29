@@ -1,7 +1,7 @@
 <div id="lien-he" class="bg-zen-bg-soft text-zen-text scroll-mt-24 px-4 py-14 sm:px-6 lg:py-16">
   <div class="mx-auto max-w-6xl lg:grid lg:grid-cols-2 lg:items-stretch lg:gap-12">
     <div class="flex flex-col justify-center">
-      <p class="text-zen-primary-dark text-xs font-semibold uppercase tracking-[0.2em]">Contact</p>
+      <p class="text-zen-accent-dark text-xs font-semibold uppercase tracking-[0.2em]">Contact</p>
       <h2 class="text-zen-text mt-3 font-heading text-3xl font-semibold leading-tight sm:text-4xl">
         Visit ZenStyle
       </h2>
@@ -11,7 +11,7 @@
 
       <ul class="mt-8 space-y-6">
         <li class="flex gap-3">
-          <span class="mt-0.5 shrink-0 text-zen-primary" aria-hidden="true">
+          <span class="mt-0.5 shrink-0 text-zen-accent" aria-hidden="true">
             <x-heroicon-s-map-pin class="h-5 w-5" />
           </span>
           <div>
@@ -19,23 +19,25 @@
             <p class="text-zen-muted mt-1 text-sm">
               Hanoi, Vietnam
               <span class="text-zen-border-dark"> · </span>
-              <a href="tel:+84901234567" class="text-zen-primary hover:text-zen-primary-dark underline decoration-zen-border-dark underline-offset-2">0901 234 567</a>
+              <a href="tel:+84901234567" class="text-zen-accent hover:text-zen-accent-dark underline decoration-zen-border-dark underline-offset-2">0901 234 567</a>
             </p>
           </div>
         </li>
       </ul>
 
       <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+        {{-- Nút email: CTA chính dùng xanh xám để tạo điểm nhấn contact. --}}
         <a
           href="mailto:testforcode36@gmail.com"
-          class="border-zen-border-dark bg-zen-secondary text-zen-text-light hover:bg-zen-primary-light inline-flex w-fit items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-sm transition"
+          class="border-zen-accent bg-zen-accent text-zen-text-light hover:border-zen-accent-dark hover:bg-zen-accent-dark inline-flex w-fit items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium shadow-sm transition"
         >
           <x-heroicon-o-envelope class="h-4 w-4 text-zen-text-light" />
           hello@zenstyle.vn
         </a>
+        {{-- Nút liên hệ: CTA phụ nền trắng, viền xanh xám. --}}
         <a
           href="{{ route('contact') }}"
-          class="bg-zen-accent text-zen-text-light hover:bg-zen-accent-dark inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition"
+          class="border border-zen-accent bg-zen-surface text-zen-accent hover:bg-zen-accent-soft hover:text-zen-accent-dark inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition"
         >
           <x-heroicon-o-document-text class="h-4 w-4" />
           Contact Form

@@ -1,8 +1,9 @@
 {{--
     Footer: liên hệ + 4 cột tối + bar cuối.
 --}}
-<footer class="border-t border-zen-border">
-  <div class="bg-zen-bg-dark text-zen-text-light">
+<footer id="site-footer" data-site-footer class="border-t border-zen-border">
+{{-- Footer dùng zen-dark để giữ tông luxury đen-trắng nhất quán. --}}
+  <div class="bg-zen-dark text-zen-text-light">
     <div class="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 lg:grid-cols-4 lg:gap-12">
       
       <!-- Column 1: Brand & Contact -->
@@ -39,11 +40,11 @@
       <div>
         <h4 class="text-sm font-semibold uppercase tracking-wide text-white">Explore</h4>
         <ul class="mt-4 space-y-2.5 text-sm text-white/70">
-          <li><a href="{{ route('home') }}" class="transition hover:text-zen-accent">Home</a></li>
-          <li><a href="{{ route('about') }}" class="transition hover:text-zen-accent">About</a></li>
-          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent">Services</a></li>
-          <li><a href="{{ route('faq') }}" class="transition hover:text-zen-accent">FAQ</a></li>
-          <li><a href="{{ route('contact') }}" class="transition hover:text-zen-accent">Contact</a></li>
+          <li><a href="{{ route('home') }}" class="transition hover:text-zen-accent-light">Home</a></li>
+          <li><a href="{{ route('about') }}" class="transition hover:text-zen-accent-light">About</a></li>
+          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent-light">Services</a></li>
+          <li><a href="{{ route('faq') }}" class="transition hover:text-zen-accent-light">FAQ</a></li>
+          <li><a href="{{ route('contact') }}" class="transition hover:text-zen-accent-light">Contact</a></li>
         </ul>
       </div>
 
@@ -51,10 +52,10 @@
       <div>
         <h4 class="text-sm font-semibold uppercase tracking-wide text-white">Services</h4>
         <ul class="mt-4 space-y-2.5 text-sm text-white/70">
-          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent">Hair Services</a></li>
-          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent">Nail Services</a></li>
-          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent">Spa & Massage</a></li>
-          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent">Combo Packages</a></li>
+          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent-light">Hair Services</a></li>
+          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent-light">Nail Services</a></li>
+          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent-light">Spa & Massage</a></li>
+          <li><a href="{{ route('services') }}" class="transition hover:text-zen-accent-light">Combo Packages</a></li>
         </ul>
       </div>
 
@@ -63,10 +64,11 @@
         <h4 class="text-sm font-semibold uppercase tracking-wide text-white">Visit</h4>
         <p class="mt-4 text-sm text-white/70">Ready to plan your visit?</p>
         <p class="mt-2 text-sm text-white/50">Book your appointment online in a few simple steps.</p>
+        {{-- Nút trong footer — dùng secondary (nền trắng) để nổi rõ trên footer tối --}}
         <div class="mt-6">
           <a
             href="{{ route('booking') }}"
-            class="zen-btn-primary inline-flex shadow-sm hover:shadow-zen-md"
+            class="zen-btn-secondary inline-flex shadow-sm hover:shadow-zen-md"
           >
             Book Now
           </a>
@@ -80,9 +82,9 @@
       <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-5 text-xs text-white/45 sm:flex-row sm:px-6">
         <span>ZenStyle — eProject.</span>
         <div class="flex flex-wrap items-center justify-center gap-4">
-          <a href="{{ route('privacy-policy') }}" class="hover:text-white transition-colors">Privacy Policy</a>
-          <a href="{{ route('terms-of-service') }}" class="hover:text-white transition-colors">Terms of Service</a>
-          <a href="{{ route('faq') }}" class="hover:text-white transition-colors">FAQ</a>
+          <a href="{{ route('privacy-policy') }}" class="hover:text-zen-accent-light transition-colors">Privacy Policy</a>
+          <a href="{{ route('terms-of-service') }}" class="hover:text-zen-accent-light transition-colors">Terms of Service</a>
+          <a href="{{ route('faq') }}" class="hover:text-zen-accent-light transition-colors">FAQ</a>
         </div>
       </div>
     </div>
