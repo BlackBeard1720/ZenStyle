@@ -9,7 +9,6 @@ use App\Models\Service;
 use App\Support\FrontendServiceCatalog;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class FrontendController extends Controller
 {
@@ -104,31 +103,36 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function serviceShow(string $slug): View
+    public function serviceShow(Service $service): View
     {
-        // Lay toan bo service active kem category tu DB de tim theo slug URL
-        $serviceModels = $this->activeServices();
+        $service->load('category');
 
-        $serviceModel = $serviceModels->first(function (Service $service) use ($slug) {
-            return Str::slug($service->name) === $slug;
-        });
-        abort_if(! $serviceModel, 404);
+        abort_if(
+            $service->status !== 'active' || $service->category?->status !== 'active',
+            404
+        );
 
-        // Lay danh sach lien quan cung category va loai bo service hien tai
-        $relatedServices = $serviceModels
-            ->where('category_id', $serviceModel->category_id)
-            ->reject(fn (Service $item) => $item->id === $serviceModel->id)
+        // Lay danh sach lien quan cung category va chi hien thi dich vu dang active
+        $relatedServices = Service::query()
+            ->with('category')
+            ->where('status', 'active')
+            ->where('category_id', $service->category_id)
+            ->whereKeyNot($service->id)
+            ->whereHas('category', function ($query) {
+                $query->where('status', 'active');
+            })
+            ->orderBy('name')
             ->take(4)
-            ->values();
+            ->get();
 
         // Lay danh sach comment da duyet cua dich vu hien tai
-        $approvedComments = $serviceModel->comments()
+        $approvedComments = $service->comments()
             ->where('status', 'approved')
             ->latest()
             ->get();
 
         return view('frontend.services.show', [
-            'service' => $serviceModel,
+            'service' => $service,
             'relatedServices' => $relatedServices,
             'approvedComments' => $approvedComments,
         ]);
