@@ -4,7 +4,6 @@ function initNavbarAutoHide() {
         return;
     }
 
-    const banner = document.getElementById('site-banner');
 
     const showAtTopPx = 24;
     const directionThreshold = 6;
@@ -87,22 +86,8 @@ function initNavbarAutoHide() {
     }
 
     function updateHeroNavTheme() {
-        if (!banner) {
-            header.removeAttribute('data-on-banner');
-            return;
-        }
-
-        const y = window.scrollY;
-        const bannerBottomPx = banner.offsetTop + banner.offsetHeight;
-        const fadePx = 56;
-
-        const stillOnHero = y < bannerBottomPx - fadePx;
-
-        if (stillOnHero) {
-            header.setAttribute('data-on-banner', 'true');
-        } else {
-            header.removeAttribute('data-on-banner');
-        }
+        // Giu navbar nen sang de banner Home nam duoi header nhu cac trang khac.
+        header.removeAttribute('data-on-banner');
     }
 
     function applyState() {
@@ -168,6 +153,8 @@ function initScrollTopButton() {
         { passive: true },
     );
 
+    window.addEventListener('resize', syncVisibility, { passive: true });
+
     btn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -179,12 +166,10 @@ function initFloatingBookingButton() {
     const btn = document.querySelector('[data-floating-booking]');
     if (!btn) return;
 
-    const banner = document.getElementById('site-banner');
     let ticking = false;
 
     function syncVisibility() {
-        const bannerBottom = banner ? banner.offsetTop + banner.offsetHeight : 420;
-        const shouldShow = window.scrollY > bannerBottom - 80;
+        const shouldShow = window.scrollY > 320;
 
         btn.classList.toggle('pointer-events-auto', shouldShow);
         btn.classList.toggle('pointer-events-none', !shouldShow);
@@ -236,7 +221,7 @@ function initMobileMenu() {
         }
     });
 
-    const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link');
+    const mobileLinks = mobileMenu.querySelectorAll('a.mobile-nav-link');
     mobileLinks.forEach((link) => {
         link.addEventListener('click', () => {
             toggleBtn.setAttribute('aria-expanded', 'false');
@@ -262,19 +247,28 @@ function initDesktopDropdown() {
 
     if (!dropdown || !trigger) return;
 
+    const setOpen = (isOpen) => {
+        dropdown.classList.toggle('is-open', isOpen);
+        trigger.setAttribute('aria-expanded', String(isOpen));
+    };
+
     trigger.addEventListener('click', (e) => {
         e.stopPropagation();
-        const isOpen = dropdown.classList.contains('is-open');
-        if (isOpen) {
-            dropdown.classList.remove('is-open');
-        } else {
-            dropdown.classList.add('is-open');
+        setOpen(!dropdown.classList.contains('is-open'));
+    });
+
+    dropdown.addEventListener('mouseleave', () => setOpen(false));
+
+    trigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            setOpen(false);
+            trigger.focus();
         }
     });
 
     document.addEventListener('click', (e) => {
         if (!dropdown.contains(e.target)) {
-            dropdown.classList.remove('is-open');
+            setOpen(false);
         }
     });
 }

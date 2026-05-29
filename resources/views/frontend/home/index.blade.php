@@ -1,4 +1,4 @@
-<x-frontend.layout title="ZenStyle — Trang chủ" main-class="pt-0">
+<x-frontend.layout title="ZenStyle — Home">
   {{--
       Redesign: Chuyển từ "ép booking" sang "tham quan salon"
       Cấu trúc: Hero → Greeting → Services Discovery → Salon Space → Hot Trend → Experience Flow → Final CTA
@@ -38,12 +38,12 @@
   {{-- ===== HERO / BANNER ===== --}}
   <section
     id="site-banner"
-    class="relative min-h-screen w-full overflow-hidden bg-zen-dark"
+    class="relative min-h-[calc(100vh-5rem)] w-full overflow-hidden bg-zen-dark"
     aria-label="ZenStyle Banner">
     <div
       class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-black/45 via-black/20 to-black/60"></div>
 
-    <div class="relative h-screen">
+    <div class="relative min-h-[calc(100vh-5rem)]">
       @foreach ($heroSlides as $index => $slide)
         <article
           data-slide
@@ -66,8 +66,8 @@
           type="button"
           data-slide-dot
           data-slide-index="{{ $index }}"
-          class="h-3 rounded-full transition-all cursor-pointer pointer-events-auto {{ $index === 0 ? 'w-8 bg-white' : 'w-3 bg-white/50 hover:bg-white/75' }}"
-          aria-label="Chuyển đến slide {{ $index + 1 }}"
+          class="h-3 rounded-full transition-[width,background-color] duration-200 cursor-pointer pointer-events-auto {{ $index === 0 ? 'w-8 bg-white' : 'w-3 bg-white/50 hover:bg-white/75' }}"
+          aria-label="Go to slide {{ $index + 1 }}"
           aria-current="{{ $index === 0 ? 'true' : 'false' }}"
         ></button>
       @endforeach
@@ -121,13 +121,13 @@
             <!-- Original slides -->
             @foreach ($featuredServices as $service)
               <article class="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 px-3">
-                <div class="flex h-full flex-col border border-zen-border bg-zen-bg transition hover:shadow-zen duration-300 rounded-none">
+                <div class="flex h-full flex-col border border-zen-border bg-zen-bg transition-colors duration-200 hover:border-zen-accent/40 rounded-none">
                   <div class="relative overflow-hidden bg-zen-bg-soft shrink-0">
                     <a href="{{ route('services.show', $service) }}" class="block w-full">
                       <img
                         src="{{ $service->thumbnail ? asset($service->thumbnail) : asset('images/default-news.jpg') }}"
                         alt="{{ $service->name }}"
-                        class="h-60 w-full object-cover transition duration-300 hover:scale-102"
+                        class="h-60 w-full object-cover transition-transform duration-200 hover:scale-[1.01]"
                         loading="lazy"
                       >
                     </a>
@@ -154,13 +154,13 @@
             <!-- Duplicated slides for seamless loop -->
             @foreach ($featuredServices as $service)
               <article class="w-[280px] sm:w-[320px] md:w-[360px] shrink-0 px-3" aria-hidden="true">
-                <div class="flex h-full flex-col border border-zen-border bg-zen-bg transition hover:shadow-zen duration-300 rounded-none">
+                <div class="flex h-full flex-col border border-zen-border bg-zen-bg transition-colors duration-200 hover:border-zen-accent/40 rounded-none">
                   <div class="relative overflow-hidden bg-zen-bg-soft shrink-0">
                     <a href="{{ route('services.show', $service) }}" class="block w-full">
                       <img
                         src="{{ $service->thumbnail ? asset($service->thumbnail) : asset('images/default-news.jpg') }}"
                         alt="{{ $service->name }}"
-                        class="h-60 w-full object-cover transition duration-300 hover:scale-102"
+                        class="h-60 w-full object-cover transition-transform duration-200 hover:scale-[1.01]"
                         loading="lazy"
                       >
                     </a>
@@ -202,7 +202,7 @@
           <img
             src="{{ $salonImages[0] }}"
             alt="ZenStyle Premium Salon Space"
-            class="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-[1.02]"
+            class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-[1.01]"
             loading="lazy"
             decoding="async"
           >
@@ -224,7 +224,7 @@
             <img
               src="{{ $salonImages[1] }}"
               alt="ZenStyle Treatment Environment"
-              class="absolute inset-0 w-full h-full object-cover transition duration-500 hover:scale-[1.02]"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-[1.01]"
               loading="lazy"
               decoding="async"
             >
@@ -256,7 +256,7 @@
           @foreach ($experienceSteps as $step)
             <li class="relative pl-16 pb-10 last:pb-0 md:pl-0 md:pb-0 md:text-center group">
               <!-- Number Circle -->
-              <div class="absolute left-0 top-0 md:relative md:left-auto md:top-auto md:mx-auto w-12 h-12 rounded-full border border-zen-border bg-zen-surface flex items-center justify-center font-mono font-bold text-sm text-zen-muted transition-all duration-300 z-10 group-hover:border-zen-primary group-hover:text-zen-primary group-hover:bg-zen-bg-soft">
+              <div class="absolute left-0 top-0 md:relative md:left-auto md:top-auto md:mx-auto w-12 h-12 rounded-full border border-zen-border bg-zen-surface flex items-center justify-center font-mono font-bold text-sm text-zen-muted transition-colors duration-200 z-10 group-hover:border-zen-primary group-hover:text-zen-primary group-hover:bg-zen-bg-soft">
                 {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
               </div>
               
@@ -281,12 +281,12 @@
     <div class="mx-auto max-w-6xl overflow-hidden rounded-none border border-zen-border bg-zen-bg-soft p-8 sm:p-10 lg:p-12 shadow-none">
       <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle booking</p>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle Booking</p>
           <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-            Sẵn sàng làm mới diện mạo của bạn?
+            Ready to refresh your look?
           </h2>
           <p class="mt-3 max-w-2xl text-sm leading-relaxed text-zen-muted sm:text-base">
-            Chọn dịch vụ, thời gian và stylist phù hợp. ZenStyle sẽ ghi nhận lịch hẹn và liên hệ xác nhận nếu cần.
+            Choose your service, preferred time, and stylist. ZenStyle will record your appointment request and contact you for confirmation when needed.
           </p>
         </div>
         <div class="flex flex-col gap-3 sm:flex-row">
@@ -294,7 +294,7 @@
             Book Now
           </a>
           <a href="{{ route('services') }}" class="zen-btn-secondary">
-            Xem dịch vụ
+            View Services
           </a>
         </div>
       </div>

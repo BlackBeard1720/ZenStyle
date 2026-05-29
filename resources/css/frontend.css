@@ -141,7 +141,7 @@
     }
 
     #site-header.mobile-menu-open {
-        @apply border-zen-border! bg-zen-bg/95! backdrop-blur-md! shadow-zen-md!;
+        @apply border-zen-border! bg-zen-bg/95! backdrop-blur-sm! shadow-zen!;
     }
 
     #site-header.mobile-menu-open .site-nav-brand {
@@ -241,9 +241,21 @@
         opacity: 1;
     }
 
-    /* Nút cuộn lên — nền gần đen, icon trắng; khi đè footer đổi sang nền trắng (xử lý bằng JS + .is-over-footer) */
+    .pages-dropdown:hover #desktop-pages-menu,
+    .pages-dropdown.is-open #desktop-pages-menu {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateX(-50%) scale(1);
+    }
+
+    .pages-dropdown:hover #desktop-pages-arrow,
+    .pages-dropdown.is-open #desktop-pages-arrow {
+        transform: rotate(180deg);
+    }
+
+    /* Nut cuon len: hover chi doi mau de tranh giat lag. */
     .scroll-top-btn {
-        @apply fixed z-40 flex h-10 w-10 items-center justify-center rounded-full border border-zen-dark bg-zen-dark text-base font-medium text-zen-text-light shadow-zen-md transition-all duration-300 ease-out hover:bg-zen-accent hover:border-zen-accent hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/50 focus-visible:ring-offset-2 cursor-pointer;
+        @apply fixed z-50 flex h-10 w-10 items-center justify-center rounded-full border border-zen-dark bg-zen-dark text-base font-medium text-zen-text-light shadow-sm transition-[opacity,transform,background-color,border-color,color] duration-200 ease-out hover:bg-zen-accent hover:border-zen-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/50 focus-visible:ring-offset-2 cursor-pointer;
         right: max(1rem, env(safe-area-inset-right, 0px));
         bottom: calc(max(1.25rem, env(safe-area-inset-bottom, 0px)) + 3.9rem);
         opacity: 0;
@@ -295,12 +307,12 @@
 
     /* Nút chính: nền đen, chữ trắng; hover chuyển xanh xám slate-teal. */
     .zen-btn-primary {
-        @apply inline-flex items-center justify-center rounded-full border border-zen-dark bg-zen-dark px-6 py-3 text-sm font-semibold text-zen-text-light transition-all duration-300 ease-out hover:border-zen-accent hover:bg-zen-accent hover:text-zen-text-light focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/50 focus-visible:ring-offset-2 active:scale-[0.98] cursor-pointer;
+        @apply inline-flex items-center justify-center rounded-full border border-zen-dark bg-zen-dark px-6 py-3 text-sm font-semibold text-zen-text-light transition-colors duration-150 ease-out hover:border-zen-accent hover:bg-zen-accent hover:text-zen-text-light focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/50 focus-visible:ring-offset-2 cursor-pointer;
     }
 
     /* Nút phụ: nền trắng, viền đen, chữ đen; hover dùng accent xanh xám. */
     .zen-btn-secondary {
-        @apply inline-flex items-center justify-center rounded-full border border-zen-text bg-zen-surface px-6 py-3 text-sm font-semibold text-zen-text transition-all duration-300 ease-out hover:border-zen-accent hover:bg-zen-accent-soft hover:text-zen-accent-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/40 focus-visible:ring-offset-2 active:scale-[0.98] cursor-pointer;
+        @apply inline-flex items-center justify-center rounded-full border border-zen-text bg-zen-surface px-6 py-3 text-sm font-semibold text-zen-text transition-colors duration-150 ease-out hover:border-zen-accent hover:bg-zen-accent-soft hover:text-zen-accent-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/40 focus-visible:ring-offset-2 cursor-pointer;
     }
 
     #site-header[data-on-banner='true'] .site-nav-cta {
@@ -313,6 +325,6 @@
       Class này được đặt/xóa bằng IntersectionObserver trong navbar.js.
     */
     [data-floating-action].is-over-footer {
-        @apply !bg-zen-surface !text-zen-text !border !border-zen-accent !shadow-zen-md hover:!bg-zen-accent-soft;
+        @apply !bg-zen-surface !text-zen-text !border !border-zen-accent !shadow-sm hover:!bg-zen-accent-soft;
     }
 }
