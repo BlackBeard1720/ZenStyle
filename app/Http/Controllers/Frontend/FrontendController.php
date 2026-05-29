@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\News;
 use App\Models\Service;
-use App\Support\FrontendServiceCatalog;
+use App\Models\Staff;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 
@@ -29,7 +29,15 @@ class FrontendController extends Controller
 
     public function about(): View
     {
-        return view('frontend.about.index');
+        $teamMembers = Staff::query()
+            ->where('status', 'active')
+            ->orderBy('full_name')
+            ->take(6)
+            ->get();
+
+        return view('frontend.about.index', [
+            'teamMembers' => $teamMembers,
+        ]);
     }
 
     public function news(): View
@@ -157,27 +165,5 @@ class FrontendController extends Controller
     public function contact(): View
     {
         return view('frontend.contact.index');
-    }
-
-    private function activeServices(?int $limit = null): Collection
-    {
-        try {
-            $query = Service::query()
-                ->with('category')
-                ->where('status', 'active')
-                ->orderBy('name');
-
-            if ($limit) {
-                $query->limit($limit);
-            }
-
-            return $query->get();
-        } catch (\Throwable $exception) {
-            if (app()->environment('testing')) {
-                return collect();
-            }
-
-            throw $exception;
-        }
     }
 }

@@ -1,137 +1,86 @@
-<x-frontend.layout title="ZenStyle - Giới thiệu" main-class="pt-0">
+<x-frontend.layout title="ZenStyle - About" main-class="pt-0">
     @php
-        $heroImage = asset('images/frontend/banner/Gemini_Generated_Image_kt0965kt0965kt09.png');
+        $heroImage = asset('images/frontend/about-hero-img.png');
         $stats = [
-            ['value' => '4+', 'label' => 'năm phát triển ý tưởng'],
-            ['value' => '6+', 'label' => 'dịch vụ nổi bật'],
-            ['value' => '100%', 'label' => 'quy trình đặt lịch rõ ràng'],
+            ['value' => '4+', 'label' => 'years of concept development'],
+            ['value' => '6+', 'label' => 'featured services'],
+            ['value' => '100%', 'label' => 'clear booking flow'],
         ];
 
         $values = [
             [
                 'number' => '01',
-                'title' => 'Tận tâm trong tư vấn',
-                'body' => 'Mỗi buổi hẹn bắt đầu bằng việc lắng nghe tình trạng tóc, mong muốn và thói quen chăm sóc của khách.',
+                'title' => 'Thoughtful consultation',
+                'body' => 'Every appointment starts with listening to the customer’s hair condition, preferences, and daily styling habits.',
             ],
             [
                 'number' => '02',
-                'title' => 'Minh bạch về dịch vụ',
-                'body' => 'Thời lượng, mức giá và lưu ý chăm sóc được trình bày rõ để khách chủ động trước khi đặt lịch.',
+                'title' => 'Transparent services',
+                'body' => 'Service duration, pricing, and care notes are clearly presented before customers make a booking.',
             ],
             [
                 'number' => '03',
-                'title' => 'Trải nghiệm đặt lịch tiện lợi',
-                'body' => 'Luồng booking online giúp chọn ngày, giờ, dịch vụ và stylist nhanh hơn, hạn chế chờ đợi tại salon.',
+                'title' => 'Convenient booking experience',
+                'body' => 'The online booking flow helps customers choose services, time slots, and stylists with less waiting.',
             ],
         ];
 
         $timeline = [
             [
                 'year' => '2023',
-                'title' => 'Khởi đầu',
-                'body' => 'Ý tưởng ZenStyle hình thành từ mong muốn tạo một studio chăm sóc tóc gần gũi nhưng có quy trình rõ ràng.',
+                'title' => 'The beginning',
+                'body' => 'ZenStyle started as an idea to build a friendly salon experience with a clear and reliable service process.',
             ],
             [
                 'year' => '2024',
-                'title' => 'Mở rộng dịch vụ',
-                'body' => 'Bổ sung các nhóm dịch vụ màu tóc, uốn texture, gội thư giãn và treatment phục hồi.',
+                'title' => 'Service expansion',
+                'body' => 'Hair coloring, texture perm, relaxing shampoo, and recovery treatment services were added to serve more customer needs.',
             ],
             [
                 'year' => '2025',
-                'title' => 'Chuẩn hóa quy trình',
-                'body' => 'Xây dựng trải nghiệm đặt lịch online, ghi nhận thông tin dịch vụ và nhắc lịch thống nhất.',
+                'title' => 'Process standardization',
+                'body' => 'ZenStyle improved the online booking flow, service records, and appointment confirmation process.',
             ],
             [
                 'year' => '2026',
-                'title' => 'ZenStyle hôm nay',
-                'body' => 'Trở thành điểm hẹn làm đẹp tại FPT Aptech với đội ngũ stylist, spa và tư vấn viên đồng hành cùng khách.',
-            ],
-        ];
-
-        $team = [
-            [
-                'name' => 'Nguyễn Minh An',
-                'role' => 'Salon Director',
-                'bio' => 'Định hướng trải nghiệm tổng thể, tư vấn form tóc và đào tạo chất lượng dịch vụ.',
-                'image' => asset('images/tailadmin/user/user-01.jpg'),
-                'badges' => ['Tư vấn', 'Cắt tóc'],
-            ],
-            [
-                'name' => 'Trần Lan Chi',
-                'role' => 'Senior Stylist',
-                'bio' => 'Chuyên layer, mullet và tạo kiểu cá nhân hóa theo khuôn mặt.',
-                'image' => asset('images/tailadmin/user/user-02.jpg'),
-                'badges' => ['Cắt tóc', 'Styling'],
-            ],
-            [
-                'name' => 'Lê Hoàng Nam',
-                'role' => 'Color Specialist',
-                'bio' => 'Tư vấn màu, highlight và kiểm soát quy trình màu tóc an toàn.',
-                'image' => asset('images/tailadmin/user/user-04.jpg'),
-                'badges' => ['Nhuộm tóc', 'Highlight'],
-            ],
-            [
-                'name' => 'Phạm Thu Hà',
-                'role' => 'Spa & Treatment',
-                'bio' => 'Phụ trách gội dưỡng sinh, treatment phục hồi và chăm sóc da đầu.',
-                'image' => asset('images/tailadmin/user/user-03.jpg'),
-                'badges' => ['Spa', 'Gội đầu'],
-            ],
-            [
-                'name' => 'Đỗ Quốc Bảo',
-                'role' => 'Barber / Fade',
-                'bio' => 'Tập trung fade, taper và các kiểu tóc nam gọn, sắc nét.',
-                'image' => asset('images/tailadmin/user/user-05.jpg'),
-                'badges' => ['Cắt tóc', 'Fade'],
-            ],
-            [
-                'name' => 'Vũ Mai Linh',
-                'role' => 'Reception & Style Advisor',
-                'bio' => 'Hỗ trợ lịch hẹn, tư vấn gói dịch vụ và chăm sóc khách trước/sau buổi làm.',
-                'image' => asset('images/tailadmin/user/user-06.jpg'),
-                'badges' => ['Tư vấn', 'Booking'],
+                'title' => 'ZenStyle today',
+                'body' => 'ZenStyle is growing as a beauty destination with stylists, spa specialists, and advisors supporting each customer journey.',
             ],
         ];
 
         $reasons = [
-            ['title' => 'Đặt lịch nhanh chóng', 'body' => 'Chọn ngày, giờ và dịch vụ trực tiếp trên website.'],
-            ['title' => 'Dịch vụ rõ giá và thời lượng', 'body' => 'Thông tin cần biết được trình bày trước khi xác nhận.'],
-            ['title' => 'Stylist có hồ sơ rõ ràng', 'body' => 'Khách có thể chọn nhân viên phù hợp với nhu cầu.'],
-            ['title' => 'Không gian salon thư giãn', 'body' => 'Tông màu ấm, nhịp phục vụ nhẹ nhàng và thân thiện.'],
+            ['title' => 'Fast appointment booking', 'body' => 'Choose your preferred date, time, and service directly on the website.'],
+            ['title' => 'Clear service information', 'body' => 'Pricing, duration, and important notes are shown before confirmation.'],
+            ['title' => 'Staff profiles from real data', 'body' => 'Stylists are displayed from the system database instead of static sample content.'],
+            ['title' => 'Relaxing salon atmosphere', 'body' => 'A warm visual style and simple flow help customers feel comfortable from the first visit.'],
         ];
     @endphp
 
     <section
         id="about-hero"
-        class="relative min-h-[520px] overflow-hidden bg-zen-bg sm:min-h-[560px] lg:min-h-[620px]"
-        aria-label="Câu chuyện ZenStyle"
+        class="bg-white px-4 pb-12 pt-28 sm:px-6 sm:pt-32 lg:pb-20 lg:pt-40"
+        aria-label="ZenStyle Story"
     >
-        <img
-            src="{{ $heroImage }}"
-            alt="Không gian chăm sóc tóc tại ZenStyle"
-            class="absolute inset-0 h-full w-full object-cover object-center"
-            loading="eager"
-        >
-        <div class="absolute inset-0 bg-black/10"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-zen-bg/95 via-zen-bg/72 to-zen-bg/15"></div>
-        <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-zen-bg to-transparent"></div>
-
-        <div class="relative mx-auto flex min-h-[520px] max-w-6xl items-center px-4 pb-14 pt-28 sm:min-h-[560px] sm:px-6 sm:pt-32 lg:min-h-[620px] lg:pb-16">
-            <div class="max-w-2xl">
-                <p class="text-xs font-semibold uppercase tracking-[0.22em] text-zen-primary">Câu chuyện ZenStyle</p>
-                <h1 class="mt-4 font-heading text-3xl font-semibold leading-tight text-zen-text sm:text-4xl lg:text-5xl">
-                    Từ một studio nhỏ đến điểm hẹn làm đẹp tại FPT Aptech
-                </h1>
-                <p class="mt-4 max-w-xl text-base leading-7 text-zen-text/80">
-                    ZenStyle kết hợp tay nghề stylist, không gian chăm sóc thư giãn và quy trình đặt lịch rõ ràng để mỗi buổi làm đẹp trở nên nhẹ nhàng, chuyên nghiệp và dễ tin cậy hơn.
-                </p>
-                <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-                    <a href="{{ route('booking') }}" class="zen-btn-primary">
-                        Đặt lịch ngay
-                    </a>
-                    <a href="{{ route('services') }}" class="zen-btn-secondary">
-                        Khám phá dịch vụ
-                    </a>
+        <div class="mx-auto max-w-6xl">
+            <div class="grid gap-10 lg:grid-cols-2 lg:gap-16 lg:items-center">
+                <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-zen-primary">ZENSTYLE STORY</p>
+                    <h1 class="mt-4 font-heading text-4xl font-semibold leading-tight text-zen-text sm:text-5xl lg:text-[3.5rem] lg:leading-[1.1]">
+                        From a small studio to a beauty destination
+                    </h1>
+                    <p class="mt-6 text-base leading-relaxed text-zen-muted sm:text-lg">
+                        ZenStyle combines stylist skills, a relaxing salon and spa atmosphere, and a clear booking process to make every beauty appointment gentle, professional, and reliable.
+                    </p>
+                </div>
+                <div>
+                    <div class="relative overflow-hidden rounded-2xl shadow-zen-md">
+                        <img
+                            src="{{ $heroImage }}"
+                            alt="ZenStyle hair care space"
+                            class="aspect-[4/3] w-full object-cover object-center sm:aspect-[3/2] lg:aspect-[4/5]"
+                            loading="eager"
+                        >
+                    </div>
                 </div>
             </div>
         </div>
@@ -140,15 +89,15 @@
     <section class="bg-white px-4 py-12 sm:px-6 lg:py-14">
         <div class="mx-auto max-w-5xl">
             <div class="max-w-3xl">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Về chúng tôi</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">About Us</p>
                 <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-                    ZenStyle là gì?
+                    What is ZenStyle?
                 </h2>
                 <p class="mt-4 text-sm leading-7 text-zen-muted sm:text-base">
-                    ZenStyle là mô hình salon/spa định hướng trải nghiệm: dịch vụ dễ hiểu, lịch hẹn rõ ràng, stylist lắng nghe và quy trình chăm sóc được cá nhân hóa theo từng khách.
+                    ZenStyle is an experience-driven salon and spa model: clear services, transparent schedules, attentive stylists, and a personalized care process for each customer.
                 </p>
                 <blockquote class="mt-5 rounded-zen-md border border-zen-border bg-zen-bg px-5 py-4 text-sm font-medium leading-7 text-zen-text shadow-sm">
-                    Làm đẹp nên bắt đầu bằng cảm giác được tư vấn rõ ràng, được chăm sóc đúng nhu cầu và rời salon với phong cách tự tin hơn.
+                    Beauty should begin with clear consultation, proper care, and leaving the salon with a more confident style.
                 </blockquote>
             </div>
 
@@ -168,15 +117,15 @@
     <section class="bg-zen-bg-soft px-4 py-12 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <div class="max-w-2xl">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Giá trị cốt lõi</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Core Values</p>
                 <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-                    Giá trị ZenStyle theo đuổi
+                    Values ZenStyle pursues
                 </h2>
             </div>
 
             <div class="mt-8 grid gap-4 md:grid-cols-3">
                 @foreach ($values as $value)
-                    <article class="group rounded-zen-lg border border-zen-border bg-white p-5 shadow-zen transition hover:-translate-y-1 hover:border-zen-border-dark hover:shadow-zen-md">
+                    <article class="group rounded-zen-lg border border-zen-border bg-white p-5 shadow-zen">
                         <div class="flex items-start gap-4">
                             <span class="grid size-9 shrink-0 place-items-center rounded-full bg-zen-accent-soft text-xs font-semibold text-zen-primary ring-1 ring-zen-border">
                                 {{ $value['number'] }}
@@ -195,12 +144,12 @@
     <section class="bg-white px-4 py-12 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <div class="mx-auto max-w-2xl text-center">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Hành trình</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Journey</p>
                 <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-                    Hành trình ZenStyle
+                    The ZenStyle Journey
                 </h2>
                 <p class="mt-3 text-sm leading-relaxed text-zen-muted">
-                    Bốn cột mốc chính định hình cách ZenStyle phục vụ khách hàng hôm nay.
+                    Four key milestones that shape how ZenStyle serves customers today.
                 </p>
             </div>
 
@@ -227,41 +176,39 @@
     <section class="bg-gradient-to-b from-zen-bg-soft to-white px-4 py-14 sm:px-6 lg:py-16">
         <div class="mx-auto max-w-6xl">
             <div class="max-w-3xl">
-                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Đội ngũ</p>
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Our team</p>
                 <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-                    Gặp gỡ các stylist của ZenStyle
+                    Meet the ZenStyle stylists
                 </h2>
                 <p class="mt-3 text-sm leading-relaxed text-zen-muted sm:text-base">
-                    Mỗi thành viên phụ trách một thế mạnh riêng, nhưng cùng chung cách làm: tư vấn kỹ, thao tác gọn và chăm sóc khách rõ ràng trước, trong và sau buổi hẹn.
+                    Each team member brings a clear specialty, with the same goal: thoughtful consultation, clean execution, and a comfortable salon experience.
                 </p>
             </div>
 
-            <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach ($team as $member)
-                    <article class="group overflow-hidden rounded-zen-lg border border-zen-border bg-white shadow-zen transition hover:-translate-y-1 hover:shadow-zen-md">
-                        <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
-                            <img
-                                src="{{ $member['image'] }}"
-                                alt="{{ $member['name'] }}"
-                                class="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                                loading="lazy"
-                            >
-                        </div>
-                        <div class="p-5">
-                            <h3 class="text-lg font-semibold text-zen-text">{{ $member['name'] }}</h3>
-                            <p class="mt-1 text-sm font-medium text-zen-primary">{{ $member['role'] }}</p>
-                            <p class="mt-3 text-sm leading-relaxed text-zen-muted">{{ $member['bio'] }}</p>
-                            <div class="mt-4 flex flex-wrap gap-2">
-                                @foreach ($member['badges'] as $badge)
-                                    <span class="rounded-full bg-zen-accent-soft px-3 py-1 text-xs font-semibold text-zen-primary">
-                                        {{ $badge }}
-                                    </span>
-                                @endforeach
+            @if($teamMembers->isEmpty())
+                <div class="mt-10 rounded-zen-lg border border-zen-border bg-zen-bg p-8 text-center shadow-sm">
+                    <p class="text-sm font-medium text-zen-muted">Our stylist team will be updated soon.</p>
+                </div>
+            @else
+                <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    @foreach ($teamMembers as $member)
+                        <article class="group overflow-hidden rounded-none border border-zen-border bg-white shadow-sm">
+                            <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
+                                <img
+                                    src="{{ $member->avatar ? asset('storage/' . $member->avatar) : asset('images/tailadmin/user/user-01.jpg') }}"
+                                    alt="{{ $member->full_name }}"
+                                    class="h-full w-full object-cover"
+                                    loading="lazy"
+                                >
                             </div>
-                        </div>
-                    </article>
-                @endforeach
-            </div>
+                            <div class="p-5">
+                                <h3 class="text-lg font-semibold text-zen-text">{{ $member->full_name }}</h3>
+                                <p class="mt-1 text-sm font-medium text-zen-primary">{{ $member->specialization ?? 'ZenStyle Stylist' }}</p>
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
 
@@ -269,9 +216,9 @@
         <div class="mx-auto max-w-6xl">
             <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Vì sao chọn ZenStyle?</p>
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">Why choose ZenStyle?</p>
                     <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-                        Một trải nghiệm làm đẹp dễ hiểu từ đầu đến cuối.
+                        A clear beauty experience from start to finish.
                     </h2>
                 </div>
                 <div class="grid gap-4 sm:grid-cols-2">
@@ -281,30 +228,6 @@
                             <p class="mt-2 text-sm leading-relaxed text-zen-muted">{{ $reason['body'] }}</p>
                         </article>
                     @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-white px-4 py-14 sm:px-6 lg:py-16">
-        <div class="mx-auto max-w-6xl overflow-hidden rounded-none border border-zen-border bg-zen-accent-soft p-8 sm:p-10 lg:p-12 shadow-none">
-            <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-                <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle booking</p>
-                    <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-                        Sẵn sàng làm mới diện mạo của bạn?
-                    </h2>
-                    <p class="mt-3 max-w-2xl text-sm leading-relaxed text-zen-muted sm:text-base">
-                        Chọn dịch vụ, thời gian và stylist phù hợp. ZenStyle sẽ ghi nhận lịch hẹn và liên hệ xác nhận nếu cần.
-                    </p>
-                </div>
-                <div class="flex flex-col gap-3 sm:flex-row lg:flex-row">
-                    <a href="{{ route('booking') }}" class="zen-btn-primary">
-                        Đặt lịch ngay
-                    </a>
-                    <a href="{{ route('services') }}" class="zen-btn-secondary">
-                        Xem dịch vụ
-                    </a>
                 </div>
             </div>
         </div>

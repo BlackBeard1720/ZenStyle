@@ -313,35 +313,44 @@
 
           <div class="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
-              <label for="full-name" class="mb-1.5 block text-sm font-medium text-zen-muted">Full Name</label>
+              <label for="full-name" class="mb-1.5 block text-sm font-medium text-zen-muted">
+                Full Name <span class="text-red-500">*</span>
+              </label>
               <input
                 id="full-name"
                 name="full_name"
                 type="text"
                 placeholder="John Doe"
+                required
                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
               >
             </div>
 
             <div>
-              <label for="phone" class="mb-1.5 block text-sm font-medium text-zen-muted">Phone Number</label>
+              <label for="phone" class="mb-1.5 block text-sm font-medium text-zen-muted">
+                Phone Number <span class="text-red-500">*</span>
+              </label>
               <input
                 id="phone"
                 name="phone"
                 type="tel"
                 placeholder="09xx xxx xxx"
+                required
                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
               >
             </div>
 
             <div>
-              <label for="email" class="mb-1.5 block text-sm font-medium text-zen-muted">Email</label>
+              <label for="email" class="mb-1.5 block text-sm font-medium text-zen-muted">
+                Email <span class="text-red-500">*</span>
+              </label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 value="{{ old('email') }}"
                 placeholder="example@gmail.com"
+                required
                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
               >
               @error('email')

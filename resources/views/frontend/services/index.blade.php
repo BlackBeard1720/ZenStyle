@@ -58,7 +58,7 @@
           @foreach ($services as $service)
             <a
               href="{{ route('services.show', $service) }}"
-              class="block overflow-hidden border border-zen-border bg-white shadow-zen"
+              class="group block overflow-hidden border border-zen-border bg-white shadow-zen"
             >
               <div class="aspect-[4/3] overflow-hidden bg-zen-bg-soft">
                 <img
@@ -88,9 +88,10 @@
                     ${{ number_format((float) $service->price, 0) }}
                   </p>
 
-                  <span class="font-semibold text-zen-accent-dark">
-          View detail &gt;&gt;&gt;
-        </span>
+                  <span class="inline-flex items-center gap-1 font-semibold text-zen-accent-dark">
+                    <span>View detail</span>
+                    <x-heroicon-o-arrow-right class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                  </span>
                 </div>
               </div>
             </a>

@@ -44,9 +44,10 @@
                   href="{{ $post['external_url'] }}"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="mt-auto pt-4 inline-flex text-sm font-semibold text-zen-accent-dark transition hover:text-zen-primary"
+                  class="group mt-auto pt-4 inline-flex items-center gap-1 text-sm font-semibold text-zen-accent-dark transition hover:text-zen-primary"
                 >
-                  Read more &gt;&gt;&gt;
+                  <span>Read more</span>
+                  <x-heroicon-o-arrow-right class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </a>
               </div>
             </article>
