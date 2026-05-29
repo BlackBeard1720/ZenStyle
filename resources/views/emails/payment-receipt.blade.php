@@ -128,10 +128,10 @@
                                                 {{ $item->service->duration }} minutes
                                             </span>
                     @endif
-                    @if($item->service)
+                    @if($item->service && $item->service->status === 'active' && $item->service->category?->status === 'active')
                       <br>
-                      <a href="{{ route('services.show', $item->service) }}#comments" style="display:inline-block;margin-top:8px;padding:7px 12px;border-radius:999px;background:#0f766e;color:#ffffff;font-size:12px;font-weight:bold;text-decoration:none;">
-                        Đánh giá dịch vụ này
+                      <a href="{{ route('services.show', ['service' => $item->service->id]) }}#comments" style="display:inline-block;margin-top:8px;color:#0f766e;font-size:12px;font-weight:600;text-decoration:underline;">
+                        Review this service
                       </a>
                     @endif
                   </td>

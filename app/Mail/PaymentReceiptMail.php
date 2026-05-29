@@ -20,7 +20,7 @@ class PaymentReceiptMail extends Mailable
     {
         $this->payment = $payment->loadMissing([
             'appointment.client',
-            'appointment.appointmentServices.service',
+            'appointment.appointmentServices.service.category',
             'appointment.appointmentServices.staff',
         ]);
     }
