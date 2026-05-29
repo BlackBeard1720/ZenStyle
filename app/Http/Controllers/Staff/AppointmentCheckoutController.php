@@ -153,7 +153,7 @@ class AppointmentCheckoutController extends Controller
     {
         $payment->loadMissing([
             'appointment.client',
-            'appointment.appointmentServices.service',
+            'appointment.appointmentServices.service.category',
             'appointment.appointmentServices.staff',
         ]);
 
