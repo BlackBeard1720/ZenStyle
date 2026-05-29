@@ -1,28 +1,28 @@
 @php
     $faqs = [
         [
-            'question' => 'Tôi có cần đặt lịch trước không?',
-            'answer' => 'Bạn nên đặt lịch trước để ZenStyle giữ khung giờ phù hợp và chuẩn bị stylist theo dịch vụ đã chọn. Salon vẫn hỗ trợ khách đến trực tiếp nếu còn chỗ trống.',
+            'question' => 'Do I need to book an appointment in advance?',
+            'answer' => 'We highly recommend booking in advance so that ZenStyle can reserve the perfect time slot and prepare your stylist. Walk-ins are still welcome if slots are available.',
         ],
         [
-            'question' => 'Sau khi đặt lịch online, tôi nhận xác nhận bằng cách nào?',
-            'answer' => 'Sau khi gửi thông tin đặt lịch, hệ thống hiển thị bước xác nhận OTP. Team ZenStyle có thể liên hệ lại qua số điện thoại bạn cung cấp để chốt lịch khi cần.',
+            'question' => 'How do I receive confirmation after booking online?',
+            'answer' => 'Once you submit your booking, the system will verify it via OTP. Our team may reach out to confirm or adjust your slot details if necessary.',
         ],
         [
-            'question' => 'Tôi có thể chọn nhiều dịch vụ trong một lịch hẹn không?',
-            'answer' => 'Có. Ở trang đặt lịch, bạn có thể chọn nhiều dịch vụ trong cùng một buổi hẹn. Tổng tạm tính sẽ cập nhật theo các dịch vụ được chọn.',
+            'question' => 'Can I book multiple services for a single appointment?',
+            'answer' => 'Yes. On the booking page, you can select multiple services for the same slot. The estimated total price will update accordingly.',
         ],
         [
-            'question' => 'Tôi có thể đổi giờ hoặc hủy lịch không?',
-            'answer' => 'Bạn vui lòng liên hệ hotline hoặc nhắn tin cho ZenStyle càng sớm càng tốt. Salon sẽ hỗ trợ đổi sang khung giờ còn trống phù hợp.',
+            'question' => 'Can I reschedule or cancel my appointment?',
+            'answer' => 'Yes, please contact our hotline or message us as early as possible. We will happily help you reschedule to another available slot.',
         ],
         [
-            'question' => 'Giá trên website có phải giá cuối cùng không?',
-            'answer' => 'Giá trên website là mức tham khảo cho dịch vụ tiêu chuẩn. Một số dịch vụ màu, uốn hoặc phục hồi có thể thay đổi theo tình trạng tóc và tư vấn trực tiếp tại salon.',
+            'question' => 'Are the prices shown on the website final?',
+            'answer' => 'Website prices are standard references. Services like hair coloring, perming, or specialty treatments may vary based on your hair condition and direct consultation.',
         ],
         [
-            'question' => 'Tôi cần chuẩn bị gì trước khi đến salon?',
-            'answer' => 'Bạn chỉ cần đến đúng giờ hẹn và mang theo ảnh tham khảo nếu muốn tư vấn kiểu tóc, màu nhuộm hoặc phong cách cụ thể.',
+            'question' => 'What should I prepare before coming to the salon?',
+            'answer' => 'Just arrive on time! Feel free to bring reference photos of haircuts, colors, or styles you would like to discuss with our stylists.',
         ],
     ];
 @endphp
@@ -32,10 +32,10 @@
         <div class="mx-auto max-w-4xl">
             <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">FAQ</p>
             <h1 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
-                Câu hỏi thường gặp
+                Frequently Asked Questions
             </h1>
             <p class="mt-4 text-sm leading-relaxed text-zen-muted sm:text-base">
-                Những thông tin nhanh về đặt lịch, dịch vụ và trải nghiệm tại ZenStyle.
+                Quick answers to common questions about appointments, services, and the ZenStyle experience.
             </p>
         </div>
     </section>

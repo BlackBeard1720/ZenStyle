@@ -61,7 +61,6 @@
     select,
     textarea,
     label,
-    .booking-cta,
     .site-nav-link,
     .site-nav-cta {
         @apply font-body;
@@ -71,7 +70,6 @@
     input[type='button'],
     input[type='submit'],
     input[type='reset'],
-    .booking-cta,
     .site-nav-cta {
         font-weight: 600;
     }
@@ -110,20 +108,87 @@
 }
 
 @layer components {
-    .booking-cta {
-        @apply bg-linear-to-r from-zen-primary via-zen-accent to-zen-primary-light text-zen-text-light shadow-zen-md ring-1 ring-white/50 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:from-zen-primary-dark hover:via-zen-primary hover:to-zen-accent hover:text-zen-text-light hover:shadow-zen-md active:translate-y-0;
-    }
+
 
     #site-header[data-on-banner='true'] {
         @apply border-transparent bg-transparent shadow-none backdrop-blur-none;
     }
 
     #site-header[data-on-banner='true'] .site-nav-link {
-        @apply text-white! hover:text-zen-bg-soft!;
+        @apply text-white! hover:text-zen-accent!;
+    }
+
+    #site-header[data-on-banner='true'] .site-nav-link.is-active {
+        @apply text-zen-accent!;
     }
 
     #site-header[data-on-banner='true'] .site-nav-logo {
         filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+    }
+
+    .site-nav-brand {
+        transition: color 300ms ease;
+    }
+
+    #site-header[data-on-banner='true'] .site-nav-brand,
+    #site-header[data-on-banner='true'] .site-nav-brand span {
+        @apply text-white!;
+    }
+
+    #site-header[data-on-banner='true'] #mobile-menu-toggle {
+        @apply border-white/20 bg-transparent text-white!;
+    }
+
+    #site-header.mobile-menu-open {
+        @apply border-zen-border! bg-zen-bg/95! backdrop-blur-md! shadow-zen-md!;
+    }
+
+    #site-header.mobile-menu-open .site-nav-brand {
+        @apply text-zen-text!;
+    }
+
+    #site-header.mobile-menu-open .site-nav-brand span:first-child {
+        @apply text-zen-primary!;
+    }
+
+    #site-header.mobile-menu-open .site-nav-brand span:last-child {
+        @apply text-zen-text!;
+    }
+
+    #site-header.mobile-menu-open #mobile-menu-toggle {
+        @apply border-zen-border! bg-zen-bg! text-zen-text!;
+    }
+
+    #mobile-menu-toggle[aria-expanded='true'] #hamburger-line-top {
+        transform: translateY(6px) rotate(45deg);
+    }
+
+    #mobile-menu-toggle[aria-expanded='true'] #hamburger-line-middle {
+        opacity: 0;
+    }
+
+    #mobile-menu-toggle[aria-expanded='true'] #hamburger-line-bottom {
+        transform: translateY(-6px) rotate(-45deg);
+    }
+
+    [data-service-track] {
+        display: flex;
+        width: max-content;
+        animation: service-marquee 32s linear infinite;
+        will-change: transform;
+    }
+
+    [data-service-carousel]:hover [data-service-track] {
+        animation-play-state: paused;
+    }
+
+    @keyframes service-marquee {
+        from {
+            transform: translate3d(0, 0, 0);
+        }
+        to {
+            transform: translate3d(-50%, 0, 0);
+        }
     }
 
     .reveal-up {
@@ -175,7 +240,7 @@
     }
 
     .scroll-top-btn {
-        @apply fixed z-40 grid h-10 w-10 place-items-center rounded-full border border-white/50 bg-linear-to-r from-zen-primary via-zen-accent to-zen-primary-light text-base font-extrabold text-zen-text-light shadow-zen ring-1 ring-zen-primary/25 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:from-zen-primary-dark hover:via-zen-primary hover:to-zen-accent hover:text-zen-text-light hover:shadow-zen-md focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/65 focus-visible:ring-offset-2;
+        @apply fixed z-40 flex h-10 w-10 items-center justify-center rounded-full bg-zen-accent text-base font-medium text-white shadow-zen-md transition-all duration-300 ease-out hover:bg-zen-accent-dark hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 cursor-pointer;
         right: max(1rem, env(safe-area-inset-right, 0px));
         bottom: calc(max(1.25rem, env(safe-area-inset-bottom, 0px)) + 3.9rem);
         opacity: 0;
@@ -209,7 +274,6 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .booking-cta,
         .scroll-top-btn,
         .reveal-up,
         .hero-reveal,
@@ -224,5 +288,13 @@
         .hero-reveal {
             opacity: 1 !important;
         }
+    }
+
+    .zen-btn-primary {
+        @apply inline-flex items-center justify-center rounded-full bg-zen-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-zen-accent-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
+    }
+
+    .zen-btn-secondary {
+        @apply inline-flex items-center justify-center rounded-full border border-zen-accent bg-white px-6 py-3 text-sm font-semibold text-zen-accent transition-all duration-300 ease-out hover:bg-zen-accent/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
     }
 }

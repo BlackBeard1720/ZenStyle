@@ -13,13 +13,13 @@ function initNavbarAutoHide() {
     let ticking = false;
 
     function updateActiveNavByHash() {
-        const navLinks = Array.from(header.querySelectorAll('.site-nav-link[data-nav-key]'));
+        const navLinks = Array.from(header.querySelectorAll('.site-nav-link[data-nav-key], .mobile-nav-link[data-nav-key]'));
         if (!navLinks.length) {
             return;
         }
 
         navLinks.forEach((link) => {
-            link.classList.remove('is-active', 'text-zen-text', 'after:scale-x-100');
+            link.classList.remove('is-active', 'text-zen-accent', 'text-zen-primary', 'after:scale-x-100');
             if (!link.classList.contains('text-zen-muted')) {
                 link.classList.add('text-zen-muted');
             }
@@ -46,19 +46,24 @@ function initNavbarAutoHide() {
             activeKey = 'news';
         } else if (path === '/lien-he') {
             activeKey = 'contact';
+        } else if (path === '/faq') {
+            activeKey = 'faq';
         }
 
         if (!activeKey) {
             return;
         }
 
-        const activeLink = header.querySelector(`.site-nav-link[data-nav-key="${activeKey}"]`);
-        if (!activeLink) {
-            return;
-        }
-
-        activeLink.classList.add('is-active', 'text-zen-text', 'after:scale-x-100');
-        activeLink.classList.remove('text-zen-muted');
+        const activeLinks = header.querySelectorAll(`.site-nav-link[data-nav-key="${activeKey}"], .mobile-nav-link[data-nav-key="${activeKey}"]`);
+        activeLinks.forEach((activeLink) => {
+            activeLink.classList.add('is-active');
+            activeLink.classList.remove('text-zen-muted');
+            if (activeLink.classList.contains('site-nav-link')) {
+                activeLink.classList.add('text-zen-accent', 'after:scale-x-100');
+            } else {
+                activeLink.classList.add('text-zen-primary');
+            }
+        });
     }
 
     function updateHeroNavTheme() {
@@ -186,8 +191,54 @@ function initFloatingBookingButton() {
     syncVisibility();
 }
 
+function initMobileMenu() {
+    const header = document.getElementById('site-header');
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (!toggleBtn || !mobileMenu || !header) {
+        return;
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        const isOpen = toggleBtn.getAttribute('aria-expanded') === 'true';
+
+        toggleBtn.setAttribute('aria-expanded', !isOpen);
+
+        if (!isOpen) {
+            mobileMenu.classList.remove('pointer-events-none', 'opacity-0', 'scale-y-95');
+            mobileMenu.classList.add('pointer-events-auto', 'opacity-100', 'scale-y-100');
+            header.classList.add('mobile-menu-open');
+        } else {
+            mobileMenu.classList.remove('pointer-events-auto', 'opacity-100', 'scale-y-100');
+            mobileMenu.classList.add('pointer-events-none', 'opacity-0', 'scale-y-95');
+            header.classList.remove('mobile-menu-open');
+        }
+    });
+
+    const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-link');
+    mobileLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            mobileMenu.classList.remove('pointer-events-auto', 'opacity-100', 'scale-y-100');
+            mobileMenu.classList.add('pointer-events-none', 'opacity-0', 'scale-y-95');
+            header.classList.remove('mobile-menu-open');
+        });
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 640) {
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            mobileMenu.classList.remove('pointer-events-auto', 'opacity-100', 'scale-y-100');
+            mobileMenu.classList.add('pointer-events-none', 'opacity-0', 'scale-y-95');
+            header.classList.remove('mobile-menu-open');
+        }
+    }, { passive: true });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initNavbarAutoHide();
     initScrollTopButton();
     initFloatingBookingButton();
+    initMobileMenu();
 });

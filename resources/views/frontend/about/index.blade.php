@@ -126,10 +126,10 @@
                     ZenStyle kết hợp tay nghề stylist, không gian chăm sóc thư giãn và quy trình đặt lịch rõ ràng để mỗi buổi làm đẹp trở nên nhẹ nhàng, chuyên nghiệp và dễ tin cậy hơn.
                 </p>
                 <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-                    <a href="{{ route('booking') }}" class="inline-flex w-fit items-center justify-center rounded-full bg-zen-primary px-6 py-3 text-sm font-semibold text-white shadow-zen transition hover:-translate-y-0.5 hover:bg-zen-primary-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40 focus-visible:ring-offset-2">
+                    <a href="{{ route('booking') }}" class="zen-btn-primary">
                         Đặt lịch ngay
                     </a>
-                    <a href="{{ route('services') }}" class="inline-flex w-fit items-center justify-center rounded-full border border-zen-primary bg-white/85 px-6 py-3 text-sm font-semibold text-zen-primary shadow-sm transition hover:-translate-y-0.5 hover:bg-zen-accent-soft">
+                    <a href="{{ route('services') }}" class="zen-btn-secondary">
                         Khám phá dịch vụ
                     </a>
                 </div>
@@ -286,23 +286,23 @@
         </div>
     </section>
 
-    <section class="bg-zen-bg-soft px-4 py-14 sm:px-6 lg:py-16">
-        <div class="mx-auto max-w-6xl overflow-hidden rounded-zen-lg border border-zen-border bg-zen-bg-dark p-8 shadow-zen-md sm:p-10 lg:p-12">
+    <section class="bg-white px-4 py-14 sm:px-6 lg:py-16">
+        <div class="mx-auto max-w-6xl overflow-hidden rounded-none border border-zen-border bg-zen-accent-soft p-8 sm:p-10 lg:p-12 shadow-none">
             <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-accent-soft">ZenStyle booking</p>
-                    <h2 class="mt-3 font-heading text-3xl font-semibold text-white sm:text-4xl">
+                    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-zen-primary">ZenStyle booking</p>
+                    <h2 class="mt-3 font-heading text-3xl font-semibold text-zen-text sm:text-4xl">
                         Sẵn sàng làm mới diện mạo của bạn?
                     </h2>
-                    <p class="mt-3 max-w-2xl text-sm leading-relaxed text-white/75 sm:text-base">
+                    <p class="mt-3 max-w-2xl text-sm leading-relaxed text-zen-muted sm:text-base">
                         Chọn dịch vụ, thời gian và stylist phù hợp. ZenStyle sẽ ghi nhận lịch hẹn và liên hệ xác nhận nếu cần.
                     </p>
                 </div>
-                <div class="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                    <a href="{{ route('booking') }}" class="booking-cta inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold">
+                <div class="flex flex-col gap-3 sm:flex-row lg:flex-row">
+                    <a href="{{ route('booking') }}" class="zen-btn-primary">
                         Đặt lịch ngay
                     </a>
-                    <a href="{{ route('services') }}" class="inline-flex items-center justify-center rounded-full border border-white/35 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10">
+                    <a href="{{ route('services') }}" class="zen-btn-secondary">
                         Xem dịch vụ
                     </a>
                 </div>
