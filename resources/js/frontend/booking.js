@@ -11,6 +11,12 @@ const SEL = {
     stylistRadios: 'input[data-booking-stylist-radio]',
     staffNameInput: '[data-booking-staff-name-input]',
     timeInput: '[data-booking-time-input]',
+    serviceSearchInput: '#service-search',
+    serviceSortSelect: '#service-sort',
+    serviceTypeFilter: '[data-service-type-filter]',
+    serviceRow: '[data-booking-service-row]',
+    serviceList: '[data-service-list]',
+    serviceFilterEmpty: '[data-service-filter-empty]',
 };
 
 const dayClasses = {
@@ -132,6 +138,97 @@ function initBookingPage(root) {
     const promoHint = root.querySelector(SEL.promoHint);
     const staffNameInput = root.querySelector(SEL.staffNameInput);
     const timeInput = root.querySelector(SEL.timeInput);
+
+    // --- Service filter/sort ---
+    const serviceSearchInput = root.querySelector(SEL.serviceSearchInput);
+    const serviceSortSelect = root.querySelector(SEL.serviceSortSelect);
+    const serviceTypeFilters = [...root.querySelectorAll(SEL.serviceTypeFilter)];
+    const serviceRows = [...root.querySelectorAll(SEL.serviceRow)];
+    const serviceList = root.querySelector(SEL.serviceList);
+    const serviceFilterEmpty = root.querySelector(SEL.serviceFilterEmpty);
+
+    function getSelectedServiceTypes() {
+        const allCheckbox = serviceTypeFilters.find((cb) => cb.value === 'all');
+        const selectedTypes = serviceTypeFilters
+            .filter((cb) => cb.value !== 'all' && cb.checked)
+            .map((cb) => cb.value);
+
+        if (allCheckbox?.checked || selectedTypes.length === 0) {
+            return ['all'];
+        }
+
+        return selectedTypes;
+    }
+
+    function applyServiceFilterAndSort() {
+        const keyword = serviceSearchInput?.value.trim().toLowerCase() ?? '';
+        const selectedTypes = getSelectedServiceTypes();
+        const sortValue = serviceSortSelect?.value ?? 'default';
+        let visibleCount = 0;
+
+        serviceRows.forEach((row) => {
+            const name = (row.dataset.serviceName ?? '').toLowerCase();
+            const category = row.dataset.serviceCategory ?? '';
+
+            const matchName = !keyword || name.includes(keyword);
+            const matchType = selectedTypes.includes('all') || selectedTypes.includes(category);
+            const shouldShow = matchName && matchType;
+
+            row.hidden = !shouldShow;
+            if (shouldShow) visibleCount += 1;
+        });
+
+        // Sap xep lai DOM theo tieu chi hien tai
+        const sortedRows = [...serviceRows].sort((a, b) => {
+            const nameA = a.dataset.serviceName ?? '';
+            const nameB = b.dataset.serviceName ?? '';
+            const priceA = Number(a.dataset.servicePrice ?? 0);
+            const priceB = Number(b.dataset.servicePrice ?? 0);
+            const orderA = Number(a.dataset.serviceOrder ?? 0);
+            const orderB = Number(b.dataset.serviceOrder ?? 0);
+
+            if (sortValue === 'price-asc') return priceA - priceB;
+            if (sortValue === 'price-desc') return priceB - priceA;
+            if (sortValue === 'name-asc') return nameA.localeCompare(nameB);
+            if (sortValue === 'name-desc') return nameB.localeCompare(nameA);
+
+            return orderA - orderB;
+        });
+
+        sortedRows.forEach((row) => serviceList?.appendChild(row));
+
+        if (serviceFilterEmpty) {
+            serviceFilterEmpty.hidden = visibleCount > 0;
+        }
+    }
+
+    serviceSearchInput?.addEventListener('input', applyServiceFilterAndSort);
+    serviceSortSelect?.addEventListener('change', applyServiceFilterAndSort);
+
+    serviceTypeFilters.forEach((checkbox) => {
+        checkbox.addEventListener('change', function () {
+            const allCheckbox = serviceTypeFilters.find((item) => item.value === 'all');
+            const typeCheckboxes = serviceTypeFilters.filter((item) => item.value !== 'all');
+
+            if (this.value === 'all' && this.checked) {
+                typeCheckboxes.forEach((item) => { item.checked = false; });
+            }
+
+            if (this.value !== 'all' && this.checked && allCheckbox) {
+                allCheckbox.checked = false;
+            }
+
+            const hasSelectedType = typeCheckboxes.some((item) => item.checked);
+            if (!hasSelectedType && allCheckbox) {
+                allCheckbox.checked = true;
+            }
+
+            applyServiceFilterAndSort();
+        });
+    });
+
+    applyServiceFilterAndSort();
+    // --- End service filter/sort ---
 
     function selectedSlot() {
         return slotButtons.find((b) => b.getAttribute('aria-pressed') === 'true');
@@ -407,21 +504,31 @@ function initBookingPage(root) {
         promoHint.hidden = false;
         promoHint.classList.remove('text-zen-muted');
         promoHint.classList.add('text-zen-success');
-        promoHint.textContent = `Promotion code “${raw}” has been recorded (demo only, no discount applied).`;
+        promoHint.textContent = `Promotion code "${raw}" has been recorded (demo only, no discount applied).`;
     });
 
     form?.addEventListener('submit', (e) => {
         if (!timeInput?.value) {
             e.preventDefault();
-            const slotGroup = root.querySelector('[aria-label="Start time"]');err.textContent = 'Please select a time slot before booking.';
-            if (slotGroup && !root.querySelector('#booking-slot-error')) {
-                const err = document.createElement('p');
-                err.id = 'booking-slot-error';
-                err.className = 'mt-2 text-xs font-medium text-red-600';
-                err.textContent = 'Please select a time slot before booking.';
-                slotGroup.after(err);
+
+            // Hien error neu chua chon gio, tranh dung bien truoc khi khai bao
+            const slotGroup = root.querySelector('[aria-label="Start time"]');
+            let errEl = root.querySelector('#booking-slot-error');
+
+            if (!errEl) {
+                errEl = document.createElement('p');
+                errEl.id = 'booking-slot-error';
+                errEl.className = 'mt-2 text-xs font-medium text-red-600';
+                if (slotGroup) slotGroup.after(errEl);
             }
-            root.querySelector('#booking-slot-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            if (errEl) {
+                errEl.textContent = 'Please select a time slot before booking.';
+                errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } else {
+            // Xoa loi cu khi da chon gio
+            root.querySelector('#booking-slot-error')?.remove();
         }
     });
 
