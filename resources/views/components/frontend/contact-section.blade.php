@@ -35,7 +35,7 @@
         </a>
         <a
           href="{{ route('contact') }}"
-          class="bg-zen-primary text-zen-text-light hover:bg-zen-primary-dark inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition"
+          class="bg-zen-accent text-zen-text-light hover:bg-zen-accent-dark inline-flex w-fit items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-sm transition"
         >
           <x-heroicon-o-document-text class="h-4 w-4" />
           Contact Form

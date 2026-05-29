@@ -77,9 +77,9 @@
 
         <a
             href="{{ route('booking') }}"
-            class="site-nav-cta booking-cta relative z-10 ml-auto shrink-0 rounded-full px-4 py-2 text-sm font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary focus-visible:ring-offset-2 hidden sm:inline-flex"
+            class="zen-btn-primary relative z-10 ml-auto shrink-0 hidden sm:inline-flex"
         >
-            Book Appointment
+            Book Now
         </a>
 
         <!-- Hamburger Button for Mobile -->
@@ -149,9 +149,9 @@
             </a>
             <a
                 href="{{ route('booking') }}"
-                class="mobile-nav-cta booking-cta mt-2 flex items-center justify-center rounded-full py-3 text-center text-sm font-semibold"
+                class="zen-btn-primary mt-2 flex justify-center w-full"
             >
-                Book Appointment
+                Book Now
             </a>
         </div>
     </div>

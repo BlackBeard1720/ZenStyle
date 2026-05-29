@@ -61,7 +61,6 @@
     select,
     textarea,
     label,
-    .booking-cta,
     .site-nav-link,
     .site-nav-cta {
         @apply font-body;
@@ -71,7 +70,6 @@
     input[type='button'],
     input[type='submit'],
     input[type='reset'],
-    .booking-cta,
     .site-nav-cta {
         font-weight: 600;
     }
@@ -110,9 +108,7 @@
 }
 
 @layer components {
-    .booking-cta {
-        @apply bg-linear-to-r from-zen-primary via-zen-accent to-zen-primary-light text-zen-text-light shadow-zen-md ring-1 ring-white/50 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:from-zen-primary-dark hover:via-zen-primary hover:to-zen-accent hover:text-zen-text-light hover:shadow-zen-md active:translate-y-0;
-    }
+
 
     #site-header[data-on-banner='true'] {
         @apply border-transparent bg-transparent shadow-none backdrop-blur-none;
@@ -244,7 +240,7 @@
     }
 
     .scroll-top-btn {
-        @apply fixed z-40 grid h-10 w-10 place-items-center rounded-full border border-white/50 bg-linear-to-r from-zen-primary via-zen-accent to-zen-primary-light text-base font-extrabold text-zen-text-light shadow-zen ring-1 ring-zen-primary/25 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:from-zen-primary-dark hover:via-zen-primary hover:to-zen-accent hover:text-zen-text-light hover:shadow-zen-md focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/65 focus-visible:ring-offset-2;
+        @apply fixed z-40 flex h-10 w-10 items-center justify-center rounded-full bg-zen-accent text-base font-medium text-white shadow-zen-md transition-all duration-300 ease-out hover:bg-zen-accent-dark hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 cursor-pointer;
         right: max(1rem, env(safe-area-inset-right, 0px));
         bottom: calc(max(1.25rem, env(safe-area-inset-bottom, 0px)) + 3.9rem);
         opacity: 0;
@@ -278,7 +274,6 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .booking-cta,
         .scroll-top-btn,
         .reveal-up,
         .hero-reveal,
@@ -296,10 +291,10 @@
     }
 
     .zen-btn-primary {
-        @apply inline-flex items-center justify-center rounded-full bg-zen-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-zen-primary-light focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
+        @apply inline-flex items-center justify-center rounded-full bg-zen-accent px-6 py-3 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-zen-accent-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
     }
 
     .zen-btn-secondary {
-        @apply inline-flex items-center justify-center rounded-full border border-zen-primary bg-white px-6 py-3 text-sm font-semibold text-zen-primary transition-all duration-300 ease-out hover:bg-zen-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
+        @apply inline-flex items-center justify-center rounded-full border border-zen-accent bg-white px-6 py-3 text-sm font-semibold text-zen-accent transition-all duration-300 ease-out hover:bg-zen-accent/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-accent/60 focus-visible:ring-offset-2 active:translate-y-0 cursor-pointer;
     }
 }

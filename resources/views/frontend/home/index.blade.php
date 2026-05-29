@@ -291,7 +291,7 @@
         </div>
         <div class="flex flex-col gap-3 sm:flex-row">
           <a href="{{ route('booking') }}" class="zen-btn-primary">
-            Đặt lịch ngay
+            Book Now
           </a>
           <a href="{{ route('services') }}" class="zen-btn-secondary">
             Xem dịch vụ
