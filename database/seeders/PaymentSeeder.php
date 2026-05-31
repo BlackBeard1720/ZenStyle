@@ -25,25 +25,15 @@ class PaymentSeeder extends Seeder
         }
 
         foreach ($completedAppointments as $appointment) {
-            $paymentMethod = fake()->randomElement(['cash', 'paypal']);
-
             Payment::query()->create([
                 'appointment_id' => $appointment->id,
                 'amount' => $appointment->total_amount,
-                'payment_method' => $paymentMethod,
+                'payment_method' => 'cash',
                 'status' => 'paid',
-                'transaction_code' => $paymentMethod === 'paypal'
-                    ? 'PAYPAL-' . strtoupper(Str::random(12))
-                    : 'CASH-' . now()->format('YmdHis') . '-' . $appointment->id,
-                'paypal_order_id' => $paymentMethod === 'paypal'
-                    ? 'ORDER-' . strtoupper(Str::random(12))
-                    : null,
-                'paypal_capture_id' => $paymentMethod === 'paypal'
-                    ? 'CAPTURE-' . strtoupper(Str::random(12))
-                    : null,
-                'note' => $paymentMethod === 'paypal'
-                    ? 'Seeded PayPal payment.'
-                    : 'Seeded cash payment.',
+                'transaction_code' => 'CASH-' . now()->format('YmdHis') . '-' . $appointment->id,
+                'paypal_order_id' => null,
+                'paypal_capture_id' => null,
+                'note' => 'Seeded cash payment.',
                 'paid_at' => now()->subDays(fake()->numberBetween(0, 10)),
             ]);
         }

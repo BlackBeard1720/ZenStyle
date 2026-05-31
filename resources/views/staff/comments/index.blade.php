@@ -113,9 +113,15 @@
                 </td>
                 <td class="px-4 py-4 sm:px-6">
                   <div class="flex items-center justify-end gap-2 whitespace-nowrap">
-                    <a href="{{ route('staff.comments.edit', $item) }}" class="inline-flex min-w-[76px] items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-1 text-center text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
-                      Edit
-                    </a>
+                    @if($item->status !== 'approved')
+                      <form action="{{ route('staff.comments.approve', $item) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="inline-flex min-w-[76px] items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-1 text-center text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+                          Approve
+                        </button>
+                      </form>
+                    @endif
                     <x-staff.confirm-action
                       action="{{ route('staff.comments.destroy', $item) }}"
                       method="DELETE"

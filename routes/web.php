@@ -235,12 +235,7 @@ Route::prefix('staff')->name('staff.')
         Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])
             ->name('appointments.complete');
 
-        // route for appointment PayPal payment
-        Route::post('appointments/{appointment}/paypal/create-order', [AppointmentCheckoutController::class, 'createPayPalOrder'])
-            ->name('appointments.paypal.create-order');
 
-        Route::post('appointments/{appointment}/paypal/capture-order', [AppointmentCheckoutController::class, 'capturePayPalOrder'])
-            ->name('appointments.paypal.capture-order');
 
         // cancel appointment (soft delete -> change status)
         Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])
@@ -248,7 +243,9 @@ Route::prefix('staff')->name('staff.')
 
         Route::resource('categories', CategoryController::class);
         Route::resource('services', ServiceController::class);
-        Route::resource('comments', CommentController::class)->except(['show', 'create', 'store']);
+        Route::get('comments', [CommentController::class, 'index'])->name('comments.index');
+        Route::patch('comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
+        Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
         Route::resource('clients', ClientController::class);
 
