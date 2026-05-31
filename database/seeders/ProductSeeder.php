@@ -4,94 +4,74 @@ namespace Database\Seeders;
 
 use App\Models\Product;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 
 class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        Storage::disk('public')->makeDirectory('products');
-
         $products = [
             [
-                'name' => 'Keratin Shampoo',
+                'supplier_id' => 1,
+                'product_name' => 'Keratin Shampoo',
                 'sku' => 'SP001',
-                'url' => 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800',
+                'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1780201488/ChatGPT_Image_11_19_00_31_thg_5_2026_1_idltjy.png',
+                'description' => 'Keratin Shampoo',
                 'price' => 25,
-                'stock' => 50,
-                'min' => 10,
+                'stock_quantity' => 50,
+                'min_threshold' => 10,
+                'status' => 'active',
             ],
             [
-                'name' => 'Hair Dye Premium',
+                'supplier_id' => 1,
+                'product_name' => 'Hair Dye Premium',
                 'sku' => 'SP002',
-                'url' => 'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800',
+                'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1780201488/ChatGPT_Image_11_19_01_31_thg_5_2026_3_w6efqf.png',
+                'description' => 'Hair Dye Premium',
                 'price' => 18,
-                'stock' => 20,
-                'min' => 5,
+                'stock_quantity' => 20,
+                'min_threshold' => 5,
+                'status' => 'active',
             ],
             [
-                'name' => 'Spa Face Cream',
+                'supplier_id' => 1,
+                'product_name' => 'Spa Face Cream',
                 'sku' => 'SP003',
-                'url' => 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800',
+                'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1780201489/ChatGPT_Image_20_28_56_30_thg_5_2026_1_dtrwty.png',
+                'description' => 'Spa Face Cream',
                 'price' => 32,
-                'stock' => 30,
-                'min' => 8,
+                'stock_quantity' => 30,
+                'min_threshold' => 8,
+                'status' => 'active',
             ],
             [
-                'name' => 'Hair Serum',
+                'supplier_id' => 1,
+                'product_name' => 'Hair Serum',
                 'sku' => 'SP004',
-                'url' => 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800',
+                'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1780201488/ChatGPT_Image_11_19_00_31_thg_5_2026_2_u91y5b.png',
+                'description' => 'Hair Serum',
                 'price' => 28,
-                'stock' => 15,
-                'min' => 5,
+                'stock_quantity' => 15,
+                'min_threshold' => 5,
+                'status' => 'active',
             ],
             [
-                'name' => 'Hair Mask',
+                'supplier_id' => 1,
+                'product_name' => 'Hair Mask',
                 'sku' => 'SP005',
-                'url' => 'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800',
+                'image' => 'https://res.cloudinary.com/dg5hsfg4n/image/upload/q_auto/f_auto/v1780201489/ChatGPT_Image_20_28_56_30_thg_5_2026_2_kaecvr.png',
+                'description' => 'Hair Mask',
                 'price' => 35,
-                'stock' => 12,
-                'min' => 5,
+                'stock_quantity' => 12,
+                'min_threshold' => 5,
+                'status' => 'active',
             ],
         ];
 
-        foreach ($products as $index => $item) {
-
-            $imagePath = null;
-
-            try {
-
-                $imageName = strtolower($item['sku']) . '.jpg';
-
-                $imageContent = Http::timeout(20)
-                    ->get($item['url'])
-                    ->body();
-
-                Storage::disk('public')->put(
-                    'products/' . $imageName,
-                    $imageContent
-                );
-
-                $imagePath = 'products/' . $imageName;
-
-            } catch (\Exception $e) {
-
-                $imagePath = null;
-
-            }
-
-            Product::create([
-                'supplier_id' => ($index % 2) + 1,
-                'product_name' => $item['name'],
-                'sku' => $item['sku'],
-                'image' => $imagePath,
-                'description' => $item['name'],
-                'price' => $item['price'],
-                'stock_quantity' => $item['stock'],
-                'min_threshold' => $item['min'],
-                'status' => 'active',
-            ]);
+        foreach ($products as $product) {
+            Product::updateOrCreate(
+                ['sku' => $product['sku']],
+                $product
+            );
         }
     }
 }

@@ -132,17 +132,25 @@
       <a href="{{ route('staff.appointments.index') }}" class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">Back</a>
 
       @if($appointment->status === 'pending')
-        <form method="POST" action="{{ route('staff.appointments.confirm', $appointment) }}" onsubmit="return confirm('Confirm this appointment?')">
-          @csrf
-          @method('PATCH')
-          <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-success-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-success-600">Confirm</button>
-        </form>
+        <x-staff.confirm-action
+          action="{{ route('staff.appointments.confirm', $appointment) }}"
+          method="PATCH"
+          title="Confirm Appointment"
+          message="Confirm this appointment?"
+          variant="success"
+          buttonText="Confirm"
+          buttonClass="inline-flex items-center justify-center rounded-lg bg-success-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-success-600"
+        />
       @elseif($appointment->status === 'confirmed')
-        <form method="POST" action="{{ route('staff.appointments.complete', $appointment) }}" onsubmit="return confirm('Complete this appointment?')">
-          @csrf
-          @method('PATCH')
-          <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600">Complete</button>
-        </form>
+        <x-staff.confirm-action
+          action="{{ route('staff.appointments.complete', $appointment) }}"
+          method="PATCH"
+          title="Complete Appointment"
+          message="Complete this appointment?"
+          variant="primary"
+          buttonText="Complete"
+          buttonClass="inline-flex items-center justify-center rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600"
+        />
       @elseif($appointment->status === 'completed' && ! $isPaid)
         <a href="{{ route('staff.appointments.checkout.show', $appointment) }}"
            class="inline-flex items-center justify-center rounded-lg bg-success-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-success-600">
@@ -160,11 +168,15 @@
 
       @can('cancel-appointments')
         @if($appointment->canBeCancelled())
-          <form method="POST" action="{{ route('staff.appointments.cancel', $appointment) }}" onsubmit="return confirm('Cancel this appointment?')">
-            @csrf
-            @method('PATCH')
-            <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-error-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-error-600">Cancel Appointment</button>
-          </form>
+          <x-staff.confirm-action
+            action="{{ route('staff.appointments.cancel', $appointment) }}"
+            method="PATCH"
+            title="Cancel Appointment"
+            message="Cancel this appointment?"
+            variant="danger"
+            buttonText="Cancel Appointment"
+            buttonClass="inline-flex items-center justify-center rounded-lg bg-error-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-error-600"
+          />
         @endif
       @endcan
     </div>

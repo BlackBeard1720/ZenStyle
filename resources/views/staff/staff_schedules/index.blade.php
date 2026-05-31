@@ -170,13 +170,15 @@
                   </td>
                   <td class="px-4 py-4 sm:px-6">
                     <div class="flex items-center justify-end gap-2 whitespace-nowrap">
-                      <form method="POST" action="{{ route('staff.schedules.destroy', $schedule) }}" class="inline" onsubmit="return confirm('Delete this schedule?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="inline-flex min-w-[76px] items-center justify-center rounded-md bg-error-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-error-600">
-                          Delete
-                        </button>
-                      </form>
+                      <x-staff.confirm-action
+                        action="{{ route('staff.schedules.destroy', $schedule) }}"
+                        method="DELETE"
+                        title="Delete Schedule"
+                        message="Delete this schedule?"
+                        variant="danger"
+                        buttonText="Delete"
+                        buttonClass="inline-flex min-w-[76px] items-center justify-center rounded-md bg-error-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-error-600"
+                      />
                     </div>
                   </td>
                 </tr>

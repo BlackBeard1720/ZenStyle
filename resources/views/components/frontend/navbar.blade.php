@@ -51,13 +51,7 @@
                 >
                     Services
                 </a>
-                <a
-                    href="{{ route('booking') }}"
-                    data-nav-key="booking"
-                    class="site-nav-link relative pb-1 transition-colors after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-left after:rounded-full after:bg-zen-accent after:transition-transform after:duration-200 {{ $isBookingRoute ? 'is-active text-zen-accent after:scale-x-100 group-data-[on-banner=\'true\']:text-white group-data-[on-banner=\'true\']:after:bg-white' : 'text-zen-muted hover:text-zen-accent after:scale-x-0 hover:after:scale-x-100 group-data-[on-banner=\'true\']:text-white/80 group-data-[on-banner=\'true\']:hover:text-white group-data-[on-banner=\'true\']:after:bg-white' }}"
-                >
-                    Booking
-                </a>
+
                 <a
                     href="{{ route('news') }}"
                     data-nav-key="news"
@@ -173,13 +167,7 @@
             >
                 Services
             </a>
-            <a
-                href="{{ route('booking') }}"
-                data-nav-key="booking"
-                class="mobile-nav-link text-base font-semibold transition-colors hover:text-zen-text py-2 border-b border-zen-border/40 {{ $isBookingRoute ? 'is-active text-zen-primary' : 'text-zen-muted' }}"
-            >
-                Booking
-            </a>
+
             <a
                 href="{{ route('news') }}"
                 data-nav-key="news"

@@ -132,9 +132,9 @@
           <input name="sku" placeholder="SKU" class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
 
           <input
-            type="file"
+            type="url"
             name="image"
-            accept="image/*"
+            placeholder="Cloudinary image URL"
             class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
 
           <input name="price" type="number" step="0.01" placeholder="Price" class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
@@ -233,7 +233,7 @@
                   <div class="flex items-center gap-4">
                     <div class="h-[60px] w-[60px] overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
                       <img
-                        src="{{ $product->image ? asset('storage/'.$product->image) : asset('images/product-default.png') }}"
+                        src="{{ $product->image ?: asset('images/product-default.png') }}"
                         alt="{{ $product->product_name }}"
                         class="h-full w-full object-cover">
                     </div>
@@ -295,16 +295,15 @@
                         Edit
                       </button>
 
-                      <form method="POST" action="{{ route('staff.inventory.product.destroy', $product) }}">
-                        @csrf
-                        @method('DELETE')
-
-                        <button
-                          onclick="return confirm('Delete product?')"
-                          class="rounded-lg bg-red-600 px-3 py-2 text-xs font-medium text-white hover:bg-red-700">
-                          Delete
-                        </button>
-                      </form>
+                      <x-staff.confirm-action
+                        action="{{ route('staff.inventory.product.destroy', $product) }}"
+                        method="DELETE"
+                        title="Delete Product"
+                        message="Delete product?"
+                        variant="danger"
+                        buttonText="Delete"
+                        buttonClass="rounded-lg bg-red-600 px-3 py-2 text-xs font-medium text-white hover:bg-red-700"
+                      />
                     </div>
 
                     <form method="POST"
@@ -363,7 +362,7 @@
                     <input name="sku" value="{{ $product->sku }}"
                            class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm dark:border-gray-700 dark:text-white/90">
 
-                    <input type="file" name="image" accept="image/*"
+                    <input type="url" name="image" placeholder="Cloudinary image URL (leave empty to keep current)"
                            class="h-11 rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
 
                     <input name="price" type="number" step="0.01" value="{{ $product->price }}"

@@ -24,11 +24,15 @@
       </dl>
 
       @if($payment->status === 'paid')
-        <form method="POST" action="{{ route('staff.payments.refund', $payment) }}" class="mt-4" onsubmit="return confirm('Mark this payment as refunded?')">
-          @csrf
-          @method('PATCH')
-          <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-error-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-error-600">Mark as refunded</button>
-        </form>
+        <x-staff.confirm-action
+          action="{{ route('staff.payments.refund', $payment) }}"
+          method="PATCH"
+          title="Refund Payment"
+          message="Mark this payment as refunded?"
+          variant="danger"
+          buttonText="Mark as refunded"
+          buttonClass="inline-flex items-center justify-center rounded-lg bg-error-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-error-600"
+        />
       @endif
     </div>
 

@@ -1,4 +1,4 @@
-﻿<x-staff.layout title="Appointments" page-name="Appointments">
+<x-staff.layout title="Appointments" page-name="Appointments">
   <div x-data="{ pageName: `Appointments` }">
     <x-staff.partials.breadcrumb />
   </div>
@@ -133,21 +133,25 @@
                 <td class="px-4 py-4 sm:px-6">
                   <div class="flex items-center justify-end gap-2 whitespace-nowrap">
                     @if($appointment->status === 'pending')
-                      <form method="POST" action="{{ route('staff.appointments.confirm', $appointment) }}" onsubmit="return confirm('Confirm this appointment?')">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" class="inline-flex min-w-[76px] items-center justify-center rounded-md bg-success-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-success-600">
-                          Confirm
-                        </button>
-                      </form>
+                      <x-staff.confirm-action
+                        action="{{ route('staff.appointments.confirm', $appointment) }}"
+                        method="PATCH"
+                        title="Confirm Appointment"
+                        message="Confirm this appointment?"
+                        variant="success"
+                        buttonText="Confirm"
+                        buttonClass="inline-flex min-w-[76px] items-center justify-center rounded-md bg-success-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-success-600"
+                      />
                     @elseif($appointment->status === 'confirmed')
-                      <form method="POST" action="{{ route('staff.appointments.complete', $appointment) }}" onsubmit="return confirm('Complete this appointment?')">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" class="inline-flex min-w-[76px] items-center justify-center rounded-md bg-brand-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-brand-600">
-                          Complete
-                        </button>
-                      </form>
+                      <x-staff.confirm-action
+                        action="{{ route('staff.appointments.complete', $appointment) }}"
+                        method="PATCH"
+                        title="Complete Appointment"
+                        message="Complete this appointment?"
+                        variant="primary"
+                        buttonText="Complete"
+                        buttonClass="inline-flex min-w-[76px] items-center justify-center rounded-md bg-brand-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-brand-600"
+                      />
                     @elseif($appointment->status === 'completed' && ! $appointment->isPaid())
                       <a href="{{ route('staff.appointments.checkout.show', $appointment) }}" class="inline-flex min-w-[76px] items-center justify-center rounded-md bg-warning-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-warning-600">
                         Checkout

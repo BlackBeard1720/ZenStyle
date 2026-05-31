@@ -39,11 +39,15 @@
       <a href="{{ route('staff.categories.index') }}" class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700">Back</a>
       @can('manage-categories')
         <a href="{{ route('staff.categories.edit', $category) }}" class="inline-flex items-center justify-center rounded-lg bg-brand-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-brand-600">Edit</a>
-        <form method="POST" action="{{ route('staff.categories.destroy', $category) }}" onsubmit="return confirm('Delete this category? Categories with services will be marked inactive instead.')">
-          @csrf
-          @method('DELETE')
-          <button type="submit" class="inline-flex items-center justify-center rounded-lg bg-error-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-error-600">Delete</button>
-        </form>
+        <x-staff.confirm-action
+          action="{{ route('staff.categories.destroy', $category) }}"
+          method="DELETE"
+          title="Delete Category"
+          message="Delete this category? Categories with services will be marked inactive instead."
+          variant="danger"
+          buttonText="Delete"
+          buttonClass="inline-flex items-center justify-center rounded-lg bg-error-500 px-5 py-2.5 text-sm font-medium text-white shadow-theme-xs hover:bg-error-600"
+        />
       @endcan
     </div>
   </div>

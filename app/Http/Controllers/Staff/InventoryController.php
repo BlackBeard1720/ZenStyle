@@ -64,7 +64,7 @@ class InventoryController extends Controller
             'supplier_id' => ['nullable', 'exists:suppliers,id'],
             'product_name' => ['required', 'string', 'max:100'],
             'sku' => ['nullable', 'string', 'max:50'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'image' => ['nullable', 'url', 'max:500'],
             'description' => ['nullable', 'string'],
             'price' => ['nullable', 'numeric', 'min:0'],
             'stock_quantity' => ['required', 'integer', 'min:0'],
@@ -72,9 +72,7 @@ class InventoryController extends Controller
             'status' => ['required', 'in:active,inactive'],
         ]);
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
-        }
+
 
         Product::create($data);
 
@@ -87,19 +85,15 @@ class InventoryController extends Controller
             'supplier_id' => ['nullable', 'exists:suppliers,id'],
             'product_name' => ['required', 'string', 'max:100'],
             'sku' => ['nullable', 'string', 'max:50'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'image' => ['nullable', 'url', 'max:500'],
             'description' => ['nullable', 'string'],
             'price' => ['nullable', 'numeric', 'min:0'],
             'stock_quantity' => ['required', 'integer', 'min:0'],
             'min_threshold' => ['required', 'integer', 'min:0'],
             'status' => ['required', 'in:active,inactive'],
         ]);
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
-
-            $data['image'] = $request->file('image')->store('products', 'public');
+        if (empty($data['image'])) {
+            unset($data['image']);
         }
         $product->update($data);
 

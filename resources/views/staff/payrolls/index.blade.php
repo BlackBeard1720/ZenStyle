@@ -199,13 +199,15 @@
                         </form>
                       @endif
 
-                      <form method="POST" action="{{ route('staff.payrolls.destroy', $payroll) }}" class="inline" onsubmit="return confirm('Delete this payroll?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="inline-flex min-w-[76px] items-center justify-center rounded-md bg-error-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-error-600">
-                          Delete
-                        </button>
-                      </form>
+                      <x-staff.confirm-action
+                        action="{{ route('staff.payrolls.destroy', $payroll) }}"
+                        method="DELETE"
+                        title="Delete Payroll"
+                        message="Delete this payroll?"
+                        variant="danger"
+                        buttonText="Delete"
+                        buttonClass="inline-flex min-w-[76px] items-center justify-center rounded-md bg-error-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-error-600"
+                      />
                     </div>
                   </td>
                 </tr>

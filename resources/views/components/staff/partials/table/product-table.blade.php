@@ -38,7 +38,7 @@
             <div class="flex items-center gap-4">
               <div class="h-[60px] w-[60px] overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800">
                 <img
-                  src="{{ $product->image ? asset('storage/'.$product->image) : asset('images/product-default.png') }}"
+                  src="{{ $product->image ?: asset('images/product-default.png') }}"
                   alt="{{ $product->product_name }}"
                   class="h-full w-full object-cover">
               </div>

@@ -116,13 +116,15 @@
                     <a href="{{ route('staff.comments.edit', $item) }}" class="inline-flex min-w-[76px] items-center justify-center rounded-md border border-gray-300 bg-white px-2.5 py-1 text-center text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
                       Edit
                     </a>
-                    <form action="{{ route('staff.comments.destroy', $item) }}" method="POST" onsubmit="return confirm('Delete this comment?')" class="inline-block">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="inline-flex min-w-[76px] items-center justify-center rounded-md bg-error-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-error-600">
-                        Delete
-                      </button>
-                    </form>
+                    <x-staff.confirm-action
+                      action="{{ route('staff.comments.destroy', $item) }}"
+                      method="DELETE"
+                      title="Delete Comment"
+                      message="Delete this comment?"
+                      variant="danger"
+                      buttonText="Delete"
+                      buttonClass="inline-flex min-w-[76px] items-center justify-center rounded-md bg-error-500 px-2.5 py-1 text-center text-xs font-medium text-white shadow-theme-xs hover:bg-error-600"
+                    />
                   </div>
                 </td>
               </tr>
