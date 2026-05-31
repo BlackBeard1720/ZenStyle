@@ -13,16 +13,12 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('appointment_id')
-                ->constrained('appointments')
-                ->cascadeOnDelete();
+            $table->foreignId('appointment_id')->constrained('appointments')->cascadeOnDelete();
 
             $table->decimal('amount', 10, 2);
             $table->string('payment_method', 50);
             $table->string('status', 30)->default('pending');
             $table->string('transaction_code')->nullable();
-            $table->string('paypal_order_id')->nullable();
-            $table->string('paypal_capture_id')->nullable();
             $table->text('note')->nullable();
 
             $table->timestamp('paid_at')->nullable();
