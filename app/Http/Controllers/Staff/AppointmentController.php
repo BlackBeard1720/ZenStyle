@@ -82,7 +82,7 @@ class AppointmentController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-            if ($this->hasStaffConflict($data)) {
+        if ($this->hasStaffConflict($data)) {
             return back()
                 ->withInput()
                 ->with('error', 'Nhan vien nay da co lich hen vao thoi gian da chon.');
@@ -276,7 +276,7 @@ class AppointmentController extends Controller
         return Appointment::query()
             ->whereDate('appointment_date', $data['appointment_date'])
             ->whereTime('appointment_time', $data['appointment_time'])
-            ->whereIn('status', ['pending', 'confirmed'])
+            ->where('status', 'pending')
             ->when($appointment, fn ($query) => $query->whereKeyNot($appointment->id))
             ->whereHas('appointmentServices', function ($query) use ($staffId) {
                 $query->where('staff_id', $staffId);
