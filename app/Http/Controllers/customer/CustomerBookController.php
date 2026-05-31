@@ -49,7 +49,7 @@ class CustomerBookController extends Controller
             ->whereHas('appointment', function ($query) use ($data) {
                 $query->whereDate('appointment_date', $data['appointment_date'])
                     ->whereTime('appointment_time', $data['appointment_time'])
-                    ->whereIn('status', ['pending', 'confirmed']);
+                    ->where('status', 'pending');
             })
             ->distinct()
             ->pluck('staff_id')
@@ -321,7 +321,7 @@ class CustomerBookController extends Controller
         return Appointment::query()
             ->whereDate('appointment_date', $data['appointment_date'])
             ->whereTime('appointment_time', $data['appointment_time'])
-            ->whereIn('status', ['pending', 'confirmed'])
+            ->where('status', 'pending')
             ->whereHas('appointmentServices', function ($query) use ($staffId) {
                 $query->where('staff_id', $staffId);
             })->exists();
