@@ -59,13 +59,13 @@
                 <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
                     <a
                         href="{{ route('home') }}"
-                        class="inline-flex h-11 items-center justify-center rounded-zen-sm bg-zen-primary px-5 text-sm font-semibold text-white transition hover:bg-zen-primary-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40 focus-visible:ring-offset-2"
+                        class="inline-flex h-11 items-center justify-center rounded-zen-sm bg-zen-primary px-5 text-sm font-semibold text-white transition hover:bg-zen-primary-dark focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40 focus-visible:ring-offset-2 cursor-pointer"
                     >
                         Back to Home
                     </a>
                     <a
                         href="{{ route('booking') }}"
-                        class="inline-flex h-11 items-center justify-center rounded-zen-sm border border-zen-primary bg-zen-bg px-5 text-sm font-semibold text-zen-primary transition hover:bg-zen-accent-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40 focus-visible:ring-offset-2"
+                        class="inline-flex h-11 items-center justify-center rounded-zen-sm border border-zen-primary bg-zen-bg px-5 text-sm font-semibold text-zen-primary transition hover:bg-zen-accent-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-zen-primary/40 focus-visible:ring-offset-2 cursor-pointer"
                     >
                         Book Another Appointment
                     </a>

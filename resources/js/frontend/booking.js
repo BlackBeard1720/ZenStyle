@@ -1,3 +1,116 @@
+// ============================================================
+// Toast notification nhe — hien o goc tren phai, tu dong tat
+// ============================================================
+let _toastContainer = null;
+
+function getToastContainer() {
+    if (_toastContainer) return _toastContainer;
+    _toastContainer = document.createElement('div');
+    _toastContainer.id = 'booking-toast-container';
+    Object.assign(_toastContainer.style, {
+        position: 'fixed',
+        top: '80px',
+        right: '16px',
+        zIndex: '9999',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        pointerEvents: 'none',
+    });
+    document.body.appendChild(_toastContainer);
+    return _toastContainer;
+}
+
+function showBookingToast(message, type = 'error') {
+    const colors = {
+        error:   { bg: '#fef2f2', border: '#fca5a5', text: '#991b1b', icon: '✕' },
+        warning: { bg: '#fffbeb', border: '#fcd34d', text: '#92400e', icon: '⚠' },
+        success: { bg: '#f0fdf4', border: '#86efac', text: '#166534', icon: '✓' },
+    };
+    const c = colors[type] ?? colors.error;
+    const container = getToastContainer();
+
+    const toast = document.createElement('div');
+    Object.assign(toast.style, {
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '10px',
+        background: c.bg,
+        border: `1px solid ${c.border}`,
+        borderRadius: '10px',
+        padding: '12px 16px',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
+        maxWidth: '340px',
+        minWidth: '240px',
+        pointerEvents: 'auto',
+        opacity: '0',
+        transform: 'translateX(24px)',
+        transition: 'opacity 0.22s ease, transform 0.22s ease',
+    });
+
+    // Icon
+    const icon = document.createElement('span');
+    icon.textContent = c.icon;
+    Object.assign(icon.style, {
+        fontWeight: '700',
+        fontSize: '14px',
+        color: c.text,
+        lineHeight: '1.5',
+        flexShrink: '0',
+        marginTop: '1px',
+    });
+
+    // Text
+    const text = document.createElement('span');
+    text.textContent = message;
+    Object.assign(text.style, {
+        fontSize: '13px',
+        fontWeight: '500',
+        color: c.text,
+        lineHeight: '1.5',
+        flex: '1',
+    });
+
+    // Close button
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '×';
+    Object.assign(closeBtn.style, {
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        fontSize: '18px',
+        lineHeight: '1',
+        color: c.text,
+        opacity: '0.6',
+        padding: '0',
+        flexShrink: '0',
+        marginTop: '-1px',
+    });
+
+    toast.appendChild(icon);
+    toast.appendChild(text);
+    toast.appendChild(closeBtn);
+    container.appendChild(toast);
+
+    // Animate in
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(0)';
+        });
+    });
+
+    function dismiss() {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(24px)';
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }
+
+    closeBtn.addEventListener('click', dismiss);
+    const timer = setTimeout(dismiss, 4000);
+    closeBtn.addEventListener('click', () => clearTimeout(timer), { once: true });
+}
+
 const SEL = {
     page: '#booking-page',
     form: '#booking-form',
@@ -151,6 +264,8 @@ function initBookingPage(root) {
     const staffNameInput = root.querySelector(SEL.staffNameInput);
     const timeInput = root.querySelector(SEL.timeInput);
     const busyStaffUrl = root.dataset.bookingBusyStaffUrl ?? '/booking/busy-staff';
+    // Old time tu old() khi store() redirect back (OTP modal dang mo)
+    const initialTime = root.dataset.initialTime ?? '';
     let busyStaffRequestId = 0;
     let busyStaffAbortController = null;
     let busyStaffDebounceTimer = null;
@@ -599,28 +714,64 @@ function initBookingPage(root) {
         }),
     );
     form?.addEventListener('submit', (e) => {
-        if (!timeInput?.value) {
-            e.preventDefault();
+        const errors = [];
 
-            // Hien error neu chua chon gio, tranh dung bien truoc khi khai bao
-            const slotGroup = root.querySelector('[aria-label="Start time"]');
-            let errEl = root.querySelector('#booking-slot-error');
-
-            if (!errEl) {
-                errEl = document.createElement('p');
-                errEl.id = 'booking-slot-error';
-                errEl.className = 'mt-2 text-xs font-medium text-red-600';
-                if (slotGroup) slotGroup.after(errEl);
+        // --- Helper: danh dau input loi ---
+        function markFieldError(el) {
+            if (!el) return;
+            el.style.borderColor = '#f87171';
+            el.style.boxShadow = '0 0 0 2px rgba(248,113,113,0.2)';
+            function clearError() {
+                el.style.borderColor = '';
+                el.style.boxShadow = '';
+                el.removeEventListener('input', clearError);
+                el.removeEventListener('change', clearError);
             }
-
-            if (errEl) {
-                errEl.textContent = 'Please select a time slot before booking.';
-                errEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        } else {
-            // Xoa loi cu khi da chon gio
-            root.querySelector('#booking-slot-error')?.remove();
+            el.addEventListener('input', clearError);
+            el.addEventListener('change', clearError);
         }
+
+        // 1. Phai chon it nhat 1 dich vu
+        const checkedServices = root.querySelectorAll('[data-booking-service-row] input[type="checkbox"]:checked');
+        if (checkedServices.length === 0) {
+            errors.push({ msg: 'Please select at least one service.', scrollTo: root.querySelector('[data-service-list]') });
+        }
+
+        // 2. Phai chon khung gio
+        if (!timeInput?.value) {
+            errors.push({ msg: 'Please select a time slot.', scrollTo: root.querySelector('[aria-label="Start time"]') });
+        }
+
+        // 3. Validate Contact Information
+        const fullNameEl = form.querySelector('[data-booking-field="full_name"]');
+        const phoneEl    = form.querySelector('[data-booking-field="phone"]');
+        const emailEl    = form.querySelector('[data-booking-field="email"]');
+
+        if (!fullNameEl?.value.trim()) {
+            errors.push({ msg: 'Full name is required.', scrollTo: fullNameEl });
+            markFieldError(fullNameEl);
+        }
+        if (!phoneEl?.value.trim()) {
+            errors.push({ msg: 'Phone number is required.', scrollTo: phoneEl });
+            markFieldError(phoneEl);
+        }
+        if (!emailEl?.value.trim()) {
+            errors.push({ msg: 'Email is required.', scrollTo: emailEl });
+            markFieldError(emailEl);
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim())) {
+            errors.push({ msg: 'Please enter a valid email address.', scrollTo: emailEl });
+            markFieldError(emailEl);
+        }
+
+        if (errors.length === 0) return; // Pass — cho form submit
+
+        e.preventDefault();
+
+        // Hien toast cho tung loi
+        errors.forEach(({ msg }) => showBookingToast(msg, 'error'));
+
+        // Scroll ve loi dau tien
+        errors[0].scrollTo?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
     form?.addEventListener('reset', () => {
@@ -640,11 +791,38 @@ function initBookingPage(root) {
 
     ensureDateInputIsFutureSafe();
     if (summaryBranch) summaryBranch.textContent = 'ZenStyle FPT Aptech';
+
+    // Pre-select slot tu old input (sau khi store() redirect back voi OTP modal)
+    // Blade da restore old date vao date input, chi can pre-select dung slot
+    // Phai danh dau aria-pressed truoc khi syncAllSummaries chay
+    if (initialTime) {
+        const targetSlot = slotButtons.find((btn) => btn.dataset.slot === initialTime);
+        if (targetSlot) {
+            slotButtons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+            targetSlot.setAttribute('aria-pressed', 'true');
+        }
+    }
+
     syncAllSummaries();
     refreshBusyStaffAvailability();
+
+    // Lang nghe event tu pageshow handler khi page restore tu bfcache
+    root.addEventListener('booking:refresh-busy-staff', refreshBusyStaffAvailability);
 }
 
 export function initBookingIfPresent() {
     const root = document.querySelector(SEL.page);
-    if (root) initBookingPage(root);
+    if (!root) return;
+
+    initBookingPage(root);
+
+    // Khi browser restore trang tu bfcache (nhan back sau redirect),
+    // JS khong chay lai -> goi lai refreshBusyStaffAvailability de cap nhat trang thai busy/available.
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+            // Lay lai ham tu closure cua initBookingPage da chay
+            // Bang cach dispatch custom event de kich hoat refresh
+            root.dispatchEvent(new CustomEvent('booking:refresh-busy-staff'));
+        }
+    });
 }

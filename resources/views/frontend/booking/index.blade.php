@@ -21,19 +21,14 @@
     });
 
     $bookingStylists = $staff->map(function ($s, $index) {
-
-        $isActive = $s->status === 'active';
-
         return [
             'id'           => $s->id,
             'name'         => $s->full_name,
-            'status'       => $isActive ? 'Available' : 'Busy',
-            'status_class' => $isActive
-                ? 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20'
-                : 'bg-zen-warning/10 text-zen-warning ring-zen-warning/20',
+            'status'       => 'Available',
+            'status_class' => 'bg-zen-accent-soft text-zen-primary ring-zen-primary/20',
             'image'        => $s->avatar ?: ('https://ui-avatars.com/api/?name=' . urlencode($s->full_name) . '&background=465FFF&color=fff'),
-            'is_available' => $isActive,
-            'checked'      => $index === 0 && $isActive,
+            'is_available' => true,
+            'checked'      => $index === 0,
         ];
     })->all();
 
@@ -49,7 +44,18 @@
         ->all();
   @endphp
 
-  <div id="booking-page" data-booking-busy-staff-url="{{ route('booking.busy-staff') }}" class="pb-12 pt-6 sm:pt-8">
+  {{-- Truyen old date/time de JS pre-select dung slot khi OTP modal dang mo --}}
+  @php
+    $oldDate = old('appointment_date', $bookingToday->toDateString());
+    $oldTime = old('appointment_time', '');
+  @endphp
+  <div
+    id="booking-page"
+    data-booking-busy-staff-url="{{ route('booking.busy-staff') }}"
+    data-initial-date="{{ $oldDate }}"
+    data-initial-time="{{ $oldTime }}"
+    class="pb-12 pt-6 sm:pt-8"
+  >
     <div class="mx-auto max-w-7xl px-4 sm:px-6">
       <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -69,7 +75,8 @@
     >
       @csrf
 
-      <input type="hidden" name="appointment_time" value="" data-booking-time-input>
+      {{-- Neu co old time (sau khi store() redirect back), set luon vao hidden input --}}
+      <input type="hidden" name="appointment_time" value="{{ $oldTime }}" data-booking-time-input>
 
       <div class="min-w-0 space-y-5">
         @if($errors->any() && ! $errors->has('otp'))
@@ -203,7 +210,7 @@
               id="booking-date"
               name="appointment_date"
               type="date"
-              value="{{ $bookingToday->toDateString() }}"
+              value="{{ $oldDate }}"
               min="{{ $bookingToday->toDateString() }}"
               class="h-10 w-full max-w-xs rounded border border-zen-border bg-zen-surface px-3 text-sm text-zen-text outline-none ring-zen-primary focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
             >
@@ -322,7 +329,7 @@
                 name="full_name"
                 type="text"
                 placeholder="John Doe"
-                required
+                data-booking-field="full_name"
                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
               >
             </div>
@@ -336,7 +343,7 @@
                 name="phone"
                 type="tel"
                 placeholder="09xx xxx xxx"
-                required
+                data-booking-field="phone"
                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
               >
             </div>
@@ -351,7 +358,7 @@
                 name="email"
                 value="{{ old('email') }}"
                 placeholder="example@gmail.com"
-                required
+                data-booking-field="email"
                 class="h-10 w-full rounded-zen-sm border border-zen-border px-3 text-sm outline-none focus:border-zen-primary focus:ring-2 focus:ring-zen-primary/20"
               >
               @error('email')
@@ -422,7 +429,7 @@
           {{-- Nút xác nhận — nền đen, chữ trắng, hover xanh xám theo brand palette. --}}
           <button
             type="submit"
-            class="mt-5 flex h-10 w-full items-center justify-center rounded-zen-sm bg-zen-dark text-sm font-semibold text-zen-text-light transition hover:bg-zen-accent active:scale-[0.98]"
+            class="mt-5 flex h-10 w-full items-center justify-center rounded-zen-sm bg-zen-dark text-sm font-semibold text-zen-text-light transition hover:bg-zen-accent active:scale-[0.98] cursor-pointer"
           >
             Complete Booking
           </button>

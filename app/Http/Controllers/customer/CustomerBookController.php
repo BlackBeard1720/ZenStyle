@@ -25,7 +25,7 @@ class CustomerBookController extends Controller
     {
         return view('frontend.booking.index', [
             'staff' => Staff::query()
-                ->orderByRaw("status = 'active' desc")
+                ->where('status', 'active')
                 ->orderBy('full_name')
                 ->get(),
             'services' => Service::query()
@@ -69,7 +69,7 @@ class CustomerBookController extends Controller
             'email' => ['required', 'email', 'max:255'],
             'appointment_date' => ['required', 'date', 'after_or_equal:today'],
             'appointment_time' => ['required', 'date_format:H:i'],
-            'service_ids' => ['nullable', 'array'],
+            'service_ids' => ['required', 'array', 'min:1'],
             'service_ids.*' => ['integer', Rule::exists('services', 'id')->where(fn ($query) => $query->where('status', 'active'))],
             'staff_id' => ['nullable', 'integer', 'exists:staff,id'],
             'notes' => ['nullable', 'string'],
