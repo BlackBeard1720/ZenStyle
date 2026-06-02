@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Appointment;
 use App\Models\Payment;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 use RuntimeException;
 
 class PaymentSeeder extends Seeder
@@ -31,8 +30,6 @@ class PaymentSeeder extends Seeder
                 'payment_method' => 'cash',
                 'status' => 'paid',
                 'transaction_code' => 'CASH-' . now()->format('YmdHis') . '-' . $appointment->id,
-                'paypal_order_id' => null,
-                'paypal_capture_id' => null,
                 'note' => 'Seeded cash payment.',
                 'paid_at' => now()->subDays(fake()->numberBetween(0, 10)),
             ]);
