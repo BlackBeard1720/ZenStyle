@@ -1,7 +1,7 @@
 # ZenStyle - Salon & Spa Management Web Application
 
 ZenStyle is a web application for managing salon and spa operations.  
-The system supports online booking, staff management, appointment management, service management, inventory management, payment tracking, customer management, comments, news, notifications, attendance, payroll, and dashboard reporting.
+The system supports online booking, staff management, appointment management, service management, inventory management, payment tracking, client management, comments, news, notifications, attendance, payroll, and dashboard reporting.
 
 This project was built as an eProject using Laravel.
 
@@ -9,7 +9,7 @@ This project was built as an eProject using Laravel.
 
 ## Features
 
-### Customer Side
+### Client Side
 
 - View salon information, services, news, FAQ, and contact page
 - Book appointments online
@@ -24,7 +24,7 @@ This project was built as an eProject using Laravel.
 - Manage appointments
 - Confirm, complete, and cancel appointments
 - Checkout appointment and create payment record
-- Manage customers
+- Manage clients
 - Manage staff accounts and staff profiles
 - Manage services and categories
 - Manage comments: approve or delete
@@ -324,6 +324,15 @@ php artisan queue:listen
 
 ---
 
+## Demo Video
+
+The demonstration video shows the main workflow of the ZenStyle system, including online booking, email OTP verification, appointment management, checkout, and email receipt.
+
+Demo link:  
+https://drive.google.com/file/d/1iTsosiqbSVH0YrMG8lAZQM1eJ7_bzzd2/view?usp=sharing
+
+---
+
 ## Demo Accounts
 
 After running seeders, you can login using these accounts.
@@ -361,7 +370,7 @@ These accounts are for demo and testing only.
 
 ## Main Routes
 
-Customer pages:
+Client pages:
 
 ```txt
 /                    Home
