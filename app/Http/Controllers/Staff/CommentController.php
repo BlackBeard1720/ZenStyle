@@ -45,7 +45,7 @@ class CommentController extends Controller
 
         $comment->update(['status' => 'approved']);
 
-        return to_route('staff.comments.index')->with('success', 'Bình luận đã được duyệt thành công.');
+        return to_route('staff.comments.index')->with('success', 'Comment approved successfully.');
     }
 
     public function destroy(Comment $comment): RedirectResponse
