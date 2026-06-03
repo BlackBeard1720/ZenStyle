@@ -1,58 +1,419 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ZenStyle - Salon & Spa Management Web Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+ZenStyle is a web application for managing salon and spa operations.  
+The system supports online booking, staff management, appointment management, service management, inventory management, payment tracking, customer management, comments, news, notifications, attendance, payroll, and dashboard reporting.
 
-## About Laravel
+This project was built as an eProject using Laravel.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Customer Side
 
-## Learning Laravel
+- View salon information, services, news, FAQ, and contact page
+- Book appointments online
+- Verify booking by email OTP
+- View booking success page
+- Comment on services
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Staff/Admin Side
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Staff login with JWT authentication
+- Dashboard overview
+- Manage appointments
+- Confirm, complete, and cancel appointments
+- Checkout appointment and create payment record
+- Manage customers
+- Manage staff accounts and staff profiles
+- Manage services and categories
+- Manage comments: approve or delete
+- Manage news
+- Manage staff schedules
+- Manage attendance
+- Manage payroll
+- Manage inventory, suppliers, products, and purchase orders
+- Receive Firebase notification for new booking
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## Tech Stack
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- Backend: Laravel 13
+- Language: PHP 8.3+
+- Database: MySQL
+- Frontend: Blade, Tailwind CSS, Alpine.js
+- Build tool: Vite
+- Authentication: JWT stored in HttpOnly cookie
+- Notification: Firebase Cloud Messaging
+- Image upload: Cloudinary
+- Calendar: FullCalendar
+- Chart: Chart.js / ApexCharts
+
+---
+
+## Requirements
+
+Before running this project, make sure your computer has:
+
+- PHP 8.3 or higher
+- Composer
+- Node.js and npm
+- MySQL
+- Git
+- Laragon / XAMPP / Laravel Herd / local PHP environment
+
+Recommended for Windows students:
+
+- Laragon
+- MySQL from Laragon
+- VS Code or PhpStorm
+
+---
+
+## Installation
+
+Clone the project:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/BlackBeard1720/ZenStyle.git
+cd ZenStyle
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Install PHP dependencies:
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Install JavaScript dependencies:
 
-## Code of Conduct
+```bash
+npm install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Create `.env` file:
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+On Windows PowerShell, you can use:
 
-## License
+```powershell
+copy .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Generate Laravel application key:
+
+```bash
+php artisan key:generate
+```
+
+---
+
+## Environment Configuration
+
+Open `.env` and update the database configuration:
+
+```env
+APP_NAME=ZenStyle
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+ASSET_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=zenstyle
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Create a MySQL database named:
+
+```txt
+zenstyle
+```
+
+Then add a JWT secret:
+
+```env
+JWT_SECRET=your_random_secret_key_here
+```
+
+Example:
+
+```env
+JWT_SECRET=zenstyle_secret_123456789
+```
+
+Do not use the example secret in production.
+
+---
+
+## Mail Configuration
+
+For local development, you can keep mail as log:
+
+```env
+MAIL_MAILER=log
+MAIL_FROM_ADDRESS="hello@zenstyle.local"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+If you want to send real email OTP, configure SMTP:
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your_email@gmail.com
+MAIL_PASSWORD=your_app_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your_email@gmail.com
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Use Gmail App Password, not your normal Gmail password.
+
+---
+
+## Firebase Configuration
+
+If you want to use Firebase Cloud Messaging, fill these values in `.env`:
+
+```env
+FIREBASE_API_KEY=
+FIREBASE_AUTH_DOMAIN=
+FIREBASE_PROJECT_ID=
+FIREBASE_STORAGE_BUCKET=
+FIREBASE_MESSAGING_SENDER_ID=
+FIREBASE_APP_ID=
+FIREBASE_VAPID_KEY=
+```
+
+If Firebase is not configured, the main system can still run, but push notification features may not work.
+
+---
+
+## Cloudinary Configuration
+
+For image upload, configure Cloudinary:
+
+```env
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_UPLOAD_PRESET=
+```
+
+The upload preset should be unsigned when using Cloudinary Upload Widget from the browser.
+
+---
+
+## Database Migration and Seeding
+
+Run migrations:
+
+```bash
+php artisan migrate
+```
+
+Run seeders:
+
+```bash
+php artisan db:seed
+```
+
+Or reset the database and seed again:
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+The seeders will create sample data for roles, users, staff, clients, categories, services, comments, appointments, payments, news, schedules, suppliers, products, and purchase orders.
+
+---
+
+## Running the Project
+
+Run Laravel server:
+
+```bash
+php artisan serve
+```
+
+Run Vite development server:
+
+```bash
+npm run dev
+```
+
+Open the project in browser:
+
+```txt
+http://127.0.0.1:8000
+```
+
+Staff login page:
+
+```txt
+http://127.0.0.1:8000/staff/login
+```
+
+---
+
+## Queue Worker
+
+This project uses database queue connection.
+
+Run the queue worker:
+
+```bash
+php artisan queue:listen
+```
+
+Or:
+
+```bash
+php artisan queue:work
+```
+
+If the queue tables do not exist, run:
+
+```bash
+php artisan queue:table
+php artisan migrate
+```
+
+---
+
+## Useful Commands
+
+Clear config and cache:
+
+```bash
+php artisan optimize:clear
+```
+
+Build frontend assets:
+
+```bash
+npm run build
+```
+
+Run tests:
+
+```bash
+php artisan test
+```
+
+Run all development processes using Composer script:
+
+```bash
+composer run dev
+```
+
+Note: On Windows, `composer run dev` may fail because Laravel Pail requires the `pcntl` extension. If that happens, run these commands separately instead:
+
+```bash
+php artisan serve
+npm run dev
+php artisan queue:listen
+```
+
+---
+
+## Demo Accounts
+
+After running seeders, you can login using these accounts.
+
+### Admin
+
+```txt
+Email: minhpham@gmail.com
+Password: minh123456
+```
+
+### Receptionist
+
+```txt
+Email: linhvn@gmail.com
+Password: linh123456
+```
+
+### Stylist
+
+```txt
+Email: huyphg@gmail.com
+Password: huy123456
+```
+
+Other stylist accounts are also created by `StaffSeeder`. Most of them use:
+
+```txt
+Password: password123
+```
+
+These accounts are for demo and testing only.
+
+---
+
+## Main Routes
+
+Customer pages:
+
+```txt
+/                    Home
+/about               About
+/news                News
+/dich-vu             Services
+/booking             Booking
+/lien-he             Contact
+/faq                 FAQ
+```
+
+Staff pages:
+
+```txt
+/staff/login         Staff login
+/staff               Staff dashboard
+/staff/appointments  Appointment management
+/staff/services      Service management
+/staff/categories    Category management
+/staff/clients       Client management
+/staff/inventory     Inventory management
+/staff/payments      Payment management
+/staff/comments      Comment management
+/staff/news          News management
+```
+
+---
+
+## Project Structure
+
+Important folders:
+
+```txt
+app/Http/Controllers       Controllers
+app/Models                 Eloquent models
+app/Services               Service classes
+app/Http/Middleware        Custom middleware
+database/migrations        Database migrations
+database/seeders           Sample data seeders
+resources/views            Blade views
+routes/web.php             Web routes
+public                     Public assets
+config/services.php        Third-party service configuration
+```
+
+---
+
+## Notes
+
+- Do not commit real `.env` file to GitHub.
+- Do not commit real Firebase private keys or API secrets.
+- Use demo credentials only for local testing.
+- Run `php artisan optimize:clear` after changing `.env`.
+- Run `npm run build` before deployment.
+- Make sure MySQL is running before running migrations.
